@@ -1,30 +1,35 @@
-import 'dart:typed_data';
-
-import 'package:flutter/material.dart';
+import 'package:flutter/foundation.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
-class VideoProvider with ChangeNotifier {
-  VideoPlayerController? _controller;
-  Uint8List? _thumbnailData;
-  bool isLiked = false;
-  bool _showPlayPauseIcon = false;
-
-  VideoPlayerController? get controller => _controller;
-  Uint8List? get thumbnailData => _thumbnailData;
-  bool get showPlayPauseIcon => _showPlayPauseIcon;
+class VideoProvider {
+  final ValueNotifier<VideoPlayerController?> controllerNotifier =
+      ValueNotifier(null);
+  final ValueNotifier<Uint8List?> thumbnailNotifier = ValueNotifier(null);
+  final ValueNotifier<bool> isLikedNotifier = ValueNotifier(false);
+  final ValueNotifier<bool> showPlayPauseIconNotifier = ValueNotifier(false);
+  final ValueNotifier<Duration> positionNotifier = ValueNotifier(Duration.zero);
+  final ValueNotifier<Duration> durationNotifier = ValueNotifier(Duration.zero);
+  final ValueNotifier<bool> isPausedNotifier = ValueNotifier(false);
 
   VideoProvider(String videoUrl) {
     _initializeController(videoUrl);
   }
 
   Future<void> _initializeController(String videoUrl) async {
-    _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl))
-      ..initialize().then((_) {
-        notifyListeners();
-      })
-      ..setLooping(true)
-      ..play();
+    final VideoPlayerController controller =
+        VideoPlayerController.networkUrl(Uri.parse(videoUrl))..setLooping(true);
+
+    await controller.initialize();
+    controller.play();
+    controllerNotifier.value = controller;
+
+    durationNotifier.value = controller.value.duration;
+    controller.addListener(() {
+      positionNotifier.value = controller.value.position;
+      isPausedNotifier.value = !controller.value.isPlaying;
+    });
+
     await _loadThumbnail(videoUrl);
   }
 
@@ -36,28 +41,45 @@ class VideoProvider with ChangeNotifier {
       quality: 75,
     );
 
-    _thumbnailData = thumbnailData;
-    notifyListeners();
+    thumbnailNotifier.value = thumbnailData;
   }
 
   void togglePlayPause() {
-    if (_controller!.value.isPlaying) {
-      _controller!.pause();
-    } else {
-      _controller!.play();
-    }
-    _showPlayPauseIcon = true;
-    notifyListeners();
+    final VideoPlayerController? controller = controllerNotifier.value;
+    if (controller != null) {
+      if (controller.value.isPlaying) {
+        controller.pause();
+      } else {
+        controller.play();
+      }
+      showPlayPauseIconNotifier.value = true;
+      isPausedNotifier.value = !controller.value.isPlaying;
 
-    Future.delayed(const Duration(seconds: 1), () {
-      _showPlayPauseIcon = false;
-      notifyListeners();
-    });
+      Future.delayed(const Duration(seconds: 1), () {
+        showPlayPauseIconNotifier.value = false;
+      });
+    }
   }
 
-  @override
+  void toggleLike() {
+    isLikedNotifier.value = !isLikedNotifier.value;
+  }
+
+  void seekTo(Duration position) {
+    final VideoPlayerController? controller = controllerNotifier.value;
+    if (controller != null) {
+      controller.seekTo(position);
+    }
+  }
+
   void dispose() {
-    _controller?.dispose();
-    super.dispose();
+    controllerNotifier.value?.dispose();
+    controllerNotifier.dispose();
+    thumbnailNotifier.dispose();
+    isLikedNotifier.dispose();
+    showPlayPauseIconNotifier.dispose();
+    positionNotifier.dispose();
+    durationNotifier.dispose();
+    isPausedNotifier.dispose();
   }
 }

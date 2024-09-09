@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/videos_list.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
+import 'package:shorts/core/utils/widgets/custom_title.dart';
 
 import '../../../../core/service_locator/service_locator.dart';
 import '../../domain/videos_use_cases/get_videos_use_case/get_videos_use_case.dart';
@@ -13,7 +14,9 @@ class VideoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('TikTok Videos')),
+      appBar: AppBar(
+          title: const CustomTitle(
+              title: 'Videos', style: TitleStyle.styleBold20)),
       body: BlocProvider(
         create: (context) => VideoCubit(
           getVideosUseCase: getIt.get<GetVideosUseCase>(),
@@ -33,9 +36,15 @@ class VideoPage extends StatelessWidget {
                 },
               );
             } else if (state is VideoError) {
-              return Center(child: Text(state.message));
+              return Center(
+                  child: CustomTitle(
+                title: state.message,
+                style: TitleStyle.style20,
+              ));
             }
-            return const Center(child: Text('No data available'));
+            return const Center(
+                child: CustomTitle(
+                    title: 'No data available', style: TitleStyle.styleBold20));
           },
         ),
       ),
