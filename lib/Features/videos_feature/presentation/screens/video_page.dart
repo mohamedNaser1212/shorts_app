@@ -22,29 +22,37 @@ class VideoPage extends StatelessWidget {
           getVideosUseCase: getIt.get<GetVideosUseCase>(),
           uploadVideoUseCase: getIt.get<UploadVideoUseCase>(),
         )..getVideos(),
-        child: BlocBuilder<VideoCubit, VideoState>(
-          builder: (context, state) {
+        child: BlocConsumer<VideoCubit, VideoState>(
+          listener: (context, state) {
             if (state is GetVideoLoading) {
-              return const Center(child: CircularProgressIndicator());
-            } else if (state is GetVideoSuccess) {
-              return PageView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: state.videos.length,
-                itemBuilder: (context, index) {
-                  final video = state.videos[index];
-                  return VideoListItem(videoUrl: video.videoUrl);
-                },
-              );
-            } else if (state is VideoError) {
-              return Center(
-                  child: CustomTitle(
-                title: state.message,
-                style: TitleStyle.style20,
-              ));
+              const Center(child: CircularProgressIndicator());
             }
-            return const Center(
-                child: CustomTitle(
-                    title: 'No data available', style: TitleStyle.styleBold20));
+          },
+          builder: (context, state) {
+            return BlocBuilder<VideoCubit, VideoState>(
+              builder: (context, state) {
+                if (state is GetVideoSuccess) {
+                  return PageView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: state.videos.length,
+                    itemBuilder: (context, index) {
+                      final video = state.videos[index];
+                      return VideoListItem(videoUrl: video.videoUrl);
+                    },
+                  );
+                } else if (state is VideoError) {
+                  return Center(
+                      child: CustomTitle(
+                    title: state.message,
+                    style: TitleStyle.style20,
+                  ));
+                }
+                return const Center(
+                    child: CustomTitle(
+                        title: 'No data available',
+                        style: TitleStyle.styleBold20));
+              },
+            );
           },
         ),
       ),
