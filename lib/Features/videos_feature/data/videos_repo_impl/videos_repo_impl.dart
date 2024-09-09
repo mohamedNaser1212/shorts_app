@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
-import 'package:shorts/Features/videos_feature/data/video_remote_data_source/videos_rermote_data_source.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
+import 'package:shorts/Features/videos_feature/data/video_remote_data_source/videos_rermote_data_source.dart';
 import 'package:shorts/Features/videos_feature/domain/video_repo/video_repo.dart';
 import 'package:shorts/core/error_manager/failure.dart';
 import 'package:shorts/core/error_manager/server_failure.dart';
@@ -23,9 +23,15 @@ class VideosRepoImpl extends VideosRepo {
   }
 
   @override
-  Future<Either<Failure, VideoModel>> uploadVideo() async {
+  Future<Either<Failure, VideoModel>> uploadVideo({
+    required String description,
+    required String videoPath,
+  }) async {
     try {
-      final video = await videosRemoteDataSource.uploadVideo();
+      final video = await videosRemoteDataSource.uploadVideo(
+        videoPath: videoPath,
+        description: description,
+      );
       return Right(video);
     } catch (e) {
       return Left(ServerFailure(

@@ -7,7 +7,8 @@ import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cu
 import 'package:shorts/core/navigations_manager/navigations_manager.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/utils/bloc_observer.dart';
-import 'package:shorts/main.dart';
+
+import '../../../../Features/layout/presentation/screens/home_page.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});

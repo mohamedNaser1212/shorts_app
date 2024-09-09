@@ -1,3 +1,4 @@
+import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/Features/videos_feature/domain/videos_use_cases/get_videos_use_case/get_videos_use_case.dart';
@@ -15,19 +16,33 @@ class VideoCubit extends Cubit<VideoState> {
 
   final UploadVideoUseCase uploadVideoUseCase;
   final GetVideosUseCase getVideosUseCase;
+  Future<String?> pickVideo() async {
+    final result = await FilePicker.platform.pickFiles(type: FileType.video);
+    if (result != null && result.files.isNotEmpty) {
+      final path = result.files.single.path;
+      print('Picked file path: $path');
+      return path;
+    }
+    return null;
+  }
 
-  Future<void> uploadVideo() async {
+  Future<void> uploadVideo(
+      {required String videoPath, required String description}) async {
     emit(VideoUploading());
-    final result = await uploadVideoUseCase();
+    final result = await uploadVideoUseCase.call(
+        description: description, videoPath: videoPath);
     result.fold(
-      (failure) => emit(VideoError(message: failure.message)),
+      (failure) {
+        print('Error uploading video: ${failure.message}');
+        emit(VideoError(message: failure.message));
+      },
       (video) => emit(VideoUploaded(videoUrl: video.videoUrl)),
     );
   }
 
   Future<void> getVideos() async {
     emit(GetVideoLoading());
-    final result = await getVideosUseCase();
+    final result = await getVideosUseCase.call();
     result.fold(
       (failure) => emit(VideoError(message: failure.message)),
       (videos) => emit(GetVideoSuccess(videos: videos)),

@@ -1,19 +1,22 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:file_picker/file_picker.dart';
-import 'package:uuid/uuid.dart'; // Import uuid package
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
+import 'package:uuid/uuid.dart'; // Import uuid package
 
 abstract class VideosRemoteDataSource {
   Future<List<VideoModel>> getVideos();
-  Future<VideoModel> uploadVideo();
+  Future<VideoModel> uploadVideo({
+    required String description,
+    required String videoPath,
+  });
 }
 
 class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
   final FirebaseStorage _storage = FirebaseStorage.instance;
-  final Uuid _uuid = Uuid(); // Instantiate Uuid
+  final Uuid _uuid = const Uuid();
 
   @override
   Future<List<VideoModel>> getVideos() async {
@@ -29,46 +32,22 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
   }
 
   @override
-  Future<VideoModel> uploadVideo() async {
-    try {
-      // Use FilePicker to select a video
-      final result = await FilePicker.platform.pickFiles(
-        type: FileType.video,
-      );
-
-      if (result == null || result.files.isEmpty) {
-        throw Exception('No video selected');
-      }
-
-      final filePath = result.files.single.path;
-      if (filePath == null) {
-        throw Exception('Invalid file path');
-      }
-
-      final videoId = _uuid.v4();
-
-      // Upload video to Firebase Storage
-      final videoRef = _storage.ref().child('videos/$videoId.mp4');
-      final uploadTask = videoRef.putFile(File(filePath));
-      final snapshot = await uploadTask.whenComplete(() => null);
-
-      final videoUrl = await snapshot.ref.getDownloadURL();
-
-      final videoData = VideoModel(
-        id: videoId,
-        title: result.files.single.name,
-        thumbnail: '',
-        videoUrl: videoUrl,
-      );
-
-      await _firestore
-          .collection('videos')
-          .doc(videoId)
-          .set(videoData.toJson());
-
-      return videoData;
-    } catch (e) {
-      throw Exception('Error uploading video: $e');
-    }
+  Future<VideoModel> uploadVideo({
+    required String description,
+    required String videoPath,
+  }) async {
+    final videoId = _uuid.v4();
+    final videoRef = _storage.ref().child('videos').child(videoId);
+    final uploadTask = videoRef.putFile(File(videoPath));
+    final snapshot = await uploadTask.whenComplete(() => null);
+    final videoUrl = await snapshot.ref.getDownloadURL();
+    final video = VideoModel(
+      videoUrl: videoUrl,
+      thumbnail: '',
+      description: description,
+      id: videoId,
+    );
+    await _firestore.collection('videos').doc(videoId).set(video.toJson());
+    return video;
   }
 }

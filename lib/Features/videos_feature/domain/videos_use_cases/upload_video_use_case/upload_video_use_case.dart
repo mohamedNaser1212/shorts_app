@@ -8,7 +8,13 @@ class UploadVideoUseCase {
 
   UploadVideoUseCase({required this.videoRepository});
 
-   Future<Either<Failure, VideoModel>> call() async {
-    return await videoRepository.uploadVideo()  ;
+  Future<Either<Failure, VideoModel>> call({
+    required String description,
+    required String videoPath,
+  }) async {
+    return await videoRepository.uploadVideo(
+      description: description,
+      videoPath: videoPath,
+    );
   }
 }
