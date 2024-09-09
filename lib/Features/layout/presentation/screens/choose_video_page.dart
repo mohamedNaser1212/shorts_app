@@ -1,20 +1,25 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:path_provider/path_provider.dart'; // For saving the thumbnail
+import 'package:shorts/Features/videos_feature/presentation/widgets/image_thumbnail.dart';
 import 'package:shorts/core/utils/widgets/custom_title.dart';
+import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../videos_feature/presentation/video_cubit/video_cubit.dart';
+import '../../../videos_feature/presentation/widgets/thumbnail_page.dart';
 
 class ChooseVideoPage extends StatefulWidget {
   const ChooseVideoPage({super.key});
 
   @override
-  _ChooseVideoPageState createState() => _ChooseVideoPageState();
+  State<ChooseVideoPage> createState() => _ChooseVideoPageState();
 }
 
 class _ChooseVideoPageState extends State<ChooseVideoPage> {
   final TextEditingController _titleController = TextEditingController();
   String? _selectedVideoPath;
+  String? _thumbnailPath;
 
   @override
   void dispose() {
@@ -24,8 +29,25 @@ class _ChooseVideoPageState extends State<ChooseVideoPage> {
 
   Future<void> _pickVideo() async {
     final result = await context.read<VideoCubit>().pickVideo();
+
+    _selectedVideoPath = result;
+    if (_selectedVideoPath != null) {
+      _generateThumbnail(_selectedVideoPath!);
+    }
+  }
+
+  Future<void> _generateThumbnail(String videoPath) async {
+    final tempDir = await getTemporaryDirectory();
+    final thumbnailPath = await VideoThumbnail.thumbnailFile(
+      video: videoPath,
+      thumbnailPath: tempDir.path,
+      imageFormat: ImageFormat.JPEG,
+      maxHeight: 100,
+      quality: 75,
+    );
+
     setState(() {
-      _selectedVideoPath = result;
+      _thumbnailPath = thumbnailPath;
     });
   }
 
@@ -34,6 +56,17 @@ class _ChooseVideoPageState extends State<ChooseVideoPage> {
       VideoCubit.get(context).uploadVideo(
         videoPath: _selectedVideoPath!,
         description: _titleController.text,
+      );
+    }
+  }
+
+  void _navigateToThumbnailPage(BuildContext context) {
+    if (_selectedVideoPath != null) {
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => ThumbnailPage(videoPath: _selectedVideoPath!),
+        ),
       );
     }
   }
@@ -51,6 +84,7 @@ class _ChooseVideoPageState extends State<ChooseVideoPage> {
         } else if (state is VideoUploaded) {
           _titleController.clear();
           _selectedVideoPath = null;
+          _thumbnailPath = null;
 
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(
@@ -79,6 +113,11 @@ class _ChooseVideoPageState extends State<ChooseVideoPage> {
                     ),
                   ),
                   const SizedBox(height: 20),
+                  if (_thumbnailPath != null)
+                    GestureDetector(
+                      onTap: () => _navigateToThumbnailPage(context),
+                      child: ImageThumbnail(thumbnailPath: _thumbnailPath!),
+                    ),
                   ElevatedButton(
                     onPressed: _pickVideo,
                     child: const CustomTitle(
@@ -86,13 +125,6 @@ class _ChooseVideoPageState extends State<ChooseVideoPage> {
                       style: TitleStyle.style18,
                     ),
                   ),
-                  if (_selectedVideoPath != null)
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8.0),
-                      child: Text(
-                        'Selected Video: ${_selectedVideoPath!.split('/').last}',
-                      ),
-                    ),
                   const SizedBox(height: 20),
                   ConditionalBuilder(
                     condition: state is! VideoUploading,
