@@ -2,32 +2,43 @@ import 'package:flutter/foundation.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
-class VideoProvider {
-  final ValueNotifier<VideoPlayerController?> controllerNotifier =
-      ValueNotifier(null);
-  final ValueNotifier<Uint8List?> thumbnailNotifier = ValueNotifier(null);
-  final ValueNotifier<bool> isLikedNotifier = ValueNotifier(false);
-  final ValueNotifier<bool> showPlayPauseIconNotifier = ValueNotifier(false);
-  final ValueNotifier<Duration> positionNotifier = ValueNotifier(Duration.zero);
-  final ValueNotifier<Duration> durationNotifier = ValueNotifier(Duration.zero);
-  final ValueNotifier<bool> isPausedNotifier = ValueNotifier(false);
-
+class VideoProvider extends ChangeNotifier {
   VideoProvider(String videoUrl) {
     _initializeController(videoUrl);
   }
 
+  VideoPlayerController? _controller;
+  Uint8List? _thumbnail;
+  bool _isLiked = false;
+  bool _showPlayPauseIcon = false;
+  final ValueNotifier<Duration> _positionNotifier =
+      ValueNotifier(Duration.zero);
+  final ValueNotifier<Duration> _durationNotifier =
+      ValueNotifier(Duration.zero);
+  final ValueNotifier<bool> _isLikedNotifier = ValueNotifier(false);
+  bool _isPaused = false;
+
+  VideoPlayerController? get controller => _controller;
+  Uint8List? get thumbnail => _thumbnail;
+  bool get isLiked => _isLikedNotifier.value;
+  bool get showPlayPauseIcon => _showPlayPauseIcon;
+  ValueNotifier<Duration> get positionNotifier => _positionNotifier;
+  ValueNotifier<Duration> get durationNotifier => _durationNotifier;
+  ValueNotifier<bool> get isLikedNotifier => _isLikedNotifier;
+  bool get isPaused => _isPaused;
+
   Future<void> _initializeController(String videoUrl) async {
-    final VideoPlayerController controller =
-        VideoPlayerController.networkUrl(Uri.parse(videoUrl))..setLooping(true);
+    _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl))
+      ..setLooping(true);
 
-    await controller.initialize();
-    controller.play();
-    controllerNotifier.value = controller;
+    await _controller!.initialize();
+    _controller!.play();
+    _durationNotifier.value = _controller!.value.duration;
 
-    durationNotifier.value = controller.value.duration;
-    controller.addListener(() {
-      positionNotifier.value = controller.value.position;
-      isPausedNotifier.value = !controller.value.isPlaying;
+    _controller!.addListener(() {
+      _positionNotifier.value = _controller!.value.position;
+      _isPaused = !_controller!.value.isPlaying;
+      notifyListeners();
     });
 
     await _loadThumbnail(videoUrl);
@@ -41,45 +52,46 @@ class VideoProvider {
       quality: 75,
     );
 
-    thumbnailNotifier.value = thumbnailData;
+    _thumbnail = thumbnailData;
+    notifyListeners();
   }
 
   void togglePlayPause() {
-    final VideoPlayerController? controller = controllerNotifier.value;
-    if (controller != null) {
-      if (controller.value.isPlaying) {
-        controller.pause();
+    if (_controller != null) {
+      if (_controller!.value.isPlaying) {
+        _controller!.pause();
       } else {
-        controller.play();
+        _controller!.play();
       }
-      showPlayPauseIconNotifier.value = true;
-      isPausedNotifier.value = !controller.value.isPlaying;
+      _showPlayPauseIcon = true;
+      _isPaused = !_controller!.value.isPlaying;
+      notifyListeners();
 
       Future.delayed(const Duration(seconds: 1), () {
-        showPlayPauseIconNotifier.value = false;
+        _showPlayPauseIcon = false;
+        notifyListeners();
       });
     }
   }
 
   void toggleLike() {
-    isLikedNotifier.value = !isLikedNotifier.value;
+    _isLiked = !_isLiked;
+    _isLikedNotifier.value = _isLiked;
+    notifyListeners();
   }
 
   void seekTo(Duration position) {
-    final VideoPlayerController? controller = controllerNotifier.value;
-    if (controller != null) {
-      controller.seekTo(position);
+    if (_controller != null) {
+      _controller!.seekTo(position);
     }
   }
 
+  @override
   void dispose() {
-    controllerNotifier.value?.dispose();
-    controllerNotifier.dispose();
-    thumbnailNotifier.dispose();
-    isLikedNotifier.dispose();
-    showPlayPauseIconNotifier.dispose();
-    positionNotifier.dispose();
-    durationNotifier.dispose();
-    isPausedNotifier.dispose();
+    _positionNotifier.dispose();
+    _durationNotifier.dispose();
+    _isLikedNotifier.dispose();
+    _controller?.dispose();
+    super.dispose();
   }
 }

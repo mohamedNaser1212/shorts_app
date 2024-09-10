@@ -1,5 +1,5 @@
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../domain/video_notifiers/video_notifier.dart';
 
@@ -9,11 +9,9 @@ class ThumbnailNotifier extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final videoProvider = VideoProvider(videoUrl);
-
-    return ValueListenableBuilder<Uint8List?>(
-      valueListenable: videoProvider.thumbnailNotifier,
-      builder: (context, thumbnailData, child) {
+    return Consumer<VideoProvider>(
+      builder: (context, videoProvider, child) {
+        final thumbnailData = videoProvider.thumbnail;
         if (thumbnailData != null) {
           return Image.memory(
             thumbnailData,

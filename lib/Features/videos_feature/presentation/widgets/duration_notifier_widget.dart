@@ -4,7 +4,9 @@ import '../../domain/video_notifiers/video_notifier.dart';
 
 class DurationNotifier extends StatelessWidget {
   const DurationNotifier({super.key, required this.videoProvider});
+
   final VideoProvider videoProvider;
+
   @override
   Widget build(BuildContext context) {
     return ValueListenableBuilder<Duration>(

@@ -1,8 +1,5 @@
-import 'dart:io';
-
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
-import 'package:shorts/core/network/firebase_manager/firebase_helper.dart'; // Import FirebaseHelper
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 import 'package:uuid/uuid.dart';
 
 abstract class VideosRemoteDataSource {
@@ -15,7 +12,6 @@ abstract class VideosRemoteDataSource {
 
 class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
   final FirebaseHelper firebaseHelper;
-  final FirebaseStorage _storage = FirebaseStorage.instance;
   final Uuid _uuid = const Uuid();
 
   VideosRemoteDataSourceImpl({
@@ -34,7 +30,10 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     required String videoPath,
   }) async {
     final videoId = _uuid.v4();
-    final videoUrl = await _uploadVideoToStorage(videoPath, videoId);
+    final videoUrl = await firebaseHelper.uploadVideoToStorage(
+      videoPath: videoPath,
+      videoId: videoId,
+    );
 
     final video = VideoModel(
       id: videoId,
@@ -50,13 +49,5 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     );
 
     return video;
-  }
-
-  Future<String> _uploadVideoToStorage(String videoPath, String videoId) async {
-    final videoRef = _storage.ref().child('videos').child(videoId);
-    final uploadTask = videoRef.putFile(File(videoPath));
-    final snapshot = await uploadTask.whenComplete(() => null);
-    final videoUrl = await snapshot.ref.getDownloadURL();
-    return videoUrl;
   }
 }

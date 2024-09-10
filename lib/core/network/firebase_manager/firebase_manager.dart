@@ -1,8 +1,12 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 
 class FirebaseManagerImpl implements FirebaseHelper {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseStorage _storage = FirebaseStorage.instance;
 
   @override
   Future<List<Map<String, dynamic>>> get({
@@ -56,6 +60,23 @@ class FirebaseManagerImpl implements FirebaseHelper {
       await _firestore.collection(collectionPath).doc(documentId).delete();
     } catch (e) {
       print('Error deleting data: $e');
+    }
+  }
+
+  @override
+  Future<String> uploadVideoToStorage({
+    required String videoPath,
+    required String videoId,
+  }) async {
+    try {
+      final videoRef = _storage.ref().child('videos').child(videoId);
+      final uploadTask = videoRef.putFile(File(videoPath));
+      final snapshot = await uploadTask.whenComplete(() => null);
+      final videoUrl = await snapshot.ref.getDownloadURL();
+      return videoUrl;
+    } catch (e) {
+      print('Error uploading video: $e');
+      throw Exception('Failed to upload video');
     }
   }
 }

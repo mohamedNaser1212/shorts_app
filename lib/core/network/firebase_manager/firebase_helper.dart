@@ -21,4 +21,9 @@ abstract class FirebaseHelper {
     required String collectionPath,
     required String documentId,
   });
+
+  Future<String> uploadVideoToStorage({
+    required String videoPath,
+    required String videoId,
+  });
 }

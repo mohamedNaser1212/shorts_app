@@ -1,22 +1,27 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
 import '../../domain/video_notifiers/video_notifier.dart';
 import 'duration_notifier_widget.dart';
 
 class SliderNotifier extends StatelessWidget {
-  const SliderNotifier({super.key, required this.videoProvider});
+  const SliderNotifier({
+    super.key,
+    required this.videoProvider,
+  });
+
   final VideoProvider videoProvider;
+
   @override
   Widget build(BuildContext context) {
     return Positioned(
       bottom: 20,
       left: 20,
       right: 20,
-      child: ValueListenableBuilder<bool>(
-        valueListenable: videoProvider.isPausedNotifier,
-        builder: (context, isPaused, child) {
+      child: Consumer<VideoProvider>(
+        builder: (context, videoProvider, child) {
           return AnimatedOpacity(
-            opacity: isPaused ? 1.0 : 0.0,
+            opacity: videoProvider.isPaused ? 1.0 : 0.0,
             duration: const Duration(milliseconds: 300),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
