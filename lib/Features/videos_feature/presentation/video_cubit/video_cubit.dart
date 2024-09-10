@@ -9,6 +9,9 @@ import '../../domain/video_entity/video_entity.dart';
 part 'video_state.dart';
 
 class VideoCubit extends Cubit<VideoState> {
+  final UploadVideoUseCase uploadVideoUseCase;
+  final GetVideosUseCase getVideosUseCase;
+
   VideoCubit({
     required this.uploadVideoUseCase,
     required this.getVideosUseCase,
@@ -16,8 +19,6 @@ class VideoCubit extends Cubit<VideoState> {
 
   static VideoCubit get(context) => BlocProvider.of(context);
 
-  final UploadVideoUseCase uploadVideoUseCase;
-  final GetVideosUseCase getVideosUseCase;
   Future<String?> pickVideo() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.video);
     if (result != null && result.files.isNotEmpty) {
@@ -34,10 +35,7 @@ class VideoCubit extends Cubit<VideoState> {
     required UserEntity user,
   }) async {
     emit(VideoUploading());
-    print(user?.name);
-    print(user?.id);
-    print(user?.phone);
-    print(user?.email);
+
     final result = await uploadVideoUseCase.call(
       description: description,
       videoPath: videoPath,
