@@ -10,6 +10,9 @@ import 'package:shorts/core/internet_manager/internet_manager_impl.dart';
 import 'package:shorts/core/network/Hive_manager/hive_helper.dart';
 import 'package:shorts/core/network/Hive_manager/hive_manager.dart';
 
+import '../network/firebase_manager/firebase_helper.dart';
+import '../network/firebase_manager/firebase_manager.dart';
+
 final getIt = GetIt.instance;
 
 Future<void> setUpServiceLocator() async {
@@ -19,7 +22,7 @@ Future<void> setUpServiceLocator() async {
   // Register HiveService
   getIt.registerSingleton<LocalStorageManager>(HiveManager());
   await getIt.get<LocalStorageManager>().initialize();
-  print("Hive Initialized");
+
   getIt.registerFactory<GetVideosUseCase>(
     () => GetVideosUseCase(
       videosRepository: getIt.get<VideosRepo>(),
@@ -36,16 +39,17 @@ Future<void> setUpServiceLocator() async {
       videosRemoteDataSource: getIt.get<VideosRemoteDataSource>(),
     ),
   );
-  // Register Remote Data Source
-  getIt.registerSingleton<VideosRemoteDataSource>(
-    VideosRemoteDataSourceImpl(),
+
+  getIt.registerSingleton<FirebaseHelper>(
+    FirebaseManagerImpl(),
   );
 
-  // Register Repository
+  getIt.registerSingleton<VideosRemoteDataSource>(
+    VideosRemoteDataSourceImpl(
+      firebaseHelper: getIt.get<FirebaseHelper>(),
+    ),
+  );
 
-  // Register Use Cases
-
-  // Register Cubit last, after dependencies are registered
   getIt.registerFactory<VideoCubit>(
     () => VideoCubit(
       uploadVideoUseCase: getIt.get<UploadVideoUseCase>(),

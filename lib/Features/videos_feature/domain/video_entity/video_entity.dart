@@ -1,0 +1,22 @@
+import 'package:hive/hive.dart';
+
+part 'video_entity.g.dart';
+
+@HiveType(typeId: 0)
+class VideoEntity {
+  @HiveField(0)
+  final String id;
+  @HiveField(1)
+  final String thumbnail;
+  @HiveField(2)
+  final String videoUrl;
+  @HiveField(3)
+  final String? description;
+
+  const VideoEntity({
+    required this.id,
+    required this.thumbnail,
+    required this.videoUrl,
+    this.description,
+  });
+}

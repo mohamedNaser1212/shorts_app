@@ -1,23 +1,19 @@
-class VideoModel {
-  final String id;
+import '../../domain/video_entity/video_entity.dart';
 
-  final String thumbnail;
-  final String videoUrl;
-  final String? description;
-
-  VideoModel({
-    required this.id,
-    required this.thumbnail,
-    required this.videoUrl,
-    this.description,
+class VideoModel extends VideoEntity {
+  const VideoModel({
+    required super.id,
+    required super.thumbnail,
+    required super.videoUrl,
+    super.description,
   });
 
   factory VideoModel.fromJson(Map<String, dynamic> json) {
     return VideoModel(
-      id: json['id'],
-      thumbnail: json['thumbnail'],
-      videoUrl: json['videoUrl'],
-      description: json['description'] ?? '',
+      id: json['id'] ?? '',
+      thumbnail: json['thumbnail'] ?? '',
+      videoUrl: json['videoUrl'] ?? '',
+      description: json['description'],
     );
   }
 
