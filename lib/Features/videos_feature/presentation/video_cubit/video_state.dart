@@ -14,9 +14,8 @@ class VideoUploaded extends VideoState {
 
 class VideoError extends VideoState {
   final String message;
-  VideoError({
-    required this.message,
-  });
+
+  VideoError({required this.message});
 }
 
 class GetVideoLoading extends VideoState {}
@@ -29,7 +28,6 @@ class GetVideoSuccess extends VideoState {
 
 class GetVideosError extends VideoState {
   final String message;
-  GetVideosError({
-    required this.message,
-  });
+
+  GetVideosError({required this.message});
 }

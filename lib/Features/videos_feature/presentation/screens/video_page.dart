@@ -15,8 +15,11 @@ class VideoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-          title: const CustomTitle(
-              title: 'Videos', style: TitleStyle.styleBold20)),
+        title: const CustomTitle(
+          title: 'Videos',
+          style: TitleStyle.styleBold20,
+        ),
+      ),
       body: BlocProvider(
         create: (context) => VideoCubit(
           getVideosUseCase: getIt.get<GetVideosUseCase>(),
@@ -29,31 +32,30 @@ class VideoPage extends StatelessWidget {
             }
           },
           builder: (context, state) {
-            return BlocBuilder<VideoCubit, VideoState>(
-              builder: (context, state) {
-                if (state is GetVideoSuccess) {
-                  return PageView.builder(
-                    scrollDirection: Axis.vertical,
-                    itemCount: state.videos.length,
-                    itemBuilder: (context, index) {
-                      final video = state.videos[index];
-                      return VideoListItem(
-                        videoUrl: video.videoUrl,
-                      );
-                    },
+            if (state is GetVideoSuccess) {
+              return PageView.builder(
+                scrollDirection: Axis.vertical,
+                itemCount: state.videos.length,
+                itemBuilder: (context, index) {
+                  final video = state.videos[index];
+                  return VideoListItem(
+                    videoEntity: video,
                   );
-                } else if (state is VideoError) {
-                  return Center(
-                      child: CustomTitle(
-                    title: state.message,
-                    style: TitleStyle.style20,
-                  ));
-                }
-                return const Center(
-                    child: CustomTitle(
-                        title: 'No data available',
-                        style: TitleStyle.styleBold20));
-              },
+                },
+              );
+            } else if (state is VideoError) {
+              return Center(
+                child: CustomTitle(
+                  title: state.message,
+                  style: TitleStyle.style20,
+                ),
+              );
+            }
+            return const Center(
+              child: CustomTitle(
+                title: 'No data available',
+                style: TitleStyle.styleBold20,
+              ),
             );
           },
         ),

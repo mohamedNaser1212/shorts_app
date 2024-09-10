@@ -37,12 +37,15 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     required UserEntity user,
   }) async {
     final videoId = _uuid.v4();
+
+    // Upload the video to storage and get the URL
     final videoUrl = await firebaseHelper.uploadToStorage(
       videoPath: videoPath,
       videoId: videoId,
       collectionName: CollectionNames.videos,
     );
 
+    // Create the video model
     final video = VideoModel(
       id: videoId,
       description: description,
@@ -53,6 +56,13 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
 
     await firebaseHelper.post(
       collectionPath: CollectionNames.videos,
+      data: video.toJson(),
+      documentId: videoId,
+    );
+
+    // Add the video to the user's 'videos' sub-collection inside their document
+    await firebaseHelper.post(
+      collectionPath: '${CollectionNames.users}/${user.id}/videos',
       data: video.toJson(),
       documentId: videoId,
     );
