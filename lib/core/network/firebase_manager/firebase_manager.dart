@@ -9,6 +9,25 @@ class FirebaseManagerImpl implements FirebaseHelper {
   final FirebaseStorage _storage = FirebaseStorage.instance;
 
   @override
+  Future<Map<String, dynamic>> getDocument({
+    required String collectionPath,
+    required String documentId,
+  }) async {
+    try {
+      final doc =
+          await _firestore.collection(collectionPath).doc(documentId).get();
+      if (doc.exists) {
+        return doc.data()!;
+      } else {
+        throw Exception('Document not found');
+      }
+    } catch (e) {
+      print('Error fetching document: $e');
+      throw Exception('Failed to fetch document');
+    }
+  }
+
+  @override
   Future<List<Map<String, dynamic>>> get({
     required String collectionPath,
   }) async {
@@ -22,19 +41,24 @@ class FirebaseManagerImpl implements FirebaseHelper {
   }
 
   @override
-  Future<void> post({
+  Future<DocumentReference> post({
     required String collectionPath,
     required Map<String, dynamic> data,
     String? documentId,
   }) async {
     try {
       if (documentId != null) {
-        await _firestore.collection(collectionPath).doc(documentId).set(data);
+        final docRef = _firestore.collection(collectionPath).doc(documentId);
+        await docRef.set(data);
+        return docRef;
       } else {
-        await _firestore.collection(collectionPath).add(data);
+        final docRef = _firestore.collection(collectionPath).doc();
+        await docRef.set(data);
+        return docRef;
       }
     } catch (e) {
       print('Error posting data: $e');
+      throw Exception('Failed to post data');
     }
   }
 
@@ -64,12 +88,13 @@ class FirebaseManagerImpl implements FirebaseHelper {
   }
 
   @override
-  Future<String> uploadVideoToStorage({
+  Future<String> uploadToStorage({
     required String videoPath,
     required String videoId,
+    required String collectionName,
   }) async {
     try {
-      final videoRef = _storage.ref().child('videos').child(videoId);
+      final videoRef = _storage.ref().child(collectionName).child(videoId);
       final uploadTask = videoRef.putFile(File(videoPath));
       final snapshot = await uploadTask.whenComplete(() => null);
       final videoUrl = await snapshot.ref.getDownloadURL();
@@ -77,6 +102,23 @@ class FirebaseManagerImpl implements FirebaseHelper {
     } catch (e) {
       print('Error uploading video: $e');
       throw Exception('Failed to upload video');
+    }
+  }
+
+  @override
+  Future<Map<String, dynamic>> getUserById({
+    required String userId,
+  }) async {
+    try {
+      final doc = await _firestore.collection('users').doc(userId).get();
+      if (doc.exists) {
+        return doc.data()!;
+      } else {
+        throw Exception('User not found');
+      }
+    } catch (e) {
+      print('Error fetching user: $e');
+      throw Exception('Failed to fetch user');
     }
   }
 }

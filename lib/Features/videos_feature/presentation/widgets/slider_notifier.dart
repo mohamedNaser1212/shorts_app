@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
 
 import '../../domain/video_notifiers/video_notifier.dart';
 import 'duration_notifier_widget.dart';
 
-class SliderNotifier extends StatelessWidget {
+class SliderNotifier extends StatefulWidget {
   const SliderNotifier({
     super.key,
     required this.videoProvider,
@@ -13,43 +12,66 @@ class SliderNotifier extends StatelessWidget {
   final VideoProvider videoProvider;
 
   @override
+  State<SliderNotifier> createState() => _SliderNotifierState();
+}
+
+class _SliderNotifierState extends State<SliderNotifier> {
+  late final VoidCallback _positionListener;
+  late final VoidCallback _durationListener;
+
+  Duration _position = Duration.zero;
+  Duration _duration = Duration.zero;
+
+  @override
+  void initState() {
+    super.initState();
+
+    _positionListener = () {
+      setState(() {
+        _position = widget.videoProvider.positionNotifier.value;
+      });
+    };
+    widget.videoProvider.positionNotifier.addListener(_positionListener);
+
+    _durationListener = () {
+      setState(() {
+        _duration = widget.videoProvider.durationNotifier.value;
+      });
+    };
+    widget.videoProvider.durationNotifier.addListener(_durationListener);
+  }
+
+  @override
+  void dispose() {
+    widget.videoProvider.positionNotifier.removeListener(_positionListener);
+    widget.videoProvider.durationNotifier.removeListener(_durationListener);
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Positioned(
       bottom: 20,
       left: 20,
       right: 20,
-      child: Consumer<VideoProvider>(
-        builder: (context, videoProvider, child) {
-          return AnimatedOpacity(
-            opacity: videoProvider.isPaused ? 1.0 : 0.0,
-            duration: const Duration(milliseconds: 300),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.stretch,
-              children: [
-                ValueListenableBuilder<Duration>(
-                  valueListenable: videoProvider.positionNotifier,
-                  builder: (context, position, child) {
-                    return ValueListenableBuilder<Duration>(
-                      valueListenable: videoProvider.durationNotifier,
-                      builder: (context, duration, child) {
-                        return Slider(
-                          value: position.inMilliseconds.toDouble(),
-                          min: 0.0,
-                          max: duration.inMilliseconds.toDouble(),
-                          onChanged: (value) {
-                            videoProvider
-                                .seekTo(Duration(milliseconds: value.toInt()));
-                          },
-                        );
-                      },
-                    );
-                  },
-                ),
-                DurationNotifier(videoProvider: videoProvider),
-              ],
+      child: AnimatedOpacity(
+        opacity: widget.videoProvider.isPaused ? 1.0 : 0.0,
+        duration: const Duration(milliseconds: 300),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            Slider(
+              value: _position.inMilliseconds.toDouble(),
+              min: 0.0,
+              max: _duration.inMilliseconds.toDouble(),
+              onChanged: (value) {
+                widget.videoProvider
+                    .seekTo(Duration(milliseconds: value.toInt()));
+              },
             ),
-          );
-        },
+            DurationNotifier(videoProvider: widget.videoProvider),
+          ],
+        ),
       ),
     );
   }

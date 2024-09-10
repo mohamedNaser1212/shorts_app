@@ -1,6 +1,11 @@
 abstract class FirebaseHelper {
   const FirebaseHelper();
 
+  Future<Map<String, dynamic>> getDocument({
+    required String collectionPath,
+    required String documentId,
+  });
+
   Future<List<Map<String, dynamic>>> get({
     required String collectionPath,
   });
@@ -22,8 +27,13 @@ abstract class FirebaseHelper {
     required String documentId,
   });
 
-  Future<String> uploadVideoToStorage({
+  Future<String> uploadToStorage({
     required String videoPath,
     required String videoId,
+    required String collectionName,
+  });
+
+  Future<Map<String, dynamic>> getUserById({
+    required String userId,
   });
 }

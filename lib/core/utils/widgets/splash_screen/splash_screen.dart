@@ -1,14 +1,10 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shorts/Features/videos_feature/domain/videos_use_cases/get_videos_use_case/get_videos_use_case.dart';
-import 'package:shorts/Features/videos_feature/domain/videos_use_cases/upload_video_use_case/upload_video_use_case.dart';
-import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/core/navigations_manager/navigations_manager.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/utils/bloc_observer.dart';
-
-import '../../../../Features/layout/presentation/screens/home_page.dart';
+import 'package:shorts/core/utils/widgets/initial_screen/initial_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -33,13 +29,7 @@ class _SplashScreenState extends State<SplashScreen> {
         if (mounted) {
           NavigationManager.navigateAndFinish(
             context: context,
-            screen: BlocProvider(
-              create: (context) => VideoCubit(
-                getVideosUseCase: getIt.get<GetVideosUseCase>(),
-                uploadVideoUseCase: getIt.get<UploadVideoUseCase>(),
-              ),
-              child: const MyHomePage(),
-            ),
+            screen: const InitialScreen(),
           );
         }
       });

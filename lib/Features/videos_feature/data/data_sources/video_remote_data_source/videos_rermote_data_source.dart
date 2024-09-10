@@ -2,6 +2,8 @@ import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 import 'package:uuid/uuid.dart';
 
+import '../../../../../core/network/firebase_manager/collection_names.dart';
+
 abstract class VideosRemoteDataSource {
   Future<List<VideoModel>> getVideos();
   Future<VideoModel> uploadVideo({
@@ -20,7 +22,9 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
 
   @override
   Future<List<VideoModel>> getVideos() async {
-    final data = await firebaseHelper.get(collectionPath: 'videos');
+    final data = await firebaseHelper.get(
+      collectionPath: CollectionNames.videos,
+    );
     return data.map((doc) => VideoModel.fromJson(doc)).toList();
   }
 
@@ -30,9 +34,10 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     required String videoPath,
   }) async {
     final videoId = _uuid.v4();
-    final videoUrl = await firebaseHelper.uploadVideoToStorage(
+    final videoUrl = await firebaseHelper.uploadToStorage(
       videoPath: videoPath,
       videoId: videoId,
+      collectionName: CollectionNames.videos,
     );
 
     final video = VideoModel(
@@ -43,7 +48,7 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     );
 
     await firebaseHelper.post(
-      collectionPath: 'videos',
+      collectionPath: CollectionNames.videos,
       data: video.toJson(),
       documentId: videoId,
     );

@@ -1,7 +1,9 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
 import 'package:shorts/core/error_manager/failure.dart';
+import 'package:shorts/core/error_manager/firebase_failure.dart';
 import 'package:shorts/core/error_manager/internet_failure.dart';
 
 import '../error_manager/server_failure.dart';
@@ -31,13 +33,14 @@ class RepoManagerImpl extends RepoManager {
       final result = await action();
       return right(result);
     } on DioException catch (e) {
-      // Handle rate limiting if it's a 429 status
       if (e.response?.statusCode == 429) {
         return left(const ServerFailure(
             message:
                 'You have made too many requests. PleaSe try again later.'));
       }
       return left(ServerFailure.fromDioError(e));
+    } on FirebaseException catch (e) {
+      return left(FirebaseFailure.fromFirebaseError(e));
     } catch (e) {
       return left(ServerFailure(message: e.toString()));
     }
