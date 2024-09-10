@@ -1,5 +1,7 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 
+import 'hive_boxes_names.dart';
 import 'hive_helper.dart';
 
 class HiveManager implements LocalStorageManager {
@@ -8,22 +10,14 @@ class HiveManager implements LocalStorageManager {
   @override
   Future<void> initialize() async {
     await Hive.initFlutter();
-    // Hive.registerAdapter(ProductEntityAdapter());
-    // Hive.registerAdapter(CategoriesEntityAdapter());
-    // Hive.registerAdapter(FavouritesEntityAdapter());
-    // Hive.registerAdapter(AddToCartEntityAdapter());
-    // Hive.registerAdapter(UserEntityAdapter());
+    Hive.registerAdapter(VideoEntityAdapter());
+
     await _openAllBoxes();
   }
 
   Future<void> _openAllBoxes() async {
     await Future.wait([
-      // _openBox<ProductEntity>(HiveBoxesNames.kProductsBox),
-      // _openBox<CategoriesEntity>(HiveBoxesNames.kCategoriesBox),
-      // _openBox<FavouritesEntity>(HiveBoxesNames.kFavouritesBox),
-      // _openBox<CartEntity>(HiveBoxesNames.kCartBox),
-      // _openBox<UserEntity>(HiveBoxesNames.kUserBox),
-      // _openBox<String>(HiveBoxesNames.kSaveTokenBox),
+      _openBox<VideoEntity>(HiveBoxesNames.kVideoBox),
     ]);
   }
 

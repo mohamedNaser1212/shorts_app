@@ -1,5 +1,6 @@
 import 'package:get_it/get_it.dart';
-import 'package:shorts/Features/videos_feature/data/video_remote_data_source/videos_rermote_data_source.dart';
+import 'package:shorts/Features/videos_feature/data/data_sources/video_remote_data_source/videos_rermote_data_source.dart';
+import 'package:shorts/Features/videos_feature/data/data_sources/videos_local_data_source/video_local_data_source.dart';
 import 'package:shorts/Features/videos_feature/data/videos_repo_impl/videos_repo_impl.dart';
 import 'package:shorts/Features/videos_feature/domain/video_repo/video_repo.dart';
 import 'package:shorts/Features/videos_feature/domain/videos_use_cases/get_videos_use_case/get_videos_use_case.dart';
@@ -23,6 +24,12 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<LocalStorageManager>(HiveManager());
   await getIt.get<LocalStorageManager>().initialize();
 
+  getIt.registerSingleton<VideoLocalDataSource>(
+    VideoLocalDataSourceImpl(
+      hiveHelper: getIt.get<LocalStorageManager>(),
+    ),
+  );
+
   getIt.registerFactory<GetVideosUseCase>(
     () => GetVideosUseCase(
       videosRepository: getIt.get<VideosRepo>(),
@@ -37,6 +44,7 @@ Future<void> setUpServiceLocator() async {
   getIt.registerFactory<VideosRepo>(
     () => VideosRepoImpl(
       videosRemoteDataSource: getIt.get<VideosRemoteDataSource>(),
+      videoLocalDataSource: getIt.get<VideoLocalDataSource>(),
     ),
   );
 
