@@ -25,8 +25,10 @@ class AuthRepoImpl implements AuthenticationRepo {
   }) {
     return repoManager.call(
       action: () async {
-        final loginEntity =
-            await loginDataSource.login(email: email, password: password);
+        final loginEntity = await loginDataSource.login(
+          email: email,
+          password: password,
+        );
         await userInfoLocalDataSourceImpl.saveUserData(user: loginEntity);
         return loginEntity;
       },
@@ -34,11 +36,12 @@ class AuthRepoImpl implements AuthenticationRepo {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> register(
-      {required String email,
-      required String password,
-      required String name,
-      required String phone}) {
+  Future<Either<Failure, UserEntity>> register({
+    required String email,
+    required String password,
+    required String name,
+    required String phone,
+  }) {
     return repoManager.call(
       action: () async {
         final registerEntity = await loginDataSource.register(

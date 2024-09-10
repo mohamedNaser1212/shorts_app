@@ -1,8 +1,10 @@
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/Features/videos_feature/domain/videos_use_cases/get_videos_use_case/get_videos_use_case.dart';
 import 'package:shorts/Features/videos_feature/domain/videos_use_cases/upload_video_use_case/upload_video_use_case.dart';
+import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
+
+import '../../domain/video_entity/video_entity.dart';
 
 part 'video_state.dart';
 
@@ -26,11 +28,21 @@ class VideoCubit extends Cubit<VideoState> {
     return null;
   }
 
-  Future<void> uploadVideo(
-      {required String videoPath, required String description}) async {
+  Future<void> uploadVideo({
+    required String videoPath,
+    required String description,
+    required UserEntity user,
+  }) async {
     emit(VideoUploading());
+    print(user?.name);
+    print(user?.id);
+    print(user?.phone);
+    print(user?.email);
     final result = await uploadVideoUseCase.call(
-        description: description, videoPath: videoPath);
+      description: description,
+      videoPath: videoPath,
+      user: user,
+    );
     result.fold(
       (failure) {
         print('Error uploading video: ${failure.message}');

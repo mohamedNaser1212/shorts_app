@@ -39,9 +39,33 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<LocalStorageManager>(HiveManager());
   await getIt.get<LocalStorageManager>().initialize();
 
+  getIt.registerSingleton<FirebaseHelper>(
+    FirebaseManagerImpl(),
+  );
+
+  getIt.registerSingleton<RepoManager>(
+    RepoManagerImpl(
+      internetManager: getIt.get<InternetManager>(),
+    ),
+  );
+
+  getIt.registerSingleton<VideosRemoteDataSource>(
+    VideosRemoteDataSourceImpl(
+      firebaseHelper: getIt.get<FirebaseHelper>(),
+    ),
+  );
+
   getIt.registerSingleton<VideoLocalDataSource>(
     VideoLocalDataSourceImpl(
       hiveHelper: getIt.get<LocalStorageManager>(),
+    ),
+  );
+
+  getIt.registerFactory<VideosRepo>(
+    () => VideosRepoImpl(
+      videosRemoteDataSource: getIt.get<VideosRemoteDataSource>(),
+      videoLocalDataSource: getIt.get<VideoLocalDataSource>(),
+      repoManager: getIt.get<RepoManager>(),
     ),
   );
 
@@ -56,37 +80,27 @@ Future<void> setUpServiceLocator() async {
       videoRepository: getIt.get<VideosRepo>(),
     ),
   );
-  getIt.registerFactory<VideosRepo>(
-    () => VideosRepoImpl(
-      videosRemoteDataSource: getIt.get<VideosRemoteDataSource>(),
-      videoLocalDataSource: getIt.get<VideoLocalDataSource>(),
+
+  getIt.registerFactory<VideoCubit>(
+    () => VideoCubit(
+      uploadVideoUseCase: getIt.get<UploadVideoUseCase>(),
+      getVideosUseCase: getIt.get<GetVideosUseCase>(),
     ),
   );
 
-  getIt.registerSingleton<FirebaseHelper>(
-    FirebaseManagerImpl(),
-  );
-  getIt.registerSingleton<RepoManager>(
-    RepoManagerImpl(
-      internetManager: getIt.get<InternetManager>(),
-    ),
-  );
-  getIt.registerSingleton<VideosRemoteDataSource>(
-    VideosRemoteDataSourceImpl(
-      firebaseHelper: getIt.get<FirebaseHelper>(),
-    ),
-  );
-
+  // UserInfo and Authentication related registrations
   getIt.registerSingleton<AuthenticationRemoteDataSource>(
     AuthenticationDataSourceImpl(
       firebaseHelper: getIt.get<FirebaseHelper>(),
     ),
   );
+
   getIt.registerSingleton<UserLocalDataSourceImpl>(
     UserLocalDataSourceImpl(
       hiveHelper: getIt.get<LocalStorageManager>(),
     ),
   );
+
   getIt.registerSingleton<AuthenticationRepo>(
     AuthRepoImpl(
       repoManager: getIt.get<RepoManager>(),
@@ -98,6 +112,11 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<UserInfoRemoteDataSource>(
     UserInfoRemoteDataSourceImpl(),
   );
+
+  getIt.registerSingleton<UserInfoLocalDataSource>(
+    UserLocalDataSourceImpl(hiveHelper: getIt.get<LocalStorageManager>()),
+  );
+
   getIt.registerSingleton<UserInfoRepo>(
     UserInfoRepoImpl(
       userLocalDataSource: getIt.get<UserLocalDataSourceImpl>(),
@@ -106,20 +125,13 @@ Future<void> setUpServiceLocator() async {
     ),
   );
 
+  // Ensure that GetUserInfoUseCase is registered before UserInfoCubit
   getIt.registerSingleton<GetUserInfoUseCase>(
     GetUserInfoUseCase(
       userInfoRepo: getIt.get<UserInfoRepo>(),
     ),
   );
-  getIt.registerFactory<VideoCubit>(
-    () => VideoCubit(
-      uploadVideoUseCase: getIt.get<UploadVideoUseCase>(),
-      getVideosUseCase: getIt.get<GetVideosUseCase>(),
-    ),
-  );
-  getIt.registerSingleton<UserInfoLocalDataSource>(
-    UserLocalDataSourceImpl(hiveHelper: getIt.get<LocalStorageManager>()),
-  );
+
   getIt.registerFactory(() => UserInfoCubit(
         getUserUseCase: getIt.get<GetUserInfoUseCase>(),
       ));
@@ -129,17 +141,20 @@ Future<void> setUpServiceLocator() async {
       authenticationRepo: getIt.get<AuthenticationRepo>(),
     ),
   );
+
   getIt.registerSingleton<RegisterUseCase>(
     RegisterUseCase(
       authenticationRepo: getIt.get<AuthenticationRepo>(),
     ),
   );
+
   getIt.registerSingleton<RegisterCubit>(
     RegisterCubit(
       loginUseCase: getIt.get<RegisterUseCase>(),
       userDataUseCase: getIt.get<GetUserInfoUseCase>(),
     ),
   );
+
   getIt.registerSingleton<LoginCubit>(
     LoginCubit(
       loginUseCase: getIt.get<LoginUseCase>(),

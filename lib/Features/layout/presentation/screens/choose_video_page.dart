@@ -1,8 +1,9 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:path_provider/path_provider.dart'; // For saving the thumbnail
+import 'package:path_provider/path_provider.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/image_thumbnail.dart';
+import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/utils/widgets/custom_title.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
@@ -29,8 +30,10 @@ class _ChooseVideoPageState extends State<ChooseVideoPage> {
 
   Future<void> _pickVideo() async {
     final result = await context.read<VideoCubit>().pickVideo();
+    setState(() {
+      _selectedVideoPath = result;
+    });
 
-    _selectedVideoPath = result;
     if (_selectedVideoPath != null) {
       _generateThumbnail(_selectedVideoPath!);
     }
@@ -52,10 +55,13 @@ class _ChooseVideoPageState extends State<ChooseVideoPage> {
   }
 
   Future<void> _uploadVideo() async {
-    if (_selectedVideoPath != null && _titleController.text.isNotEmpty) {
+    final userEntity = UserInfoCubit.get(context).userEntity;
+
+    if (userEntity != null && _selectedVideoPath != null) {
       VideoCubit.get(context).uploadVideo(
         videoPath: _selectedVideoPath!,
         description: _titleController.text,
+        user: userEntity,
       );
     }
   }
@@ -83,8 +89,10 @@ class _ChooseVideoPageState extends State<ChooseVideoPage> {
           );
         } else if (state is VideoUploaded) {
           _titleController.clear();
-          _selectedVideoPath = null;
-          _thumbnailPath = null;
+          setState(() {
+            _selectedVideoPath = null;
+            _thumbnailPath = null;
+          });
 
           ScaffoldMessenger.of(context).showSnackBar(
             const SnackBar(

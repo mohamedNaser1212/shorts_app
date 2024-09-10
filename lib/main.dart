@@ -4,6 +4,7 @@ import 'package:shorts/Features/authentication_feature/presentation/cubit/login_
 import 'package:shorts/Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
+import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 
 import 'core/utils/widgets/splash_screen/splash_screen.dart';
 
@@ -26,6 +27,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt<VideoCubit>()..getVideos(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<UserInfoCubit>()..getUserData(),
         ),
       ],
       child: MaterialApp(

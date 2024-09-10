@@ -18,13 +18,6 @@ abstract class AuthenticationRemoteDataSource {
     required String name,
     required String phone,
   });
-
-  void createUserData({
-    required String email,
-    required String password,
-    required String name,
-    required String phone,
-  });
 }
 
 class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
@@ -45,6 +38,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       password: password,
     );
     uId = userCredential.user!.uid;
+
     UserModel user = UserModel(
       name: '',
       email: email,
@@ -61,32 +55,13 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     required String name,
     required String phone,
   }) async {
-    FirebaseAuth.instance
-        .createUserWithEmailAndPassword(
+    UserCredential userCredential =
+        await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
       password: password,
-    )
-        .then((value) {
-      uId = value.user!.uid;
-
-      createUserData(
-          email: email, password: password, name: name, phone: phone);
-    });
-
-    return UserModel(
-      name: name,
-      email: email,
-      phone: phone,
-      id: uId ?? '',
     );
-  }
+    uId = userCredential.user!.uid;
 
-  @override
-  void createUserData(
-      {required String email,
-      required String password,
-      required String name,
-      required String phone}) {
     UserModel user = UserModel(
       name: name,
       email: email,
@@ -94,9 +69,15 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       id: uId ?? '',
     );
 
+    createUserData(user: user);
+
+    return user;
+  }
+
+  void createUserData({required UserModel user}) {
     FirebaseFirestore.instance
         .collection(CollectionNames.users)
-        .doc(uId)
+        .doc(user.id)
         .set(user.toJson());
   }
 }

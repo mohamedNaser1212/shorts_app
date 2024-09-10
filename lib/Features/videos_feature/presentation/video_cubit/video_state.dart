@@ -22,7 +22,7 @@ class VideoError extends VideoState {
 class GetVideoLoading extends VideoState {}
 
 class GetVideoSuccess extends VideoState {
-  final List<VideoModel> videos;
+  final List<VideoEntity> videos;
 
   GetVideoSuccess({required this.videos});
 }

@@ -1,6 +1,5 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../constants/consts.dart';
 import '../../../error_manager/failure.dart';
 import '../../../repo_manager/repo_manager.dart';
 import '../../domain/user_entity/user_entity.dart';
@@ -31,9 +30,7 @@ class UserInfoRepoImpl implements UserInfoRepo {
         } else if (cachedUserData == null) {
           return cachedUserData;
         } else {
-          final userId = uId ?? '';
-
-          final userData = await remoteDataSource.getUser(userId);
+          final userData = await remoteDataSource.getUser();
 
           await userLocalDataSource.saveUserData(user: userData);
           return userData;
