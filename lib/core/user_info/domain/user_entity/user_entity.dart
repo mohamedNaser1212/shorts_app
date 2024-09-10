@@ -21,9 +21,6 @@ class UserEntity {
     required this.phone,
     required this.id,
   });
-
-  //majke a toJson method
-
   factory UserEntity.fromJson(Map<String, dynamic> json) {
     return UserEntity(
       name: json['name'],

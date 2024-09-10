@@ -1,13 +1,14 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shorts/core/network/firebase_manager/collection_names.dart';
 
 import '../../../../Features/authentication_feature/data/user_model/user_model.dart';
 import '../../../constants/consts.dart';
+import '../../../network/firebase_manager/collection_names.dart';
 
 abstract class UserInfoRemoteDataSource {
   const UserInfoRemoteDataSource();
 
   Future<UserModel> getUser();
+  Future<List<Map<String, dynamic>>> getUserVideos();
 }
 
 class UserInfoRemoteDataSourceImpl implements UserInfoRemoteDataSource {
@@ -17,7 +18,17 @@ class UserInfoRemoteDataSourceImpl implements UserInfoRemoteDataSource {
         .collection(CollectionNames.users)
         .doc(uId)
         .get();
-    print(userDoc.data());
     return UserModel.fromJson(userDoc.data()!);
+  }
+
+  @override
+  Future<List<Map<String, dynamic>>> getUserVideos() async {
+    final videoDocs = await FirebaseFirestore.instance
+        .collection(CollectionNames.users)
+        .doc(uId)
+        .collection('videos')
+        .get();
+
+    return videoDocs.docs.map((doc) => doc.data()).toList();
   }
 }

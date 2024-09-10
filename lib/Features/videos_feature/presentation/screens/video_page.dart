@@ -37,7 +37,9 @@ class VideoPage extends StatelessWidget {
                     itemCount: state.videos.length,
                     itemBuilder: (context, index) {
                       final video = state.videos[index];
-                      return VideoListItem(videoUrl: video.videoUrl);
+                      return VideoListItem(
+                        videoUrl: video.videoUrl,
+                      );
                     },
                   );
                 } else if (state is VideoError) {

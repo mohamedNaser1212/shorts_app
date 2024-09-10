@@ -80,4 +80,20 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
         .doc(user.id)
         .set(user.toJson());
   }
+
+  // Method to upload video data into the user's collection
+  Future<void> uploadVideo(
+      {required String videoUrl, required String title}) async {
+    final videoData = {
+      'videoUrl': videoUrl,
+      'title': title,
+      'uploadDate': FieldValue.serverTimestamp(),
+    };
+
+    await FirebaseFirestore.instance
+        .collection(CollectionNames.users)
+        .doc(uId)
+        .collection('videos')
+        .add(videoData);
+  }
 }
