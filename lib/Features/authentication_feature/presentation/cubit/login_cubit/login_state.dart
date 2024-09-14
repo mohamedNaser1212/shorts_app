@@ -1,11 +1,11 @@
-import '../../../../../core/user_info/domain/user_entity/user_entity.dart';
+import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 
 class LoginState {}
 
 class AppLoginLoadingState extends LoginState {}
 
 class AppLoginSuccessState extends LoginState {
-  final UserEntity userModel;
+  final UserModel userModel;
   AppLoginSuccessState({
     required this.userModel,
   });

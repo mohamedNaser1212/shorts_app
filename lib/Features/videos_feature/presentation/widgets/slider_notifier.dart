@@ -9,7 +9,7 @@ class SliderNotifier extends StatefulWidget {
     required this.videoProvider,
   });
 
-  final VideoProvider videoProvider;
+  final VideoController videoProvider;
 
   @override
   State<SliderNotifier> createState() => _SliderNotifierState();

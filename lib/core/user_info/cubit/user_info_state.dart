@@ -5,10 +5,10 @@ class UserInfoState {}
 class GetUserInfoLoadingState extends UserInfoState {}
 
 class GetUserInfoSuccessState extends UserInfoState {
-  final UserEntity? userEntity;
+  final UserModel? userModel;
 
   GetUserInfoSuccessState({
-    required this.userEntity,
+    required this.userModel,
   });
 }
 

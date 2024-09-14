@@ -1,9 +1,9 @@
-import '../../../authentication_feature/data/user_model/user_model.dart'; // Ensure to import UserModel
+import '../../../authentication_feature/data/user_model/user_model.dart';
 import '../../domain/video_entity/video_entity.dart';
 
 class VideoModel extends VideoEntity {
   const VideoModel({
-    required super.user,
+    required super.user, // UserModel
     required super.id,
     required super.thumbnail,
     required super.videoUrl,
@@ -16,7 +16,7 @@ class VideoModel extends VideoEntity {
       thumbnail: json['thumbnail'] ?? '',
       videoUrl: json['videoUrl'] ?? '',
       description: json['description'],
-      user: UserModel.fromJson(json['user'] ?? {}),
+      user: UserModel.fromJson(json['user']),
     );
   }
 

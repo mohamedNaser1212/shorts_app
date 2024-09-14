@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../domain/video_entity/video_entity.dart';
@@ -11,14 +12,17 @@ import '../widgets/thumbnail_notifier.dart';
 
 class VideoListItem extends StatelessWidget {
   final VideoEntity videoEntity;
+  final UserModel userModel;
 
-  const VideoListItem({super.key, required this.videoEntity});
+  const VideoListItem(
+      {super.key, required this.videoEntity, required this.userModel});
 
   @override
   Widget build(BuildContext context) {
+    //  final userModel = UserInfoCubit.get(context).userModel!;
     return ChangeNotifierProvider(
-      create: (_) => VideoProvider(videoEntity.videoUrl),
-      child: Consumer<VideoProvider>(
+      create: (_) => VideoController(videoEntity.videoUrl),
+      child: Consumer<VideoController>(
         builder: (context, videoProvider, child) {
           return Stack(
             fit: StackFit.expand,
@@ -33,7 +37,8 @@ class VideoListItem extends StatelessWidget {
                     else
                       ThumbnailNotifier(videoUrl: videoEntity.videoUrl),
                     AnimatedPauseIcon(videoProvider: videoProvider),
-                    LikeIcon(videoProvider: videoProvider),
+                    LikeIcon(
+                        videoProvider: videoProvider, videoEntity: videoEntity),
                     SliderNotifier(videoProvider: videoProvider),
                   ],
                 ),
@@ -52,7 +57,7 @@ class VideoListItem extends StatelessWidget {
                       ),
                     ),
                     Text(
-                      videoEntity.description!,
+                      videoEntity.description ?? '',
                       style: const TextStyle(
                         color: Colors.white,
                         fontSize: 16,
@@ -60,18 +65,6 @@ class VideoListItem extends StatelessWidget {
                       ),
                     ),
                   ],
-                ),
-              ),
-              Positioned(
-                bottom: 40,
-                left: 10,
-                right: 10,
-                child: Text(
-                  videoEntity.description ?? '',
-                  style: const TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
-                  ),
                 ),
               ),
             ],

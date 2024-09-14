@@ -26,17 +26,17 @@ class _InitialScreenState extends State<InitialScreen> {
       child: BlocListener<UserInfoCubit, UserInfoState>(
         listener: (context, state) {
           if (state is GetUserInfoSuccessState) {
-            if (state.userEntity == null) {
+            if (state.userModel == null) {
               NavigationManager.navigateAndFinish(
                 context: context,
                 screen: LoginScreen(),
               );
             } else {
-              print(state.userEntity!.name);
-              UserInfoCubit.get(context).userEntity = state.userEntity;
+              print(state.userModel!.name);
+              UserInfoCubit.get(context).userModel = state.userModel;
               NavigationManager.navigateAndFinish(
                 context: context,
-                screen: const MyHomePage(),
+                screen: MyHomePage(),
               );
             }
           }

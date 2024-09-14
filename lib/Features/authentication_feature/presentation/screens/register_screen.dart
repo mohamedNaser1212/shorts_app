@@ -58,10 +58,10 @@ Future<void> _listener(BuildContext context, RegisterState state) async {
       fontSize: 16.0,
     );
     final userInfoCubit = context.read<UserInfoCubit>();
-    userInfoCubit.userEntity = state.userModel;
+    userInfoCubit.userModel = state.userModel;
     NavigationManager.navigateAndFinish(
       context: context,
-      screen: const MyHomePage(),
+      screen: MyHomePage(),
     );
   } else if (state is RegisterErrorState) {
     Fluttertoast.showToast(

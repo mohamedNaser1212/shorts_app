@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/videos_list.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
+import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/utils/widgets/custom_title.dart';
 
 import '../../../../core/service_locator/service_locator.dart';
@@ -25,37 +26,51 @@ class VideoPage extends StatelessWidget {
           getVideosUseCase: getIt.get<GetVideosUseCase>(),
           uploadVideoUseCase: getIt.get<UploadVideoUseCase>(),
         )..getVideos(),
-        child: BlocConsumer<VideoCubit, VideoState>(
-          listener: (context, state) {
-            if (state is GetVideoLoading) {
-              const Center(child: CircularProgressIndicator());
+        child: BlocConsumer<UserInfoCubit, UserInfoState>(
+          listener: (context, UserState) {
+            if (UserState is GetUserInfoSuccessState) {
+              print(UserState.userModel?.name);
+              print(UserState.userModel?.id);
+              print(UserState.userModel?.phone);
+              print(UserState.userModel?.email);
+              print(UserState.userModel?.fcmToken);
             }
           },
           builder: (context, state) {
-            if (state is GetVideoSuccess) {
-              return PageView.builder(
-                scrollDirection: Axis.vertical,
-                itemCount: state.videos.length,
-                itemBuilder: (context, index) {
-                  final video = state.videos[index];
-                  return VideoListItem(
-                    videoEntity: video,
+            return BlocConsumer<VideoCubit, VideoState>(
+              listener: (context, state) {
+                if (state is GetVideoLoading) {
+                  const Center(child: CircularProgressIndicator());
+                }
+              },
+              builder: (context, state) {
+                if (state is GetVideoSuccess) {
+                  return PageView.builder(
+                    scrollDirection: Axis.vertical,
+                    itemCount: state.videos.length,
+                    itemBuilder: (context, index) {
+                      final video = state.videos[index];
+                      return VideoListItem(
+                        videoEntity: video,
+                        userModel: UserInfoCubit.get(context).userModel!,
+                      );
+                    },
                   );
-                },
-              );
-            } else if (state is VideoError) {
-              return Center(
-                child: CustomTitle(
-                  title: state.message,
-                  style: TitleStyle.style20,
-                ),
-              );
-            }
-            return const Center(
-              child: CustomTitle(
-                title: 'No data available',
-                style: TitleStyle.styleBold20,
-              ),
+                } else if (state is VideoError) {
+                  return Center(
+                    child: CustomTitle(
+                      title: state.message,
+                      style: TitleStyle.style20,
+                    ),
+                  );
+                }
+                return const Center(
+                  child: CustomTitle(
+                    title: 'No data available',
+                    style: TitleStyle.styleBold20,
+                  ),
+                );
+              },
             );
           },
         ),

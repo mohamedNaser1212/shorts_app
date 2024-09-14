@@ -57,12 +57,12 @@ class LoginScreen extends StatelessWidget {
         fontSize: 16.0,
       );
       if (context.mounted) {
-        UserInfoCubit.get(context).userEntity = state.userModel;
+        UserInfoCubit.get(context).userModel = state.userModel;
         //UserInfoCubit.get(context).getUserData();
         // FavouritesCubit.get(context).getFavorites();
         // CartsCubit.get(context).getCartItems();
         NavigationManager.navigateAndFinish(
-            context: context, screen: const MyHomePage());
+            context: context, screen: MyHomePage());
       }
     } else if (state is AppLoginErrorState) {
       Fluttertoast.showToast(

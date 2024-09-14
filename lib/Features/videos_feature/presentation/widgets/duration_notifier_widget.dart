@@ -5,7 +5,7 @@ import '../../domain/video_notifiers/video_notifier.dart';
 class DurationNotifier extends StatefulWidget {
   const DurationNotifier({super.key, required this.videoProvider});
 
-  final VideoProvider videoProvider;
+  final VideoController videoProvider;
 
   @override
   State<DurationNotifier> createState() => _DurationNotifierState();

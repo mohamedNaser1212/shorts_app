@@ -1,11 +1,11 @@
 import 'package:dartz/dartz.dart';
 import 'package:shorts/core/error_manager/failure.dart';
 import 'package:shorts/core/repo_manager/repo_manager.dart';
-import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
 import '../../../../core/user_info/data/user_info_data_sources/user_info_local_data_source.dart';
 import '../../domain/authentication_repo/authentication_repo.dart';
 import '../authentication_data_sources/authentication_remote_data_source.dart';
+import '../user_model/user_model.dart';
 
 class AuthRepoImpl implements AuthenticationRepo {
   final AuthenticationRemoteDataSource loginDataSource;
@@ -19,7 +19,7 @@ class AuthRepoImpl implements AuthenticationRepo {
   });
 
   @override
-  Future<Either<Failure, UserEntity>> login({
+  Future<Either<Failure, UserModel>> login({
     required String email,
     required String password,
   }) {
@@ -36,7 +36,7 @@ class AuthRepoImpl implements AuthenticationRepo {
   }
 
   @override
-  Future<Either<Failure, UserEntity>> register({
+  Future<Either<Failure, UserModel>> register({
     required String email,
     required String password,
     required String name,

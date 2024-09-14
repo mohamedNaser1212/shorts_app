@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../../../../core/constants/consts.dart';
 import '../../../../core/network/firebase_manager/collection_names.dart';
@@ -39,11 +40,15 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     );
     uId = userCredential.user!.uid;
 
+    // Retrieve FCM token
+    String? fcmToken = await FirebaseMessaging.instance.getToken();
+
     UserModel user = UserModel(
       name: '',
       email: email,
       phone: '',
       id: uId ?? '',
+      fcmToken: fcmToken ?? '', // Add FCM token to the user
     );
     return user;
   }
@@ -62,11 +67,15 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     );
     uId = userCredential.user!.uid;
 
+    // Retrieve FCM token
+    String? fcmToken = await FirebaseMessaging.instance.getToken();
+
     UserModel user = UserModel(
       name: name,
       email: email,
       phone: phone,
       id: uId ?? '',
+      fcmToken: fcmToken ?? '', // Add FCM token to the user
     );
 
     createUserData(user: user);
@@ -81,7 +90,6 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
         .set(user.toJson());
   }
 
-  // Method to upload video data into the user's collection
   Future<void> uploadVideo(
       {required String videoUrl, required String title}) async {
     final videoData = {

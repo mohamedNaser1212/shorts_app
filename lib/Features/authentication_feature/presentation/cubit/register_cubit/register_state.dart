@@ -3,7 +3,7 @@ part of 'register_cubit.dart';
 class RegisterState {}
 
 class RegisterSuccessState extends RegisterState {
-  final UserEntity userModel;
+  final UserModel userModel;
 
   RegisterSuccessState({required this.userModel});
 }

@@ -8,7 +8,7 @@ class AnimatedPauseIcon extends StatefulWidget {
     required this.videoProvider,
   });
 
-  final VideoProvider videoProvider;
+  final VideoController videoProvider;
 
   @override
   State<AnimatedPauseIcon> createState() => _AnimatedPauseIconState();

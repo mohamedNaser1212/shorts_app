@@ -9,7 +9,7 @@ class ThumbnailNotifier extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Consumer<VideoProvider>(
+    return Consumer<VideoController>(
       builder: (context, videoProvider, child) {
         final thumbnailData = videoProvider.thumbnail;
         if (thumbnailData != null) {

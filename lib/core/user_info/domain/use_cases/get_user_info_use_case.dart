@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 
+import '../../../../Features/authentication_feature/data/user_model/user_model.dart';
 import '../../../error_manager/failure.dart';
-import '../user_entity/user_entity.dart';
 import '../user_info_repo/user_info_repo.dart';
 
 class GetUserInfoUseCase {
@@ -11,7 +11,7 @@ class GetUserInfoUseCase {
     required this.userInfoRepo,
   });
 
-  Future<Either<Failure, UserEntity?>> call() async {
+  Future<Either<Failure, UserModel?>> call() async {
     return await userInfoRepo.getUser();
   }
 }
