@@ -51,7 +51,7 @@ class _LikeIconState extends State<LikeIcon> {
                 fcmToken: widget.videoEntity.user.fcmToken,
                 userId: widget.videoEntity.user.id,
                 title: 'Liked',
-                body: 'Your video has been liked.',
+                body: 'Your video has been liked .',
                 context: context,
               );
             },
