@@ -3,7 +3,7 @@ import '../../domain/video_entity/video_entity.dart';
 
 class VideoModel extends VideoEntity {
   const VideoModel({
-    required super.user, // UserModel
+    required super.user,
     required super.id,
     required super.thumbnail,
     required super.videoUrl,

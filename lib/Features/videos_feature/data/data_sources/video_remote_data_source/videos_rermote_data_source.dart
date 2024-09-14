@@ -2,19 +2,19 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
-import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../core/network/firebase_manager/collection_names.dart';
+import '../../../../../core/user_info/domain/user_entity/user_entity.dart';
 
 abstract class VideosRemoteDataSource {
   Future<List<VideoModel>> getVideos();
   Future<VideoModel> uploadVideo({
     required String description,
     required String videoPath,
-    required UserModel user,
+    required UserEntity user,
   });
 }
 
@@ -40,7 +40,7 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
   Future<VideoModel> uploadVideo({
     required String description,
     required String videoPath,
-    required UserModel user,
+    required UserEntity user,
   }) async {
     final videoId = _uuid.v4();
 

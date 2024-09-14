@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/network/Hive_manager/hive_helper.dart';
 import '../../../../../core/user_info/domain/use_cases/get_user_info_use_case.dart';
-import '../../../data/user_model/user_model.dart';
+import '../../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../../domain/authentication_use_case/register_use_case.dart';
 
 part 'register_state.dart';

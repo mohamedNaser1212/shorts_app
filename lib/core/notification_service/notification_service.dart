@@ -33,7 +33,7 @@ class NotificationService {
       FirebaseMessaging.onMessage.listen((RemoteMessage message) {
         print(
             "Message received: ${message.notification?.title} - ${message.notification?.body}");
-        // Trigger the callback to handle the notification
+
         onMessageReceived(
             message.notification?.title, message.notification?.body);
       });

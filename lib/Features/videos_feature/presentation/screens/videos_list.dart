@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 import 'package:video_player/video_player.dart';
 
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../domain/video_entity/video_entity.dart';
 import '../../domain/video_notifiers/video_notifier.dart';
 import '../widgets/animated_pause_icon.dart';
@@ -12,7 +12,7 @@ import '../widgets/thumbnail_notifier.dart';
 
 class VideoListItem extends StatelessWidget {
   final VideoEntity videoEntity;
-  final UserModel userModel;
+  final UserEntity userModel;
 
   const VideoListItem(
       {super.key, required this.videoEntity, required this.userModel});

@@ -18,9 +18,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
   FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
-
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
-  await _firebaseMessaging.subscribeToTopic('all_users');
+  //
+  // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+  // await _firebaseMessaging.subscribeToTopic('all_users');
 
   runApp(MyApp());
 }

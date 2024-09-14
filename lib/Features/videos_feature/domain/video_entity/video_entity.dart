@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
-import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
+
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
 part 'video_entity.g.dart';
 
@@ -14,7 +15,7 @@ class VideoEntity {
   @HiveField(3)
   final String? description;
   @HiveField(4)
-  final UserModel user;
+  final UserEntity user;
 
   const VideoEntity({
     required this.id,

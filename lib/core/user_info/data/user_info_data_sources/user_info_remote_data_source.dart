@@ -8,7 +8,7 @@ abstract class UserInfoRemoteDataSource {
   const UserInfoRemoteDataSource();
 
   Future<UserModel> getUser();
-  Future<List<Map<String, dynamic>>> getUserVideos();
+  Future<List<Map<String, UserModel>>> getUserVideos();
 }
 
 class UserInfoRemoteDataSourceImpl implements UserInfoRemoteDataSource {
@@ -22,13 +22,17 @@ class UserInfoRemoteDataSourceImpl implements UserInfoRemoteDataSource {
   }
 
   @override
-  Future<List<Map<String, dynamic>>> getUserVideos() async {
+  Future<List<Map<String, UserModel>>> getUserVideos() async {
     final videoDocs = await FirebaseFirestore.instance
         .collection(CollectionNames.users)
         .doc(uId)
         .collection('videos')
         .get();
 
-    return videoDocs.docs.map((doc) => doc.data()).toList();
+    return videoDocs.docs
+        .map((videoDoc) => {
+              videoDoc.id: UserModel.fromJson(videoDoc.data()),
+            })
+        .toList();
   }
 }

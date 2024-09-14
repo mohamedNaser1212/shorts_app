@@ -1,8 +1,8 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../../Features/authentication_feature/data/user_model/user_model.dart';
 import '../../../error_manager/failure.dart';
 import '../../../repo_manager/repo_manager.dart';
+import '../../domain/user_entity/user_entity.dart';
 import '../../domain/user_info_repo/user_info_repo.dart';
 import '../user_info_data_sources/user_info_local_data_source.dart';
 import '../user_info_data_sources/user_info_remote_data_source.dart';
@@ -19,10 +19,10 @@ class UserInfoRepoImpl implements UserInfoRepo {
   });
 
   @override
-  Future<Either<Failure, UserModel?>> getUser() async {
+  Future<Either<Failure, UserEntity?>> getUser() async {
     return repoManager.call(
       action: () async {
-        final UserModel? cachedUserData =
+        final UserEntity? cachedUserData =
             await userLocalDataSource.loadUserData();
 
         if (cachedUserData != null) {

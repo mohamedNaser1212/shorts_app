@@ -49,9 +49,9 @@ class _LikeIconState extends State<LikeIcon> {
               print(widget.videoEntity.user.fcmToken);
               PushNotificationService.sendNotificationToSpecificUser(
                 fcmToken: widget.videoEntity.user.fcmToken,
-                userId: widget.videoEntity.user.id,
+                userId: widget.videoEntity.user.id!,
                 title: 'Liked',
-                body: 'Your video has been liked   .',
+                body: 'Your video has been liked .',
                 context: context,
               );
             },

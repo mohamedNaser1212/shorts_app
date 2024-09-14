@@ -1,34 +1,24 @@
 // user_model.dart
-import 'package:hive/hive.dart';
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
-part 'user_model.g.dart';
-
-@HiveType(typeId: 5)
-class UserModel {
-  @HiveField(0)
-  final String name;
-  @HiveField(1)
-  final String email;
-  @HiveField(2)
-  final String phone;
-  @HiveField(3)
-  final String id;
-  @HiveField(4)
-  final String fcmToken;
+class UserModel extends UserEntity {
   UserModel({
-    required this.name,
-    required this.email,
-    required this.phone,
-    required this.id,
-    required this.fcmToken,
+    required super.name,
+    required super.email,
+    required super.phone,
+    required super.id,
+    required super.fcmToken,
   });
 
-  UserModel.fromJson(Map<String, dynamic> json)
-      : name = json['name'],
-        email = json['email'],
-        phone = json['phone'],
-        id = json['id'],
-        fcmToken = json['fcmToken'];
+  factory UserModel.fromJson(Map<String, dynamic> json) {
+    return UserModel(
+      name: json['name'],
+      email: json['email'],
+      phone: json['phone'],
+      id: json['id'],
+      fcmToken: json['fcmToken'],
+    );
+  }
 
   @override
   Map<String, dynamic> toJson() {

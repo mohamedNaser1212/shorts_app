@@ -1,7 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../Features/authentication_feature/data/user_model/user_model.dart';
 import '../domain/use_cases/get_user_info_use_case.dart';
+import '../domain/user_entity/user_entity.dart';
 
 part 'user_info_state.dart';
 
@@ -13,7 +13,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
   static UserInfoCubit get(context) => BlocProvider.of(context);
 
   final GetUserInfoUseCase getUserUseCase;
-  UserModel? userModel;
+  UserEntity? userModel;
 
   Future<void> getUserData() async {
     emit(GetUserInfoLoadingState());
