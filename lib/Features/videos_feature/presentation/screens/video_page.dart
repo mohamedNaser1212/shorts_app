@@ -52,7 +52,7 @@ class VideoPage extends StatelessWidget {
                       final video = state.videos[index];
                       return VideoListItem(
                         videoEntity: video,
-                        userModel: UserInfoCubit.get(context).userModel!,
+                        userModel: UserInfoCubit.get(context).userEntity!,
                       );
                     },
                   );

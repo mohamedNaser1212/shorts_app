@@ -24,6 +24,8 @@ import '../../Features/authentication_feature/domain/authentication_repo/authent
 import '../../Features/authentication_feature/domain/authentication_use_case/login_use_case.dart';
 import '../network/firebase_manager/firebase_helper.dart';
 import '../network/firebase_manager/firebase_manager.dart';
+import '../notification_service/notification_helper.dart';
+import '../notification_service/push_notification_service.dart';
 import '../repo_manager/repo_manager.dart';
 import '../repo_manager/repo_manager_impl.dart';
 import '../user_info/data/user_info_repo_impl/user_info_repo_impl.dart';
@@ -54,6 +56,8 @@ Future<void> setUpServiceLocator() async {
       firebaseHelper: getIt.get<FirebaseHelper>(),
     ),
   );
+  getIt.registerLazySingleton<NotificationHelper>(
+      () => PushNotificationService());
 
   getIt.registerSingleton<VideoLocalDataSource>(
     VideoLocalDataSourceImpl(

@@ -22,8 +22,7 @@ class UserInfoRepoImpl implements UserInfoRepo {
   Future<Either<Failure, UserEntity?>> getUser() async {
     return repoManager.call(
       action: () async {
-        final UserEntity? cachedUserData =
-            await userLocalDataSource.loadUserData();
+        final cachedUserData = await userLocalDataSource.loadUserData();
 
         if (cachedUserData != null) {
           return cachedUserData;

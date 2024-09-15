@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:get_it/get_it.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-import 'package:shorts/core/notification_service/push_notification_service.dart';
 
+import '../../../../core/notification_service/notification_helper.dart';
 import '../../domain/video_notifiers/video_notifier.dart';
 
 class LikeIcon extends StatefulWidget {
-  const LikeIcon(
-      {super.key, required this.videoProvider, required this.videoEntity});
+  const LikeIcon({
+    super.key,
+    required this.videoProvider,
+    required this.videoEntity,
+  });
 
   final VideoController videoProvider;
   final VideoEntity videoEntity;
@@ -17,6 +21,7 @@ class LikeIcon extends StatefulWidget {
 
 class _LikeIconState extends State<LikeIcon> {
   late final VoidCallback _listener;
+  final notificationHelper = GetIt.instance.get<NotificationHelper>();
 
   @override
   void initState() {
@@ -46,12 +51,11 @@ class _LikeIconState extends State<LikeIcon> {
             onPressed: () {
               widget.videoProvider.toggleLike();
               print(widget.videoEntity.user.fcmToken);
-              print(widget.videoEntity.user.fcmToken);
-              PushNotificationService.sendNotificationToSpecificUser(
+              notificationHelper.sendNotificationToSpecificUser(
                 fcmToken: widget.videoEntity.user.fcmToken,
                 userId: widget.videoEntity.user.id!,
                 title: 'Liked',
-                body: 'Your video has been liked .',
+                body: 'Your video has been liked.',
                 context: context,
               );
             },

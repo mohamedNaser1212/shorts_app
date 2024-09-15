@@ -2,7 +2,6 @@ import 'package:hive_flutter/hive_flutter.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
-import '../../../Features/authentication_feature/data/user_model/user_model.dart';
 import 'hive_boxes_names.dart';
 import 'hive_helper.dart';
 
@@ -21,7 +20,7 @@ class HiveManager implements LocalStorageManager {
   Future<void> _openAllBoxes() async {
     await Future.wait([
       _openBox<VideoEntity>(HiveBoxesNames.kVideoBox),
-      _openBox<UserModel>(HiveBoxesNames.kUserBox),
+      _openBox<UserEntity>(HiveBoxesNames.kUserBox),
       _openBox<String>(
           HiveBoxesNames.kSaveTokenBox), // Assuming SaveTokenBox stores Strings
     ]);

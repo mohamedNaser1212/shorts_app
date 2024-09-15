@@ -22,7 +22,7 @@ void main() async {
   // final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
   // await _firebaseMessaging.subscribeToTopic('all_users');
 
-  runApp(MyApp());
+  runApp(const MyApp());
 }
 
 class MyApp extends StatelessWidget {

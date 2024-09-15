@@ -1,14 +1,50 @@
 import 'dart:convert';
 
+import 'package:firebase_core/firebase_core.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:googleapis_auth/auth_io.dart' as auth;
 import 'package:http/http.dart' as http;
 
-class PushNotificationService {
-  static final http.Client _client = http.Client();
+import 'notification_helper.dart';
 
-  static Future<String> getAccessToken() async {
-    final serviceAccountJson = {
+typedef NotificationCallback = void Function(String? title, String? body);
+
+class PushNotificationService implements NotificationHelper {
+  static final http.Client _client = http.Client();
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging.instance;
+
+  @override
+  Future<void> initialize(NotificationCallback onMessageReceived) async {
+    FirebaseMessaging.onBackgroundMessage(_firebaseMessagingBackgroundHandler);
+
+    final settings = await _firebaseMessaging.requestPermission(
+      alert: true,
+      badge: true,
+      sound: true,
+    );
+
+    if (settings.authorizationStatus == AuthorizationStatus.authorized) {
+      print('User granted permission');
+      FirebaseMessaging.onMessage.listen((message) {
+        final title = message.notification?.title;
+        final body = message.notification?.body;
+        print('Message received: $title - $body');
+        onMessageReceived(title, body);
+      });
+      FirebaseMessaging.onMessageOpenedApp.listen((message) {
+        print('Message clicked!');
+      });
+
+      subscribeToAllUsersTopic();
+    } else {
+      print('User declined or has not accepted permission');
+    }
+  }
+
+  @override
+  Future<String> getAccessToken() async {
+    const serviceAccountJson = {
       "type": "service_account",
       "project_id": "video-project-39c3e",
       "private_key_id": "e90a7e98586ca5852aab2733a648bc713fd770f0",
@@ -33,7 +69,7 @@ class PushNotificationService {
     ];
 
     try {
-      var credentials = await auth.obtainAccessCredentialsViaServiceAccount(
+      final credentials = await auth.obtainAccessCredentialsViaServiceAccount(
         auth.ServiceAccountCredentials.fromJson(serviceAccountJson),
         scopes,
         _client,
@@ -45,8 +81,8 @@ class PushNotificationService {
     }
   }
 
-  // Method to send a notification to a specific user
-  static Future<void> sendNotificationToSpecificUser({
+  @override
+  Future<void> sendNotificationToSpecificUser({
     required String fcmToken,
     required String userId,
     required String title,
@@ -58,13 +94,8 @@ class PushNotificationService {
       final notificationPayload = {
         "message": {
           "token": fcmToken,
-          "notification": {
-            "title": title,
-            "body": body,
-          },
-          "data": {
-            "user_id": userId,
-          },
+          "notification": {"title": title, "body": body},
+          "data": {"user_id": userId},
         }
       };
 
@@ -81,30 +112,43 @@ class PushNotificationService {
       if (response.statusCode == 200) {
         _showDialog(context, 'Success', 'Notification sent successfully.');
       } else {
-        print('Failed response: ${response.body}');
         _showDialog(
             context, 'Error', 'Error sending notification: ${response.body}');
       }
     } catch (e) {
-      print('Exception caught: $e');
       _showDialog(context, 'Error', 'Error sending notification: $e');
     }
   }
 
-  // Helper method to show a dialog
-  static void _showDialog(BuildContext context, String title, String message) {
-    showDialog(
-      context: context,
-      builder: (context) => AlertDialog(
-        title: Text(title),
-        content: Text(message),
-        actions: [
-          TextButton(
-            onPressed: () => Navigator.of(context).pop(),
-            child: const Text('OK'),
+  @override
+  void subscribeToAllUsersTopic() {
+    _firebaseMessaging.subscribeToTopic('allUsers');
+  }
+
+  static Future<void> _firebaseMessagingBackgroundHandler(
+      RemoteMessage message) async {
+    await Firebase.initializeApp();
+    print(
+        'Background message: ${message.notification?.title ?? ''} - ${message.notification?.body ?? ''}');
+  }
+
+  void _showDialog(BuildContext context, String title, String message) {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (context.mounted) {
+        showDialog(
+          context: context,
+          builder: (_) => AlertDialog(
+            title: Text(title),
+            content: Text(message),
+            actions: [
+              TextButton(
+                onPressed: () => Navigator.pop(context),
+                child: const Text('OK'),
+              ),
+            ],
           ),
-        ],
-      ),
-    );
+        );
+      }
+    });
   }
 }

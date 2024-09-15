@@ -13,7 +13,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
   static UserInfoCubit get(context) => BlocProvider.of(context);
 
   final GetUserInfoUseCase getUserUseCase;
-  UserEntity? userModel;
+  UserEntity? userEntity;
 
   Future<void> getUserData() async {
     emit(GetUserInfoLoadingState());
@@ -24,13 +24,13 @@ class UserInfoCubit extends Cubit<UserInfoState> {
         emit(GetUserInfoErrorState(message: failure.message));
       },
       (user) {
-        userModel = user;
-        print(userModel?.name);
-        print(userModel?.id);
-        print(userModel?.phone);
-        print(userModel?.email);
-        print(userModel?.fcmToken);
-        emit(GetUserInfoSuccessState(userModel: userModel));
+        userEntity = user;
+        print(userEntity?.name);
+        print(userEntity?.id);
+        print(userEntity?.phone);
+        print(userEntity?.email);
+        print(userEntity?.fcmToken);
+        emit(GetUserInfoSuccessState(userModel: userEntity));
       },
     );
   }

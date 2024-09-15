@@ -58,7 +58,7 @@ Future<void> _listener(BuildContext context, RegisterState state) async {
       fontSize: 16.0,
     );
     final userInfoCubit = context.read<UserInfoCubit>();
-    userInfoCubit.userModel = state.userModel;
+    userInfoCubit.userEntity = state.userModel;
     NavigationManager.navigateAndFinish(
       context: context,
       screen: MyHomePage(),

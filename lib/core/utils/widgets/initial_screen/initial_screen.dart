@@ -33,7 +33,8 @@ class _InitialScreenState extends State<InitialScreen> {
               );
             } else {
               print(state.userModel!.name);
-              UserInfoCubit.get(context).userModel = state.userModel;
+              UserInfoCubit.get(context).userEntity = state.userModel;
+
               NavigationManager.navigateAndFinish(
                 context: context,
                 screen: MyHomePage(),
