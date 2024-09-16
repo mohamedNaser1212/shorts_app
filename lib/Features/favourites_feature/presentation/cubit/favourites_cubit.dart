@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourites_use_case/favourites_use_case.dart';
-import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 
 part 'favourites_state.dart';
 
@@ -13,7 +13,7 @@ class FavouritesCubit extends Cubit<FavouritesState> {
   static FavouritesCubit get(context) => BlocProvider.of(context);
 
   Map<String, bool> favorites = {};
-  List<VideoEntity> getFavouritesModel = [];
+  List<FavouritesEntity> getFavouritesModel = [];
 
   Future<void> getFavourites() async {
     emit(GetFavoritesLoadingState());
@@ -34,11 +34,11 @@ class FavouritesCubit extends Cubit<FavouritesState> {
   Future<void> toggleFavourite(String videoId) async {
     emit(ToggleFavoritesLoadingState());
     favorites[videoId] = !(favorites[videoId] ?? false);
+
     emit(ToggleFavouriteSuccessState(isFavourite: favorites[videoId] ?? false));
 
-    final result = await favouritesUseCase.toggleFavouriteVideo(
-      videoId: videoId,
-    );
+    final result =
+        await favouritesUseCase.toggleFavouriteVideo(videoId: videoId);
     result.fold(
       (failure) {
         print('Failed to toggle favourite: ${failure.message}');

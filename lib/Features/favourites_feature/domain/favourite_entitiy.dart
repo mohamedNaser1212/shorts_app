@@ -1,11 +1,11 @@
 import 'package:hive/hive.dart';
 
-import '../../../../core/user_info/domain/user_entity/user_entity.dart';
+import '../../../core/user_info/domain/user_entity/user_entity.dart';
 
-part 'video_entity.g.dart';
+part 'favourite_entitiy.g.dart';
 
-@HiveType(typeId: 0)
-class VideoEntity {
+@HiveType(typeId: 2)
+class FavouritesEntity {
   @HiveField(0)
   final String id;
   @HiveField(1)
@@ -16,12 +16,15 @@ class VideoEntity {
   final String? description;
   @HiveField(4)
   final UserEntity user;
+  @HiveField(5)
+  bool? isFavourite;
 
-  VideoEntity({
+  FavouritesEntity({
     required this.id,
     required this.thumbnail,
     required this.videoUrl,
     this.description,
     required this.user,
+    this.isFavourite,
   });
 }

@@ -1,9 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
-import 'package:shorts/Features/favourites_feature/domain/favourites_use_case/favourites_use_case.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
-import 'package:shorts/core/service_locator/service_locator.dart';
+import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:video_player/video_player.dart';
 
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
@@ -18,12 +17,14 @@ class VideoListItem extends StatelessWidget {
   final VideoEntity videoEntity;
   final UserEntity userModel;
 
-  const VideoListItem(
-      {super.key, required this.videoEntity, required this.userModel});
+  const VideoListItem({
+    super.key,
+    required this.videoEntity,
+    required this.userModel,
+  });
 
   @override
   Widget build(BuildContext context) {
-    //  final userModel = UserInfoCubit.get(context).userModel!;
     return ChangeNotifierProvider(
       create: (_) => VideoController(videoEntity.videoUrl),
       child: Consumer<VideoController>(
@@ -41,12 +42,20 @@ class VideoListItem extends StatelessWidget {
                     else
                       ThumbnailNotifier(videoUrl: videoEntity.videoUrl),
                     AnimatedPauseIcon(videoProvider: videoProvider),
-                    BlocProvider(
-                      create: (context) => FavouritesCubit(
-                          favouritesUseCase: getIt.get<FavouritesUseCase>()),
-                      child: LikeIcon(
-                          videoProvider: videoProvider,
-                          videoEntity: videoEntity),
+                    BlocConsumer<VideoCubit, VideoState>(
+                      listener: (context, state) {},
+                      builder: (context, state) {
+                        return BlocConsumer<FavouritesCubit, FavouritesState>(
+                          listener: (context, state) {},
+                          builder: (context, state) {
+                            return LikeIcon(
+                              videoProvider: videoProvider,
+                              videoEntity: videoEntity,
+                              // favouritesEntity: ,
+                            );
+                          },
+                        );
+                      },
                     ),
                     SliderNotifier(videoProvider: videoProvider),
                   ],

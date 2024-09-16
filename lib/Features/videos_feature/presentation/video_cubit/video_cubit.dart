@@ -18,6 +18,7 @@ class VideoCubit extends Cubit<VideoState> {
   }) : super(VideoInitial());
 
   static VideoCubit get(context) => BlocProvider.of(context);
+  List<VideoEntity> videos = [];
 
   Future<String?> pickVideo() async {
     final result = await FilePicker.platform.pickFiles(type: FileType.video);
@@ -53,9 +54,11 @@ class VideoCubit extends Cubit<VideoState> {
   Future<void> getVideos() async {
     emit(GetVideoLoading());
     final result = await getVideosUseCase.call();
-    result.fold(
-      (failure) => emit(VideoError(message: failure.message)),
-      (videos) => emit(GetVideoSuccess(videos: videos)),
-    );
+    result.fold((failure) => emit(VideoError(message: failure.message)),
+        (videos) {
+      this.videos = videos;
+
+      emit(GetVideoSuccess(videos: videos));
+    });
   }
 }

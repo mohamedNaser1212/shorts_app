@@ -1,10 +1,11 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shorts/Features/favourites_feature/data/favourites_model/favourites_model.dart';
 
 import '../../../../../core/network/firebase_manager/collection_names.dart';
-import '../../../videos_feature/data/model/video_model.dart';
+import '../../../../core/constants/consts.dart';
 
 abstract class FavouritesRemoteDataSource {
-  Future<List<VideoModel>> getFavouriteVideos();
+  Future<List<FavouritesVideoModel>> getFavouriteVideos();
   Future<bool> toggleFavouriteVideo({
     required String videoId,
   });
@@ -14,45 +15,51 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
-  Future<List<VideoModel>> getFavouriteVideos() async {
-    try {
-      final querySnapshot = await firestore
-          .collection(CollectionNames.videos)
-          .where('isFavourite', isEqualTo: true)
-          .get();
+  Future<List<FavouritesVideoModel>> getFavouriteVideos() async {
+    final querySnapshot = await firestore
+        .collection(CollectionNames.users)
+        .doc(uId)
+        .collection(CollectionNames.favourites)
+        .get();
 
-      return querySnapshot.docs
-          .map((doc) => VideoModel.fromJson(doc.data()))
-          .toList();
-    } catch (error) {
-      print('Failed to fetch favourite videos: $error');
-      return [];
-    }
+    return querySnapshot.docs
+        .map((doc) => FavouritesVideoModel.fromJson(doc.data()))
+        .toList();
   }
 
   @override
   Future<bool> toggleFavouriteVideo({
     required String videoId,
   }) async {
-    final videoRef = firestore.collection(CollectionNames.videos).doc(videoId);
+    final userFavouritesRef = firestore
+        .collection(CollectionNames.users)
+        .doc(uId)
+        .collection(CollectionNames.favourites)
+        .doc(videoId);
 
-    final videoDoc = await videoRef.get();
-    if (videoDoc.exists) {
-      final videoData = videoDoc.data() as Map<String, dynamic>;
-      final bool isCurrentlyFavourite = videoData['isFavourite'] ?? false;
+    final userFavouriteDoc = await userFavouritesRef.get();
 
-      await videoRef.update({
-        'isFavourite': !isCurrentlyFavourite,
-      });
-
-      print(isCurrentlyFavourite
-          ? 'Video removed from favourites'
-          : 'Video added to favourites');
-
-      return !isCurrentlyFavourite;
-    } else {
-      print('Video not found');
+    if (userFavouriteDoc.exists) {
+      await userFavouritesRef.delete();
+      print('Video removed from favourites collection');
       return false;
+    } else {
+      final globalVideoRef =
+          firestore.collection(CollectionNames.videos).doc(videoId);
+      final globalVideoDoc = await globalVideoRef.get();
+
+      if (globalVideoDoc.exists) {
+        final videoData = globalVideoDoc.data() as Map<String, dynamic>;
+
+        // Add the video to the user's Favourites sub-collection
+        await userFavouritesRef.set(videoData);
+
+        print('Video added to favourites collection');
+        return true;
+      } else {
+        print('Video not found in global videos collection');
+        return false;
+      }
     }
   }
 }

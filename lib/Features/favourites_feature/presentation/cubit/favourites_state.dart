@@ -26,7 +26,7 @@ class GetFavoritesErrorState extends FavouritesState {
 }
 
 class GetFavoritesSuccessState extends FavouritesState {
-  final List<VideoEntity> getFavouritesModel;
+  final List<FavouritesEntity> getFavouritesModel;
   GetFavoritesSuccessState({
     required this.getFavouritesModel,
   });

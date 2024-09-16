@@ -22,7 +22,6 @@ class VideoEntityAdapter extends TypeAdapter<VideoEntity> {
       videoUrl: fields[2] as String,
       description: fields[3] as String?,
       user: fields[4] as UserEntity,
-      isFavourite: fields[5] as bool,
     );
   }
 
@@ -39,9 +38,7 @@ class VideoEntityAdapter extends TypeAdapter<VideoEntity> {
       ..writeByte(3)
       ..write(obj.description)
       ..writeByte(4)
-      ..write(obj.user)
-      ..writeByte(5)
-      ..write(obj.isFavourite);
+      ..write(obj.user);
   }
 
   @override

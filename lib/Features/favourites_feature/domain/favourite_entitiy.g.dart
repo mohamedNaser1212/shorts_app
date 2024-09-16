@@ -1,44 +1,47 @@
 // GENERATED CODE - DO NOT MODIFY BY HAND
 
-part of 'user_entity.dart';
+part of 'favourite_entitiy.dart';
 
 // **************************************************************************
 // TypeAdapterGenerator
 // **************************************************************************
 
-class UserEntityAdapter extends TypeAdapter<UserEntity> {
+class FavouritesEntityAdapter extends TypeAdapter<FavouritesEntity> {
   @override
-  final int typeId = 5;
+  final int typeId = 2;
 
   @override
-  UserEntity read(BinaryReader reader) {
+  FavouritesEntity read(BinaryReader reader) {
     final numOfFields = reader.readByte();
     final fields = <int, dynamic>{
       for (int i = 0; i < numOfFields; i++) reader.readByte(): reader.read(),
     };
-    return UserEntity(
-      name: fields[0] as String,
-      email: fields[1] as String,
-      phone: fields[2] as String,
-      id: fields[3] as String?,
-      fcmToken: fields[4] as String,
+    return FavouritesEntity(
+      id: fields[0] as String,
+      thumbnail: fields[1] as String,
+      videoUrl: fields[2] as String,
+      description: fields[3] as String?,
+      user: fields[4] as UserEntity,
+      isFavourite: fields[5] as bool?,
     );
   }
 
   @override
-  void write(BinaryWriter writer, UserEntity obj) {
+  void write(BinaryWriter writer, FavouritesEntity obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
-      ..write(obj.name)
-      ..writeByte(1)
-      ..write(obj.email)
-      ..writeByte(2)
-      ..write(obj.phone)
-      ..writeByte(3)
       ..write(obj.id)
+      ..writeByte(1)
+      ..write(obj.thumbnail)
+      ..writeByte(2)
+      ..write(obj.videoUrl)
+      ..writeByte(3)
+      ..write(obj.description)
       ..writeByte(4)
-      ..write(obj.fcmToken);
+      ..write(obj.user)
+      ..writeByte(5)
+      ..write(obj.isFavourite);
   }
 
   @override
@@ -47,7 +50,7 @@ class UserEntityAdapter extends TypeAdapter<UserEntity> {
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is UserEntityAdapter &&
+      other is FavouritesEntityAdapter &&
           runtimeType == other.runtimeType &&
           typeId == other.typeId;
 }

@@ -3,6 +3,7 @@ import 'package:shorts/Features/authentication_feature/data/authentication_repo_
 import 'package:shorts/Features/authentication_feature/domain/authentication_use_case/register_use_case.dart';
 import 'package:shorts/Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
 import 'package:shorts/Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
+import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_local_data_source.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_remote_data_source.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourites_repo/favourites_repo.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourites_use_case/favourites_use_case.dart';
@@ -71,11 +72,17 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<FavouritesRemoteDataSource>(
     FavouritesRemoteDataSourceImpl(),
   );
+  getIt.registerSingleton<FavouritesLocalDataSource>(
+    FavouritesLocalDataSourceImpl(
+      hiveHelper: getIt.get<LocalStorageManager>(),
+    ),
+  );
 
   getIt.registerSingleton<FavouritesRepo>(
     FavouritesRepoImpl(
       remoteDataSource: getIt.get<FavouritesRemoteDataSource>(),
       repoManager: getIt.get<RepoManager>(),
+      favouritesLocalDataSource: getIt.get<FavouritesLocalDataSource>(),
     ),
   );
 

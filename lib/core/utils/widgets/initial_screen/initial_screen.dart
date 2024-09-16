@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/layout/presentation/screens/home_page.dart';
 
 import '../../../../Features/authentication_feature/presentation/screens/login_screen.dart';
+import '../../../../Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
 import '../../../navigations_manager/navigations_manager.dart';
 import '../../../service_locator/service_locator.dart';
 import '../../../user_info/cubit/user_info_cubit.dart';
@@ -34,7 +35,7 @@ class _InitialScreenState extends State<InitialScreen> {
             } else {
               print(state.userModel!.name);
               UserInfoCubit.get(context).userEntity = state.userModel;
-
+              FavouritesCubit.get(context).getFavourites();
               NavigationManager.navigateAndFinish(
                 context: context,
                 screen: MyHomePage(),
