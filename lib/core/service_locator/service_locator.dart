@@ -47,159 +47,109 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<LocalStorageManager>(HiveManager());
   await getIt.get<LocalStorageManager>().initialize();
 
-  getIt.registerSingleton<FirebaseHelper>(
-    FirebaseManagerImpl(),
-  );
+  getIt.registerSingleton<FirebaseHelper>(FirebaseManagerImpl());
 
-  getIt.registerSingleton<RepoManager>(
-    RepoManagerImpl(
-      internetManager: getIt.get<InternetManager>(),
-    ),
-  );
+  getIt.registerSingleton<RepoManager>(RepoManagerImpl(
+    internetManager: getIt.get<InternetManager>(),
+  ));
 
-  getIt.registerSingleton<VideosRemoteDataSource>(
-    VideosRemoteDataSourceImpl(),
-  );
-  getIt.registerLazySingleton<NotificationHelper>(
-      () => PushNotificationService());
+  getIt.registerSingleton<VideosRemoteDataSource>(VideosRemoteDataSourceImpl());
 
-  getIt.registerSingleton<VideoLocalDataSource>(
-    VideoLocalDataSourceImpl(
-      hiveHelper: getIt.get<LocalStorageManager>(),
-    ),
-  );
+  getIt.registerSingleton<NotificationHelper>(PushNotificationService());
+
+  getIt.registerSingleton<VideoLocalDataSource>(VideoLocalDataSourceImpl(
+    hiveHelper: getIt.get<LocalStorageManager>(),
+  ));
 
   getIt.registerSingleton<FavouritesRemoteDataSource>(
-    FavouritesRemoteDataSourceImpl(),
-  );
+      FavouritesRemoteDataSourceImpl());
   getIt.registerSingleton<FavouritesLocalDataSource>(
-    FavouritesLocalDataSourceImpl(
-      hiveHelper: getIt.get<LocalStorageManager>(),
-    ),
-  );
+      FavouritesLocalDataSourceImpl(
+    hiveHelper: getIt.get<LocalStorageManager>(),
+  ));
 
-  getIt.registerSingleton<FavouritesRepo>(
-    FavouritesRepoImpl(
-      remoteDataSource: getIt.get<FavouritesRemoteDataSource>(),
-      repoManager: getIt.get<RepoManager>(),
-      favouritesLocalDataSource: getIt.get<FavouritesLocalDataSource>(),
-    ),
-  );
+  getIt.registerSingleton<FavouritesRepo>(FavouritesRepoImpl(
+    remoteDataSource: getIt.get<FavouritesRemoteDataSource>(),
+    repoManager: getIt.get<RepoManager>(),
+    favouritesLocalDataSource: getIt.get<FavouritesLocalDataSource>(),
+  ));
 
-  //register the favourites use case here
+  // Register FavouritesUseCase and FavouritesCubit
+  getIt.registerFactory<FavouritesUseCase>(() => FavouritesUseCase(
+        favouritesRepo: getIt.get<FavouritesRepo>(),
+      ));
 
-  getIt.registerFactory<FavouritesUseCase>(
-    () => FavouritesUseCase(
-      favouritesRepo: getIt.get<FavouritesRepo>(),
-    ),
-  );
+  getIt.registerFactory<FavouritesCubit>(() => FavouritesCubit(
+        favouritesUseCase: getIt.get<FavouritesUseCase>(),
+      ));
 
-  //register the cubit here
+  getIt.registerFactory<VideosRepo>(() => VideosRepoImpl(
+        videosRemoteDataSource: getIt.get<VideosRemoteDataSource>(),
+        videoLocalDataSource: getIt.get<VideoLocalDataSource>(),
+        repoManager: getIt.get<RepoManager>(),
+      ));
 
-  getIt.registerFactory<FavouritesCubit>(
-    () => FavouritesCubit(
-      favouritesUseCase: getIt.get<FavouritesUseCase>(),
-    ),
-  );
+  getIt.registerFactory<GetVideosUseCase>(() => GetVideosUseCase(
+        videosRepository: getIt.get<VideosRepo>(),
+      ));
 
-  getIt.registerFactory<VideosRepo>(
-    () => VideosRepoImpl(
-      videosRemoteDataSource: getIt.get<VideosRemoteDataSource>(),
-      videoLocalDataSource: getIt.get<VideoLocalDataSource>(),
-      repoManager: getIt.get<RepoManager>(),
-    ),
-  );
+  getIt.registerFactory<UploadVideoUseCase>(() => UploadVideoUseCase(
+        videoRepository: getIt.get<VideosRepo>(),
+      ));
 
-  getIt.registerFactory<GetVideosUseCase>(
-    () => GetVideosUseCase(
-      videosRepository: getIt.get<VideosRepo>(),
-    ),
-  );
-
-  getIt.registerFactory<UploadVideoUseCase>(
-    () => UploadVideoUseCase(
-      videoRepository: getIt.get<VideosRepo>(),
-    ),
-  );
-
-  getIt.registerFactory<VideoCubit>(
-    () => VideoCubit(
-      uploadVideoUseCase: getIt.get<UploadVideoUseCase>(),
-      getVideosUseCase: getIt.get<GetVideosUseCase>(),
-    ),
-  );
+  getIt.registerFactory<VideoCubit>(() => VideoCubit(
+        uploadVideoUseCase: getIt.get<UploadVideoUseCase>(),
+        getVideosUseCase: getIt.get<GetVideosUseCase>(),
+      ));
 
   // UserInfo and Authentication related registrations
   getIt.registerSingleton<AuthenticationRemoteDataSource>(
-    AuthenticationDataSourceImpl(
-      firebaseHelper: getIt.get<FirebaseHelper>(),
-    ),
-  );
+      AuthenticationDataSourceImpl(
+    firebaseHelper: getIt.get<FirebaseHelper>(),
+  ));
 
-  getIt.registerSingleton<UserLocalDataSourceImpl>(
-    UserLocalDataSourceImpl(
-      hiveHelper: getIt.get<LocalStorageManager>(),
-    ),
-  );
+  getIt.registerSingleton<UserLocalDataSourceImpl>(UserLocalDataSourceImpl(
+    hiveHelper: getIt.get<LocalStorageManager>(),
+  ));
 
-  getIt.registerSingleton<AuthenticationRepo>(
-    AuthRepoImpl(
-      repoManager: getIt.get<RepoManager>(),
-      loginDataSource: getIt.get<AuthenticationRemoteDataSource>(),
-      userInfoLocalDataSourceImpl: getIt.get<UserLocalDataSourceImpl>(),
-    ),
-  );
+  getIt.registerSingleton<AuthenticationRepo>(AuthRepoImpl(
+    repoManager: getIt.get<RepoManager>(),
+    loginDataSource: getIt.get<AuthenticationRemoteDataSource>(),
+    userInfoLocalDataSourceImpl: getIt.get<UserLocalDataSourceImpl>(),
+  ));
 
   getIt.registerSingleton<UserInfoRemoteDataSource>(
-    UserInfoRemoteDataSourceImpl(),
-  );
+      UserInfoRemoteDataSourceImpl());
 
-  getIt.registerSingleton<UserInfoLocalDataSource>(
-    UserLocalDataSourceImpl(hiveHelper: getIt.get<LocalStorageManager>()),
-  );
+  getIt.registerSingleton<UserInfoRepo>(UserInfoRepoImpl(
+    userLocalDataSource: getIt.get<UserLocalDataSourceImpl>(),
+    remoteDataSource: getIt.get<UserInfoRemoteDataSource>(),
+    repoManager: getIt.get<RepoManager>(),
+  ));
 
-  getIt.registerSingleton<UserInfoRepo>(
-    UserInfoRepoImpl(
-      userLocalDataSource: getIt.get<UserLocalDataSourceImpl>(),
-      remoteDataSource: getIt.get<UserInfoRemoteDataSource>(),
-      repoManager: getIt.get<RepoManager>(),
-    ),
-  );
+  getIt.registerSingleton<GetUserInfoUseCase>(GetUserInfoUseCase(
+    userInfoRepo: getIt.get<UserInfoRepo>(),
+  ));
 
-  // Ensure that GetUserInfoUseCase is registered before UserInfoCubit
-  getIt.registerSingleton<GetUserInfoUseCase>(
-    GetUserInfoUseCase(
-      userInfoRepo: getIt.get<UserInfoRepo>(),
-    ),
-  );
-
-  getIt.registerFactory(() => UserInfoCubit(
+  getIt.registerFactory<UserInfoCubit>(() => UserInfoCubit(
         getUserUseCase: getIt.get<GetUserInfoUseCase>(),
       ));
 
-  getIt.registerSingleton<LoginUseCase>(
-    LoginUseCase(
-      authenticationRepo: getIt.get<AuthenticationRepo>(),
-    ),
-  );
+  getIt.registerSingleton<LoginUseCase>(LoginUseCase(
+    authenticationRepo: getIt.get<AuthenticationRepo>(),
+  ));
 
-  getIt.registerSingleton<RegisterUseCase>(
-    RegisterUseCase(
-      authenticationRepo: getIt.get<AuthenticationRepo>(),
-    ),
-  );
+  getIt.registerSingleton<RegisterUseCase>(RegisterUseCase(
+    authenticationRepo: getIt.get<AuthenticationRepo>(),
+  ));
 
-  getIt.registerSingleton<RegisterCubit>(
-    RegisterCubit(
-      loginUseCase: getIt.get<RegisterUseCase>(),
-      userDataUseCase: getIt.get<GetUserInfoUseCase>(),
-    ),
-  );
+  getIt.registerFactory<RegisterCubit>(() => RegisterCubit(
+        userDataUseCase: getIt.get<GetUserInfoUseCase>(),
+        registerUseCase: getIt.get<RegisterUseCase>(),
+      ));
 
-  getIt.registerSingleton<LoginCubit>(
-    LoginCubit(
-      loginUseCase: getIt.get<LoginUseCase>(),
-      userDataUseCase: getIt.get<GetUserInfoUseCase>(),
-    ),
-  );
+  getIt.registerFactory<LoginCubit>(() => LoginCubit(
+        loginUseCase: getIt.get<LoginUseCase>(),
+        userDataUseCase: getIt.get<GetUserInfoUseCase>(),
+      ));
 }

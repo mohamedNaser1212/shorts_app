@@ -11,21 +11,31 @@ class HiveManager implements LocalStorageManager {
 
   @override
   Future<void> initialize() async {
-    await Hive.initFlutter();
-    Hive.registerAdapter(VideoEntityAdapter());
-    Hive.registerAdapter(UserEntityAdapter());
-    Hive.registerAdapter(FavouritesEntityAdapter());
+    try {
+      await Hive.initFlutter();
+      Hive.registerAdapter(VideoEntityAdapter());
+      Hive.registerAdapter(UserEntityAdapter());
+      Hive.registerAdapter(FavouritesEntityAdapter());
 
-    await _openAllBoxes();
+      await _openAllBoxes();
+    } catch (e) {
+      print('Failed to initialize Hive: $e');
+      rethrow;
+    }
   }
 
   Future<void> _openAllBoxes() async {
-    await Future.wait([
-      _openBox<VideoEntity>(HiveBoxesNames.kVideoBox),
-      _openBox<UserEntity>(HiveBoxesNames.kUserBox),
-      _openBox<String>(HiveBoxesNames.kSaveTokenBox),
-      _openBox<FavouritesEntity>(HiveBoxesNames.kFavouritesBox),
-    ]);
+    try {
+      await Future.wait([
+        _openBox<VideoEntity>(HiveBoxesNames.kVideoBox),
+        _openBox<UserEntity>(HiveBoxesNames.kUserBox),
+        _openBox<String>(HiveBoxesNames.kSaveTokenBox),
+        _openBox<FavouritesEntity>(HiveBoxesNames.kFavouritesBox),
+      ]);
+    } catch (e) {
+      print('Failed to open all boxes: $e');
+      rethrow;
+    }
   }
 
   Future<void> _openBox<T>(String boxName) async {
@@ -50,38 +60,68 @@ class HiveManager implements LocalStorageManager {
 
   @override
   Future<void> saveData<T>(List<T> data, String boxName) async {
-    var box = _getBox<T>(boxName);
-    await box.clear();
-    await box.addAll(data);
+    try {
+      var box = _getBox<T>(boxName);
+      await box.clear();
+      await box.addAll(data);
+    } catch (e) {
+      print('Failed to save data to $boxName: $e');
+      rethrow;
+    }
   }
 
   @override
   Future<List<T>> loadData<T>(String boxName) async {
-    var box = _getBox<T>(boxName);
-    return box.values.toList();
+    try {
+      var box = _getBox<T>(boxName);
+      return box.values.toList();
+    } catch (e) {
+      print('Failed to load data from $boxName: $e');
+      rethrow;
+    }
   }
 
   @override
   Future<void> saveSingleItem<T>(String key, T item, String boxName) async {
-    var box = _getBox<T>(boxName);
-    await box.put(key, item);
+    try {
+      var box = _getBox<T>(boxName);
+      await box.put(key, item);
+    } catch (e) {
+      print('Failed to save single item to $boxName: $e');
+      rethrow;
+    }
   }
 
   @override
   Future<T?> loadSingleItem<T>(String key, String boxName) async {
-    var box = _getBox<T>(boxName);
-    return box.get(key);
+    try {
+      var box = _getBox<T>(boxName);
+      return box.get(key);
+    } catch (e) {
+      print('Failed to load single item from $boxName: $e');
+      rethrow;
+    }
   }
 
   @override
   Future<void> clearData<T>(String boxName) async {
-    var box = _getBox<T>(boxName);
-    await box.clear();
+    try {
+      var box = _getBox<T>(boxName);
+      await box.clear();
+    } catch (e) {
+      print('Failed to clear data from $boxName: $e');
+      rethrow;
+    }
   }
 
   @override
   Future<void> clearSingleItem<T>(String key, String boxName) async {
-    var box = _getBox<T>(boxName);
-    await box.delete(key);
+    try {
+      var box = _getBox<T>(boxName);
+      await box.delete(key);
+    } catch (e) {
+      print('Failed to clear single item from $boxName: $e');
+      rethrow;
+    }
   }
 }

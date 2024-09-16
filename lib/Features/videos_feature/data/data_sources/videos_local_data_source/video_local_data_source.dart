@@ -27,6 +27,7 @@ class VideoLocalDataSourceImpl implements VideoLocalDataSource {
   @override
   Future<void> saveVideos(List<VideoEntity> videos) async {
     await hiveHelper.saveData<VideoEntity>(videos, HiveBoxesNames.kVideoBox);
+    print('Videos saved');
   }
 
   @override

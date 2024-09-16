@@ -9,11 +9,11 @@ import '../../../domain/authentication_use_case/register_use_case.dart';
 part 'register_state.dart';
 
 class RegisterCubit extends Cubit<RegisterState> {
-  final RegisterUseCase loginUseCase;
+  final RegisterUseCase registerUseCase;
   final GetUserInfoUseCase userDataUseCase;
 
   RegisterCubit({
-    required this.loginUseCase,
+    required this.registerUseCase,
     required this.userDataUseCase,
   }) : super(RegisterState());
 
@@ -32,7 +32,7 @@ class RegisterCubit extends Cubit<RegisterState> {
   }) async {
     emit(RegisterLoadingState());
 
-    final result = await loginUseCase.call(
+    final result = await registerUseCase.call(
         email: email, password: password, name: name, phone: phone);
 
     result.fold(

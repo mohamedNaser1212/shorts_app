@@ -26,7 +26,7 @@ class RegisterScreen extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => RegisterCubit(
-            loginUseCase: RegisterUseCase(
+            registerUseCase: RegisterUseCase(
               authenticationRepo: getIt.get<AuthenticationRepo>(),
             ),
             userDataUseCase: getIt.get<GetUserInfoUseCase>(),
