@@ -3,31 +3,115 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
+import 'package:shorts/core/utils/widgets/custom_title.dart';
 
 import '../../../../core/notification_service/notification_helper.dart';
 import '../../domain/video_notifiers/video_notifier.dart';
 
-class LikeIcon extends StatefulWidget {
-  const LikeIcon({
+class VideoIcons extends StatefulWidget {
+  const VideoIcons({
     super.key,
     required this.videoProvider,
     required this.videoEntity,
-/*    required this.favouritesEntity,*/
   });
 
   final VideoController videoProvider;
   final VideoEntity videoEntity;
-  //final FavouritesEntity favouritesEntity;
 
   @override
-  State<LikeIcon> createState() => _LikeIconState();
+  State<VideoIcons> createState() => _VideoIconsState();
 }
 
-class _LikeIconState extends State<LikeIcon> {
+class _VideoIconsState extends State<VideoIcons> {
+  final List<String> _comments = [
+    'asdads',
+    'adsadsadsadsadsadsadsadsadsadsd',
+    'asdddddddd',
+    'asdads',
+    'adsadsadsadsadsadsadsadsadsadsd',
+    'asdddddddd',
+    'asdads',
+    'adsadsadsadsadsadsadsadsadsadsd',
+    'asdddddddd',
+    'asdads',
+    'adsadsadsadsadsadsadsadsadsadsd',
+    'asdddddddd',
+  ]; // Example comments list
+
   @override
-  initState() {
+  void initState() {
     super.initState();
     FavouritesCubit.get(context).getFavourites();
+  }
+
+  void _showCommentBottomSheet() {
+    showModalBottomSheet(
+      context: context,
+      isScrollControlled: true,
+      builder: (context) {
+        final screenHeight = MediaQuery.of(context).size.height;
+        final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
+        final bottomSheetHeight = screenHeight * 0.75;
+
+        return SizedBox(
+          height: bottomSheetHeight,
+          child: Padding(
+            padding: EdgeInsets.only(
+              left: 32.0,
+              right: 16.0,
+              bottom: keyboardHeight,
+            ),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                const CustomTitle(
+                  title: 'Comments',
+                  style: TitleStyle.styleBold18,
+                ),
+                const SizedBox(height: 8),
+                Flexible(
+                  child: ListView.builder(
+                    itemCount: _comments.length,
+                    itemBuilder: (context, index) {
+                      return ListTile(
+                        title: Text(_comments[index]),
+                      );
+                    },
+                  ),
+                ),
+                const SizedBox(height: 8),
+                Padding(
+                  padding: const EdgeInsets.only(top: 8.0),
+                  child: Column(
+                    children: [
+                      TextField(
+                        decoration: const InputDecoration(
+                          border: OutlineInputBorder(),
+                          labelText: 'Enter your comment',
+                        ),
+                        onSubmitted: (comment) {
+                          setState(() {
+                            _comments.add(comment);
+                          });
+                          Navigator.of(context).pop();
+                        },
+                      ),
+                      const SizedBox(height: 16),
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.of(context).pop();
+                        },
+                        child: const Text('Submit'),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
+            ),
+          ),
+        );
+      },
+    );
   }
 
   @override
@@ -71,7 +155,7 @@ class _LikeIconState extends State<LikeIcon> {
               ),
               const SizedBox(height: 10),
               IconButton(
-                onPressed: () {},
+                onPressed: _showCommentBottomSheet,
                 icon: const Icon(
                   Icons.comment,
                   color: Colors.white,

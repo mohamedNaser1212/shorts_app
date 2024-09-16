@@ -48,7 +48,7 @@ class VideoListItem extends StatelessWidget {
                         return BlocConsumer<FavouritesCubit, FavouritesState>(
                           listener: (context, state) {},
                           builder: (context, state) {
-                            return LikeIcon(
+                            return VideoIcons(
                               videoProvider: videoProvider,
                               videoEntity: videoEntity,
                               // favouritesEntity: ,
