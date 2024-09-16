@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 
 import '../../../../core/notification_service/notification_helper.dart';
@@ -51,6 +52,8 @@ class _LikeIconState extends State<LikeIcon> {
             onPressed: () {
               widget.videoProvider.toggleLike();
               print(widget.videoEntity.user.fcmToken);
+              FavouritesCubit.get(context)
+                  .toggleFavourite(widget.videoEntity.id!);
               notificationHelper.sendNotificationToSpecificUser(
                 fcmToken: widget.videoEntity.user.fcmToken,
                 userId: widget.videoEntity.user.id!,

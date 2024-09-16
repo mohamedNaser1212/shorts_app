@@ -48,7 +48,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       email: email,
       phone: '',
       id: uId ?? '',
-      fcmToken: fcmToken ?? '', // Add FCM token to the user
+      fcmToken: fcmToken ?? '',
     );
     return user;
   }
@@ -67,7 +67,6 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     );
     uId = userCredential.user!.uid;
 
-    // Retrieve FCM token
     String? fcmToken = await FirebaseMessaging.instance.getToken();
 
     UserModel user = UserModel(
@@ -75,7 +74,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       email: email,
       phone: phone,
       id: uId ?? '',
-      fcmToken: fcmToken ?? '', // Add FCM token to the user
+      fcmToken: fcmToken ?? '',
     );
 
     createUserData(user: user);
@@ -88,20 +87,5 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
         .collection(CollectionNames.users)
         .doc(user.id)
         .set(user.toJson());
-  }
-
-  Future<void> uploadVideo(
-      {required String videoUrl, required String title}) async {
-    final videoData = {
-      'videoUrl': videoUrl,
-      'title': title,
-      'uploadDate': FieldValue.serverTimestamp(),
-    };
-
-    await FirebaseFirestore.instance
-        .collection(CollectionNames.users)
-        .doc(uId)
-        .collection('videos')
-        .add(videoData);
   }
 }

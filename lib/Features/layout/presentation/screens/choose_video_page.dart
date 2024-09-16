@@ -26,11 +26,12 @@ class _ChooseVideoPageState extends State<ChooseVideoPage> {
   }
 
   Future<void> _uploadVideo() async {
-    if (_selectedVideoPath != null) {
+    final user = UserInfoCubit.get(context).userEntity;
+    if (_selectedVideoPath != null || user != null) {
       VideoCubit.get(context).uploadVideo(
         videoPath: _selectedVideoPath!,
         description: _titleController.text,
-        user: UserInfoCubit.get(context).userEntity!,
+        user: user!,
       );
     }
   }

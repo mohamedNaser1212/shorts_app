@@ -1,4 +1,3 @@
-// user_model.dart
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
 class UserModel extends UserEntity {

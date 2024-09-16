@@ -22,13 +22,14 @@ class VideoEntityAdapter extends TypeAdapter<VideoEntity> {
       videoUrl: fields[2] as String,
       description: fields[3] as String?,
       user: fields[4] as UserEntity,
+      isFavourite: fields[5] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, VideoEntity obj) {
     writer
-      ..writeByte(5)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -38,7 +39,9 @@ class VideoEntityAdapter extends TypeAdapter<VideoEntity> {
       ..writeByte(3)
       ..write(obj.description)
       ..writeByte(4)
-      ..write(obj.user);
+      ..write(obj.user)
+      ..writeByte(5)
+      ..write(obj.isFavourite);
   }
 
   @override

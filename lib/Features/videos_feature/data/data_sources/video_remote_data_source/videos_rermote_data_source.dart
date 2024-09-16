@@ -3,7 +3,6 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
-import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../core/network/firebase_manager/collection_names.dart';
@@ -16,24 +15,22 @@ abstract class VideosRemoteDataSource {
     required String videoPath,
     required UserEntity user,
   });
+  Future<List<VideoModel>> getFavouriteVideos();
+  Future<bool> toggleFavouriteVideo({
+    required String videoId,
+    required UserEntity user,
+  });
 }
 
 class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
-  final FirebaseHelper firebaseHelper;
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   final Uuid _uuid = const Uuid();
 
-  VideosRemoteDataSourceImpl({
-    required this.firebaseHelper,
-  });
-
   @override
   Future<List<VideoModel>> getVideos() async {
-    final data = await firebaseHelper.get(
-      collectionPath: CollectionNames.videos,
-    );
-    return data.map((video) => VideoModel.fromJson(video)).toList();
+    final data = await firestore.collection(CollectionNames.videos).get();
+    return data.docs.map((doc) => VideoModel.fromJson(doc.data())).toList();
   }
 
   @override
@@ -43,29 +40,21 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     required UserEntity user,
   }) async {
     final videoId = _uuid.v4();
-
-    final videoUrl = await _uploadVideoToStorage(
-      videoId: videoId,
-      videoPath: videoPath,
-    );
-
-    // Create video model
+    final videoUrl =
+        await _uploadVideoToStorage(videoId: videoId, videoPath: videoPath);
     final video = VideoModel(
       id: videoId,
       description: description,
       videoUrl: videoUrl,
-      thumbnail:
-          '', // You may add a logic for generating or uploading a thumbnail
-      user: user, // Already the passed user; no need to update
+      thumbnail: '',
+      user: user,
+      isFavourite: false,
     );
 
-    // Save the video data to the main videos collection
     await firestore
         .collection(CollectionNames.videos)
         .doc(videoId)
         .set(video.toJson());
-
-    // Save the video data to the user's videos collection
     await firestore
         .collection(CollectionNames.users)
         .doc(user.id)
@@ -83,11 +72,61 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     final Reference storageRef =
         firebaseStorage.ref().child('videos/$videoId.mp4');
     final UploadTask uploadTask = storageRef.putFile(File(videoPath));
-
-    // Wait for the upload to complete
     final TaskSnapshot snapshot = await uploadTask;
-
-    // Get the video URL
     return await snapshot.ref.getDownloadURL();
+  }
+
+  @override
+  Future<List<VideoModel>> getFavouriteVideos() async {
+    final querySnapshot = await firestore
+        .collection(CollectionNames.videos)
+        .where('isFavourite', isEqualTo: true)
+        .get();
+
+    return querySnapshot.docs
+        .map((doc) => VideoModel.fromJson(doc.data()))
+        .toList();
+  }
+
+  @override
+  Future<bool> toggleFavouriteVideo({
+    required String videoId,
+    required UserEntity user,
+  }) async {
+    final videoRef = firestore.collection(CollectionNames.videos).doc(videoId);
+    final userFavouritesRef = firestore
+        .collection(CollectionNames.users)
+        .doc(user.id)
+        .collection(CollectionNames.favourites)
+        .doc(videoId);
+
+    final videoDoc = await videoRef.get();
+
+    if (videoDoc.exists) {
+      final videoData = videoDoc.data() as Map<String, dynamic>;
+      final bool isCurrentlyFavourite = videoData['isFavourite'] ?? false;
+
+      // Update video favourite status
+      await videoRef.update({'isFavourite': !isCurrentlyFavourite});
+
+      // Update user's favourites list
+      if (!isCurrentlyFavourite) {
+        await userFavouritesRef.set({
+          'videoId': videoId,
+          'timestamp': FieldValue.serverTimestamp(),
+        });
+      } else {
+        await userFavouritesRef.delete();
+      }
+
+      print(isCurrentlyFavourite
+          ? 'Video removed from favourites'
+          : 'Video added to favourites');
+
+      return !isCurrentlyFavourite;
+    } else {
+      print('Video not found');
+      return false;
+    }
   }
 }

@@ -26,7 +26,7 @@ class UserInfoRemoteDataSourceImpl implements UserInfoRemoteDataSource {
     final videoDocs = await FirebaseFirestore.instance
         .collection(CollectionNames.users)
         .doc(uId)
-        .collection('videos')
+        .collection(CollectionNames.videos)
         .get();
 
     return videoDocs.docs

@@ -1,4 +1,3 @@
-// user_entity.dart
 import 'package:hive/hive.dart';
 
 import '../../../constants/consts.dart';

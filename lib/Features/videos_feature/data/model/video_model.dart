@@ -2,12 +2,13 @@ import '../../../authentication_feature/data/user_model/user_model.dart';
 import '../../domain/video_entity/video_entity.dart';
 
 class VideoModel extends VideoEntity {
-  const VideoModel({
+  VideoModel({
     required super.user,
     required super.id,
     required super.thumbnail,
     required super.videoUrl,
     super.description,
+    super.isFavourite = false,
   });
 
   factory VideoModel.fromJson(Map<String, dynamic> json) {
@@ -17,6 +18,7 @@ class VideoModel extends VideoEntity {
       videoUrl: json['videoUrl'] ?? '',
       description: json['description'],
       user: UserModel.fromJson(json['user']),
+      isFavourite: json['isFavourite'] ?? false,
     );
   }
 
@@ -28,6 +30,7 @@ class VideoModel extends VideoEntity {
       'videoUrl': videoUrl,
       'description': description,
       'user': user.toJson(),
+      'isFavourite': isFavourite, // Include isFavourite in JSON serialization
     };
   }
 }

@@ -16,12 +16,15 @@ class VideoEntity {
   final String? description;
   @HiveField(4)
   final UserEntity user;
+  @HiveField(5)
+  bool isFavourite;
 
-  const VideoEntity({
+  VideoEntity({
     required this.id,
     required this.thumbnail,
     required this.videoUrl,
     this.description,
     required this.user,
+    this.isFavourite = false,
   });
 }
