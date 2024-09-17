@@ -1,6 +1,7 @@
 import 'package:hive/hive.dart';
 
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
+import '../../../comments_feature/domain/comments_entity/comments_entity.dart';
 
 part 'video_entity.g.dart';
 
@@ -16,6 +17,8 @@ class VideoEntity {
   final String? description;
   @HiveField(4)
   final UserEntity user;
+  @HiveField(5)
+  final List<CommentEntity> comments;
 
   VideoEntity({
     required this.id,
@@ -23,5 +26,6 @@ class VideoEntity {
     required this.videoUrl,
     this.description,
     required this.user,
+    required this.comments,
   });
 }

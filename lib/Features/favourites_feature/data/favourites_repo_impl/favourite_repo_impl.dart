@@ -5,6 +5,7 @@ import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart
 import 'package:shorts/core/error_manager/failure.dart';
 import 'package:shorts/core/repo_manager/repo_manager.dart';
 
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../domain/favourites_repo/favourites_repo.dart';
 
 /// Repository Interface for Videos
@@ -48,11 +49,13 @@ class FavouritesRepoImpl implements FavouritesRepo {
   @override
   Future<Either<Failure, bool>> toggleFavouriteVideo({
     required String videoId,
+    required UserEntity user,
   }) async {
     return repoManager.call(
       action: () async {
         final result = await remoteDataSource.toggleFavouriteVideo(
           videoId: videoId,
+          user: user,
         );
         if (result) {
           final updatedFavourites = await remoteDataSource.getFavouriteVideos();

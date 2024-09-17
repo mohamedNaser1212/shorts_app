@@ -3,6 +3,8 @@ import 'package:shorts/Features/authentication_feature/data/authentication_repo_
 import 'package:shorts/Features/authentication_feature/domain/authentication_use_case/register_use_case.dart';
 import 'package:shorts/Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
 import 'package:shorts/Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
+import 'package:shorts/Features/comments_feature/domain/comments_use_case/show_comments_use_case.dart';
+import 'package:shorts/Features/comments_feature/presentation/cubit/comments_cubit.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_local_data_source.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_remote_data_source.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourites_repo/favourites_repo.dart';
@@ -26,6 +28,10 @@ import 'package:shorts/core/user_info/domain/user_info_repo/user_info_repo.dart'
 import '../../Features/authentication_feature/data/authentication_data_sources/authentication_remote_data_source.dart';
 import '../../Features/authentication_feature/domain/authentication_repo/authentication_repo.dart';
 import '../../Features/authentication_feature/domain/authentication_use_case/login_use_case.dart';
+import '../../Features/comments_feature/data/comments_repo_impl/comments_repo_impl.dart';
+import '../../Features/comments_feature/data/data_sources/commenta_remote_data_source.dart';
+import '../../Features/comments_feature/domain/ccommeints_repo/comments_repo.dart';
+import '../../Features/comments_feature/domain/comments_use_case/add_comments_use_case.dart';
 import '../../Features/favourites_feature/data/favourites_repo_impl/favourite_repo_impl.dart';
 import '../../Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
 import '../network/firebase_manager/firebase_helper.dart';
@@ -118,8 +124,15 @@ Future<void> setUpServiceLocator() async {
     userInfoLocalDataSourceImpl: getIt.get<UserLocalDataSourceImpl>(),
   ));
 
+  getIt.registerSingleton<CommentsRemoteDataSource>(
+    CommentsRemoteDataSourceImpl(),
+  );
   getIt.registerSingleton<UserInfoRemoteDataSource>(
       UserInfoRemoteDataSourceImpl());
+  getIt.registerSingleton<CommentsRepo>(CommentsRepoImpl(
+    repoManager: getIt.get<RepoManager>(),
+    commentsRemoteDataSource: getIt.get<CommentsRemoteDataSource>(),
+  ));
 
   getIt.registerSingleton<UserInfoRepo>(UserInfoRepoImpl(
     userLocalDataSource: getIt.get<UserLocalDataSourceImpl>(),
@@ -130,7 +143,12 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<GetUserInfoUseCase>(GetUserInfoUseCase(
     userInfoRepo: getIt.get<UserInfoRepo>(),
   ));
-
+  getIt.registerSingleton<AddCommentsUseCase>(AddCommentsUseCase(
+    commentsRepo: getIt.get<CommentsRepo>(),
+  ));
+  getIt.registerSingleton<GetCommentsUseCase>(GetCommentsUseCase(
+    commentsRepo: getIt.get<CommentsRepo>(),
+  ));
   getIt.registerFactory<UserInfoCubit>(() => UserInfoCubit(
         getUserUseCase: getIt.get<GetUserInfoUseCase>(),
       ));
@@ -147,7 +165,10 @@ Future<void> setUpServiceLocator() async {
         userDataUseCase: getIt.get<GetUserInfoUseCase>(),
         registerUseCase: getIt.get<RegisterUseCase>(),
       ));
-
+  getIt.registerFactory<CommentsCubit>(() => CommentsCubit(
+        addCommentsUseCase: getIt.get<AddCommentsUseCase>(),
+        getCommentsUseCase: getIt.get<GetCommentsUseCase>(),
+      ));
   getIt.registerFactory<LoginCubit>(() => LoginCubit(
         loginUseCase: getIt.get<LoginUseCase>(),
         userDataUseCase: getIt.get<GetUserInfoUseCase>(),

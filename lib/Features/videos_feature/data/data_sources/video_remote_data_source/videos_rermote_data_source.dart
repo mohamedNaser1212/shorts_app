@@ -48,6 +48,7 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
       videoUrl: videoUrl,
       thumbnail: '',
       user: user,
+      comments: [],
     );
 
     await firestore

@@ -3,11 +3,13 @@ import 'package:shorts/Features/favourites_feature/data/favourites_model/favouri
 
 import '../../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../../core/constants/consts.dart';
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
 abstract class FavouritesRemoteDataSource {
   Future<List<FavouritesVideoModel>> getFavouriteVideos();
   Future<bool> toggleFavouriteVideo({
     required String videoId,
+    required UserEntity user,
   });
 }
 
@@ -30,10 +32,11 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
   @override
   Future<bool> toggleFavouriteVideo({
     required String videoId,
+    required UserEntity user,
   }) async {
     final userFavouritesRef = firestore
         .collection(CollectionNames.users)
-        .doc(uId)
+        .doc(user.id)
         .collection(CollectionNames.favourites)
         .doc(videoId);
 
@@ -51,7 +54,6 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
       if (globalVideoDoc.exists) {
         final videoData = globalVideoDoc.data() as Map<String, dynamic>;
 
-        // Add the video to the user's Favourites sub-collection
         await userFavouritesRef.set(videoData);
 
         print('Video added to favourites collection');

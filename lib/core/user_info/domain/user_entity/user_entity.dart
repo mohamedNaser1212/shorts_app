@@ -25,16 +25,6 @@ class UserEntity {
     required this.fcmToken,
   });
 
-  factory UserEntity.fromJson(Map<String, dynamic> json) {
-    return UserEntity(
-      name: json['name'],
-      email: json['email'],
-      phone: json['phone'],
-      id: json['id'],
-      fcmToken: json['fcmToken'],
-    );
-  }
-
   Map<String, dynamic> toJson() {
     return {
       'name': name,

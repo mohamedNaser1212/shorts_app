@@ -1,11 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shorts/Features/comments_feature/domain/comments_use_case/add_comments_use_case.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
+import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/utils/widgets/custom_title.dart';
 
 import '../../../../core/notification_service/notification_helper.dart';
+import '../../../comments_feature/domain/comments_use_case/show_comments_use_case.dart';
+import '../../../comments_feature/presentation/cubit/comments_cubit.dart';
 import '../../domain/video_notifiers/video_notifier.dart';
 
 class VideoIcons extends StatefulWidget {
@@ -42,6 +46,10 @@ class _VideoIconsState extends State<VideoIcons> {
   void initState() {
     super.initState();
     FavouritesCubit.get(context).getFavourites();
+
+    CommentsCubit.get(context).fetchComments(
+      videoId: widget.videoEntity.id,
+    );
   }
 
   void _showCommentBottomSheet() {
@@ -53,60 +61,74 @@ class _VideoIconsState extends State<VideoIcons> {
         final keyboardHeight = MediaQuery.of(context).viewInsets.bottom;
         final bottomSheetHeight = screenHeight * 0.75;
 
-        return SizedBox(
-          height: bottomSheetHeight,
-          child: Padding(
-            padding: EdgeInsets.only(
-              left: 32.0,
-              right: 16.0,
-              bottom: keyboardHeight,
-            ),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const CustomTitle(
-                  title: 'Comments',
-                  style: TitleStyle.styleBold18,
-                ),
-                const SizedBox(height: 8),
-                Flexible(
-                  child: ListView.builder(
-                    itemCount: _comments.length,
-                    itemBuilder: (context, index) {
-                      return ListTile(
-                        title: Text(_comments[index]),
-                      );
-                    },
+        return BlocProvider(
+          create: (context) => CommentsCubit(
+              addCommentsUseCase: getIt.get<AddCommentsUseCase>(),
+              getCommentsUseCase: getIt.get<GetCommentsUseCase>()),
+          child: SizedBox(
+            height: bottomSheetHeight,
+            child: Padding(
+              padding: EdgeInsets.only(
+                left: 32.0,
+                right: 16.0,
+                bottom: keyboardHeight,
+              ),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const CustomTitle(
+                    title: 'Comments',
+                    style: TitleStyle.styleBold18,
                   ),
-                ),
-                const SizedBox(height: 8),
-                Padding(
-                  padding: const EdgeInsets.only(top: 8.0),
-                  child: Column(
-                    children: [
-                      TextField(
-                        decoration: const InputDecoration(
-                          border: OutlineInputBorder(),
-                          labelText: 'Enter your comment',
+                  const SizedBox(height: 8),
+                  Flexible(
+                    child: ListView.builder(
+                      itemCount: _comments.length,
+                      itemBuilder: (context, index) {
+                        return ListTile(
+                          title: Text(_comments[index]),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 8),
+                  Padding(
+                    padding: const EdgeInsets.only(top: 8.0),
+                    child: Column(
+                      children: [
+                        TextField(
+                          decoration: const InputDecoration(
+                            border: OutlineInputBorder(),
+                            labelText: 'Enter your comment',
+                          ),
+                          onSubmitted: (comment) {
+                            CommentsCubit.get(context).addComment(
+                              videoId: widget.videoEntity.id,
+                              comment: comment,
+                              user: widget.videoEntity.user,
+                            );
+                            setState(() {
+                              _comments.add(comment);
+                            });
+                            Navigator.of(context).pop();
+                          },
                         ),
-                        onSubmitted: (comment) {
-                          setState(() {
-                            _comments.add(comment);
-                          });
-                          Navigator.of(context).pop();
-                        },
-                      ),
-                      const SizedBox(height: 16),
-                      ElevatedButton(
-                        onPressed: () {
-                          Navigator.of(context).pop();
-                        },
-                        child: const Text('Submit'),
-                      ),
-                    ],
+                        const SizedBox(height: 16),
+                        ElevatedButton(
+                          onPressed: () {
+                            CommentsCubit.get(context).addComment(
+                              videoId: widget.videoEntity.id,
+                              comment: 'Comment',
+                              user: widget.videoEntity.user,
+                            );
+                          },
+                          child: const Text('Submit'),
+                        ),
+                      ],
+                    ),
                   ),
-                ),
-              ],
+                ],
+              ),
             ),
           ),
         );
@@ -130,8 +152,10 @@ class _VideoIconsState extends State<VideoIcons> {
             children: [
               IconButton(
                 onPressed: () {
-                  FavouritesCubit.get(context)
-                      .toggleFavourite(widget.videoEntity.id);
+                  FavouritesCubit.get(context).toggleFavourite(
+                    videoId: widget.videoEntity.id,
+                    user: widget.videoEntity.user,
+                  );
 
                   notificationHelper.sendNotificationToSpecificUser(
                     fcmToken: widget.videoEntity.user.fcmToken,

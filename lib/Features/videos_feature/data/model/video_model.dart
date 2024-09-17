@@ -1,12 +1,14 @@
 import '../../../authentication_feature/data/user_model/user_model.dart';
+import '../../../comments_feature/data/model/comments_model.dart';
 import '../../domain/video_entity/video_entity.dart';
 
 class VideoModel extends VideoEntity {
   VideoModel({
-    required super.user,
     required super.id,
     required super.thumbnail,
     required super.videoUrl,
+    required super.user,
+    required super.comments,
     super.description,
   });
 
@@ -17,6 +19,9 @@ class VideoModel extends VideoEntity {
       videoUrl: json['videoUrl'] ?? '',
       description: json['description'],
       user: UserModel.fromJson(json['user']),
+      comments: (json['comments'] as List)
+          .map((e) => CommentModel.fromJson(e as Map<String, dynamic>))
+          .toList(),
     );
   }
 
@@ -28,6 +33,7 @@ class VideoModel extends VideoEntity {
       'videoUrl': videoUrl,
       'description': description,
       'user': user.toJson(),
+      'comments': comments.map((e) => e.toJson()).toList(),
     };
   }
 }
