@@ -19,7 +19,7 @@ class CommentEntityAdapter extends TypeAdapter<CommentEntity> {
     return CommentEntity(
       id: fields[0] as String,
       content: fields[1] as String,
-      user: fields[2] as UserEntity,
+      user: fields[2] as UserModel,
       timestamp: fields[3] as DateTime,
     );
   }

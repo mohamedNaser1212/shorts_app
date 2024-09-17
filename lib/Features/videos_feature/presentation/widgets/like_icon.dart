@@ -5,6 +5,7 @@ import 'package:shorts/Features/comments_feature/domain/comments_use_case/add_co
 import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
+import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/utils/widgets/custom_title.dart';
 
 import '../../../../core/notification_service/notification_helper.dart';
@@ -40,13 +41,13 @@ class _VideoIconsState extends State<VideoIcons> {
     'asdads',
     'adsadsadsadsadsadsadsadsadsadsd',
     'asdddddddd',
-  ]; // Example comments list
+  ];
 
   @override
   void initState() {
     super.initState();
     FavouritesCubit.get(context).getFavourites();
-
+    UserInfoCubit.get(context).getUserData();
     CommentsCubit.get(context).fetchComments(
       videoId: widget.videoEntity.id,
     );
@@ -102,25 +103,37 @@ class _VideoIconsState extends State<VideoIcons> {
                             labelText: 'Enter your comment',
                           ),
                           onSubmitted: (comment) {
-                            CommentsCubit.get(context).addComment(
-                              videoId: widget.videoEntity.id,
-                              comment: comment,
-                              user: widget.videoEntity.user,
-                            );
-                            setState(() {
-                              _comments.add(comment);
-                            });
-                            Navigator.of(context).pop();
+                            // Do nothing here since submission will be handled by button press
                           },
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () {
-                            CommentsCubit.get(context).addComment(
-                              videoId: widget.videoEntity.id,
-                              comment: 'Comment',
-                              user: widget.videoEntity.user,
-                            );
+                            final userName =
+                                UserInfoCubit.get(context).userEntity?.name;
+                            print('userName: $userName');
+
+                            // if (userName == null || userName.isEmpty) {
+                            //   ScaffoldMessenger.of(context).showSnackBar(
+                            //     const SnackBar(
+                            //       content: Text(
+                            //           'User name is required to submit a comment.'),
+                            //     ),
+                            //   );
+                            // } else {
+                            //   CommentsCubit.get(context).addComment(
+                            //     videoId: widget.videoEntity.id,
+                            //     comment: 'Comment',
+                            //     user: UserInfoCubit.get(context).userEntity
+                            //         as UserModel,
+                            //   );
+
+                            {
+                              setState(() {
+                                _comments.add('Comment');
+                              });
+                              Navigator.of(context).pop();
+                            }
                           },
                           child: const Text('Submit'),
                         ),

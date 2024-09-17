@@ -16,10 +16,6 @@ abstract class VideosRemoteDataSource {
     required UserEntity user,
   });
   Future<List<VideoModel>> getFavouriteVideos();
-  Future<bool> toggleFavouriteVideo({
-    required String videoId,
-    required UserEntity user,
-  });
 }
 
 class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {

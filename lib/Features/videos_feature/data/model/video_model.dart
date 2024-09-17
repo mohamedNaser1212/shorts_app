@@ -1,4 +1,4 @@
-import '../../../authentication_feature/data/user_model/user_model.dart';
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../../comments_feature/data/model/comments_model.dart';
 import '../../domain/video_entity/video_entity.dart';
 
@@ -18,7 +18,7 @@ class VideoModel extends VideoEntity {
       thumbnail: json['thumbnail'] ?? '',
       videoUrl: json['videoUrl'] ?? '',
       description: json['description'],
-      user: UserModel.fromJson(json['user']),
+      user: UserEntity.fromJson(json['user']),
       comments: (json['comments'] as List)
           .map((e) => CommentModel.fromJson(e as Map<String, dynamic>))
           .toList(),

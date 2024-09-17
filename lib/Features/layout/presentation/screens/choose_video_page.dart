@@ -5,6 +5,7 @@ import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/utils/widgets/custom_title.dart';
 
 import '../../../../core/utils/widgets/thumbnail_widget.dart';
+import '../../../authentication_feature/data/user_model/user_model.dart';
 import '../../../videos_feature/presentation/video_cubit/video_cubit.dart';
 import '../../../videos_feature/presentation/widgets/select_video_botton.dart';
 
@@ -31,7 +32,7 @@ class _ChooseVideoPageState extends State<ChooseVideoPage> {
       await VideoCubit.get(context).uploadVideo(
         videoPath: _selectedVideoPath!,
         description: _titleController.text,
-        user: user!,
+        user: user! as UserModel,
       );
     }
   }

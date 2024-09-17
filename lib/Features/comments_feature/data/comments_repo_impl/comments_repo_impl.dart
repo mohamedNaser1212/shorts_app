@@ -4,7 +4,7 @@ import 'package:shorts/Features/comments_feature/domain/comments_entity/comments
 import 'package:shorts/core/error_manager/failure.dart';
 import 'package:shorts/core/repo_manager/repo_manager.dart';
 
-import '../data_sources/commenta_remote_data_source.dart';
+import '../data_sources/comments_remote_data_source.dart';
 import '../model/comments_model.dart';
 
 class CommentsRepoImpl extends CommentsRepo {

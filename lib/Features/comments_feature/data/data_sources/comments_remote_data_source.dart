@@ -39,7 +39,7 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
 
       final userVideoCommentsRef = firestore
           .collection(CollectionNames.users)
-          .doc(comment.user.id)
+          .doc(uId)
           .collection(CollectionNames.videos)
           .doc(videoId)
           .collection('comments');

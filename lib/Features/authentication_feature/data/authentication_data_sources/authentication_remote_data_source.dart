@@ -40,13 +40,12 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     );
     uId = userCredential.user!.uid;
 
-    // Retrieve FCM token
     String? fcmToken = await FirebaseMessaging.instance.getToken();
 
     UserModel user = UserModel(
-      name: '',
+      name: userCredential.user?.displayName ?? '',
       email: email,
-      phone: '',
+      phone: userCredential.user?.phoneNumber ?? '',
       id: uId ?? '',
       fcmToken: fcmToken ?? '',
     );

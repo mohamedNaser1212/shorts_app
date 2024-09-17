@@ -2,9 +2,9 @@ import 'package:dartz/dartz.dart'; // Import the Either type from dartz
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/add_comments_use_case.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/show_comments_use_case.dart';
-import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
 import '../../../../core/error_manager/failure.dart';
+import '../../../authentication_feature/data/user_model/user_model.dart';
 import '../../data/model/comments_model.dart';
 import '../../domain/comments_entity/comments_entity.dart';
 
@@ -24,15 +24,12 @@ class CommentsCubit extends Cubit<CommentsState> {
   Future<void> addComment({
     required String videoId,
     required String comment,
-    required UserEntity user,
+    required UserModel user,
   }) async {
     emit(AddCommentsLoadingState());
     try {
-      // Create a CommentModel from the String comment
       final commentModel = CommentModel(
-        id: DateTime.now()
-            .millisecondsSinceEpoch
-            .toString(), // Unique ID for the comment
+        id: DateTime.now().millisecondsSinceEpoch.toString(),
         content: comment,
         user: user,
         timestamp: DateTime.now(),

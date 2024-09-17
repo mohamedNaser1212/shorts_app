@@ -29,7 +29,7 @@ import '../../Features/authentication_feature/data/authentication_data_sources/a
 import '../../Features/authentication_feature/domain/authentication_repo/authentication_repo.dart';
 import '../../Features/authentication_feature/domain/authentication_use_case/login_use_case.dart';
 import '../../Features/comments_feature/data/comments_repo_impl/comments_repo_impl.dart';
-import '../../Features/comments_feature/data/data_sources/commenta_remote_data_source.dart';
+import '../../Features/comments_feature/data/data_sources/comments_remote_data_source.dart';
 import '../../Features/comments_feature/domain/ccommeints_repo/comments_repo.dart';
 import '../../Features/comments_feature/domain/comments_use_case/add_comments_use_case.dart';
 import '../../Features/favourites_feature/data/favourites_repo_impl/favourite_repo_impl.dart';
