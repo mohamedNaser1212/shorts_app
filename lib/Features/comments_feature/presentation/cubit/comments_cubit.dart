@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart'; // Import the Either type from dartz
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/add_comments_use_case.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/show_comments_use_case.dart';
+import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 
 import '../../../../core/error_manager/failure.dart';
 import '../../../authentication_feature/data/user_model/user_model.dart';
@@ -25,6 +26,8 @@ class CommentsCubit extends Cubit<CommentsState> {
     required String videoId,
     required String comment,
     required UserModel user,
+    required String userId,
+    required VideoEntity video,
   }) async {
     emit(AddCommentsLoadingState());
     try {
@@ -38,6 +41,8 @@ class CommentsCubit extends Cubit<CommentsState> {
       await addCommentsUseCase.addCommentToVideo(
         videoId: videoId,
         comment: commentModel,
+        userId: userId,
+        video: video,
       );
       emit(AddCommentsSuccessState());
     } catch (e) {

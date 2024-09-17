@@ -3,6 +3,8 @@ import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart
 import 'package:shorts/Features/favourites_feature/domain/favourites_use_case/favourites_use_case.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
+import '../../../authentication_feature/data/user_model/user_model.dart';
+
 part 'favourites_state.dart';
 
 class FavouritesCubit extends Cubit<FavouritesState> {
@@ -16,9 +18,13 @@ class FavouritesCubit extends Cubit<FavouritesState> {
   Map<String, bool> favorites = {};
   List<FavouritesEntity> getFavouritesModel = [];
 
-  Future<void> getFavourites() async {
+  Future<void> getFavourites({
+    required UserEntity user,
+  }) async {
     emit(GetFavoritesLoadingState());
-    final result = await favouritesUseCase.getFavouriteVideos();
+    final result = await favouritesUseCase.getFavouriteVideos(
+      user: user,
+    );
     result.fold(
       (failure) {
         print('Failed to fetch favourites: $failure');
@@ -35,6 +41,7 @@ class FavouritesCubit extends Cubit<FavouritesState> {
   Future<void> toggleFavourite({
     required String videoId,
     required UserEntity user,
+    required UserModel userModel,
   }) async {
     emit(ToggleFavoritesLoadingState());
     favorites[videoId] = !(favorites[videoId] ?? false);
@@ -44,6 +51,7 @@ class FavouritesCubit extends Cubit<FavouritesState> {
     final result = await favouritesUseCase.toggleFavouriteVideo(
       videoId: videoId,
       user: user,
+      userModel: userModel,
     );
     result.fold(
       (failure) {
@@ -51,7 +59,9 @@ class FavouritesCubit extends Cubit<FavouritesState> {
         emit(ToggleFavoriteErrorState(message: failure.message));
       },
       (favourites) async {
-        await getFavourites();
+        await getFavourites(
+          user: user,
+        );
         emit(ToggleFavouriteSuccessState(isFavourite: favourites));
       },
     );

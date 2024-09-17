@@ -47,7 +47,7 @@ class MyApp extends StatelessWidget {
           create: (context) => getIt<UserInfoCubit>()..getUserData(),
         ),
         BlocProvider(
-          create: (context) => getIt<FavouritesCubit>()..getFavourites(),
+          create: (context) => getIt<FavouritesCubit>(),
         ),
         BlocProvider(
           create: (context) => getIt<CommentsCubit>(),

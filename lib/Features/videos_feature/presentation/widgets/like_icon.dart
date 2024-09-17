@@ -9,6 +9,7 @@ import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/utils/widgets/custom_title.dart';
 
 import '../../../../core/notification_service/notification_helper.dart';
+import '../../../authentication_feature/data/user_model/user_model.dart';
 import '../../../comments_feature/domain/comments_use_case/show_comments_use_case.dart';
 import '../../../comments_feature/presentation/cubit/comments_cubit.dart';
 import '../../domain/video_notifiers/video_notifier.dart';
@@ -46,7 +47,9 @@ class _VideoIconsState extends State<VideoIcons> {
   @override
   void initState() {
     super.initState();
-    FavouritesCubit.get(context).getFavourites();
+    FavouritesCubit.get(context).getFavourites(
+      user: UserInfoCubit.get(context).userEntity as UserModel,
+    );
     UserInfoCubit.get(context).getUserData();
     CommentsCubit.get(context).fetchComments(
       videoId: widget.videoEntity.id,
@@ -102,38 +105,25 @@ class _VideoIconsState extends State<VideoIcons> {
                             border: OutlineInputBorder(),
                             labelText: 'Enter your comment',
                           ),
-                          onSubmitted: (comment) {
-                            // Do nothing here since submission will be handled by button press
-                          },
+                          onSubmitted: (comment) {},
                         ),
                         const SizedBox(height: 16),
                         ElevatedButton(
                           onPressed: () {
-                            final userName =
-                                UserInfoCubit.get(context).userEntity?.name;
-                            print('userName: $userName');
+                            CommentsCubit.get(context).addComment(
+                              videoId: widget.videoEntity.id,
+                              comment: 'Comment',
+                              user: UserInfoCubit.get(context).userEntity
+                                  as UserModel,
+                              userId:
+                                  UserInfoCubit.get(context).userEntity!.id!,
+                              video: widget.videoEntity,
+                            );
 
-                            // if (userName == null || userName.isEmpty) {
-                            //   ScaffoldMessenger.of(context).showSnackBar(
-                            //     const SnackBar(
-                            //       content: Text(
-                            //           'User name is required to submit a comment.'),
-                            //     ),
-                            //   );
-                            // } else {
-                            //   CommentsCubit.get(context).addComment(
-                            //     videoId: widget.videoEntity.id,
-                            //     comment: 'Comment',
-                            //     user: UserInfoCubit.get(context).userEntity
-                            //         as UserModel,
-                            //   );
-
-                            {
-                              setState(() {
-                                _comments.add('Comment');
-                              });
-                              Navigator.of(context).pop();
-                            }
+                            setState(() {
+                              _comments.add('Comment');
+                            });
+                            Navigator.of(context).pop();
                           },
                           child: const Text('Submit'),
                         ),
@@ -168,6 +158,8 @@ class _VideoIconsState extends State<VideoIcons> {
                   FavouritesCubit.get(context).toggleFavourite(
                     videoId: widget.videoEntity.id,
                     user: widget.videoEntity.user,
+                    userModel:
+                        UserInfoCubit.get(context).userEntity as UserModel,
                   );
 
                   notificationHelper.sendNotificationToSpecificUser(
@@ -177,8 +169,6 @@ class _VideoIconsState extends State<VideoIcons> {
                     body: 'Your video has been liked.',
                     context: context,
                   );
-
-                  print('videoEntity.id: ${widget.videoEntity.id}');
                 },
                 icon: CircleAvatar(
                   backgroundColor: isFavorite ? Colors.red : Colors.grey,

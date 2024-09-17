@@ -34,7 +34,9 @@ class VideoPage extends StatelessWidget {
           BlocProvider(
             create: (context) => FavouritesCubit(
               favouritesUseCase: getIt.get<FavouritesUseCase>(),
-            )..getFavourites(),
+            )..getFavourites(
+                user: UserInfoCubit.get(context).userEntity!,
+              ),
           ),
         ],
         child: BlocConsumer<UserInfoCubit, UserInfoState>(

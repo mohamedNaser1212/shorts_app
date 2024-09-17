@@ -2,14 +2,17 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_model/favourites_model.dart';
 
 import '../../../../../core/network/firebase_manager/collection_names.dart';
-import '../../../../core/constants/consts.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
+import '../../../authentication_feature/data/user_model/user_model.dart';
 
 abstract class FavouritesRemoteDataSource {
-  Future<List<FavouritesVideoModel>> getFavouriteVideos();
+  Future<List<FavouritesVideoModel>> getFavouriteVideos({
+    required UserEntity user,
+  });
   Future<bool> toggleFavouriteVideo({
     required String videoId,
     required UserEntity user,
+    required UserModel userModel,
   });
 }
 
@@ -17,10 +20,12 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
-  Future<List<FavouritesVideoModel>> getFavouriteVideos() async {
+  Future<List<FavouritesVideoModel>> getFavouriteVideos({
+    required UserEntity user,
+  }) async {
     final querySnapshot = await firestore
         .collection(CollectionNames.users)
-        .doc(uId)
+        .doc(user.id)
         .collection(CollectionNames.favourites)
         .get();
 
@@ -33,18 +38,18 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
   Future<bool> toggleFavouriteVideo({
     required String videoId,
     required UserEntity user,
+    required UserModel userModel,
   }) async {
-    final userFavouritesRef = firestore
+    final userFavouritess = firestore
         .collection(CollectionNames.users)
-        .doc(user.id)
+        .doc(userModel.id)
         .collection(CollectionNames.favourites)
         .doc(videoId);
 
-    final userFavouriteDoc = await userFavouritesRef.get();
+    final userFavourites = await userFavouritess.get();
 
-    if (userFavouriteDoc.exists) {
-      await userFavouritesRef.delete();
-      print('Video removed from favourites collection');
+    if (userFavourites.exists) {
+      await userFavouritess.delete();
       return false;
     } else {
       final globalVideoRef =
@@ -54,12 +59,11 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
       if (globalVideoDoc.exists) {
         final videoData = globalVideoDoc.data() as Map<String, dynamic>;
 
-        await userFavouritesRef.set(videoData);
+        await userFavouritess.set(videoData);
 
         print('Video added to favourites collection');
         return true;
       } else {
-        print('Video not found in global videos collection');
         return false;
       }
     }

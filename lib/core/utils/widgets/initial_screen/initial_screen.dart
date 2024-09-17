@@ -35,7 +35,9 @@ class _InitialScreenState extends State<InitialScreen> {
             } else {
               print(state.userModel!.name);
               UserInfoCubit.get(context).userEntity = state.userModel;
-              FavouritesCubit.get(context).getFavourites();
+              FavouritesCubit.get(context).getFavourites(
+                user: state.userModel!,
+              );
               NavigationManager.navigateAndFinish(
                 context: context,
                 screen: MyHomePage(),

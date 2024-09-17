@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 
 import '../../../../core/constants/consts.dart';
 import '../../../../core/network/firebase_manager/collection_names.dart';
+import '../../../videos_feature/domain/video_entity/video_entity.dart';
 import '../model/comments_model.dart';
 
 abstract class CommentsRemoteDataSource {
@@ -9,12 +11,14 @@ abstract class CommentsRemoteDataSource {
   Future<bool> addCommentToVideo({
     required String videoId,
     required CommentModel comment,
+    required String userId,
+    required VideoEntity video,
   });
 }
 
 class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-
+  VideoModel? video;
   @override
   Future<List<CommentModel>> getVideoComments(String videoId) async {
     final querySnapshot = await firestore
@@ -32,14 +36,18 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
   Future<bool> addCommentToVideo({
     required String videoId,
     required CommentModel comment,
+    required String userId,
+    required VideoEntity video,
   }) async {
     try {
+      print('Adding comment to video with id: $videoId');
+
       final videoRef =
           firestore.collection(CollectionNames.videos).doc(videoId);
 
       final userVideoCommentsRef = firestore
           .collection(CollectionNames.users)
-          .doc(uId)
+          .doc(video.user.id)
           .collection(CollectionNames.videos)
           .doc(videoId)
           .collection('comments');
