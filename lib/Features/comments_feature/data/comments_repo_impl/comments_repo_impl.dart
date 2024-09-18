@@ -42,7 +42,7 @@ class CommentsRepoImpl extends CommentsRepo {
     return repoManager.call(
       action: () async {
         final comments =
-            await commentsRemoteDataSource.getVideoComments(videoId);
+            await commentsRemoteDataSource.getComments(videoId).first;
         return comments;
       },
     );

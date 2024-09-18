@@ -30,11 +30,10 @@ class _VideoIconsState extends State<VideoIcons> {
   void initState() {
     super.initState();
     UserInfoCubit.get(context).getUserData();
+
     // FavouritesCubit.get(context)
     //     .getFavourites(user: UserInfoCubit.get(context).userEntity!);
-    CommentsCubit.get(context).fetchComments(
-      videoId: widget.videoEntity.id,
-    );
+    CommentsCubit.get(context).startListeningToComments(widget.videoEntity.id);
   }
 
   void _showCommentBottomSheet() {

@@ -1,13 +1,12 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 
-import '../../../../core/constants/consts.dart';
 import '../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../videos_feature/domain/video_entity/video_entity.dart';
 import '../model/comments_model.dart';
 
 abstract class CommentsRemoteDataSource {
-  Future<List<CommentModel>> getVideoComments(String videoId);
+  Stream<List<CommentModel>> getComments(String videoId,
+      {DocumentSnapshot? startAfter});
   Future<bool> addCommentToVideo({
     required String videoId,
     required CommentModel comment,
@@ -18,18 +17,24 @@ abstract class CommentsRemoteDataSource {
 
 class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
-  VideoModel? video;
+
   @override
-  Future<List<CommentModel>> getVideoComments(String videoId) async {
-    final querySnapshot = await firestore
+  Stream<List<CommentModel>> getComments(String videoId,
+      {DocumentSnapshot? startAfter}) {
+    Query query = firestore
         .collection(CollectionNames.videos)
         .doc(videoId)
         .collection('comments')
-        .get();
+        .orderBy('timestamp', descending: true)
+        .limit(20);
 
-    return querySnapshot.docs
-        .map((doc) => CommentModel.fromJson(doc.data()))
-        .toList();
+    if (startAfter != null) {
+      query = query.startAfterDocument(startAfter);
+    }
+
+    return query.snapshots().map((snapshot) => snapshot.docs
+        .map((doc) => CommentModel.fromJson(doc.data() as Map<String, dynamic>))
+        .toList());
   }
 
   @override
@@ -39,39 +44,34 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     required String userId,
     required VideoEntity video,
   }) async {
-    try {
-      print('Adding comment to video with id: $videoId');
+    print('Adding comment to video with id: $videoId');
 
-      final videoRef =
-          firestore.collection(CollectionNames.videos).doc(videoId);
+    final videoRef = firestore.collection(CollectionNames.videos).doc(videoId);
 
-      final userVideoCommentsRef = firestore
-          .collection(CollectionNames.users)
-          .doc(video.user.id)
-          .collection(CollectionNames.videos)
-          .doc(videoId)
-          .collection('comments');
-      print(uId);
+    final userVideoCommentsRef = firestore
+        .collection(CollectionNames.users)
+        .doc(video.user.id)
+        .collection(CollectionNames.videos)
+        .doc(videoId)
+        .collection('comments');
 
-      final videoDoc = await videoRef.get();
+    print('User ID: $userId');
 
-      if (videoDoc.exists) {
-        await videoRef
-            .collection('comments')
-            .doc(comment.id)
-            .set(comment.toJson());
+    final videoDoc = await videoRef.get();
 
-        await userVideoCommentsRef.doc(comment.id).set(comment.toJson());
+    if (videoDoc.exists) {
+      await videoRef
+          .collection('comments')
+          .doc(comment.id)
+          .set(comment.toJson());
 
-        print(
-            'Comment added to both video and user\'s video comments collection');
-        return true;
-      } else {
-        print('Video not found in collection');
-        return false;
-      }
-    } catch (e) {
-      print('Error adding comment: $e');
+      await userVideoCommentsRef.doc(comment.id).set(comment.toJson());
+
+      print(
+          'Comment added to both video and user\'s video comments collection');
+      return true;
+    } else {
+      print('Video not found in collection');
       return false;
     }
   }

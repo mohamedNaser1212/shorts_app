@@ -20,6 +20,9 @@ class CommentsCubit extends Cubit<CommentsState> {
   final AddCommentsUseCase addCommentsUseCase;
   final GetCommentsUseCase getCommentsUseCase;
 
+  // Maintain a list of comments locally with CommentModel type
+  List<CommentEntity> comments = [];
+
   Future<void> addComment({
     required String videoId,
     required String comment,
@@ -28,38 +31,45 @@ class CommentsCubit extends Cubit<CommentsState> {
     required VideoEntity video,
   }) async {
     emit(AddCommentsLoadingState());
-    try {
-      final commentModel = CommentModel(
+    // //
+    // final commentModel = CommentModel(
+    //   id: DateTime.now().millisecondsSinceEpoch.toString(),
+    //   content: comment,
+    //   user: user,
+    //   timestamp: DateTime.now(),
+    // );
+
+    emit(GetCommentsSuccessState(comments: comments));
+
+    final result = await addCommentsUseCase.addCommentToVideo(
+      videoId: videoId,
+      comment: CommentModel(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         content: comment,
         user: user,
         timestamp: DateTime.now(),
-      );
+      ),
+      userId: userId,
+      video: video,
+    );
+    result.fold(
+      (failure) => emit(AddCommentsErrorState(message: failure.toString())),
+      (success) {
+        startListeningToComments(videoId);
 
-      await addCommentsUseCase.addCommentToVideo(
-        videoId: videoId,
-        comment: commentModel,
-        userId: userId,
-        video: video,
-      );
-      emit(AddCommentsSuccessState());
-    } catch (e) {
-      emit(AddCommentsErrorState(message: e.toString()));
-    }
+        emit(AddCommentsSuccessState());
+      },
+    );
   }
 
-  List<CommentEntity> comments = [];
-
-  Future<void> fetchComments({required String videoId}) async {
+  void startListeningToComments(String videoId) async {
     emit(GetCommentsLoadingState());
 
-    var result = await getCommentsUseCase.getVideoComments(videoId);
-
+    final result = await getCommentsUseCase.getVideoComments(videoId);
     result.fold(
       (failure) => emit(GetCommentsErrorState(message: failure.toString())),
       (comments) {
-        this.comments = comments;
-        print('Comments: ${comments.length}');
+        this.comments = comments; // Update the local comments list
         emit(GetCommentsSuccessState(comments: comments));
       },
     );
