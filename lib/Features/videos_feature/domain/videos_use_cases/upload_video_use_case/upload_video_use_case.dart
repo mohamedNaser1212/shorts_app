@@ -2,7 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:shorts/Features/videos_feature/domain/video_repo/video_repo.dart';
 import 'package:shorts/core/error_manager/failure.dart';
 
-import '../../../../authentication_feature/data/user_model/user_model.dart';
+import '../../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../video_entity/video_entity.dart';
 
 class UploadVideoUseCase {
@@ -13,7 +13,7 @@ class UploadVideoUseCase {
   Future<Either<Failure, VideoEntity>> call({
     required String description,
     required String videoPath,
-    required UserModel user,
+    required UserEntity user,
   }) async {
     return await videoRepository.uploadVideo(
       description: description,

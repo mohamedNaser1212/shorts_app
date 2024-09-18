@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/core/utils/styles_manager/text_styles_manager.dart';
 
-
 enum TitleStyle {
   style12,
   style14,
   style16,
+  style16Bold,
   style18,
   styleBold18,
   style20,
@@ -49,6 +49,12 @@ class CustomTitle extends StatelessWidget {
         break;
       case TitleStyle.style16:
         textStyle = StylesManager.textStyle16.copyWith(
+          color: color,
+          fontFamily: 'Inter',
+        );
+        break;
+      case TitleStyle.style16Bold:
+        textStyle = StylesManager.textStyle16Bold.copyWith(
           color: color,
           fontFamily: 'Inter',
         );

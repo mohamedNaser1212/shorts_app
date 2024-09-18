@@ -7,6 +7,7 @@ import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cu
 import 'package:video_player/video_player.dart';
 
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
+import '../../../../core/utils/widgets/custom_list_tile.dart';
 import '../../domain/video_entity/video_entity.dart';
 import '../../domain/video_notifiers/video_notifier.dart';
 import '../widgets/animated_pause_icon.dart';
@@ -73,25 +74,18 @@ class VideoListItem extends StatelessWidget {
               Positioned(
                 bottom: 60,
                 left: 10,
-                child: Column(
-                  children: [
-                    Text(
-                      videoEntity.user.name,
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
+                child: Container(
+                  width: MediaQuery.of(context).size.width * 0.8,
+                  height: MediaQuery.of(context).size.height * 0.1,
+                  child: CustomListTile(
+                    leading: CircleAvatar(
+                      backgroundColor: Colors.grey,
+                      radius: 20,
                     ),
-                    Text(
-                      videoEntity.description ?? '',
-                      style: const TextStyle(
-                        color: Colors.white,
-                        fontSize: 16,
-                        fontWeight: FontWeight.bold,
-                      ),
-                    ),
-                  ],
+                    title: videoEntity.user.name,
+                    subtitle: videoEntity.description!,
+                    color: Colors.white,
+                  ),
                 ),
               ),
             ],

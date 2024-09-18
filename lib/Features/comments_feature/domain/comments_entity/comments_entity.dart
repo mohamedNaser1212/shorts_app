@@ -1,5 +1,6 @@
 import 'package:hive/hive.dart';
 
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../../authentication_feature/data/user_model/user_model.dart';
 
 part 'comments_entity.g.dart';
@@ -11,7 +12,7 @@ class CommentEntity {
   @HiveField(1)
   final String content;
   @HiveField(2)
-  final UserModel user;
+  final UserEntity user;
   @HiveField(3)
   final DateTime timestamp;
 

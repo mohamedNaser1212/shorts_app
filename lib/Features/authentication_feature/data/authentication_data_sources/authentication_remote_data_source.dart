@@ -39,30 +39,24 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       password: password,
     );
     uId = userCredential.user!.uid;
-
-    String? fcmToken = await FirebaseMessaging.instance.getToken();
+    //String? fcmToken = await FirebaseMessaging.instance.getToken();
 
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
         .collection(CollectionNames.users)
         .doc(uId)
         .get();
 
-    if (userDoc.exists && userDoc.data() != null) {
-      Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
 
-      UserModel user = UserModel(
-        name: userData['name'] ?? '',
-        email: userData['email'] ?? email,
-        phone: userData['phone'] ?? '',
-        id: uId ?? '',
-        fcmToken: fcmToken ?? '',
-      );
+    // UserModel user = UserModel(
+    //   name: userData['name'],
+    //   email: userData['email'] ?? email,
+    //   phone: userData['phone'],
+    //   id: userData['id'],
+    //   fcmToken: userData['fcmToken'],
+    // );
 
-      return user;
-    } else {
-      // Handle case where user document doesn't exist
-      throw Exception("User data not found.");
-    }
+    return UserModel.fromJson(userData);
   }
 
   @override
@@ -72,7 +66,6 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     required String name,
     required String phone,
   }) async {
-    // Register the user with email and password
     UserCredential userCredential =
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: email,
@@ -80,10 +73,8 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     );
     uId = userCredential.user!.uid;
 
-    // Retrieve FCM token
     String? fcmToken = await FirebaseMessaging.instance.getToken();
 
-    // Create the user model
     UserModel user = UserModel(
       name: name,
       email: email,
@@ -92,7 +83,6 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       fcmToken: fcmToken ?? '',
     );
 
-    // Save the new user data to Firestore
     createUserData(user: user);
 
     return user;

@@ -40,16 +40,16 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
     required UserEntity user,
     required UserModel userModel,
   }) async {
-    final userFavouritess = firestore
+    final userFavouritesCollection = firestore
         .collection(CollectionNames.users)
         .doc(userModel.id)
         .collection(CollectionNames.favourites)
         .doc(videoId);
 
-    final userFavourites = await userFavouritess.get();
+    final favourites = await userFavouritesCollection.get();
 
-    if (userFavourites.exists) {
-      await userFavouritess.delete();
+    if (favourites.exists) {
+      await userFavouritesCollection.delete();
       return false;
     } else {
       final globalVideoRef =
@@ -59,7 +59,7 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
       if (globalVideoDoc.exists) {
         final videoData = globalVideoDoc.data() as Map<String, dynamic>;
 
-        await userFavouritess.set(videoData);
+        await userFavouritesCollection.set(videoData);
 
         print('Video added to favourites collection');
         return true;
