@@ -31,8 +31,8 @@ class _VideoIconsState extends State<VideoIcons> {
     super.initState();
     UserInfoCubit.get(context).getUserData();
 
-    // FavouritesCubit.get(context)
-    //     .getFavourites(user: UserInfoCubit.get(context).userEntity!);
+    FavouritesCubit.get(context)
+        .getFavourites(user: UserInfoCubit.get(context).userEntity!);
     CommentsCubit.get(context).startListeningToComments(widget.videoEntity.id);
   }
 

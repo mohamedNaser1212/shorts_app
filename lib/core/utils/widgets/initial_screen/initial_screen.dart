@@ -38,6 +38,8 @@ class _InitialScreenState extends State<InitialScreen> {
               FavouritesCubit.get(context).getFavourites(
                 user: state.userModel!,
               );
+              FavouritesCubit.get(context)
+                  .getFavourites(user: UserInfoCubit.get(context).userEntity!);
               NavigationManager.navigateAndFinish(
                 context: context,
                 screen: MyHomePage(),
