@@ -9,8 +9,11 @@ class GetCommentsUseCase {
 
   GetCommentsUseCase({required this.commentsRepo});
 
-  Future<Either<Failure, List<CommentEntity>>> getVideoComments(
-      String videoId) async {
-    return await commentsRepo.getVideoComments(videoId);
+  Future<Either<Failure, List<CommentEntity>>> getVideoComments({
+    required String videoId,
+  }) async {
+    return await commentsRepo.getVideoComments(
+      videoId: videoId,
+    );
   }
 }

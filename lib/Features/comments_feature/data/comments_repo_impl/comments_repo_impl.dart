@@ -37,12 +37,14 @@ class CommentsRepoImpl extends CommentsRepo {
   }
 
   @override
-  Future<Either<Failure, List<CommentEntity>>> getVideoComments(
-      String videoId) async {
+  Future<Either<Failure, List<CommentEntity>>> getVideoComments({
+    required String videoId,
+  }) async {
     return repoManager.call(
       action: () async {
-        final comments =
-            await commentsRemoteDataSource.getComments(videoId).first;
+        final comments = await commentsRemoteDataSource.getComments(
+          videoId: videoId,
+        );
         return comments;
       },
     );

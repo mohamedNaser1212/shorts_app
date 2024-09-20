@@ -5,8 +5,9 @@ import '../../../videos_feature/domain/video_entity/video_entity.dart';
 import '../model/comments_model.dart';
 
 abstract class CommentsRemoteDataSource {
-  Stream<List<CommentModel>> getComments(String videoId,
-      {DocumentSnapshot? startAfter});
+  Future<List<CommentModel>> getComments({
+    required String videoId,
+  });
   Future<bool> addCommentToVideo({
     required String videoId,
     required CommentModel comment,
@@ -19,8 +20,9 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   @override
-  Stream<List<CommentModel>> getComments(String videoId,
-      {DocumentSnapshot? startAfter}) {
+  Future<List<CommentModel>> getComments({
+    required String videoId,
+  }) async {
     Query query = firestore
         .collection(CollectionNames.videos)
         .doc(videoId)
@@ -28,13 +30,11 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
         .orderBy('timestamp', descending: true)
         .limit(20);
 
-    if (startAfter != null) {
-      query = query.startAfterDocument(startAfter);
-    }
-
-    return query.snapshots().map((snapshot) => snapshot.docs
-        .map((doc) => CommentModel.fromJson(doc.data() as Map<String, dynamic>))
-        .toList());
+    return query.get().then((value) {
+      return value.docs
+          .map((e) => CommentModel.fromJson(e.data() as Map<String, dynamic>))
+          .toList();
+    });
   }
 
   @override

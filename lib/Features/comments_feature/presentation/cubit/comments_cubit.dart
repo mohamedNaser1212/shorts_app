@@ -65,7 +65,9 @@ class CommentsCubit extends Cubit<CommentsState> {
   void startListeningToComments(String videoId) async {
     emit(GetCommentsLoadingState());
 
-    final result = await getCommentsUseCase.getVideoComments(videoId);
+    final result = await getCommentsUseCase.getVideoComments(
+      videoId: videoId,
+    );
     result.fold(
       (failure) => emit(GetCommentsErrorState(message: failure.toString())),
       (comments) {
