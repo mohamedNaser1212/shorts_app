@@ -32,6 +32,13 @@ class MyHomePage extends StatelessWidget {
               },
               child: const Text('Videos'),
             ),
+            // ElevatedButton(
+            //   onPressed: () {
+            //     NavigationManager.navigateTo(
+            //         context: context, screen: FavouritesPage());
+            //   },
+            //   child: const Text('Favourites'),
+            // ),
           ],
         ));
   }

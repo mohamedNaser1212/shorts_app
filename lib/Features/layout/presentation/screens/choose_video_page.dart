@@ -31,7 +31,7 @@ class _ChooseVideoPageState extends State<ChooseVideoPage> {
       await VideoCubit.get(context).uploadVideo(
         videoPath: _selectedVideoPath!,
         description: _titleController.text,
-        user: user!,
+        user: UserInfoCubit.get(context).userEntity!,
       );
     }
   }

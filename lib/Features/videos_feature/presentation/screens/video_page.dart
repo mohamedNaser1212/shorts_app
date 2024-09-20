@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/videos_list.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
@@ -40,6 +41,13 @@ class VideoPage extends StatelessWidget {
         child: BlocConsumer<UserInfoCubit, UserInfoState>(
           listener: (context, UserState) {
             if (UserState is GetUserInfoSuccessState) {
+              UserInfoCubit.get(context).userModel = UserModel(
+                id: UserState.userModel?.id,
+                name: UserState.userModel!.name,
+                email: UserState.userModel!.email,
+                phone: UserState.userModel!.phone,
+                fcmToken: UserState.userModel!.fcmToken,
+              );
               print(UserState.userModel?.name);
               print(UserState.userModel?.id);
               print(UserState.userModel?.phone);

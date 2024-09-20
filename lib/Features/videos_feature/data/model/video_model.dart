@@ -1,4 +1,5 @@
-import '../../../../core/user_info/domain/user_entity/user_entity.dart';
+import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
+
 import '../../../comments_feature/data/model/comments_model.dart';
 import '../../domain/video_entity/video_entity.dart';
 

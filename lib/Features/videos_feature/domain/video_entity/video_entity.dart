@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 
-import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../../authentication_feature/data/user_model/user_model.dart';
 import '../../../comments_feature/domain/comments_entity/comments_entity.dart';
 
@@ -17,7 +16,7 @@ class VideoEntity {
   @HiveField(3)
   final String? description;
   @HiveField(4)
-  final UserEntity user;
+  final dynamic user;
   @HiveField(5)
   final List<CommentEntity> comments;
 

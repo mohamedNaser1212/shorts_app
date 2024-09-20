@@ -3,7 +3,7 @@ import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart
 import 'package:shorts/Features/favourites_feature/domain/favourites_use_case/favourites_use_case.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
-import '../../../authentication_feature/data/user_model/user_model.dart';
+import '../../../videos_feature/domain/video_entity/video_entity.dart';
 
 part 'favourites_state.dart';
 
@@ -39,18 +39,17 @@ class FavouritesCubit extends Cubit<FavouritesState> {
   }
 
   Future<void> toggleFavourite({
-    required String videoId,
-    required UserEntity user,
-    required UserModel userModel,
+    required VideoEntity videoEntity,
+    required UserEntity userModel,
   }) async {
     emit(ToggleFavoritesLoadingState());
-    favorites[videoId] = !(favorites[videoId] ?? false);
+    favorites[videoEntity.id] = !(favorites[videoEntity.id] ?? false);
 
-    emit(ToggleFavouriteSuccessState(isFavourite: favorites[videoId] ?? false));
+    emit(ToggleFavouriteSuccessState(
+        isFavourite: favorites[videoEntity.id] ?? false));
 
     final result = await favouritesUseCase.toggleFavouriteVideo(
-      videoId: videoId,
-      user: user,
+      videoEntity: videoEntity,
       userModel: userModel,
     );
     result.fold(
@@ -59,9 +58,6 @@ class FavouritesCubit extends Cubit<FavouritesState> {
         emit(ToggleFavoriteErrorState(message: failure.message));
       },
       (favourites) async {
-        await getFavourites(
-          user: user,
-        );
         emit(ToggleFavouriteSuccessState(isFavourite: favourites));
       },
     );
