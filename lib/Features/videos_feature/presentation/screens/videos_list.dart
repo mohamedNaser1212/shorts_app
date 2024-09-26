@@ -46,10 +46,12 @@ class VideoListItem extends StatelessWidget {
                       VideoPlayer(videoProvider.controller!)
                     else
                       ThumbnailNotifier(videoUrl: videoEntity.videoUrl),
+
                     AnimatedPauseIcon(videoProvider: videoProvider),
+
+                    // Handling Video Icons and Favorites
                     BlocConsumer<CommentsCubit, CommentsState>(
-                      listener: (context, state) {
-                      },
+                      listener: (context, state) {},
                       builder: (context, state) {
                         return BlocConsumer<VideoCubit, VideoState>(
                           listener: (context, state) {},
@@ -58,11 +60,11 @@ class VideoListItem extends StatelessWidget {
                                 FavouritesState>(
                               listener: (context, state) {},
                               builder: (context, state) {
+                                // Passing video and favourite entity
                                 return VideoIcons(
                                   videoProvider: videoProvider,
                                   videoEntity: videoEntity,
                                   favouriteEntity: favouriteEntity,
-                                  // favouritesEntity: ,
                                 );
                               },
                             );
@@ -86,7 +88,7 @@ class VideoListItem extends StatelessWidget {
                       radius: 20,
                     ),
                     title: videoEntity.user.name,
-                    subtitle: videoEntity.description!,
+                    subtitle: videoEntity.description ?? '',
                     color: Colors.white,
                   ),
                 ),

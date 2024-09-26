@@ -68,7 +68,7 @@ class _VideoIconsState extends State<VideoIcons> {
                 onPressed: () {
                   if (widget.videoEntity != null) {
                     FavouritesCubit.get(context).toggleFavourite(
-                      videoEntity: widget.favouriteEntity!,
+                      videoId: widget.videoEntity!.id,
                       userModel: UserInfoCubit.get(context).userEntity!,
                     );
 

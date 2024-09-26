@@ -52,13 +52,13 @@ class FavouritesRepoImpl implements FavouritesRepo {
 
   @override
   Future<Either<Failure, bool>> toggleFavouriteVideo({
-    required FavouritesEntity videoEntity,
+    required String videoId,
     required UserEntity userModel,
   }) async {
     return repoManager.call(
       action: () async {
         final result = await remoteDataSource.toggleFavouriteVideo(
-          videoEntity: videoEntity,
+          videoId: videoId,
           userModel: userModel,
         );
         if (result) {

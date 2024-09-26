@@ -3,14 +3,13 @@ import 'package:shorts/Features/favourites_feature/data/favourites_model/favouri
 
 import '../../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
-import '../../domain/favourite_entitiy.dart';
 
 abstract class FavouritesRemoteDataSource {
   Future<List<FavouritesVideoModel>> getFavouriteVideos({
     required UserEntity user,
   });
   Future<bool> toggleFavouriteVideo({
-    required FavouritesEntity videoEntity,
+    required String videoId,
     required UserEntity userModel,
   });
 }
@@ -35,14 +34,14 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
 
   @override
   Future<bool> toggleFavouriteVideo({
-    required FavouritesEntity videoEntity,
+    required String videoId,
     required UserEntity userModel,
   }) async {
     final userFavouritesCollection = firestore
         .collection(CollectionNames.users)
         .doc(userModel.id)
         .collection(CollectionNames.favourites)
-        .doc(videoEntity.id);
+        .doc(videoId);
 
     final favourites = await userFavouritesCollection.get();
 
@@ -51,7 +50,7 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
       return false;
     } else {
       final globalVideoRef =
-          firestore.collection(CollectionNames.videos).doc(videoEntity.id);
+          firestore.collection(CollectionNames.videos).doc(videoId);
       final globalVideoDoc = await globalVideoRef.get();
 
       if (globalVideoDoc.exists) {

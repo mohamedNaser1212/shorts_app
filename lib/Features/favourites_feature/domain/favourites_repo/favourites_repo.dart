@@ -9,7 +9,7 @@ abstract class FavouritesRepo {
     required UserEntity user,
   });
   Future<Either<Failure, bool>> toggleFavouriteVideo({
-    required FavouritesEntity videoEntity,
+    required String videoId,
     required UserEntity userModel,
   });
 }

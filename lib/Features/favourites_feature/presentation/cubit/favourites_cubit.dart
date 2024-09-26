@@ -37,17 +37,16 @@ class FavouritesCubit extends Cubit<FavouritesState> {
   }
 
   Future<void> toggleFavourite({
-    required FavouritesEntity videoEntity,
+    required String videoId,
     required UserEntity userModel,
   }) async {
     emit(ToggleFavoritesLoadingState());
-    favorites[videoEntity.id] = !(favorites[videoEntity.id] ?? false);
+    favorites[videoId] = !(favorites[videoId] ?? false);
 
-    emit(ToggleFavouriteSuccessState(
-        isFavourite: favorites[videoEntity.id] ?? false));
+    emit(ToggleFavouriteSuccessState(isFavourite: favorites[videoId] ?? false));
 
     final result = await favouritesUseCase.toggleFavouriteVideo(
-      videoEntity: videoEntity,
+      videoId: videoId,
       userModel: userModel,
     );
     result.fold(
