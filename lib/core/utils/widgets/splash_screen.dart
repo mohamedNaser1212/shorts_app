@@ -1,11 +1,11 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:hive_flutter/hive_flutter.dart';
-import 'package:shorts/core/navigations_manager/navigations_manager.dart';
-import 'package:shorts/core/service_locator/service_locator.dart';
+import 'package:shorts/core/functions/navigations_manager.dart';
 import 'package:shorts/core/utils/bloc_observer.dart';
-import 'package:shorts/core/utils/widgets/initial_screen/initial_screen.dart';
+import 'package:shorts/core/utils/widgets/initial_screen.dart';
+
+import '../../service_locator/service_locator.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -20,32 +20,26 @@ class _SplashScreenState extends State<SplashScreen> {
     super.initState();
     Bloc.observer = MyBlocObserver();
     Firebase.initializeApp();
+    setUpServiceLocator();
 
     WidgetsFlutterBinding.ensureInitialized();
 
-    _initializeHiveAndServices();
+    _navigateAfterDelay();
   }
 
-  Future<void> _initializeHiveAndServices() async {
-    try {
-      await Hive.initFlutter();
-      await setUpServiceLocator();
+  void _navigateAfterDelay() {
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      Future.microtask(() async {
+        await Future.delayed(const Duration(seconds: 3));
 
-      WidgetsBinding.instance.addPostFrameCallback((_) {
-        Future.microtask(() async {
-          await Future.delayed(const Duration(seconds: 5));
-
-          if (mounted) {
-            NavigationManager.navigateAndFinish(
-              context: context,
-              screen: const InitialScreen(),
-            );
-          }
-        });
+        if (mounted) {
+          NavigationManager.navigateAndFinish(
+            context: context,
+            screen: const InitialScreen(),
+          );
+        }
       });
-    } catch (e) {
-      print('Failed to initialize Hive and services: $e');
-    }
+    });
   }
 
   @override

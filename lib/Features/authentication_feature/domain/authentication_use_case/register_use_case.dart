@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../../core/error_manager/failure.dart';
+import '../../../../core/managers/error_manager/failure.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
+import '../../data/user_model/register_request_model.dart';
 import '../authentication_repo/authentication_repo.dart';
 
 class RegisterUseCase {
@@ -10,12 +11,10 @@ class RegisterUseCase {
   const RegisterUseCase({required this.authenticationRepo});
 
   Future<Either<Failure, UserEntity>> call({
-    required String email,
-    required String password,
-    required String name,
-    required String phone,
+    required RegisterRequestModel requestModel,
   }) async {
     return await authenticationRepo.register(
-        email: email, password: password, name: name, phone: phone);
+      requestModel: requestModel,
+    );
   }
 }

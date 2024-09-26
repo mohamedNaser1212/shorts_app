@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/core/utils/styles_manager/text_styles_manager.dart';
 
-
 class ReusableElevatedButton extends StatelessWidget {
   final double width;
   final double height;
@@ -12,7 +11,7 @@ class ReusableElevatedButton extends StatelessWidget {
   final void Function()? onPressed;
 
   const ReusableElevatedButton({
-    Key? key,
+    super.key,
     this.width = double.infinity,
     this.height = 50,
     this.radius = 10,
@@ -20,7 +19,7 @@ class ReusableElevatedButton extends StatelessWidget {
     this.textColor = Colors.white,
     required this.label,
     required this.onPressed,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

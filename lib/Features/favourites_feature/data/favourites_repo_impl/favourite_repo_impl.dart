@@ -2,9 +2,9 @@ import 'package:dartz/dartz.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_local_data_source.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_remote_data_source.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart';
-import 'package:shorts/core/error_manager/failure.dart';
-import 'package:shorts/core/repo_manager/repo_manager.dart';
 
+import '../../../../core/managers/error_manager/failure.dart';
+import '../../../../core/managers/repo_manager/repo_manager.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../domain/favourites_repo/favourites_repo.dart';
 

@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/layout/presentation/screens/choose_video_page.dart';
-import 'package:shorts/core/navigations_manager/navigations_manager.dart';
+import 'package:shorts/core/functions/navigations_manager.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
 import '../../../favourites_feature/presentation/screens/favourites_screen.dart';

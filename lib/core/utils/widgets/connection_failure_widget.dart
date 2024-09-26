@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/core/utils/widgets/custom_title.dart';
-import 'package:shorts/core/utils/widgets/reusable_widgets_manager/reusable_elevated_botton.dart';
+import 'package:shorts/core/utils/widgets/reusable_elevated_botton.dart';
 
 class ConnectionFailureWidget extends StatelessWidget {
   const ConnectionFailureWidget({super.key, this.onPressed});

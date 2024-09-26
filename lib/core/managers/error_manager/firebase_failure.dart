@@ -1,7 +1,8 @@
 // lib/core/error_manager/firebase_failure.dart
 
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shorts/core/error_manager/failure.dart';
+
+import 'failure.dart';
 
 class FirebaseFailure extends Failure {
   const FirebaseFailure({required super.message});

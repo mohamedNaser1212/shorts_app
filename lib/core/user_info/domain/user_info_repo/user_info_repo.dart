@@ -1,6 +1,6 @@
 import 'package:dartz/dartz.dart';
 
-import '../../../error_manager/failure.dart';
+import '../../../managers/error_manager/failure.dart';
 import '../user_entity/user_entity.dart';
 
 abstract class UserInfoRepo {

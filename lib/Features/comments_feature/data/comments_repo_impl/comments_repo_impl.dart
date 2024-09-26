@@ -1,9 +1,9 @@
 import 'package:dartz/dartz.dart';
 import 'package:shorts/Features/comments_feature/domain/ccommeints_repo/comments_repo.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
-import 'package:shorts/core/error_manager/failure.dart';
-import 'package:shorts/core/repo_manager/repo_manager.dart';
 
+import '../../../../core/managers/error_manager/failure.dart';
+import '../../../../core/managers/repo_manager/repo_manager.dart';
 import '../../../videos_feature/domain/video_entity/video_entity.dart';
 import '../data_sources/comments_remote_data_source.dart';
 import '../model/comments_model.dart';

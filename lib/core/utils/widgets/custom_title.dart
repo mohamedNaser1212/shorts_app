@@ -28,8 +28,8 @@ class CustomTitle extends StatelessWidget {
     this.color,
     this.maxLines,
     this.overflow = TextOverflow.ellipsis,
-    Key? key,
-  }) : super(key: key);
+    super.key,
+  });
 
   @override
   Widget build(BuildContext context) {

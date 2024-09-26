@@ -4,6 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/network/Hive_manager/hive_helper.dart';
 import '../../../../../core/user_info/domain/use_cases/get_user_info_use_case.dart';
 import '../../../../../core/user_info/domain/user_entity/user_entity.dart';
+import '../../../data/user_model/register_request_model.dart';
 import '../../../domain/authentication_use_case/register_use_case.dart';
 
 part 'register_state.dart';
@@ -25,15 +26,13 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   //UserEntity? userModel;
   Future<void> userRegister({
-    required String email,
-    required String password,
-    required String name,
-    required String phone,
+    required RegisterRequestModel requestModel,
   }) async {
     emit(RegisterLoadingState());
 
     final result = await registerUseCase.call(
-        email: email, password: password, name: name, phone: phone);
+      requestModel: requestModel,
+    );
 
     result.fold(
       (failure) {

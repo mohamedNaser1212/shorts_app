@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/user_info/domain/use_cases/get_user_info_use_case.dart';
+import '../../../data/user_model/login_request_model.dart';
 import '../../../domain/authentication_use_case/login_use_case.dart';
 import 'login_state.dart';
 
@@ -16,12 +17,11 @@ class LoginCubit extends Cubit<LoginState> {
   static LoginCubit get(context) => BlocProvider.of(context);
 
   Future<void> login({
-    required String email,
-    required String password,
+    required LoginRequestModel requestModel,
   }) async {
     emit(AppLoginLoadingState());
 
-    final result = await loginUseCase.call(email: email, password: password);
+    final result = await loginUseCase.call(requestModel: requestModel);
     result.fold(
       (failure) {
         emit(AppLoginErrorState(error: failure.message));

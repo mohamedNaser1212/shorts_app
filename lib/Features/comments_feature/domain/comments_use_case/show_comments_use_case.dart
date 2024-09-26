@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:shorts/Features/comments_feature/domain/ccommeints_repo/comments_repo.dart';
 
-import '../../../../core/error_manager/failure.dart';
+import '../../../../core/managers/error_manager/failure.dart';
 import '../comments_entity/comments_entity.dart';
 
 class GetCommentsUseCase {

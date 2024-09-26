@@ -14,7 +14,7 @@ class ReusableTextFormField extends StatelessWidget {
   final bool obscure;
 
   const ReusableTextFormField({
-    Key? key,
+    super.key,
     required this.label,
     this.borderRadius = 25,
     this.activeColor = Colors.blue,
@@ -26,7 +26,7 @@ class ReusableTextFormField extends StatelessWidget {
     this.prefix,
     this.suffix,
     this.obscure = false,
-  }) : super(key: key);
+  });
 
   @override
   Widget build(BuildContext context) {

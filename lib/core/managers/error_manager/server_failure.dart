@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
-import 'package:shorts/core/error_manager/failure.dart';
+
+import 'failure.dart';
 
 class ServerFailure extends Failure {
   const ServerFailure({

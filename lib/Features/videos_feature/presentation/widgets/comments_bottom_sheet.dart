@@ -5,7 +5,7 @@ import 'package:shorts/Features/comments_feature/presentation/cubit/comments_cub
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/utils/widgets/custom_title.dart';
-import 'package:shorts/core/utils/widgets/reusable_widgets_manager/reusable_text_form_field.dart';
+import 'package:shorts/core/utils/widgets/reusable_text_form_field.dart';
 
 import '../../../../core/notification_service/notification_helper.dart';
 import '../../../comments_feature/domain/comments_entity/comments_entity.dart';

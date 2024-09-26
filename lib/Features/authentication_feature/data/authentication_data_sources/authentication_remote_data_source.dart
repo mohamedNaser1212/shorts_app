@@ -5,19 +5,17 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import '../../../../core/constants/consts.dart';
 import '../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../../core/network/firebase_manager/firebase_helper.dart';
+import '../user_model/login_request_model.dart';
+import '../user_model/register_request_model.dart';
 import '../user_model/user_model.dart';
 
 abstract class AuthenticationRemoteDataSource {
   const AuthenticationRemoteDataSource();
   Future<UserModel> login({
-    required String email,
-    required String password,
+    required LoginRequestModel requestModel,
   });
   Future<UserModel> register({
-    required String email,
-    required String password,
-    required String name,
-    required String phone,
+    required RegisterRequestModel requestModel,
   });
 }
 
@@ -30,13 +28,12 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
 
   @override
   Future<UserModel> login({
-    required String email,
-    required String password,
+    required LoginRequestModel requestModel,
   }) async {
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithEmailAndPassword(
-      email: email,
-      password: password,
+      email: requestModel.email,
+      password: requestModel.password,
     );
     uId = userCredential.user!.uid;
 
@@ -51,24 +48,21 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
 
   @override
   Future<UserModel> register({
-    required String email,
-    required String password,
-    required String name,
-    required String phone,
+    required RegisterRequestModel requestModel,
   }) async {
     UserCredential userCredential =
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
-      email: email,
-      password: password,
+      email: requestModel.email,
+      password: requestModel.password,
     );
     uId = userCredential.user!.uid;
 
     String? fcmToken = await FirebaseMessaging.instance.getToken();
 
     UserModel user = UserModel(
-      name: name,
-      email: email,
-      phone: phone,
+      name: requestModel.name,
+      email: requestModel.email,
+      phone: requestModel.phone,
       id: uId ?? '',
       fcmToken: fcmToken ?? '',
     );

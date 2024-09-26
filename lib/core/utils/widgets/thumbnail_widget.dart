@@ -2,17 +2,17 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shorts/core/navigations_manager/navigations_manager.dart';
+import 'package:shorts/core/functions/navigations_manager.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../Features/videos_feature/presentation/widgets/thumbnail_page.dart';
 
 class ThumbnailWidget extends StatefulWidget {
+  const ThumbnailWidget({super.key, this.videoPath});
   final String? videoPath;
-  const ThumbnailWidget({Key? key, required this.videoPath}) : super(key: key);
 
   @override
-  _ThumbnailWidgetState createState() => _ThumbnailWidgetState();
+  State<ThumbnailWidget> createState() => _ThumbnailWidgetState();
 }
 
 class _ThumbnailWidgetState extends State<ThumbnailWidget> {

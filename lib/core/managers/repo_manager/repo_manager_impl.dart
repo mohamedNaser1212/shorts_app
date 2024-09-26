@@ -2,10 +2,10 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:dio/dio.dart';
 import 'package:internet_connection_checker/internet_connection_checker.dart';
-import 'package:shorts/core/error_manager/failure.dart';
-import 'package:shorts/core/error_manager/firebase_failure.dart';
-import 'package:shorts/core/error_manager/internet_failure.dart';
 
+import '../error_manager/failure.dart';
+import '../error_manager/firebase_failure.dart';
+import '../error_manager/internet_failure.dart';
 import '../error_manager/server_failure.dart';
 import '../internet_manager/internet_manager.dart';
 import 'repo_manager.dart';

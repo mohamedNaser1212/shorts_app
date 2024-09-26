@@ -1,7 +1,7 @@
 import 'package:dartz/dartz.dart';
 import 'package:shorts/Features/videos_feature/domain/video_repo/video_repo.dart';
-import 'package:shorts/core/error_manager/failure.dart';
 
+import '../../../../../core/managers/error_manager/failure.dart';
 import '../../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../video_entity/video_entity.dart';
 

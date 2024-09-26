@@ -7,13 +7,17 @@ import '../../../network/firebase_manager/collection_names.dart';
 abstract class UserInfoRemoteDataSource {
   const UserInfoRemoteDataSource();
 
-  Future<UserModel> getUser();
+  Future<UserModel> getUser({
+    required String uId,
+  });
   Future<List<Map<String, UserModel>>> getUserVideos();
 }
 
 class UserInfoRemoteDataSourceImpl implements UserInfoRemoteDataSource {
   @override
-  Future<UserModel> getUser() async {
+  Future<UserModel> getUser({
+    required String uId,
+  }) async {
     final userDoc = await FirebaseFirestore.instance
         .collection(CollectionNames.users)
         .doc(uId)
