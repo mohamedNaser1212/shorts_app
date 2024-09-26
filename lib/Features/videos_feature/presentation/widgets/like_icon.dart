@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:get_it/get_it.dart';
+import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/core/notification_service/notification_helper.dart';
@@ -12,12 +13,14 @@ import 'comments_bottom_sheet.dart';
 
 class VideoIcons extends StatefulWidget {
   final VideoController videoProvider;
-  final VideoEntity? videoEntity; // Optional videoEntity
+  VideoEntity? videoEntity;
+  final FavouritesEntity favouriteEntity;
 
-  const VideoIcons({
+  VideoIcons({
     super.key,
     required this.videoProvider,
     this.videoEntity,
+    required this.favouriteEntity,
   });
 
   @override
@@ -65,7 +68,7 @@ class _VideoIconsState extends State<VideoIcons> {
                 onPressed: () {
                   if (widget.videoEntity != null) {
                     FavouritesCubit.get(context).toggleFavourite(
-                      videoEntity: widget.videoEntity!,
+                      videoEntity: widget.favouriteEntity!,
                       userModel: UserInfoCubit.get(context).userEntity!,
                     );
 

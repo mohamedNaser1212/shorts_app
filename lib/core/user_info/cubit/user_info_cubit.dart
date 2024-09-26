@@ -40,7 +40,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
         // print(userEntity?.phone);
         // print(userEntity?.email);
         // print(userEntity?.fcmToken);
-        emit(GetUserInfoSuccessState(userModel: userEntity));
+        emit(GetUserInfoSuccessState(userEntity: userEntity));
       },
     );
   }

@@ -39,7 +39,6 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       password: password,
     );
     uId = userCredential.user!.uid;
-    //String? fcmToken = await FirebaseMessaging.instance.getToken();
 
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
         .collection(CollectionNames.users)
@@ -47,15 +46,6 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
         .get();
 
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-
-    // UserModel user = UserModel(
-    //   name: userData['name'],
-    //   email: userData['email'] ?? email,
-    //   phone: userData['phone'],
-    //   id: userData['id'],
-    //   fcmToken: userData['fcmToken'],
-    // );
-
     return UserModel.fromJson(userData);
   }
 
@@ -83,13 +73,19 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       fcmToken: fcmToken ?? '',
     );
 
-    createUserData(user: user);
+    await createUserData(user: user);
 
-    return user;
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection(CollectionNames.users)
+        .doc(uId)
+        .get();
+
+    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+    return UserModel.fromJson(userData);
   }
 
-  void createUserData({required UserModel user}) {
-    FirebaseFirestore.instance
+  Future<void> createUserData({required UserModel user}) async {
+    await FirebaseFirestore.instance
         .collection(CollectionNames.users)
         .doc(user.id)
         .set(user.toJson());

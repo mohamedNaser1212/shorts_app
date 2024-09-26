@@ -1,7 +1,7 @@
 import 'package:shorts/Features/favourites_feature/domain/favourites_repo/favourites_repo.dart';
 
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
-import '../../../videos_feature/domain/video_entity/video_entity.dart';
+import '../favourite_entitiy.dart';
 
 class FavouritesUseCase {
   final FavouritesRepo favouritesRepo;
@@ -17,7 +17,7 @@ class FavouritesUseCase {
   }
 
   Future toggleFavouriteVideo({
-    required VideoEntity videoEntity,
+    required FavouritesEntity videoEntity,
     required UserEntity userModel,
   }) async {
     return await favouritesRepo.toggleFavouriteVideo(

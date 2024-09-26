@@ -62,7 +62,10 @@ class LoginScreen extends StatelessWidget {
         // FavouritesCubit.get(context).getFavorites();
         // CartsCubit.get(context).getCartItems();
         NavigationManager.navigateAndFinish(
-            context: context, screen: MyHomePage());
+            context: context,
+            screen: MyHomePage(
+              currentUser: state.userModel,
+            ));
       }
     } else if (state is AppLoginErrorState) {
       Fluttertoast.showToast(

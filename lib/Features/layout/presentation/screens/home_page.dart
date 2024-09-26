@@ -3,12 +3,14 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/layout/presentation/screens/choose_video_page.dart';
 import 'package:shorts/core/navigations_manager/navigations_manager.dart';
+import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
+import '../../../favourites_feature/presentation/screens/favourites_screen.dart';
 import '../../../videos_feature/presentation/screens/video_page.dart';
 
 class MyHomePage extends StatelessWidget {
-  MyHomePage({Key? key}) : super(key: key);
-
+  const MyHomePage({Key? key, required this.currentUser}) : super(key: key);
+  final UserEntity currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -21,24 +23,27 @@ class MyHomePage extends StatelessWidget {
             ElevatedButton(
               onPressed: () {
                 NavigationManager.navigateTo(
-                    context: context, screen: ChooseVideoPage());
+                    context: context, screen: const ChooseVideoPage());
               },
               child: const Text('upload viedo'),
             ),
             ElevatedButton(
               onPressed: () {
                 NavigationManager.navigateTo(
-                    context: context, screen: VideoPage());
+                    context: context, screen: const VideoPage());
               },
               child: const Text('Videos'),
             ),
-            // ElevatedButton(
-            //   onPressed: () {
-            //     NavigationManager.navigateTo(
-            //         context: context, screen: FavouritesPage());
-            //   },
-            //   child: const Text('Favourites'),
-            // ),
+            ElevatedButton(
+              onPressed: () {
+                NavigationManager.navigateTo(
+                    context: context,
+                    screen: FavouritesPage(
+                      currentUser: currentUser,
+                    ));
+              },
+              child: const Text('Favourites'),
+            ),
           ],
         ));
   }

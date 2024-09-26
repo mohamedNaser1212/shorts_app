@@ -27,22 +27,25 @@ class _InitialScreenState extends State<InitialScreen> {
       child: BlocListener<UserInfoCubit, UserInfoState>(
         listener: (context, state) {
           if (state is GetUserInfoSuccessState) {
-            if (state.userModel == null) {
+            if (state.userEntity == null) {
               NavigationManager.navigateAndFinish(
                 context: context,
                 screen: LoginScreen(),
               );
             } else {
-              print(state.userModel!.name);
-              UserInfoCubit.get(context).userEntity = state.userModel;
+              print(state.userEntity!.name);
+              UserInfoCubit.get(context).userEntity = state.userEntity;
               FavouritesCubit.get(context).getFavourites(
-                user: state.userModel!,
+                user: state.userEntity!,
               );
               FavouritesCubit.get(context)
-                  .getFavourites(user: UserInfoCubit.get(context).userEntity!);
+                  .getFavourites(user: state.userEntity!);
+              print(UserInfoCubit.get(context).userEntity!.name);
               NavigationManager.navigateAndFinish(
                 context: context,
-                screen: MyHomePage(),
+                screen: MyHomePage(
+                  currentUser: state.userEntity!,
+                ),
               );
             }
           }

@@ -7,6 +7,7 @@ import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/utils/widgets/custom_title.dart';
 
 import '../../../../core/service_locator/service_locator.dart';
+import '../../../favourites_feature/domain/favourite_entitiy.dart';
 import '../../../favourites_feature/domain/favourites_use_case/favourites_use_case.dart';
 import '../../../favourites_feature/presentation/cubit/favourites_cubit.dart';
 import '../../domain/videos_use_cases/get_videos_use_case/get_videos_use_case.dart';
@@ -42,17 +43,17 @@ class VideoPage extends StatelessWidget {
           listener: (context, UserState) {
             if (UserState is GetUserInfoSuccessState) {
               UserInfoCubit.get(context).userModel = UserModel(
-                id: UserState.userModel?.id,
-                name: UserState.userModel!.name,
-                email: UserState.userModel!.email,
-                phone: UserState.userModel!.phone,
-                fcmToken: UserState.userModel!.fcmToken,
+                id: UserState.userEntity?.id,
+                name: UserState.userEntity!.name,
+                email: UserState.userEntity!.email,
+                phone: UserState.userEntity!.phone,
+                fcmToken: UserState.userEntity!.fcmToken,
               );
-              print(UserState.userModel?.name);
-              print(UserState.userModel?.id);
-              print(UserState.userModel?.phone);
-              print(UserState.userModel?.email);
-              print(UserState.userModel?.fcmToken);
+              print(UserState.userEntity?.name);
+              print(UserState.userEntity?.id);
+              print(UserState.userEntity?.phone);
+              print(UserState.userEntity?.email);
+              print(UserState.userEntity?.fcmToken);
             }
           },
           builder: (context, state) {
@@ -67,17 +68,22 @@ class VideoPage extends StatelessWidget {
                   },
                   builder: (context, state) {
                     if (state is GetVideoSuccess) {
-                      // FavouritesCubit.get(context).favorites = {
-                      //   for (var p in state.videos) p.id: p.isFavourite ?? false
-                      // };
                       return PageView.builder(
                         scrollDirection: Axis.vertical,
                         itemCount: state.videos.length,
                         itemBuilder: (context, index) {
                           final video = state.videos[index];
+
                           return VideoListItem(
                             videoEntity: video,
-                            userModel: UserInfoCubit.get(context).userEntity!,
+                            //userModel: UserInfoCubit.get(context).userModel,
+                            userModel: video.user,
+                            favouriteEntity: FavouritesEntity(
+                              id: video.id,
+                              videoUrl: video.videoUrl,
+                              user: video.user,
+                              thumbnail: '',
+                            ),
                           );
                         },
                       );

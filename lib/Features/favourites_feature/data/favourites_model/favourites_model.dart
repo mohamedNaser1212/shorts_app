@@ -12,7 +12,6 @@ class FavouritesVideoModel extends FavouritesEntity {
     super.isFavourite = false,
   });
 
-  // Convert JSON to instance
   factory FavouritesVideoModel.fromJson(Map<String, dynamic> json) {
     return FavouritesVideoModel(
       id: json['id'] ?? '',

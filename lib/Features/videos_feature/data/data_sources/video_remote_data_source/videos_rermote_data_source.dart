@@ -38,7 +38,7 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     final videoId = _uuid.v4();
     final videoUrl =
         await _uploadVideoToStorage(videoId: videoId, videoPath: videoPath);
-    final video = VideoModel(
+    VideoModel video = VideoModel(
       id: videoId,
       description: description,
       videoUrl: videoUrl,

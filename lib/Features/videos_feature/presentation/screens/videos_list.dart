@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/comments_cubit.dart';
+import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:video_player/video_player.dart';
@@ -18,11 +19,13 @@ import '../widgets/thumbnail_notifier.dart';
 class VideoListItem extends StatelessWidget {
   final VideoEntity videoEntity;
   final UserEntity userModel;
+  final FavouritesEntity favouriteEntity;
 
   const VideoListItem({
     super.key,
     required this.videoEntity,
     required this.userModel,
+    required this.favouriteEntity,
   });
 
   @override
@@ -46,7 +49,6 @@ class VideoListItem extends StatelessWidget {
                     AnimatedPauseIcon(videoProvider: videoProvider),
                     BlocConsumer<CommentsCubit, CommentsState>(
                       listener: (context, state) {
-                        // TODO: implement listener
                       },
                       builder: (context, state) {
                         return BlocConsumer<VideoCubit, VideoState>(
@@ -59,6 +61,7 @@ class VideoListItem extends StatelessWidget {
                                 return VideoIcons(
                                   videoProvider: videoProvider,
                                   videoEntity: videoEntity,
+                                  favouriteEntity: favouriteEntity,
                                   // favouritesEntity: ,
                                 );
                               },

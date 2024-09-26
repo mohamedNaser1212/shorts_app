@@ -61,7 +61,9 @@ Future<void> _listener(BuildContext context, RegisterState state) async {
     userInfoCubit.userEntity = state.userModel;
     NavigationManager.navigateAndFinish(
       context: context,
-      screen: MyHomePage(),
+      screen: MyHomePage(
+        currentUser: state.userModel,
+      ),
     );
   } else if (state is RegisterErrorState) {
     Fluttertoast.showToast(
