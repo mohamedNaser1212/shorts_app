@@ -5,7 +5,7 @@ import '../../../constants/consts.dart';
 import '../../../network/firebase_manager/collection_names.dart';
 
 abstract class UserInfoRemoteDataSource {
-  const UserInfoRemoteDataSource();
+  const UserInfoRemoteDataSource._();
 
   Future<UserModel> getUser({
     required String uId,

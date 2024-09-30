@@ -10,7 +10,7 @@ import '../user_model/register_request_model.dart';
 import '../user_model/user_model.dart';
 
 abstract class AuthenticationRemoteDataSource {
-  const AuthenticationRemoteDataSource();
+  const AuthenticationRemoteDataSource._();
   Future<UserModel> login({
     required LoginRequestModel requestModel,
   });

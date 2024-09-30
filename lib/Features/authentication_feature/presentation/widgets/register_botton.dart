@@ -5,9 +5,9 @@ import '../../../../core/utils/widgets/custom_elevated_botton.dart';
 
 class RegisterButton extends StatelessWidget {
   const RegisterButton({
-    Key? key,
+    super.key,
     required this.state,
-  }) : super(key: key);
+  });
 
   final RegisterScreenBodyState state;
 

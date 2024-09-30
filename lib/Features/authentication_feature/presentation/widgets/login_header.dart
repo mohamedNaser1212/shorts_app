@@ -13,18 +13,16 @@ class LoginHeader extends StatelessWidget {
   }
 
   Column _body(BuildContext context) {
-    return Column(
+    return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const CustomTitle(
-          title: 'LOGIN Screen',
+        CustomTitle(
+          title: 'Login Screen',
           style: TitleStyle.style14,
         ),
-        Text(
-          'login now to browse our hot offers',
-          style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                color: Colors.grey,
-              ),
+        CustomTitle(
+         title:  'login now to browse our hot offers',
+          style: TitleStyle.style16,
         ),
       ],
     );

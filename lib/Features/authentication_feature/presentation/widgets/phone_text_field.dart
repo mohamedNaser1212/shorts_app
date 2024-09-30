@@ -10,7 +10,7 @@ class PhoneField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReusableTextFormField(
+    return CustomTextFormField(
       label: 'Phone Number',
       validator: FieldsValidator.isValidPhoneNumber,
       controller: controller,

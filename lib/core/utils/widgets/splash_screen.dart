@@ -1,7 +1,7 @@
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shorts/core/functions/navigations_manager.dart';
+import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/utils/bloc_observer.dart';
 import 'package:shorts/core/utils/widgets/initial_screen.dart';
 
@@ -27,6 +27,18 @@ class _SplashScreenState extends State<SplashScreen> {
     _navigateAfterDelay();
   }
 
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      body: Image.asset(
+        'assets/images/groot.jpg',
+        height: MediaQuery.of(context).size.height,
+        width: MediaQuery.of(context).size.width,
+        fit: BoxFit.cover,
+      ),
+    );
+  }
+
   void _navigateAfterDelay() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.microtask(() async {
@@ -40,17 +52,5 @@ class _SplashScreenState extends State<SplashScreen> {
         }
       });
     });
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      body: Image.asset(
-        'assets/images/groot.jpg',
-        height: MediaQuery.of(context).size.height,
-        width: MediaQuery.of(context).size.width,
-        fit: BoxFit.cover,
-      ),
-    );
   }
 }

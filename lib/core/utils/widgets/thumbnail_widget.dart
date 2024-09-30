@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shorts/core/functions/navigations_manager.dart';
+import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 import '../../../Features/videos_feature/presentation/widgets/thumbnail_page.dart';
@@ -26,29 +26,8 @@ class _ThumbnailWidgetState extends State<ThumbnailWidget> {
     }
   }
 
-  Future<void> _generateThumbnail(String videoPath) async {
-    final tempDir = await getTemporaryDirectory();
-    final thumbnailPath = await VideoThumbnail.thumbnailFile(
-      video: videoPath,
-      thumbnailPath: tempDir.path,
-      imageFormat: ImageFormat.JPEG,
-      maxHeight: 100,
-      quality: 75,
-    );
 
-    setState(() {
-      _thumbnailPath = thumbnailPath;
-    });
-  }
 
-  void _navigateToThumbnailPage(BuildContext context) {
-    if (widget.videoPath != null) {
-      NavigationManager.navigateTo(
-        context: context,
-        screen: ThumbnailPage(videoPath: widget.videoPath!),
-      );
-    }
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -64,4 +43,27 @@ class _ThumbnailWidgetState extends State<ThumbnailWidget> {
           )
         : const SizedBox.shrink();
   }
+    void _navigateToThumbnailPage(BuildContext context) {
+    if (widget.videoPath != null) {
+      NavigationManager.navigateTo(
+        context: context,
+        screen: ThumbnailPage(videoPath: widget.videoPath!),
+      );
+    }
+  }
+    Future<void> _generateThumbnail(String videoPath) async {
+    final tempDir = await getTemporaryDirectory();
+    final thumbnailPath = await VideoThumbnail.thumbnailFile(
+      video: videoPath,
+      thumbnailPath: tempDir.path,
+      imageFormat: ImageFormat.JPEG,
+      maxHeight: 100,
+      quality: 75,
+    );
+
+    setState(() {
+      _thumbnailPath = thumbnailPath;
+    });
+  }
+
 }

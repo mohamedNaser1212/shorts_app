@@ -6,19 +6,17 @@ import 'package:shorts/Features/videos_feature/presentation/screens/videos_list.
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
 class FavouritesPage extends StatefulWidget {
+  const FavouritesPage({super.key, required this.currentUser,});
   final UserEntity currentUser;
 
-  const FavouritesPage({
-    super.key,
-    required this.currentUser,
-  });
+
 
   @override
-  _FavouritesPageState createState() => _FavouritesPageState();
+  State<FavouritesPage> createState() => _FavouritesPageState();
 }
 
 class _FavouritesPageState extends State<FavouritesPage> {
-  @override
+ @override
   void initState() {
     super.initState();
     FavouritesCubit.get(context).getFavourites(user: widget.currentUser);

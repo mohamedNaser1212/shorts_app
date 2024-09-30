@@ -3,15 +3,12 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/videos_list.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_page_view_widget.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
+import 'package:shorts/core/utils/widgets/custom_app_bar.dart';
 import 'package:shorts/core/utils/widgets/custom_title.dart';
-
-import '../../../../core/service_locator/service_locator.dart';
 import '../../../favourites_feature/domain/favourite_entitiy.dart';
-import '../../../favourites_feature/domain/favourites_use_case/favourites_use_case.dart';
 import '../../../favourites_feature/presentation/cubit/favourites_cubit.dart';
-import '../../domain/videos_use_cases/get_videos_use_case/get_videos_use_case.dart';
-import '../../domain/videos_use_cases/upload_video_use_case/upload_video_use_case.dart';
 
 class VideoPage extends StatelessWidget {
   const VideoPage({super.key});
@@ -19,95 +16,67 @@ class VideoPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const CustomTitle(
-          title: 'Videos',
-          style: TitleStyle.styleBold20,
-        ),
+      appBar: CustomAppBar(
+        title: 'Videos',
+        color: Colors.transparent,
       ),
-      body: MultiBlocProvider(
-        providers: [
-          BlocProvider(
-            create: (context) => VideoCubit(
-              getVideosUseCase: getIt.get<GetVideosUseCase>(),
-              uploadVideoUseCase: getIt.get<UploadVideoUseCase>(),
-            )..getVideos(),
-          ),
-          BlocProvider(
-            create: (context) => FavouritesCubit(
-              favouritesUseCase: getIt.get<FavouritesUseCase>(),
-            ),
-          ),
-        ],
-        child: BlocConsumer<UserInfoCubit, UserInfoState>(
-          listener: (context, UserState) {
-            if (UserState is GetUserInfoSuccessState) {
-              UserInfoCubit.get(context).userModel = UserModel(
-                id: UserState.userEntity?.id,
-                name: UserState.userEntity!.name,
-                email: UserState.userEntity!.email,
-                phone: UserState.userEntity!.phone,
-                fcmToken: UserState.userEntity!.fcmToken,
+      body: BlocConsumer<UserInfoCubit, UserInfoState>(
+        listener: _userInfoListener,
+        builder: (context, state) {
+          return BlocConsumer<FavouritesCubit, FavouritesState>(
+            listener: _favouritesListener,
+            builder: (context, state) {
+              return BlocConsumer<VideoCubit, VideoState>(
+                listener: _videosListener,
+                builder: _videosBuilder,
               );
-              print(UserState.userEntity?.name);
-              print(UserState.userEntity?.id);
-              print(UserState.userEntity?.phone);
-              print(UserState.userEntity?.email);
-              print(UserState.userEntity?.fcmToken);
-            }
-          },
-          builder: (context, state) {
-            return BlocConsumer<FavouritesCubit, FavouritesState>(
-              listener: (context, state) {},
-              builder: (context, state) {
-                return BlocConsumer<VideoCubit, VideoState>(
-                  listener: (context, state) {
-                    if (state is GetVideoLoading) {
-                      const Center(child: CircularProgressIndicator());
-                    }
-                  },
-                  builder: (context, state) {
-                    if (state is GetVideoSuccess) {
-                      return PageView.builder(
-                        scrollDirection: Axis.vertical,
-                        itemCount: state.videos.length,
-                        itemBuilder: (context, index) {
-                          final video = state.videos[index];
-
-                          return VideoListItem(
-                            videoEntity: video,
-                            //userModel: UserInfoCubit.get(context).userModel,
-                            userModel: video.user,
-                            favouriteEntity: FavouritesEntity(
-                              id: video.id,
-                              videoUrl: video.videoUrl,
-                              user: video.user,
-                              thumbnail: '',
-                            ),
-                          );
-                        },
-                      );
-                    } else if (state is VideoError) {
-                      return Center(
-                        child: CustomTitle(
-                          title: state.message,
-                          style: TitleStyle.style20,
-                        ),
-                      );
-                    }
-                    return const Center(
-                      child: CustomTitle(
-                        title: 'No data available',
-                        style: TitleStyle.styleBold20,
-                      ),
-                    );
-                  },
-                );
-              },
-            );
-          },
-        ),
+            },
+          );
+        },
       ),
     );
   }
+
+  Widget _videosBuilder(context, state) {
+    if (state is GetVideoSuccess) {
+      return  VideosPageViewWidget(
+        state: state,
+      );
+    } else if (state is VideoUploadErrorState) {
+      return Center(
+        child: CustomTitle(
+          title: state.message,
+          style: TitleStyle.style20,
+        ),
+      );
+    }
+    return const Center(
+      child: CustomTitle(
+        title: 'No data available',
+        style: TitleStyle.styleBold20,
+      ),
+    );
+  }
+
+  void _videosListener(context, state) {
+    if (state is GetVideoLoading) {
+      const Center(child: CircularProgressIndicator());
+    }
+  }
+
+  void _favouritesListener(context, state) {}
+
+  void _userInfoListener(context, UserState) {
+    if (UserState is GetUserInfoSuccessState) {
+      UserInfoCubit.get(context).userModel = UserModel(
+        id: UserState.userEntity?.id,
+        name: UserState.userEntity!.name,
+        email: UserState.userEntity!.email,
+        phone: UserState.userEntity!.phone,
+        fcmToken: UserState.userEntity!.fcmToken,
+      );
+      print(UserState.userEntity?.name);
+    }
+  }
 }
+

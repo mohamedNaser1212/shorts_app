@@ -89,7 +89,7 @@ class _CommentsBottomSheetState extends State<CommentsBottomSheet> {
                   padding: const EdgeInsets.only(top: 8.0),
                   child: Column(
                     children: [
-                      ReusableTextFormField(
+                      CustomTextFormField(
                         label: 'Enter your comment ...',
                         controller: _commentController,
                         keyboardType: TextInputType.text,

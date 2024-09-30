@@ -9,6 +9,7 @@ import '../../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../../../core/user_info/domain/user_entity/user_entity.dart';
 
 abstract class VideosRemoteDataSource {
+  const VideosRemoteDataSource._();
   Future<List<VideoModel>> getVideos();
   Future<VideoModel> uploadVideo({
     required String description,

@@ -40,35 +40,8 @@ class CustomElevatedButton extends StatelessWidget {
     );
   }
 
-  // factory CustomElevatedButton.checkOutButton({
-  //   required BuildContext context,
-  //   required num total,
-  // }) {
-  //   return CustomElevatedButton._(
-  //     onPressed: () => _checkoutAction(context, total),
-  //     label: 'CheckOut',
-  //   );
-  // }
 
-  // factory CustomElevatedButton.updateButton({
-  //   required BuildContext context,
-  //   required SettingsScreenState userState,
-  //   required GlobalKey<FormState> formKey,
-  // }) {
-  //   return CustomElevatedButton._(
-  //     onPressed: () => _updateAction(context, userState, formKey),
-  //     label: 'Update',
-  //   );
-  // }
-  //
-  // factory CustomElevatedButton.signOutButton({
-  //   required BuildContext context,
-  // }) {
-  //   return CustomElevatedButton._(
-  //     onPressed: () => _signOutAction(context),
-  //     label: 'Sign Out',
-  //   );
-  // }
+
 
   static void _loginAction(LoginScreenState state, BuildContext context) {
     if (state.formKey.currentState!.validate()) {

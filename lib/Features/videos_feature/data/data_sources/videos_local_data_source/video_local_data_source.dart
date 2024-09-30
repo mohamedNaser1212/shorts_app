@@ -4,7 +4,7 @@ import '../../../../../core/network/Hive_manager/hive_boxes_names.dart';
 import '../../../domain/video_entity/video_entity.dart';
 
 abstract class VideoLocalDataSource {
-  const VideoLocalDataSource();
+  const VideoLocalDataSource._();
 
   Future<List<VideoEntity>> getVideos();
   Future<void> saveVideos(List<VideoEntity> videos);

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/functions/navigations_manager.dart';
+import '../../../../core/functions/navigations_functions.dart';
 import '../../../../core/utils/styles_manager/color_manager.dart';
 import '../../../../core/utils/widgets/custom_title.dart';
 import '../screens/register_screen.dart';

@@ -15,7 +15,7 @@ class PasswordField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReusableTextFormField(
+    return CustomTextFormField(
       label: 'Password',
       validator: FieldsValidator.isNotEmpty,
       controller: controller,
@@ -24,9 +24,11 @@ class PasswordField extends StatelessWidget {
       activeColor: defaultLightColor,
       prefix: const Icon(Icons.key_rounded),
       suffix: IconButton(
-        onPressed: () {},
+        onPressed: _onPressed,
         icon: Icon(obscure ? Icons.visibility : Icons.visibility_off),
       ),
     );
   }
+
+  void _onPressed() {}
 }

@@ -5,6 +5,7 @@ import '../../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
 abstract class FavouritesRemoteDataSource {
+  const FavouritesRemoteDataSource._();
   Future<List<FavouritesVideoModel>> getFavouriteVideos({
     required UserEntity user,
   });

@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/core/utils/widgets/custom_app_bar.dart';
 
-import '../../../../core/functions/navigations_manager.dart';
+import '../../../../core/functions/navigations_functions.dart';
 import '../../../../core/functions/toast_function.dart';
 import '../../../../core/service_locator/service_locator.dart';
 import '../../../../core/user_info/cubit/user_info_cubit.dart';
@@ -35,7 +36,7 @@ class RegisterScreen extends StatelessWidget {
       isLoading: state is RegisterLoadingState,
       child: Scaffold(
         appBar: AppBar(
-          title: const Text('Login'),
+          title: CustomAppBar(title:'Register'),
         ),
         body: const RegisterScreenBody(),
       ),

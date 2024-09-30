@@ -20,7 +20,6 @@ class CommentsCubit extends Cubit<CommentsState> {
   final AddCommentsUseCase addCommentsUseCase;
   final GetCommentsUseCase getCommentsUseCase;
 
-  // Maintain a list of comments locally with CommentModel type
   List<CommentEntity> comments = [];
 
   Future<void> addComment({

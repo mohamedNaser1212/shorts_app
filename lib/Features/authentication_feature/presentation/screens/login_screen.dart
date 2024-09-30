@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/core/utils/widgets/custom_app_bar.dart';
 
-import '../../../../core/functions/navigations_manager.dart';
+import '../../../../core/functions/navigations_functions.dart';
 import '../../../../core/functions/toast_function.dart';
 import '../../../../core/service_locator/service_locator.dart';
 import '../../../../core/user_info/domain/use_cases/get_user_info_use_case.dart';
@@ -13,7 +14,7 @@ import '../cubit/login_cubit/login_state.dart';
 import '../widgets/login_screen_body.dart';
 
 class LoginScreen extends StatefulWidget {
-  const LoginScreen({Key? key}) : super(key: key);
+  const LoginScreen({super.key});
 
   @override
   State<LoginScreen> createState() => LoginScreenState();
@@ -57,9 +58,7 @@ class LoginScreenState extends State<LoginScreen> {
     return CustomProgressIndicator(
       isLoading: state is AppLoginLoadingState,
       child: Scaffold(
-        appBar: AppBar(
-          title: const Text('Login'),
-        ),
+        appBar:  CustomAppBar(title: 'Login'),  
         body: LoginScreenBody(state: this),
       ),
     );

@@ -6,6 +6,7 @@ import '../../data/model/comments_model.dart';
 import '../comments_entity/comments_entity.dart';
 
 abstract class CommentsRepo {
+  const CommentsRepo();
   Future<Either<Failure, List<CommentEntity>>> getVideoComments({
     required String videoId,
   });

@@ -4,7 +4,7 @@ import '../../../../../core/network/Hive_manager/hive_boxes_names.dart';
 import '../../domain/favourite_entitiy.dart';
 
 abstract class FavouritesLocalDataSource {
-  const FavouritesLocalDataSource();
+  const FavouritesLocalDataSource._();
 
   Future<List<FavouritesEntity>> getFavouriteVideos();
   Future<void> saveFavouriteVideos(List<FavouritesEntity> favourites);

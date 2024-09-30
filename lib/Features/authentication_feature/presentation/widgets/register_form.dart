@@ -16,10 +16,6 @@ class RgisterForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _body();
-  }
-
-  Column _body() {
     return Column(
       children: [
         EmailField(controller: requestModel.emailController),

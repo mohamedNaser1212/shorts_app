@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shorts/core/utils/styles_manager/color_manager.dart';
 import 'package:shorts/core/utils/styles_manager/text_styles_manager.dart';
 
 class ReusableElevatedButton extends StatelessWidget {
@@ -15,8 +16,8 @@ class ReusableElevatedButton extends StatelessWidget {
     this.width = double.infinity,
     this.height = 50,
     this.radius = 10,
-    this.backColor = Colors.blue,
-    this.textColor = Colors.white,
+    this.backColor = ColorController.blueAccent,
+    this.textColor = ColorController.whiteColor,
     required this.label,
     required this.onPressed,
   });
@@ -27,12 +28,10 @@ class ReusableElevatedButton extends StatelessWidget {
       width: width,
       height: height,
       child: ElevatedButton(
-        style: ButtonStyle(
-          backgroundColor: MaterialStateProperty.all<Color>(backColor),
-          shape: MaterialStateProperty.all<RoundedRectangleBorder>(
-            RoundedRectangleBorder(
-              borderRadius: BorderRadius.circular(radius),
-            ),
+        style: ElevatedButton.styleFrom(
+          backgroundColor: backColor, 
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(radius),
           ),
         ),
         onPressed: onPressed,

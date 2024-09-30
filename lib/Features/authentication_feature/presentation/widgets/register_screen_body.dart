@@ -40,10 +40,6 @@ class RegisterScreenBodyState extends State<RegisterScreenBody> {
 
   @override
   Widget build(BuildContext context) {
-    return _body();
-  }
-
-  Scaffold _body() {
     return Scaffold(
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(20.0),

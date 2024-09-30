@@ -4,48 +4,40 @@ import 'package:get_it/get_it.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
+import 'package:shorts/Features/videos_feature/domain/video_notifiers/video_notifier.dart';
 import 'package:shorts/core/notification_service/notification_helper.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
-
 import '../../../comments_feature/presentation/cubit/comments_cubit.dart';
-import '../../domain/video_notifiers/video_notifier.dart';
 import 'comments_bottom_sheet.dart';
 
-class VideoIcons extends StatefulWidget {
+class VideoIcons extends StatelessWidget {
   final VideoController videoProvider;
-  VideoEntity? videoEntity;
+  final VideoEntity? videoEntity;
   final FavouritesEntity favouriteEntity;
 
-  VideoIcons({
-    super.key,
+  const VideoIcons({
+    Key? key,
     required this.videoProvider,
     this.videoEntity,
     required this.favouriteEntity,
-  });
+  }) : super(key: key);
 
-  @override
-  State<VideoIcons> createState() => _VideoIconsState();
-}
+  void _toggleFavourite(BuildContext context, NotificationHelper notificationHelper) {
+    if (videoEntity != null) {
+      final favouritesCubit = FavouritesCubit.get(context);
+      final userEntity = UserInfoCubit.get(context).userEntity!;
 
-class _VideoIconsState extends State<VideoIcons> {
-  @override
-  void initState() {
-    super.initState();
-    final userEntity = UserInfoCubit.get(context).userEntity;
-    if (widget.videoEntity != null && userEntity != null) {
-      FavouritesCubit.get(context).getFavourites(user: userEntity);
-      CommentsCubit.get(context)
-          .startListeningToComments(widget.videoEntity!.id);
-    }
-  }
+      favouritesCubit.toggleFavourite(
+        videoId: videoEntity!.id,
+        userModel: userEntity,
+      );
 
-  void _showCommentBottomSheet() {
-    if (widget.videoEntity != null) {
-      showModalBottomSheet(
+      notificationHelper.sendNotificationToSpecificUser(
+        fcmToken: videoEntity!.user.fcmToken,
+        userId: videoEntity!.user.id!,
+        title: 'Like',
+        body: 'Your video has been liked by ${userEntity.name}',
         context: context,
-        isScrollControlled: true,
-        builder: (context) =>
-            CommentsBottomSheet(videoEntity: widget.videoEntity!),
       );
     }
   }
@@ -55,9 +47,7 @@ class _VideoIconsState extends State<VideoIcons> {
     return BlocBuilder<FavouritesCubit, FavouritesState>(
       builder: (context, state) {
         final notificationHelper = GetIt.instance.get<NotificationHelper>();
-        final isFavorite =
-            FavouritesCubit.get(context).favorites[widget.videoEntity?.id] ??
-                false;
+        final isFavorite = FavouritesCubit.get(context).favorites[videoEntity?.id] ?? false;
 
         return Positioned(
           right: 20,
@@ -65,23 +55,7 @@ class _VideoIconsState extends State<VideoIcons> {
           child: Column(
             children: [
               IconButton(
-                onPressed: () {
-                  if (widget.videoEntity != null) {
-                    FavouritesCubit.get(context).toggleFavourite(
-                      videoId: widget.videoEntity!.id,
-                      userModel: UserInfoCubit.get(context).userEntity!,
-                    );
-
-                    notificationHelper.sendNotificationToSpecificUser(
-                      fcmToken: widget.videoEntity!.user.fcmToken,
-                      userId: widget.videoEntity!.user.id!,
-                      title: 'Like',
-                      body:
-                          'Your video has been liked by ${UserInfoCubit.get(context).userEntity!.name}',
-                      context: context,
-                    );
-                  }
-                },
+                onPressed: () => _toggleFavourite(context, notificationHelper),
                 icon: CircleAvatar(
                   backgroundColor: isFavorite ? Colors.red : Colors.grey,
                   radius: 15,
@@ -94,7 +68,15 @@ class _VideoIconsState extends State<VideoIcons> {
               ),
               const SizedBox(height: 10),
               IconButton(
-                onPressed: _showCommentBottomSheet,
+                onPressed: () {
+                  if (videoEntity != null) {
+                    showModalBottomSheet(
+                      context: context,
+                      isScrollControlled: true,
+                      builder: (context) => CommentsBottomSheet(videoEntity: videoEntity!),
+                    );
+                  }
+                },
                 icon: const Icon(
                   Icons.comment,
                   color: Colors.white,

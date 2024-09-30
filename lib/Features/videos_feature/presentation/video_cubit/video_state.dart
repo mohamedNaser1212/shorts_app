@@ -4,18 +4,18 @@ abstract class VideoState {}
 
 class VideoInitial extends VideoState {}
 
-class VideoUploading extends VideoState {}
+class VideoUploadLoadingState extends VideoState {}
 
-class VideoUploaded extends VideoState {
+class VideoUploadedSuccessState extends VideoState {
   final String videoUrl;
 
-  VideoUploaded({required this.videoUrl});
+  VideoUploadedSuccessState({required this.videoUrl});
 }
 
-class VideoError extends VideoState {
+class VideoUploadErrorState extends VideoState {
   final String message;
 
-  VideoError({required this.message});
+  VideoUploadErrorState({required this.message});
 }
 
 class GetVideoLoading extends VideoState {}
@@ -30,4 +30,10 @@ class GetVideosError extends VideoState {
   final String message;
 
   GetVideosError({required this.message});
+}
+
+class VideoSelected extends VideoState {
+  final String videoPath;
+
+  VideoSelected({required this.videoPath});
 }

@@ -5,9 +5,9 @@ import '../screens/login_screen.dart';
 
 class LoginButton extends StatelessWidget {
   const LoginButton({
-    Key? key,
+    super.key,
     required this.state,
-  }) : super(key: key);
+  });
   final LoginScreenState state;
 
   @override

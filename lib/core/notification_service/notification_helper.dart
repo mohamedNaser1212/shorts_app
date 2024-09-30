@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shorts/core/notification_service/push_notification_service.dart';
 
 abstract class NotificationHelper {
-  const NotificationHelper();
+  const NotificationHelper._();
   Future<String> getAccessToken();
   Future<void> sendNotificationToSpecificUser({
     required String fcmToken,

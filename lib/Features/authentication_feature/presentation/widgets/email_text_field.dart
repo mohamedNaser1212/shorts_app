@@ -10,7 +10,7 @@ class EmailField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ReusableTextFormField(
+    return CustomTextFormField(
       label: 'Email',
       validator: FieldsValidator.isValidEmail,
       controller: controller,
