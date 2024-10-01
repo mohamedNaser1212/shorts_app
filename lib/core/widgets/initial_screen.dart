@@ -12,6 +12,7 @@ class InitialScreen extends StatefulWidget {
   @override
   State<InitialScreen> createState() => _InitialScreenState();
 }
+
 class _InitialScreenState extends State<InitialScreen> {
   @override
   void initState() {
@@ -58,7 +59,7 @@ class _InitialScreenState extends State<InitialScreen> {
 
         NavigationManager.navigateAndFinish(
           context: context,
-          screen: MyHomePage(currentUser: state.userEntity!),
+          screen: HomeScreen(currentUser: state.userEntity!),
         );
       }
     }
