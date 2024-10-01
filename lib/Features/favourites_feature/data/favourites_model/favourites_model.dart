@@ -22,15 +22,15 @@ class FavouritesVideoModel extends FavouritesEntity {
       isFavourite: json['isFavourite'] ?? false,
     );
   }
-  @override
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'thumbnail': thumbnail,
-      'videoUrl': videoUrl,
-      'description': description,
-      'user': user.toJson(),
-      'isFavourite': isFavourite,
-    };
-  }
+  // @override
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'id': id,
+  //     'thumbnail': thumbnail,
+  //     'videoUrl': videoUrl,
+  //     'description': description,
+  //     'user': user.toJson(),
+  //     'isFavourite': isFavourite,
+  //   };
+  // }
 }

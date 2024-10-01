@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:shorts/Features/layout/presentation/screens/choose_video_page.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
-import 'package:shorts/core/utils/widgets/custom_title.dart';
+import 'package:shorts/core/widgets/custom_title.dart';
 
 class VideoUploadBottonWidget extends StatelessWidget {
   const VideoUploadBottonWidget({super.key, required this.state});

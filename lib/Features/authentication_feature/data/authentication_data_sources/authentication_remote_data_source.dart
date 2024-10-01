@@ -1,8 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
-
-import '../../../../core/constants/consts.dart';
 import '../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../../core/network/firebase_manager/firebase_helper.dart';
 import '../user_model/login_request_model.dart';
@@ -35,11 +33,11 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       email: requestModel.email,
       password: requestModel.password,
     );
-    uId = userCredential.user!.uid;
+    //uId = userCredential.user!.uid;
 
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
         .collection(CollectionNames.users)
-        .doc(uId)
+        .doc(userCredential.user!.uid)
         .get();
 
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
@@ -55,7 +53,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       email: requestModel.email,
       password: requestModel.password,
     );
-    uId = userCredential.user!.uid;
+    //uId = userCredential.user!.uid;
 
     String? fcmToken = await FirebaseMessaging.instance.getToken();
 
@@ -63,7 +61,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       name: requestModel.name,
       email: requestModel.email,
       phone: requestModel.phone,
-      id: uId ?? '',
+      id: userCredential.user!.uid,
       fcmToken: fcmToken ?? '',
     );
 
@@ -71,7 +69,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
 
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
         .collection(CollectionNames.users)
-        .doc(uId)
+        .doc(userCredential.user!.uid)
         .get();
 
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;

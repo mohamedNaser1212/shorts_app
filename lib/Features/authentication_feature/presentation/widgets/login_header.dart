@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/utils/widgets/custom_title.dart';
+import '../../../../core/widgets/custom_title.dart';
 
 class LoginHeader extends StatelessWidget {
   const LoginHeader({

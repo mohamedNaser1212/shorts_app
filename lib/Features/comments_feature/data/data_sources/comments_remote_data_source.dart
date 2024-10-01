@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
 
 import '../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../videos_feature/domain/video_entity/video_entity.dart';
@@ -10,7 +11,7 @@ abstract class CommentsRemoteDataSource {
   });
   Future<bool> addCommentToVideo({
     required String videoId,
-    required CommentModel comment,
+    required CommentEntity comment,
     required String userId,
     required VideoEntity video,
   });
@@ -26,7 +27,7 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     Query query = firestore
         .collection(CollectionNames.videos)
         .doc(videoId)
-        .collection('comments')
+        .collection(CollectionNames.comments)
         .orderBy('timestamp', descending: true)
         .limit(20);
 
@@ -40,7 +41,7 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
   @override
   Future<bool> addCommentToVideo({
     required String videoId,
-    required CommentModel comment,
+    required CommentEntity comment,
     required String userId,
     required VideoEntity video,
   }) async {
@@ -53,7 +54,7 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
         .doc(video.user.id)
         .collection(CollectionNames.videos)
         .doc(videoId)
-        .collection('comments');
+        .collection(CollectionNames.comments);
 
     print('User ID: $userId');
 
@@ -61,7 +62,7 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
 
     if (videoDoc.exists) {
       await videoRef
-          .collection('comments')
+          .collection(CollectionNames.comments)
           .doc(comment.id)
           .set(comment.toJson());
 

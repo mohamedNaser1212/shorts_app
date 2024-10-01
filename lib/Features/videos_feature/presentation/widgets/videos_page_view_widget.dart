@@ -12,11 +12,11 @@ class VideosPageViewWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
-      scrollDirection: Axis.vertical,
       itemCount: state.videos.length,
+      scrollBehavior: const ScrollBehavior(),
+      scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         final video = state.videos[index];
-    
         return VideoListItem(
           videoEntity: video,
           userModel: video.user,

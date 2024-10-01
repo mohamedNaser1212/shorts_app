@@ -9,7 +9,6 @@ class ImageThumbnail extends StatefulWidget {
   @override
   State<ImageThumbnail> createState() => _ImageThumbnailState();
 }
-
 class _ImageThumbnailState extends State<ImageThumbnail> {
   @override
   Widget build(BuildContext context) {

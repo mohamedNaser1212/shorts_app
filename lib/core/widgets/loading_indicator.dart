@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:loading_animation_widget/loading_animation_widget.dart';
+import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 
 class LoadingIndicatorWidget extends StatelessWidget {
   const LoadingIndicatorWidget({super.key});
@@ -8,7 +9,7 @@ class LoadingIndicatorWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: LoadingAnimationWidget.waveDots(
-        color: Colors.grey,
+        color: ColorController.greyColor,
         size: 120,
       ),
     );

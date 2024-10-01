@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shorts/core/utils/widgets/custom_app_bar.dart';
+import 'package:shorts/core/widgets/custom_app_bar.dart';
 
 import '../../../../core/functions/navigations_functions.dart';
 import '../../../../core/functions/toast_function.dart';
 import '../../../../core/service_locator/service_locator.dart';
 import '../../../../core/user_info/cubit/user_info_cubit.dart';
 import '../../../../core/user_info/domain/use_cases/get_user_info_use_case.dart';
-import '../../../../core/utils/styles_manager/color_manager.dart';
-import '../../../../core/utils/widgets/custom_progress_indicator.dart';
-import '../../../../core/utils/widgets/initial_screen.dart';
+import '../../../../core/managers/styles_manager/color_manager.dart';
+import '../../../../core/widgets/custom_progress_indicator.dart';
+import '../../../../core/widgets/initial_screen.dart';
 import '../../domain/authentication_use_case/register_use_case.dart';
 import '../cubit/register_cubit/register_cubit.dart';
 import '../widgets/register_screen_body.dart';

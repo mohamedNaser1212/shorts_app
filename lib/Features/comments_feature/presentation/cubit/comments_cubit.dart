@@ -20,6 +20,8 @@ class CommentsCubit extends Cubit<CommentsState> {
   final AddCommentsUseCase addCommentsUseCase;
   final GetCommentsUseCase getCommentsUseCase;
 
+  final Map<String, List<CommentEntity>> _cachedComments = {};
+
   List<CommentEntity> comments = [];
 
   Future<void> addComment({
@@ -30,15 +32,6 @@ class CommentsCubit extends Cubit<CommentsState> {
     required VideoEntity video,
   }) async {
     emit(AddCommentsLoadingState());
-    // //
-    // final commentModel = CommentModel(
-    //   id: DateTime.now().millisecondsSinceEpoch.toString(),
-    //   content: comment,
-    //   user: user,
-    //   timestamp: DateTime.now(),
-    // );
-
-    emit(GetCommentsSuccessState(comments: comments));
 
     final result = await addCommentsUseCase.addCommentToVideo(
       videoId: videoId,
@@ -47,31 +40,38 @@ class CommentsCubit extends Cubit<CommentsState> {
         content: comment,
         user: user,
         timestamp: DateTime.now(),
-      ),
+      ) ,
       userId: userId,
       video: video,
     );
+
     result.fold(
       (failure) => emit(AddCommentsErrorState(message: failure.toString())),
       (success) {
-        startListeningToComments(videoId);
-
+        _cachedComments.remove(videoId); 
+        startListeningToComments(videoId); 
         emit(AddCommentsSuccessState());
       },
     );
   }
 
   void startListeningToComments(String videoId) async {
+   
+    if (_cachedComments.containsKey(videoId)) {
+      comments = _cachedComments[videoId]!; 
+      emit(GetCommentsSuccessState(comments: comments)); 
+      return;
+    }
+
     emit(GetCommentsLoadingState());
 
-    final result = await getCommentsUseCase.getVideoComments(
-      videoId: videoId,
-    );
+    final result = await getCommentsUseCase.getVideoComments(videoId: videoId);
     result.fold(
       (failure) => emit(GetCommentsErrorState(message: failure.toString())),
       (comments) {
-        this.comments = comments; // Update the local comments list
-        emit(GetCommentsSuccessState(comments: comments));
+        this.comments = comments;
+        _cachedComments[videoId] = comments; 
+        emit(GetCommentsSuccessState(comments: comments)); 
       },
     );
   }

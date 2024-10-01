@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/core/utils/widgets/custom_title.dart';
+import 'package:shorts/core/managers/styles_manager/color_manager.dart';
+import 'package:shorts/core/widgets/custom_title.dart';
 
 class CustomListTile extends StatelessWidget {
   final String title;
@@ -23,7 +24,7 @@ class CustomListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: leading ??
-          const CircleAvatar(backgroundColor: Colors.grey, radius: 20),
+          const CircleAvatar(backgroundColor: ColorController.greyColor, radius: 20),
       title: CustomTitle(
         title: title,
         style: TitleStyle.style16Bold,

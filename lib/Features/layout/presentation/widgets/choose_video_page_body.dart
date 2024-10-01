@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/layout/presentation/screens/choose_video_page.dart';
 import 'package:shorts/Features/layout/presentation/widgets/upload_botton_widget.dart';
+import 'package:shorts/Features/layout/presentation/widgets/video_description_form_field.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/select_video_botton.dart';
-import 'package:shorts/core/utils/widgets/custom_app_bar.dart';
-import 'package:shorts/core/utils/widgets/reusable_text_form_field.dart';
-import 'package:shorts/core/utils/widgets/thumbnail_widget.dart';
+import 'package:shorts/core/widgets/custom_app_bar.dart';
+import 'package:shorts/core/widgets/thumbnail_widget.dart';
 
 class ChooseVideoPageBody extends StatelessWidget {
   final ChooseVideoPageState state;
@@ -15,34 +15,27 @@ class ChooseVideoPageBody extends StatelessWidget {
     required this.state,
     this.selectedVideoPath,
   });
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:  CustomAppBar(title: 'Choose Video'),
+      appBar: CustomAppBar(
+        title: 'Choose Video',
+
+      ),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(16.0),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              CustomTextFormField(
-                controller:
-                    state.titleController, 
-                keyboardType: TextInputType.text,
-                label: 'Title',
-                borderRadius: 25,
-              ),
+              VideosDescriptionFormField(state: state),
               const SizedBox(height: 20),
               if (selectedVideoPath != null)
-                ThumbnailWidget(
-                    videoPath:
-                        selectedVideoPath), 
+                ThumbnailWidget(videoPath: selectedVideoPath),
               const SizedBox(height: 20),
               SelectVideoButton(
                 state: state,
-               
-              ), 
+              ),
               const SizedBox(height: 20),
               VideoUploadBottonWidget(state: state),
             ],
@@ -52,3 +45,4 @@ class ChooseVideoPageBody extends StatelessWidget {
     );
   }
 }
+

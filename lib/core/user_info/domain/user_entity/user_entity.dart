@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-import '../../../constants/consts.dart';
+// import '../../../utils/constants/consts.dart';
 
 part 'user_entity.g.dart';
 
@@ -13,7 +13,7 @@ class UserEntity {
   @HiveField(2)
   final String phone;
   @HiveField(3)
-  String? id = uId;
+  String? id ;
   @HiveField(4)
   final String fcmToken;
 

@@ -1,6 +1,6 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/video_player_gesture.dart';
 import 'package:video_player/video_player.dart';
 
 class ThumbnailPage extends StatefulWidget {
@@ -9,7 +9,7 @@ class ThumbnailPage extends StatefulWidget {
   const ThumbnailPage({super.key, required this.videoPath});
 
   @override
-  _ThumbnailPageState createState() => _ThumbnailPageState();
+  State<ThumbnailPage> createState() => _ThumbnailPageState();
 }
 
 class _ThumbnailPageState extends State<ThumbnailPage> {
@@ -21,10 +21,9 @@ class _ThumbnailPageState extends State<ThumbnailPage> {
     _controller = VideoPlayerController.file(File(widget.videoPath))
       ..initialize().then((_) {
         setState(() {});
-        _controller.play(); // Automatically start playing after initialization
+        _controller.play(); 
       });
   }
-
   @override
   void dispose() {
     _controller.dispose();
@@ -40,7 +39,6 @@ class _ThumbnailPageState extends State<ThumbnailPage> {
       }
     });
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -50,31 +48,13 @@ class _ThumbnailPageState extends State<ThumbnailPage> {
       ),
       body: Center(
         child: _controller.value.isInitialized
-            ? GestureDetector(
-                onTap: togglePlayPause,
-                child: AspectRatio(
-                  aspectRatio: _controller.value.aspectRatio,
-                  child: Stack(
-                    children: [
-                      VideoPlayer(_controller),
-                      Positioned(
-                        bottom: 20,
-                        left: 20,
-                        child: FloatingActionButton(
-                          onPressed: togglePlayPause,
-                          child: Icon(
-                            _controller.value.isPlaying
-                                ? Icons.pause
-                                : Icons.play_arrow,
-                          ),
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+            ? VideoPlayerGesture(
+                controller: _controller,
+                togglePlayPause: togglePlayPause,
               )
             : const CircularProgressIndicator(),
       ),
     );
   }
 }
+

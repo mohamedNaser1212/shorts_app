@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/utils/widgets/custom_elevated_botton.dart';
+import '../../../../core/widgets/custom_elevated_botton.dart';
 import '../screens/login_screen.dart';
 
 class LoginButton extends StatelessWidget {

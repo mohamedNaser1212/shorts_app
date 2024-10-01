@@ -1,13 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
-import 'package:shorts/Features/videos_feature/presentation/screens/videos_list.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_page_view_widget.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
-import 'package:shorts/core/utils/widgets/custom_app_bar.dart';
-import 'package:shorts/core/utils/widgets/custom_title.dart';
-import '../../../favourites_feature/domain/favourite_entitiy.dart';
+import 'package:shorts/core/widgets/custom_app_bar.dart';
+import 'package:shorts/core/widgets/custom_title.dart';
 import '../../../favourites_feature/presentation/cubit/favourites_cubit.dart';
 
 class VideoPage extends StatelessWidget {
@@ -18,7 +16,6 @@ class VideoPage extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Videos',
-        color: Colors.transparent,
       ),
       body: BlocConsumer<UserInfoCubit, UserInfoState>(
         listener: _userInfoListener,
@@ -39,7 +36,7 @@ class VideoPage extends StatelessWidget {
 
   Widget _videosBuilder(context, state) {
     if (state is GetVideoSuccess) {
-      return  VideosPageViewWidget(
+      return VideosPageViewWidget(
         state: state,
       );
     } else if (state is VideoUploadErrorState) {
@@ -79,4 +76,3 @@ class VideoPage extends StatelessWidget {
     }
   }
 }
-

@@ -3,6 +3,7 @@ import 'package:shorts/Features/authentication_feature/data/authentication_repo_
 import 'package:shorts/Features/authentication_feature/domain/authentication_use_case/register_use_case.dart';
 import 'package:shorts/Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
 import 'package:shorts/Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
+import 'package:shorts/Features/comments_feature/data/data_sources/comments_local_data_source.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/show_comments_use_case.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/comments_cubit.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_local_data_source.dart';
@@ -127,21 +128,27 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<CommentsRemoteDataSource>(
     CommentsRemoteDataSourceImpl(),
   );
+  getIt.registerSingleton<CommentsLocalDataSourceImpl>(
+    CommentsLocalDataSourceImpl(
+      hiveHelper: getIt.get<LocalStorageManager>(),
+    ),
+  );
   getIt.registerSingleton<UserInfoRemoteDataSource>(
       UserInfoRemoteDataSourceImpl());
   getIt.registerSingleton<CommentsRepo>(CommentsRepoImpl(
     repoManager: getIt.get<RepoManager>(),
     commentsRemoteDataSource: getIt.get<CommentsRemoteDataSource>(),
+    commentsLocalDataSource: getIt.get<CommentsLocalDataSourceImpl>(),
   ));
-
+  getIt.registerFactory<UserInfoCubit>(() => UserInfoCubit(
+        getUserUseCase: getIt.get<GetUserInfoUseCase>(),
+      ));
   getIt.registerSingleton<UserInfoRepo>(UserInfoRepoImpl(
     userLocalDataSource: getIt.get<UserLocalDataSourceImpl>(),
     remoteDataSource: getIt.get<UserInfoRemoteDataSource>(),
     repoManager: getIt.get<RepoManager>(),
   ));
-  getIt.registerFactory<UserInfoCubit>(() => UserInfoCubit(
-    getUserUseCase: getIt.get<GetUserInfoUseCase>(),
-  ));
+
   getIt.registerSingleton<GetUserInfoUseCase>(GetUserInfoUseCase(
     userInfoRepo: getIt.get<UserInfoRepo>(),
   ));
@@ -151,7 +158,6 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<GetCommentsUseCase>(GetCommentsUseCase(
     commentsRepo: getIt.get<CommentsRepo>(),
   ));
-
 
   getIt.registerSingleton<LoginUseCase>(LoginUseCase(
     authenticationRepo: getIt.get<AuthenticationRepo>(),

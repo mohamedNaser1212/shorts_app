@@ -2,18 +2,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/layout/presentation/screens/home_page.dart';
 
-import '../../../Features/authentication_feature/presentation/screens/login_screen.dart';
-import '../../functions/navigations_functions.dart';
-import '../../user_info/cubit/user_info_cubit.dart';
+import '../../Features/authentication_feature/presentation/screens/login_screen.dart';
+import '../functions/navigations_functions.dart';
+import '../user_info/cubit/user_info_cubit.dart';
 import 'custom_title.dart';
 
 class InitialScreen extends StatefulWidget {
   const InitialScreen({super.key});
-
   @override
   State<InitialScreen> createState() => _InitialScreenState();
 }
-
 class _InitialScreenState extends State<InitialScreen> {
   @override
   void initState() {

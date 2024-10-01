@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/utils/widgets/custom_list_tile.dart';
+import '../../../../core/widgets/custom_list_tile.dart';
 import '../../../comments_feature/domain/comments_entity/comments_entity.dart';
 
 class CommentItemWidget extends StatelessWidget {

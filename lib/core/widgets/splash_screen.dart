@@ -3,17 +3,15 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/utils/bloc_observer.dart';
-import 'package:shorts/core/utils/widgets/initial_screen.dart';
+import 'package:shorts/core/widgets/initial_screen.dart';
 
-import '../../service_locator/service_locator.dart';
+import '../service_locator/service_locator.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
-
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
-
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
@@ -21,12 +19,9 @@ class _SplashScreenState extends State<SplashScreen> {
     Bloc.observer = MyBlocObserver();
     Firebase.initializeApp();
     setUpServiceLocator();
-
     WidgetsFlutterBinding.ensureInitialized();
-
     _navigateAfterDelay();
   }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,7 +33,6 @@ class _SplashScreenState extends State<SplashScreen> {
       ),
     );
   }
-
   void _navigateAfterDelay() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.microtask(() async {

@@ -1,5 +1,5 @@
 abstract class FirebaseHelper {
-  const FirebaseHelper();
+  const FirebaseHelper._();
 
   Future<Map<String, dynamic>> getDocument({
     required String collectionPath,

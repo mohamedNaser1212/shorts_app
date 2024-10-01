@@ -4,18 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:shorts/Features/layout/presentation/screens/choose_video_page.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
+import 'package:shorts/core/widgets/custom_app_bar.dart';
 
 import '../../../favourites_feature/presentation/screens/favourites_screen.dart';
 import '../../../videos_feature/presentation/screens/video_page.dart';
 
 class MyHomePage extends StatelessWidget {
-  const MyHomePage({Key? key, required this.currentUser}) : super(key: key);
+  const MyHomePage({super.key, required this.currentUser});
   final UserEntity currentUser;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        appBar: AppBar(
-          title: const Text('FCM Notifications Receiver'),
+        appBar: CustomAppBar(
+          title: 'Home',
         ),
         body: Column(
           children: [

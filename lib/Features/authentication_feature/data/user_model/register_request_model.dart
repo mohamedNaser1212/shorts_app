@@ -1,6 +1,6 @@
 // LoginRequestModel.dart
 
-import '../../../../core/constants/request_data_names.dart';
+import '../../../../core/utils/constants/request_data_names.dart';
 
 class RegisterRequestModel {
   final String email;

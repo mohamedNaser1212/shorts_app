@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/core/utils/widgets/reusable_elevated_botton.dart';
+import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
 
-import '../../../Features/authentication_feature/data/user_model/login_request_model.dart';
-import '../../../Features/authentication_feature/data/user_model/register_request_model.dart';
-import '../../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
-import '../../../Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
-import '../../../Features/authentication_feature/presentation/screens/login_screen.dart';
-import '../../../Features/authentication_feature/presentation/widgets/register_screen_body.dart';
-import '../styles_manager/color_manager.dart';
+import '../../Features/authentication_feature/data/user_model/login_request_model.dart';
+import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
+import '../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
+import '../../Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
+import '../../Features/authentication_feature/presentation/screens/login_screen.dart';
+import '../../Features/authentication_feature/presentation/widgets/register_screen_body.dart';
+import '../managers/styles_manager/color_manager.dart';
 
 // ignore: must_be_immutable
 class CustomElevatedButton extends StatelessWidget {

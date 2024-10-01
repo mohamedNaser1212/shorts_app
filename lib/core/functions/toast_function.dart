@@ -1,8 +1,9 @@
 import 'dart:ui';
 
 import 'package:fluttertoast/fluttertoast.dart';
+import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 
-import '../utils/styles_manager/color_manager.dart';
+
 
 void showToast({
   required String message,

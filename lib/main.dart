@@ -8,7 +8,7 @@ import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cu
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 
-import 'core/utils/widgets/splash_screen.dart';
+import 'core/widgets/splash_screen.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();

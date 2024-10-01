@@ -85,45 +85,45 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
         .toList();
   }
 
-  @override
-  Future<bool> toggleFavouriteVideo({
-    required String videoId,
-    required UserEntity user,
-  }) async {
-    final videoRef = firestore.collection(CollectionNames.videos).doc(videoId);
-    final userFavouritesRef = firestore
-        .collection(CollectionNames.users)
-        .doc(user.id)
-        .collection(CollectionNames.favourites)
-        .doc(videoId);
+  // @override
+  // Future<bool> toggleFavouriteVideo({
+  //   required String videoId,
+  //   required UserEntity user,
+  // }) async {
+  //   final videoRef = firestore.collection(CollectionNames.videos).doc(videoId);
+  //   final userFavouritesRef = firestore
+  //       .collection(CollectionNames.users)
+  //       .doc(user.id)
+  //       .collection(CollectionNames.favourites)
+  //       .doc(videoId);
 
-    final videoDoc = await videoRef.get();
+  //   final videoDoc = await videoRef.get();
 
-    if (videoDoc.exists) {
-      final videoData = videoDoc.data() as Map<String, dynamic>;
-      final bool isCurrentlyFavourite = videoData['isFavourite'] ?? false;
+  //   if (videoDoc.exists) {
+  //     final videoData = videoDoc.data() as Map<String, dynamic>;
+  //     final bool isCurrentlyFavourite = videoData['isFavourite'] ?? false;
 
-      // Update video favourite status
-      await videoRef.update({'isFavourite': !isCurrentlyFavourite});
+  //     // Update video favourite status
+  //     await videoRef.update({'isFavourite': !isCurrentlyFavourite});
 
-      // Update user's favourites list
-      if (!isCurrentlyFavourite) {
-        await userFavouritesRef.set({
-          'videoId': videoId,
-          'timestamp': FieldValue.serverTimestamp(),
-        });
-      } else {
-        await userFavouritesRef.delete();
-      }
+  //     // Update user's favourites list
+  //     if (!isCurrentlyFavourite) {
+  //       await userFavouritesRef.set({
+  //         'videoId': videoId,
+  //         'timestamp': FieldValue.serverTimestamp(),
+  //       });
+  //     } else {
+  //       await userFavouritesRef.delete();
+  //     }
 
-      print(isCurrentlyFavourite
-          ? 'Video removed from favourites'
-          : 'Video added to favourites');
+  //     print(isCurrentlyFavourite
+  //         ? 'Video removed from favourites'
+  //         : 'Video added to favourites');
 
-      return !isCurrentlyFavourite;
-    } else {
-      print('Video not found');
-      return false;
-    }
-  }
+  //     return !isCurrentlyFavourite;
+  //   } else {
+  //     print('Video not found');
+  //     return false;
+  //   }
+  // }
 }

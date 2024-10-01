@@ -1,11 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-
-import '../../../Features/videos_feature/presentation/widgets/thumbnail_page.dart';
+import '../../Features/videos_feature/presentation/widgets/thumbnail_page.dart';
 
 class ThumbnailWidget extends StatefulWidget {
   const ThumbnailWidget({super.key, this.videoPath});
@@ -14,10 +12,8 @@ class ThumbnailWidget extends StatefulWidget {
   @override
   State<ThumbnailWidget> createState() => _ThumbnailWidgetState();
 }
-
 class _ThumbnailWidgetState extends State<ThumbnailWidget> {
   String? _thumbnailPath;
-
   @override
   void initState() {
     super.initState();
@@ -25,10 +21,6 @@ class _ThumbnailWidgetState extends State<ThumbnailWidget> {
       _generateThumbnail(widget.videoPath!);
     }
   }
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return _thumbnailPath != null

@@ -1,4 +1,5 @@
 import 'package:hive_flutter/hive_flutter.dart';
+import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
@@ -16,6 +17,7 @@ class HiveManager implements LocalStorageManager {
       Hive.registerAdapter(VideoEntityAdapter());
       Hive.registerAdapter(UserEntityAdapter());
       Hive.registerAdapter(FavouritesEntityAdapter());
+      Hive.registerAdapter(CommentEntityAdapter());
 
       await _openAllBoxes();
     } catch (e) {
@@ -31,6 +33,8 @@ class HiveManager implements LocalStorageManager {
         _openBox<UserEntity>(HiveBoxesNames.kUserBox),
         _openBox<String>(HiveBoxesNames.kSaveTokenBox),
         _openBox<FavouritesEntity>(HiveBoxesNames.kFavouritesBox),
+        _openBox<CommentEntity>(HiveBoxesNames.kCommentsBox),
+        
       ]);
     } catch (e) {
       print('Failed to open all boxes: $e');
@@ -39,16 +43,17 @@ class HiveManager implements LocalStorageManager {
   }
 
   Future<void> _openBox<T>(String boxName) async {
-    try {
-      if (!_openedBoxes.containsKey(boxName)) {
-        final box = await Hive.openBox<T>(boxName);
-        _openedBoxes[boxName] = box;
-      }
-    } catch (e) {
-      print('Failed to open box $boxName: $e');
-      throw Exception("Box $boxName could not be opened.");
+  try {
+    if (!_openedBoxes.containsKey(boxName)) {
+      final box = await Hive.openBox<T>(boxName);
+      _openedBoxes[boxName] = box;
     }
+  } catch (e) {
+    print('Failed to open box $boxName: $e');
+    throw Exception("Box $boxName could not be opened.");
   }
+}
+
 
   Box<T> _getBox<T>(String boxName) {
     final box = _openedBoxes[boxName] as Box<T>?;

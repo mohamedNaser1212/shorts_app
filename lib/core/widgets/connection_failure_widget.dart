@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/core/utils/widgets/custom_title.dart';
-import 'package:shorts/core/utils/widgets/reusable_elevated_botton.dart';
+import 'package:shorts/core/managers/styles_manager/color_manager.dart';
+import 'package:shorts/core/widgets/custom_title.dart';
+import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
 
 class ConnectionFailureWidget extends StatelessWidget {
   const ConnectionFailureWidget({super.key, this.onPressed});
@@ -10,9 +11,9 @@ class ConnectionFailureWidget extends StatelessWidget {
     return Scaffold(
       body: Center(
         child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
+
           children: [
-            const Icon(Icons.wifi_off, size: 80, color: Colors.red),
+            const Icon(Icons.wifi_off, size: 80, color: ColorController.redColor,),
             const SizedBox(height: 20),
             const CustomTitle(
               title: 'No Internet Connection',
