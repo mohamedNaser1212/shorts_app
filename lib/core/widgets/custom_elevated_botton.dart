@@ -1,4 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:shorts/Features/favourites_feature/presentation/screens/favourites_screen.dart';
+import 'package:shorts/Features/layout/presentation/screens/choose_video_page.dart';
+import 'package:shorts/Features/videos_feature/presentation/screens/video_page.dart';
+import 'package:shorts/core/functions/navigations_functions.dart';
+import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
 
 import '../../Features/authentication_feature/data/user_model/login_request_model.dart';
@@ -40,8 +45,33 @@ class CustomElevatedButton extends StatelessWidget {
     );
   }
 
+  factory CustomElevatedButton.favouritesPageBotton({
+    required BuildContext context,
+    required UserEntity currentUser,
+  }) {
+    return CustomElevatedButton._(
+      onPressed: () => _navigateToFavouritesPage(context, currentUser),
+      label: 'Favourites',
+    );
+  }
 
+  factory CustomElevatedButton.videoPageBotton({
+    required BuildContext context,
+  }) {
+    return CustomElevatedButton._(
+      onPressed: () => _navigateToVideoPage(context),
+      label: 'Videos',
+    );
+  }
 
+  factory CustomElevatedButton.chooseVideoPageBotton({
+    required BuildContext context,
+  }) {
+    return CustomElevatedButton._(
+      onPressed: () => _navigateToChooseVideoPage(context),
+      label: 'Upload Video',
+    );
+  }
 
   static void _loginAction(LoginScreenState state, BuildContext context) {
     if (state.formKey.currentState!.validate()) {
@@ -54,8 +84,7 @@ class CustomElevatedButton extends StatelessWidget {
     }
   }
 
-  static void _registerAction(
-      BuildContext context, RegisterScreenBodyState state) {
+  static void _registerAction(BuildContext context, RegisterScreenBodyState state) {
     if (state.formKey.currentState!.validate()) {
       RegisterCubit.get(context).userRegister(
         requestModel: RegisterRequestModel(
@@ -68,46 +97,27 @@ class CustomElevatedButton extends StatelessWidget {
     }
   }
 
-  // static void _checkoutAction(BuildContext context, num total) {
-  //   PaymentCubit.get(context).getClientSecret(
-  //     amount: total.toInt(),
-  //     currency: 'EGP',
-  //   );
-  // }
+  // Private navigation methods
+  static void _navigateToFavouritesPage(BuildContext context, UserEntity currentUser) {
+    NavigationManager.navigateTo(
+      context: context,
+      screen: FavouritesPage(currentUser: currentUser),
+    );
+  }
 
-  // static void _updateAction(
-  //   BuildContext context,
-  //   SettingsScreenState userState,
-  //   GlobalKey<FormState> formKey,
-  // ) {
-  //   if (formKey.currentState!.validate()) {
-  //     final cubit = UpdateUserDataCubit.get(context);
-  //     UpdateUserDataCubit.get(context).userModel =
-  //         UserInfoCubit.get(context).userEntity;
-  //     if (cubit.checkDataChanges(
-  //       name: userState.nameController.text,
-  //       email: userState.emailController.text,
-  //       phone: userState.phoneController.text,
-  //     )) {
-  //       cubit.updateUserData(
-  //         updateUserRequestModel: UpdateUserRequestModel(
-  //           name: userState.nameController.text,
-  //           email: userState.emailController.text,
-  //           phone: userState.phoneController.text,
-  //         ),
-  //       );
-  //     } else {
-  //       showToast(
-  //         message: 'No changes detected. Your data is up-to-date.',
-  //         color: ColorController.greenAccent,
-  //       );
-  //     }
-  //   }
-  // }
+  static void _navigateToVideoPage(BuildContext context) {
+    NavigationManager.navigateTo(
+      context: context,
+      screen: const VideoPage(),
+    );
+  }
 
-  // static void _signOutAction(BuildContext context) {
-  //   SignOutCubit.get(context).signOut();
-  // }
+  static void _navigateToChooseVideoPage(BuildContext context) {
+    NavigationManager.navigateTo(
+      context: context,
+      screen: const ChooseVideoPage(),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
