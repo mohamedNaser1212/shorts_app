@@ -58,7 +58,7 @@ class LoginScreenState extends State<LoginScreen> {
     return CustomProgressIndicator(
       isLoading: state is AppLoginLoadingState,
       child: Scaffold(
-        appBar:  CustomAppBar(title: 'Login'),  
+        appBar: CustomAppBar(title: 'Login'),
         body: LoginScreenBody(state: this),
       ),
     );
@@ -69,7 +69,7 @@ class LoginScreenState extends State<LoginScreen> {
       NavigationManager.navigateAndFinish(
           context: context, screen: const InitialScreen());
     } else if (state is AppLoginErrorState) {
-      showToast(
+      ToastHelper.showToast(
         message: state.error,
       );
     }

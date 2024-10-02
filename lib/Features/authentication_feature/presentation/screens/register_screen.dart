@@ -36,7 +36,7 @@ class RegisterScreen extends StatelessWidget {
       isLoading: state is RegisterLoadingState,
       child: Scaffold(
         appBar: AppBar(
-          title: CustomAppBar(title:'Register'),
+          title: CustomAppBar(title: 'Register'),
         ),
         body: const RegisterScreenBody(),
       ),
@@ -46,7 +46,7 @@ class RegisterScreen extends StatelessWidget {
 
 void _listener(BuildContext context, RegisterState state) {
   if (state is RegisterSuccessState) {
-    showToast(
+    ToastHelper.showToast(
       color: ColorController.greenAccent,
       message: 'Register Success',
     );
@@ -58,7 +58,7 @@ void _listener(BuildContext context, RegisterState state) {
       screen: const InitialScreen(),
     );
   } else if (state is RegisterErrorState) {
-    showToast(
+    ToastHelper.showToast(
       message: state.message,
     );
   }
