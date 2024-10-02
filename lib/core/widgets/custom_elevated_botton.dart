@@ -1,17 +1,16 @@
 import 'package:flutter/material.dart';
+import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
 import 'package:shorts/Features/favourites_feature/presentation/screens/favourites_screen.dart';
 import 'package:shorts/Features/layout/presentation/screens/choose_video_page.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/video_page.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
-
 import '../../Features/authentication_feature/data/user_model/login_request_model.dart';
 import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
 import '../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
 import '../../Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
 import '../../Features/authentication_feature/presentation/screens/login_screen.dart';
-import '../../Features/authentication_feature/presentation/widgets/register_screen_body.dart';
 import '../managers/styles_manager/color_manager.dart';
 
 // ignore: must_be_immutable
@@ -37,7 +36,7 @@ class CustomElevatedButton extends StatelessWidget {
 
   factory CustomElevatedButton.registerButton({
     required BuildContext context,
-    required RegisterScreenBodyState state,
+    required RegisterScreenFormState state,
   }) {
     return CustomElevatedButton._(
       onPressed: () => _registerAction(context, state),
@@ -84,8 +83,8 @@ class CustomElevatedButton extends StatelessWidget {
     }
   }
 
-  static void _registerAction(BuildContext context, RegisterScreenBodyState state) {
-    if (state.formKey.currentState!.validate()) {
+  static void _registerAction(BuildContext context, RegisterScreenFormState state) {
+    if (state.widget.formKey.currentState!.validate()) {
       RegisterCubit.get(context).userRegister(
         requestModel: RegisterRequestModel(
           email: state.emailController.text,

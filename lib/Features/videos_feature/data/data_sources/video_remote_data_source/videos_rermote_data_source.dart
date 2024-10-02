@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
+import 'package:shorts/core/utils/constants/request_data_names.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../../../../core/network/firebase_manager/collection_names.dart';
@@ -77,7 +78,7 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
   Future<List<VideoModel>> getFavouriteVideos() async {
     final querySnapshot = await firestore
         .collection(CollectionNames.videos)
-        .where('isFavourite', isEqualTo: true)
+        .where(RequestDataNames.isFavourite, isEqualTo: true)
         .get();
 
     return querySnapshot.docs

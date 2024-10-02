@@ -20,7 +20,6 @@ class ChooseVideoPageBody extends StatelessWidget {
     return Scaffold(
       appBar: CustomAppBar(
         title: 'Choose Video',
-
       ),
       body: Center(
         child: Padding(
@@ -28,7 +27,7 @@ class ChooseVideoPageBody extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: <Widget>[
-              VideosDescriptionFormField(state: state),
+              VideoDescriptionFormField(state: state),
               const SizedBox(height: 20),
               if (selectedVideoPath != null)
                 ThumbnailWidget(videoPath: selectedVideoPath),
@@ -45,4 +44,3 @@ class ChooseVideoPageBody extends StatelessWidget {
     );
   }
 }
-

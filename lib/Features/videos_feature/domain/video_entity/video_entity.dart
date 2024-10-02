@@ -1,6 +1,5 @@
 import 'package:hive/hive.dart';
 
-import '../../../authentication_feature/data/user_model/user_model.dart';
 import '../../../comments_feature/domain/comments_entity/comments_entity.dart';
 
 part 'video_entity.g.dart';
@@ -29,27 +28,27 @@ class VideoEntity {
     required this.comments,
   });
 
-  Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'thumbnail': thumbnail,
-      'videoUrl': videoUrl,
-      'description': description,
-      'user': user.toJson(),
-      'comments': comments.map((e) => e.toJson()).toList(),
-    };
-  }
+  // Map<String, dynamic> toJson() {
+  //   return {
+  //     'id': id,
+  //     'thumbnail': thumbnail,
+  //     'videoUrl': videoUrl,
+  //     'description': description,
+  //     'user': user.toJson(),
+  //     'comments': comments.map((e) => e.toJson()).toList(),
+  //   };
+  // }
 
-  factory VideoEntity.fromJson(Map<String, dynamic> json) {
-    return VideoEntity(
-      id: json['id'] ?? '',
-      thumbnail: json['thumbnail'] ?? '',
-      videoUrl: json['videoUrl'] ?? '',
-      description: json['description'],
-      user: UserModel.fromJson(json['user']),
-      comments: (json['comments'] as List)
-          .map((e) => CommentEntity.fromJson(e as Map<String, dynamic>))
-          .toList(),
-    );
-  }
+  // factory VideoEntity.fromJson(Map<String, dynamic> json) {
+  //   return VideoEntity(
+  //     id: json['id'] ?? '',
+  //     thumbnail: json['thumbnail'] ?? '',
+  //     videoUrl: json['videoUrl'] ?? '',
+  //     description: json['description'],
+  //     user: UserModel.fromJson(json['user']),
+  //     comments: (json['comments'] as List)
+  //         .map((e) => CommentEntity.fromJson(e as Map<String, dynamic>))
+  //         .toList(),
+  //   );
+  // }
 }

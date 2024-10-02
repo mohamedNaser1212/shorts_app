@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/utils/bloc_observer.dart';
+import 'package:shorts/core/utils/constants/consts.dart';
 import 'package:shorts/core/widgets/initial_screen.dart';
 
 import '../service_locator/service_locator.dart';
@@ -12,6 +13,7 @@ class SplashScreen extends StatefulWidget {
   @override
   State<SplashScreen> createState() => _SplashScreenState();
 }
+
 class _SplashScreenState extends State<SplashScreen> {
   @override
   void initState() {
@@ -22,17 +24,19 @@ class _SplashScreenState extends State<SplashScreen> {
     WidgetsFlutterBinding.ensureInitialized();
     _navigateAfterDelay();
   }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Image.asset(
-        'assets/images/groot.jpg',
+        constSplashImage,
         height: MediaQuery.of(context).size.height,
         width: MediaQuery.of(context).size.width,
         fit: BoxFit.cover,
       ),
     );
   }
+
   void _navigateAfterDelay() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       Future.microtask(() async {

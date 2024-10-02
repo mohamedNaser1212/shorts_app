@@ -18,29 +18,23 @@ class CommentsLocalDataSourceImpl implements CommentsLocalDataSource {
 
   @override
   Future<List<CommentEntity>> getComments() async {
-    try {
+    
       final commentItems = await hiveHelper.loadData<CommentEntity>(
         HiveBoxesNames.kCommentsBox,
       );
-      print('comments get successfully'); 
       return commentItems.cast<CommentEntity>().toList();
-    } catch (e) {
-      print('Error loading comments: $e');
-      return []; // Handle as needed
-    }
+   
   }
 
   @override
   Future<void> saveComments(List<CommentEntity> comments) async {
-    try {
+   
       await hiveHelper.saveData<CommentEntity>(
         comments,
         HiveBoxesNames.kCommentsBox,
       );
       
-    } catch (e) {
-      print('Error saving comments: $e');
-    }
+
   }
 
   @override

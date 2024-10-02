@@ -9,10 +9,6 @@ class LoginHeader extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _body(context);
-  }
-
-  Column _body(BuildContext context) {
     return const Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -21,7 +17,7 @@ class LoginHeader extends StatelessWidget {
           style: TitleStyle.style14,
         ),
         CustomTitle(
-         title:  'login now to browse our hot offers',
+          title: 'login now to browse our hot offers',
           style: TitleStyle.style16,
         ),
       ],

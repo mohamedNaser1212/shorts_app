@@ -12,19 +12,6 @@ class LoginButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return _LoginButton(state: state);
-  }
-}
-
-class _LoginButton extends StatelessWidget {
-  const _LoginButton({
-    required this.state,
-  });
-
-  final LoginScreenState state;
-
-  @override
-  Widget build(BuildContext context) {
     return Column(
       children: [
         CustomElevatedButton.loginButton(

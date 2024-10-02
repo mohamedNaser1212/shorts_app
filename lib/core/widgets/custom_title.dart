@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/core/managers/styles_manager/text_styles_manager.dart';
+import 'package:shorts/core/utils/constants/consts.dart';
 
 enum TitleStyle {
   style12,
@@ -38,67 +39,67 @@ class CustomTitle extends StatelessWidget {
       case TitleStyle.style14:
         textStyle = StylesManager.textStyle14.copyWith(
           color: color,
-          fontFamily: 'Inter',
+          fontFamily: constFontFamily,
         );
         break;
       case TitleStyle.style12:
         textStyle = StylesManager.textStyle12.copyWith(
           color: color,
-          fontFamily: 'Inter',
+          fontFamily: constFontFamily,
         );
         break;
       case TitleStyle.style16:
         textStyle = StylesManager.textStyle16.copyWith(
           color: color,
-          fontFamily: 'Inter',
+          fontFamily: constFontFamily,
         );
         break;
       case TitleStyle.style16Bold:
         textStyle = StylesManager.textStyle16Bold.copyWith(
           color: color,
-          fontFamily: 'Inter',
+          fontFamily: constFontFamily,
         );
         break;
       case TitleStyle.style18:
         textStyle = StylesManager.textStyle18.copyWith(
           color: color,
-          fontFamily: 'Inter',
+          fontFamily: constFontFamily,
         );
         break;
       case TitleStyle.styleBold18:
         textStyle = StylesManager.textStyleBold18.copyWith(
           color: color,
-          fontFamily: 'Inter',
+          fontFamily: constFontFamily,
         );
         break;
       case TitleStyle.style20:
         textStyle = StylesManager.textStyle20.copyWith(
           color: color,
-          fontFamily: 'Inter',
+          fontFamily: constFontFamily,
         );
         break;
       case TitleStyle.styleBold20:
         textStyle = StylesManager.textStyleBold20.copyWith(
           color: color,
-          fontFamily: 'Inter',
+          fontFamily: constFontFamily,
         );
         break;
       case TitleStyle.style24:
         textStyle = StylesManager.textStyle24.copyWith(
           color: color,
-          fontFamily: 'Inter',
+          fontFamily: constFontFamily,
         );
         break;
       case TitleStyle.styleBold24:
         textStyle = StylesManager.textStyleBold24.copyWith(
           color: color,
-          fontFamily: 'Inter',
+          fontFamily: constFontFamily,
         );
         break;
       case TitleStyle.style30:
         textStyle = StylesManager.textStyle30.copyWith(
           color: color,
-          fontFamily: 'Inter',
+          fontFamily: constFontFamily,
         );
         break;
     }

@@ -1,4 +1,5 @@
 import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart';
+import 'package:shorts/core/utils/constants/request_data_names.dart';
 
 import '../../../authentication_feature/data/user_model/user_model.dart';
 
@@ -14,19 +15,19 @@ class FavouritesVideoModel extends FavouritesEntity {
 
   factory FavouritesVideoModel.fromJson(Map<String, dynamic> json) {
     return FavouritesVideoModel(
-      id: json['id'] ?? '',
-      thumbnail: json['thumbnail'] ?? '',
-      videoUrl: json['videoUrl'] ?? '',
-      description: json['description'],
-      user: UserModel.fromJson(json['user']),
-      isFavourite: json['isFavourite'] ?? false,
+      id: json[RequestDataNames.id] ?? '',
+      thumbnail: json[RequestDataNames.thumbnail] ?? '',
+      videoUrl: json[RequestDataNames.videoUrl] ?? '',
+      description: json[RequestDataNames.description],
+      user: UserModel.fromJson(json[RequestDataNames.user]),
+      isFavourite: json[RequestDataNames.isFavourite] ?? false,
     );
   }
   // @override
   // Map<String, dynamic> toJson() {
   //   return {
   //     'id': id,
-  //     'thumbnail': thumbnail,
+  //     RequestDataNames.thumbnail: thumbnail,
   //     'videoUrl': videoUrl,
   //     'description': description,
   //     'user': user.toJson(),

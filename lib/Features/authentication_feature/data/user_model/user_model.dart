@@ -1,3 +1,5 @@
+import 'package:shorts/core/utils/constants/request_data_names.dart';
+
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
 class UserModel extends UserEntity {
@@ -11,22 +13,22 @@ class UserModel extends UserEntity {
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      name: json['name'],
-      email: json['email'],
-      phone: json['phone'],
-      id: json['id'],
-      fcmToken: json['fcmToken'],
+      name: json[RequestDataNames.name],
+      email: json[RequestDataNames.email],
+      phone: json[RequestDataNames.phone],
+      id: json[RequestDataNames.id],
+      fcmToken: json[RequestDataNames.fcmToken],  
     );
   }
 
   @override
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'name': name,
-      'email': email,
-      'phone': phone,
-      'fcmToken': fcmToken,
+      RequestDataNames.id: id,
+      RequestDataNames.name: name,
+      RequestDataNames.email: email,
+      RequestDataNames.phone: phone,
+      RequestDataNames.fcmToken: fcmToken,
     };
   }
 }

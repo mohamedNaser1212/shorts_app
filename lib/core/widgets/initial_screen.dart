@@ -42,9 +42,7 @@ class _InitialScreenState extends State<InitialScreen> {
         ),
       );
     }
-    return const Scaffold(
-      body: SizedBox(),
-    );
+    return  const SizedBox();
   }
 
   void _listener(context, state) {

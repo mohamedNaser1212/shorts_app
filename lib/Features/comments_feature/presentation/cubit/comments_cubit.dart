@@ -40,7 +40,7 @@ class CommentsCubit extends Cubit<CommentsState> {
         content: comment,
         user: user,
         timestamp: DateTime.now(),
-      ) ,
+      ),
       userId: userId,
       video: video,
     );
@@ -48,18 +48,17 @@ class CommentsCubit extends Cubit<CommentsState> {
     result.fold(
       (failure) => emit(AddCommentsErrorState(message: failure.toString())),
       (success) {
-        _cachedComments.remove(videoId); 
-        startListeningToComments(videoId); 
+        _cachedComments.remove(videoId);
+        getComments(videoId);
         emit(AddCommentsSuccessState());
       },
     );
   }
 
-  void startListeningToComments(String videoId) async {
-   
+  void getComments(String videoId) async {
     if (_cachedComments.containsKey(videoId)) {
-      comments = _cachedComments[videoId]!; 
-      emit(GetCommentsSuccessState(comments: comments)); 
+      comments = _cachedComments[videoId]!;
+      emit(GetCommentsSuccessState(comments: comments));
       return;
     }
 
@@ -70,8 +69,8 @@ class CommentsCubit extends Cubit<CommentsState> {
       (failure) => emit(GetCommentsErrorState(message: failure.toString())),
       (comments) {
         this.comments = comments;
-        _cachedComments[videoId] = comments; 
-        emit(GetCommentsSuccessState(comments: comments)); 
+        _cachedComments[videoId] = comments;
+        emit(GetCommentsSuccessState(comments: comments));
       },
     );
   }

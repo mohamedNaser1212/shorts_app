@@ -2,8 +2,8 @@ import 'package:flutter/widgets.dart';
 import 'package:shorts/Features/layout/presentation/screens/choose_video_page.dart';
 import 'package:shorts/core/widgets/reusable_text_form_field.dart';
 
-class VideosDescriptionFormField extends StatelessWidget {
-  const VideosDescriptionFormField({
+class VideoDescriptionFormField extends StatelessWidget {
+  const VideoDescriptionFormField({
     super.key,
     required this.state,
   });

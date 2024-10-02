@@ -25,21 +25,18 @@ class LoginScreenState extends State<LoginScreen> {
 
   late final TextEditingController emailController;
   late final TextEditingController passwordController;
-
   @override
   void initState() {
     emailController = TextEditingController();
     passwordController = TextEditingController();
     super.initState();
   }
-
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return BlocProvider(

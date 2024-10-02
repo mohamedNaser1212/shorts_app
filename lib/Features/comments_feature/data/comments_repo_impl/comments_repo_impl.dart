@@ -34,7 +34,6 @@ class CommentsRepoImpl implements CommentsRepo {
           video: video,
         );
 
-        // Update cache with new comment
         final comments = await commentsLocalDataSource.getComments();
         comments.add(comment);
         await commentsLocalDataSource.saveComments(comments);
@@ -49,13 +48,10 @@ class CommentsRepoImpl implements CommentsRepo {
   }) async {
     return repoManager.call(
       action: () async {
-        // Check cache first
         final cachedComments = await commentsLocalDataSource.getComments();
         if (cachedComments.isNotEmpty) {
-          // Return cached comments if available
           return cachedComments;
         } else {
-          // Fetch from remote source if cache is empty
           final comments = await commentsRemoteDataSource.getComments(videoId: videoId);
           await commentsLocalDataSource.saveComments(comments);
           return comments;

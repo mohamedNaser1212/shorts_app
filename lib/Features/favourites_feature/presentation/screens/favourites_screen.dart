@@ -4,19 +4,22 @@ import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/videos_list.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
+import 'package:shorts/core/widgets/custom_app_bar.dart';
+import 'package:shorts/core/widgets/custom_title.dart';
 
 class FavouritesPage extends StatefulWidget {
-  const FavouritesPage({super.key, required this.currentUser,});
+  const FavouritesPage({
+    super.key,
+    required this.currentUser,
+  });
   final UserEntity currentUser;
-
-
 
   @override
   State<FavouritesPage> createState() => _FavouritesPageState();
 }
 
 class _FavouritesPageState extends State<FavouritesPage> {
- @override
+  @override
   void initState() {
     super.initState();
     FavouritesCubit.get(context).getFavourites(user: widget.currentUser);
@@ -25,14 +28,17 @@ class _FavouritesPageState extends State<FavouritesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Favourites'),
-      ),
+      appBar: CustomAppBar(title: 'Favourites'),
       body: BlocConsumer<FavouritesCubit, FavouritesState>(
         listener: (context, state) {
           if (state is GetFavoritesErrorState) {
             ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Error loading favourites')),
+              const SnackBar(
+                content: CustomTitle(
+                  title: 'Something went wrong',
+                  style: TitleStyle.style18,
+                ),
+              ),
             );
           }
         },
@@ -42,7 +48,12 @@ class _FavouritesPageState extends State<FavouritesPage> {
           } else if (state is GetFavoritesSuccessState) {
             final favouriteVideos = state.getFavouritesModel;
             return favouriteVideos.isEmpty
-                ? const Center(child: Text('No Favourite Videos Found'))
+                ? const Center(
+                    child: CustomTitle(
+                      title: 'No Favourite Videos Found',
+                      style: TitleStyle.style18,
+                    ),
+                  )
                 : PageView.builder(
                     itemCount: favouriteVideos.length,
                     itemBuilder: (context, index) {
@@ -64,7 +75,12 @@ class _FavouritesPageState extends State<FavouritesPage> {
                     },
                   );
           } else {
-            return const Center(child: Text('Something went wrong'));
+            return const Center(
+              child: CustomTitle(
+                title: 'Something went wrong',
+                style: TitleStyle.style18,
+              ),
+            );
           }
         },
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../domain/video_notifiers/video_notifier.dart';
+import '../../../../core/video_notifiers/video_notifier.dart';
 
 class DurationNotifier extends StatefulWidget {
   const DurationNotifier({super.key, required this.videoProvider});

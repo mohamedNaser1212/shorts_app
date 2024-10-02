@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:shorts/core/utils/constants/request_data_names.dart';
 
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../../authentication_feature/data/user_model/user_model.dart';
@@ -25,18 +26,19 @@ class CommentEntity {
 
   factory CommentEntity.fromJson(Map<String, dynamic> json) {
     return CommentEntity(
-      id: json['id'] ?? '',
-      content: json['content'] ?? '',
-      user: UserModel.fromJson(json['user']),
-      timestamp: DateTime.parse(json['timestamp'] as String),
+      id: json[RequestDataNames.id] ?? '',
+      content: json[RequestDataNames.content] ?? '',
+      user: UserModel.fromJson(json[RequestDataNames.user]),
+      timestamp: DateTime.parse(json[RequestDataNames.timestamp] as String),
     );
   }
 
   Map<String, dynamic> toJson() {
     return {
-      'id': id,
-      'content': content,
-      'user': user.toJson(),
+      RequestDataNames.id: id,
+      RequestDataNames.content: content,
+     RequestDataNames.user: user.toJson(),
+      RequestDataNames.timestamp: timestamp.toIso8601String(),
     };
   }
 }

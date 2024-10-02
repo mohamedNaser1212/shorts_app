@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
+import 'package:shorts/core/utils/constants/consts.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String label;
@@ -37,6 +38,11 @@ class CustomTextFormField extends StatelessWidget {
         controller: controller,
         obscureText: obscure,
         keyboardType: keyboardType,
+        style: TextStyle(
+          color: ColorController.blackColor,
+          fontSize: 16,
+          fontFamily: constFontFamily,
+        ),
         // onTap: onTap,
         validator: validator,
         onFieldSubmitted: onSubmit,

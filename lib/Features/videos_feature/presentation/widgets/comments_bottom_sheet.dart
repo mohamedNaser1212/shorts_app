@@ -25,11 +25,10 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   void initState() {
     super.initState();
     _focusNode.addListener(() {
-      setState(() {
-      });
+      setState(() {});
     });
 
-    CommentsCubit.get(context).startListeningToComments(widget.videoEntity.id);
+    CommentsCubit.get(context).getComments(widget.videoEntity.id);
   }
 
   @override
@@ -61,4 +60,3 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
     );
   }
 }
-
