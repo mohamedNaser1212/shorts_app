@@ -14,15 +14,19 @@ class HomeScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-       
-        const ChooseVideoPageElevatedBotton(),
-        const VideoPageElevatedBotton(),
-        FavouritesPageElevatedBotton(currentUser: currentUser),
-      ],
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const ChooseVideoPageElevatedBotton(),
+          const SizedBox(height: 20),
+          const VideoPageElevatedBotton(),
+          const SizedBox(height: 20),
+          FavouritesPageElevatedBotton(currentUser: currentUser),
+        ],
+      ),
     );
   }
 }

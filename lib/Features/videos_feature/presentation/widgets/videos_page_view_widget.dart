@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart';
-import 'package:shorts/Features/videos_feature/presentation/screens/videos_list.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_list.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 
 class VideosPageViewWidget extends StatelessWidget {
