@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/utils/constants/consts.dart';
-import '../../../../core/managers/field_validaltor/fields_validator.dart';
-import '../../../../core/widgets/reusable_text_form_field.dart';
+import '../utils/constants/consts.dart';
+import '../managers/field_validaltor/fields_validator.dart';
+import 'reusable_text_form_field.dart';
 
 class PasswordField extends StatelessWidget {
   final TextEditingController controller;

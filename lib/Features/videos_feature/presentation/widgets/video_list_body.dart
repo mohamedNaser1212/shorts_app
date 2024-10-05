@@ -20,22 +20,25 @@ class VideoListBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
-      onTap: () => videoProvider.togglePlayPause(),
-      child: Stack(
-        children: [
-          if (videoProvider.controller?.value.isInitialized ?? false)
-            VideoPlayerWidget(
+    return Scaffold(
+      backgroundColor: Colors.black,
+      body: GestureDetector(
+        onTap: () => videoProvider.togglePlayPause(),
+        child: Stack(
+          children: [
+            if (videoProvider.controller?.value.isInitialized ?? false)
+              VideoPlayerWidget(
+                videoProvider: videoProvider,
+              )
+            else
+              ThumbnailNotifier(videoUrl: videoEntity.videoUrl),
+            VideoComponentsWidget(
+              videoEntity: videoEntity,
+              favouriteEntity: favouriteEntity,
               videoProvider: videoProvider,
-            )
-          else
-            ThumbnailNotifier(videoUrl: videoEntity.videoUrl),
-          VideoComponentsWidget(
-            videoEntity: videoEntity,
-            favouriteEntity: favouriteEntity,
-            videoProvider: videoProvider,
-          ),
-        ],
+            ),
+          ],
+        ),
       ),
     );
   }

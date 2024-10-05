@@ -22,32 +22,13 @@ class VideoIcons extends StatelessWidget {
     required this.favouriteEntity,
   });
 
-  void _toggleFavourite(BuildContext context, NotificationHelper notificationHelper) {
-    if (videoEntity != null) {
-      final favouritesCubit = FavouritesCubit.get(context);
-      final userEntity = UserInfoCubit.get(context).userEntity!;
-
-      favouritesCubit.toggleFavourite(
-        videoId: videoEntity!.id,
-        userModel: userEntity,
-      );
-
-      notificationHelper.sendNotificationToSpecificUser(
-        fcmToken: videoEntity!.user.fcmToken,
-        userId: videoEntity!.user.id!,
-        title: 'Like',
-        body: 'Your video has been liked by ${userEntity.name}',
-        context: context,
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<FavouritesCubit, FavouritesState>(
       builder: (context, state) {
         final notificationHelper = GetIt.instance.get<NotificationHelper>();
-        final isFavorite = FavouritesCubit.get(context).favorites[videoEntity?.id] ?? false;
+        final isFavorite =
+            FavouritesCubit.get(context).favorites[videoEntity?.id] ?? false;
 
         return Column(
           children: [
@@ -65,15 +46,7 @@ class VideoIcons extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             IconButton(
-              onPressed: () {
-                if (videoEntity != null) {
-                  showModalBottomSheet(
-                    context: context,
-                    isScrollControlled: true,
-                    builder: (context) => CommentsBottomSheet(videoEntity: videoEntity!),
-                  );
-                }
-              },
+              onPressed: () => _commentsOnPressed(context: context),
               icon: const Icon(
                 Icons.comment,
                 color: Colors.white,
@@ -82,9 +55,7 @@ class VideoIcons extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             IconButton(
-              onPressed: () {
-                // Share functionality can be implemented here
-              },
+              onPressed: _shareOnPressed,
               icon: const Icon(
                 Icons.share,
                 color: Colors.white,
@@ -95,5 +66,39 @@ class VideoIcons extends StatelessWidget {
         );
       },
     );
+  }
+
+  void _commentsOnPressed({
+    required BuildContext context,
+  }) {
+    if (videoEntity != null) {
+      showModalBottomSheet(
+        context: context,
+        isScrollControlled: true,
+        builder: (context) => CommentsBottomSheet(videoEntity: videoEntity!),
+      );
+    }
+  }
+
+  void _shareOnPressed() {}
+  void _toggleFavourite(
+      BuildContext context, NotificationHelper notificationHelper) {
+    if (videoEntity != null) {
+      final favouritesCubit = FavouritesCubit.get(context);
+      final userEntity = UserInfoCubit.get(context).userEntity!;
+
+      favouritesCubit.toggleFavourite(
+        videoId: videoEntity!.id,
+        userModel: userEntity,
+      );
+
+      notificationHelper.sendNotificationToSpecificUser(
+        fcmToken: videoEntity!.user.fcmToken,
+        userId: videoEntity!.user.id!,
+        title: 'Like',
+        body: 'Your video has been liked by ${userEntity.name}',
+        context: context,
+      );
+    }
   }
 }

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/layout/presentation/widgets/home_screen_body.dart';
-import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
+import 'package:shorts/core/widgets/custom_app_bar.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key, required this.currentUser});
@@ -9,10 +9,7 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Shorts'),
-        backgroundColor: ColorController.blueAccent,
-      ),
+      appBar: const CustomAppBar(title: 'Shorts', showLeadingIcon: false,),
       body: HomeScreenBody(
         currentUser: currentUser,
       ),

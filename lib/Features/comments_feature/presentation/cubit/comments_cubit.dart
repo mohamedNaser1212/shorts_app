@@ -46,7 +46,9 @@ class CommentsCubit extends Cubit<CommentsState> {
     );
 
     result.fold(
-      (failure) => emit(AddCommentsErrorState(message: failure.toString())),
+      (failure) {
+        emit(AddCommentsErrorState(message: failure.toString()));
+      },
       (success) {
         _cachedComments.remove(videoId);
         getComments(videoId);

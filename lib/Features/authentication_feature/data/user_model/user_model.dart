@@ -1,5 +1,4 @@
 import 'package:shorts/core/utils/constants/request_data_names.dart';
-
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
 class UserModel extends UserEntity {
@@ -17,17 +16,16 @@ class UserModel extends UserEntity {
       email: json[RequestDataNames.email],
       phone: json[RequestDataNames.phone],
       id: json[RequestDataNames.id],
-      fcmToken: json[RequestDataNames.fcmToken],  
+      fcmToken: json[RequestDataNames.fcmToken],
     );
   }
-
   @override
   Map<String, dynamic> toJson() {
     return {
-      RequestDataNames.id: id,
       RequestDataNames.name: name,
       RequestDataNames.email: email,
       RequestDataNames.phone: phone,
+      RequestDataNames.id: id,
       RequestDataNames.fcmToken: fcmToken,
     };
   }

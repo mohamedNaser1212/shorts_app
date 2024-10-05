@@ -30,7 +30,6 @@ class ReusableElevatedButton extends StatelessWidget {
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: backColor, 
-          
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius),
           ),

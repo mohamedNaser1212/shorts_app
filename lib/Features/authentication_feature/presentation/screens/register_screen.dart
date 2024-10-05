@@ -35,9 +35,7 @@ class RegisterScreen extends StatelessWidget {
     return CustomProgressIndicator(
       isLoading: state is RegisterLoadingState,
       child: Scaffold(
-        appBar: AppBar(
-          title: CustomAppBar(title: 'Register'),
-        ),
+        appBar: CustomAppBar(title: 'Register', showLeadingIcon: false),
         body: const RegisterScreenBody(),
       ),
     );

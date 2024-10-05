@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/auth_status_text_widget.dart';
-import 'package:shorts/Features/authentication_feature/presentation/widgets/register_botton.dart';
+import 'package:shorts/core/widgets/register_botton.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_form.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_header.dart';
 

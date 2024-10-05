@@ -42,7 +42,7 @@ class _InitialScreenState extends State<InitialScreen> {
         ),
       );
     }
-    return  const SizedBox();
+    return const SizedBox();
   }
 
   void _listener(context, state) {

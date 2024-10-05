@@ -1,19 +1,38 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/authentication_feature/presentation/widgets/password_text_field.dart';
-import '../screens/login_screen.dart';
+import 'package:shorts/core/widgets/password_text_field.dart';
 import 'auth_status_text_widget.dart';
-import 'email_text_field.dart';
+import '../../../../core/widgets/email_text_field.dart';
 import 'login_botton.dart';
 import 'login_header.dart';
 
-class LoginScreenBody extends StatelessWidget {
-  final LoginScreenState state;
+class LoginScreenBody extends StatefulWidget {
 
   const LoginScreenBody({
     super.key,
-    required this.state,
+ 
   });
 
+  @override
+  State<LoginScreenBody> createState() => LoginScreenBodyState();
+}
+
+class LoginScreenBodyState extends State<LoginScreenBody> {
+    final GlobalKey<FormState> formKey = GlobalKey<FormState>();
+
+  late final TextEditingController emailController;
+  late final TextEditingController passwordController;
+  @override
+  void initState() {
+    emailController = TextEditingController();
+    passwordController = TextEditingController();
+    super.initState();
+  }
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
   @override
   Widget build(BuildContext context) {
       return Center(
@@ -21,19 +40,19 @@ class LoginScreenBody extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.all(20.0),
           child: Form(
-            key: state.formKey,
+            key: formKey,
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 const LoginHeader(),
                 const SizedBox(height: 30),
-                EmailField(controller: state.emailController),
+                EmailField(controller: emailController),
                 const SizedBox(height: 15),
                 PasswordField(
-                  controller: state.passwordController,
+                  controller: passwordController,
                 ),
                 const SizedBox(height: 30),
-                LoginButton(state: state),
+                LoginButton(state:this),
                 AuthStatusTextWidget.login(context: context),
               ],
             ),
@@ -42,6 +61,4 @@ class LoginScreenBody extends StatelessWidget {
       ),
     );
   }
-
-  
 }

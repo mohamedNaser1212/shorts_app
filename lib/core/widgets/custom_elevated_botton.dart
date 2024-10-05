@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shorts/Features/authentication_feature/presentation/widgets/login_screen_body.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
 import 'package:shorts/Features/favourites_feature/presentation/screens/favourites_screen.dart';
 import 'package:shorts/Features/layout/presentation/screens/choose_video_page.dart';
@@ -10,7 +11,6 @@ import '../../Features/authentication_feature/data/user_model/login_request_mode
 import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
 import '../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
 import '../../Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
-import '../../Features/authentication_feature/presentation/screens/login_screen.dart';
 import '../managers/styles_manager/color_manager.dart';
 
 // ignore: must_be_immutable
@@ -25,7 +25,7 @@ class CustomElevatedButton extends StatelessWidget {
   Color? backColor;
 
   factory CustomElevatedButton.loginButton({
-    required LoginScreenState state,
+    required LoginScreenBodyState state,
     required BuildContext context,
   }) {
     return CustomElevatedButton._(
@@ -72,7 +72,7 @@ class CustomElevatedButton extends StatelessWidget {
     );
   }
 
-  static void _loginAction(LoginScreenState state, BuildContext context) {
+  static void _loginAction(LoginScreenBodyState state, BuildContext context) {
     if (state.formKey.currentState!.validate()) {
       LoginCubit.get(context).login(
         requestModel: LoginRequestModel(
@@ -83,7 +83,8 @@ class CustomElevatedButton extends StatelessWidget {
     }
   }
 
-  static void _registerAction(BuildContext context, RegisterScreenFormState state) {
+  static void _registerAction(
+      BuildContext context, RegisterScreenFormState state) {
     if (state.widget.formKey.currentState!.validate()) {
       RegisterCubit.get(context).userRegister(
         requestModel: RegisterRequestModel(
@@ -97,7 +98,8 @@ class CustomElevatedButton extends StatelessWidget {
   }
 
   // Private navigation methods
-  static void _navigateToFavouritesPage(BuildContext context, UserEntity currentUser) {
+  static void _navigateToFavouritesPage(
+      BuildContext context, UserEntity currentUser) {
     NavigationManager.navigateTo(
       context: context,
       screen: FavouritesPage(currentUser: currentUser),

@@ -16,7 +16,7 @@ class VideoPage extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorController.blackColor,
-      appBar: CustomAppBar(
+      appBar: const CustomAppBar(
         title: 'Videos',
       ),
       body: BlocConsumer<UserInfoCubit, UserInfoState>(
@@ -67,13 +67,13 @@ class VideoPage extends StatelessWidget {
 
   void _userInfoListener(context, UserState) {
     if (UserState is GetUserInfoSuccessState) {
-      UserInfoCubit.get(context).userModel = UserModel(
-        id: UserState.userEntity?.id,
-        name: UserState.userEntity!.name,
-        email: UserState.userEntity!.email,
-        phone: UserState.userEntity!.phone,
-        fcmToken: UserState.userEntity!.fcmToken,
-      );
+      // UserInfoCubit.get(context).userModel = UserModel(
+      //   id: UserState.userEntity?.id,
+      //   name: UserState.userEntity!.name,
+      //   email: UserState.userEntity!.email,
+      //   phone: UserState.userEntity!.phone,
+      //   fcmToken: UserState.userEntity!.fcmToken,
+      // );
       print(UserState.userEntity?.name);
     }
   }

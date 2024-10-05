@@ -13,7 +13,6 @@ abstract class NavigationManager {
       ),
     );
   }
-
   static void navigateAndFinish({
     required BuildContext context,
     required Widget screen,

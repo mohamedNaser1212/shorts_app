@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
 
-import '../../../../core/widgets/custom_elevated_botton.dart';
+import 'custom_elevated_botton.dart';
 
 class RegisterButton extends StatelessWidget {
   const RegisterButton({

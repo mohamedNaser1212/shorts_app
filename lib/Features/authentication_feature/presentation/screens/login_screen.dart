@@ -12,32 +12,10 @@ import '../../domain/authentication_use_case/login_use_case.dart';
 import '../cubit/login_cubit/login_cubit.dart';
 import '../cubit/login_cubit/login_state.dart';
 import '../widgets/login_screen_body.dart';
-
-class LoginScreen extends StatefulWidget {
+class LoginScreen extends StatelessWidget {
   const LoginScreen({super.key});
 
-  @override
-  State<LoginScreen> createState() => LoginScreenState();
-}
-
-class LoginScreenState extends State<LoginScreen> {
-  final GlobalKey<FormState> formKey = GlobalKey<FormState>();
-
-  late final TextEditingController emailController;
-  late final TextEditingController passwordController;
-  @override
-  void initState() {
-    emailController = TextEditingController();
-    passwordController = TextEditingController();
-    super.initState();
-  }
-  @override
-  void dispose() {
-    emailController.dispose();
-    passwordController.dispose();
-    super.dispose();
-  }
-  @override
+@override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => LoginCubit(
@@ -55,8 +33,8 @@ class LoginScreenState extends State<LoginScreen> {
     return CustomProgressIndicator(
       isLoading: state is AppLoginLoadingState,
       child: Scaffold(
-        appBar: CustomAppBar(title: 'Login'),
-        body: LoginScreenBody(state: this),
+        appBar: CustomAppBar(title: 'Login', showLeadingIcon: false),
+        body: const LoginScreenBody(),
       ),
     );
   }
