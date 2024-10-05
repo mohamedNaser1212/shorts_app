@@ -12,29 +12,24 @@ abstract class CommentsLocalDataSource {
 }
 
 class CommentsLocalDataSourceImpl implements CommentsLocalDataSource {
-  final LocalStorageManager hiveHelper;
+  final LocalStorageManager localStorageManager;
 
-  const CommentsLocalDataSourceImpl({required this.hiveHelper});
+  const CommentsLocalDataSourceImpl({required this.localStorageManager});
 
   @override
   Future<List<CommentEntity>> getComments() async {
-    
-      final commentItems = await hiveHelper.loadData<CommentEntity>(
-        HiveBoxesNames.kCommentsBox,
-      );
-      return commentItems.cast<CommentEntity>().toList();
-   
+    final commentItems = await localStorageManager.loadData<CommentEntity>(
+      HiveBoxesNames.kCommentsBox,
+    );
+    return commentItems.cast<CommentEntity>().toList();
   }
 
   @override
   Future<void> saveComments(List<CommentEntity> comments) async {
-   
-      await hiveHelper.saveData<CommentEntity>(
-        comments,
-        HiveBoxesNames.kCommentsBox,
-      );
-      
-
+    await localStorageManager.saveData<CommentEntity>(
+      comments,
+      HiveBoxesNames.kCommentsBox,
+    );
   }
 
   @override
@@ -47,7 +42,7 @@ class CommentsLocalDataSourceImpl implements CommentsLocalDataSource {
 
   @override
   Future<void> clearComments(String videoId) async {
-    await hiveHelper.clearData<CommentEntity>(
+    await localStorageManager.clearData<CommentEntity>(
       HiveBoxesNames.kCommentsBox,
     );
   }

@@ -24,20 +24,11 @@ class CommentEntity {
     required this.timestamp,
   });
 
-  factory CommentEntity.fromJson(Map<String, dynamic> json) {
-    return CommentEntity(
-      id: json[RequestDataNames.id] ?? '',
-      content: json[RequestDataNames.content] ?? '',
-      user: UserModel.fromJson(json[RequestDataNames.user]),
-      timestamp: DateTime.parse(json[RequestDataNames.timestamp] as String),
-    );
-  }
-
   Map<String, dynamic> toJson() {
     return {
       RequestDataNames.id: id,
       RequestDataNames.content: content,
-     RequestDataNames.user: user.toJson(),
+      RequestDataNames.user: user.toJson(),
       RequestDataNames.timestamp: timestamp.toIso8601String(),
     };
   }

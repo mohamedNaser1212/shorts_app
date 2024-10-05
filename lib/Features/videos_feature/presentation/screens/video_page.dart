@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
+
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_page_view_widget.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
@@ -50,9 +50,9 @@ class VideoPage extends StatelessWidget {
       );
     }
     return const Center(
-      child: CustomTitle(
-        title: 'No data available',
-        style: TitleStyle.styleBold20,
+      child: CircularProgressIndicator(
+        color: ColorController.whiteColor,
+
       ),
     );
   }
@@ -66,15 +66,15 @@ class VideoPage extends StatelessWidget {
   void _favouritesListener(context, state) {}
 
   void _userInfoListener(context, UserState) {
-    if (UserState is GetUserInfoSuccessState) {
-      // UserInfoCubit.get(context).userModel = UserModel(
-      //   id: UserState.userEntity?.id,
-      //   name: UserState.userEntity!.name,
-      //   email: UserState.userEntity!.email,
-      //   phone: UserState.userEntity!.phone,
-      //   fcmToken: UserState.userEntity!.fcmToken,
-      // );
-      print(UserState.userEntity?.name);
-    }
+    // if (UserState is GetUserInfoSuccessState) {
+    //   // UserInfoCubit.get(context).userModel = UserModel(
+    //   //   id: UserState.userEntity?.id,
+    //   //   name: UserState.userEntity!.name,
+    //   //   email: UserState.userEntity!.email,
+    //   //   phone: UserState.userEntity!.phone,
+    //   //   fcmToken: UserState.userEntity!.fcmToken,
+    //   // );
+    //   print(UserState.userEntity?.name);
+    // }
   }
 }

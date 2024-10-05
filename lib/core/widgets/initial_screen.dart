@@ -54,7 +54,6 @@ class _InitialScreenState extends State<InitialScreen> {
         );
       } else {
         UserInfoCubit.get(context).userEntity = state.userEntity;
-
         NavigationManager.navigateAndFinish(
           context: context,
           screen: HomeScreen(currentUser: state.userEntity!),

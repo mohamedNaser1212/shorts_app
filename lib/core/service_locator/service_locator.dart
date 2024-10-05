@@ -130,7 +130,7 @@ Future<void> setUpServiceLocator() async {
   );
   getIt.registerSingleton<CommentsLocalDataSourceImpl>(
     CommentsLocalDataSourceImpl(
-      hiveHelper: getIt.get<LocalStorageManager>(),
+      localStorageManager: getIt.get<LocalStorageManager>(),
     ),
   );
   getIt.registerSingleton<UserInfoRemoteDataSource>(

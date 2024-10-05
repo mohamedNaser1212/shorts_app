@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_list.dart';
+import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/custom_app_bar.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
@@ -76,9 +77,8 @@ class _FavouritesPageState extends State<FavouritesPage> {
                   );
           } else {
             return const Center(
-              child: CustomTitle(
-                title: 'Something went wrong',
-                style: TitleStyle.style18,
+              child: CircularProgressIndicator(
+                color: ColorController.whiteColor,
               ),
             );
           }
