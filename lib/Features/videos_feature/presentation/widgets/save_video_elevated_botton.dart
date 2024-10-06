@@ -35,7 +35,7 @@ class _SaveElevatedBottonState extends State<SaveElevatedBotton> {
           Navigator.pushReplacement(
             context,
             MaterialPageRoute(
-              builder: (context) => Preview(outputPath: outputPath ?? ''),
+              builder: (context) => PreviewPage(outputPath: outputPath ?? ''),
             ),
           );
         });

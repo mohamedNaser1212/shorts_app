@@ -29,7 +29,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Favourites'),
+      appBar: const CustomAppBar(title: 'Favourites'),
       body: BlocConsumer<FavouritesCubit, FavouritesState>(
         listener: (context, state) {
           if (state is GetFavoritesErrorState) {
