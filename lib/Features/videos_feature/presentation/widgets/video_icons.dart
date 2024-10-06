@@ -13,13 +13,11 @@ import 'comments_bottom_sheet.dart';
 class VideoIcons extends StatelessWidget {
   final VideoController videoProvider;
   final VideoEntity? videoEntity;
-  final FavouritesEntity favouriteEntity;
 
   const VideoIcons({
     super.key,
     required this.videoProvider,
     this.videoEntity,
-    required this.favouriteEntity,
   });
 
   @override
@@ -88,7 +86,7 @@ class VideoIcons extends StatelessWidget {
       final userEntity = UserInfoCubit.get(context).userEntity!;
 
       favouritesCubit.toggleFavourite(
-        videoId: videoEntity!.id,
+        video: videoEntity!,
         userModel: userEntity,
       );
 

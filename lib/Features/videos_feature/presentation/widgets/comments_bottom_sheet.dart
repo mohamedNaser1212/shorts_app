@@ -28,7 +28,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
       setState(() {});
     });
 
-    CommentsCubit.get(context).getComments(widget.videoEntity.id);
+    CommentsCubit.get(context).getComments(videoId: widget.videoEntity.id);
   }
 
   @override

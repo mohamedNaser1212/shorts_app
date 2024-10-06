@@ -10,12 +10,10 @@ class VideoComponentsWidget extends StatelessWidget {
   const VideoComponentsWidget({
     super.key,
     required this.videoEntity,
-    required this.favouriteEntity,
     required this.videoProvider,
   });
 
   final VideoEntity videoEntity;
-  final FavouritesEntity favouriteEntity;
   final VideoController videoProvider;
 
   @override
@@ -26,7 +24,6 @@ class VideoComponentsWidget extends StatelessWidget {
           AnimatedPauseIcon(videoProvider: videoProvider),
           VideoIconsScreen(
             videoEntity: videoEntity,
-            favouriteEntity: favouriteEntity,
             videoProvider: videoProvider,
           ),
           SliderNotifier(videoProvider: videoProvider),

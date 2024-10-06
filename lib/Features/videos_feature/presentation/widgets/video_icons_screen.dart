@@ -13,12 +13,10 @@ class VideoIconsScreen extends StatelessWidget {
   const VideoIconsScreen({
     super.key,
     required this.videoEntity,
-    required this.favouriteEntity,
     required this.videoProvider,
   });
 
   final VideoEntity videoEntity;
-  final FavouritesEntity favouriteEntity;
   final VideoController videoProvider;
 
   @override
@@ -73,7 +71,6 @@ class VideoIconsScreen extends StatelessWidget {
             child: VideoIcons(
               videoProvider: videoProvider,
               videoEntity: videoEntity,
-              favouriteEntity: favouriteEntity,
             ),
           ),
         ],

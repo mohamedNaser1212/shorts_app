@@ -2,6 +2,7 @@ import 'package:dartz/dartz.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_local_data_source.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_remote_data_source.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart';
+import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 
 import '../../../../core/managers/error_manager/failure.dart';
 import '../../../../core/managers/repo_manager/repo_manager.dart';
@@ -49,13 +50,13 @@ class FavouritesRepoImpl implements FavouritesRepo {
 
   @override
   Future<Either<Failure, bool>> toggleFavouriteVideo({
-    required String videoId,
+    required  VideoEntity videoEntity,
     required UserEntity userModel,
   }) async {
     return repoManager.call(
       action: () async {
         final result = await remoteDataSource.toggleFavouriteVideo(
-          videoId: videoId,
+          videoEntity: videoEntity,
           userModel: userModel,
         );
         if (result) {

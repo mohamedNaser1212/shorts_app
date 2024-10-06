@@ -32,4 +32,13 @@ class CommentEntity {
       RequestDataNames.timestamp: timestamp.toIso8601String(),
     };
   }
+
+  factory CommentEntity.fromJson(Map<String, dynamic> json) {
+    return CommentEntity(
+      id: json[RequestDataNames.id] ?? '',
+      content: json[RequestDataNames.content] ?? '',
+      user: UserModel.fromJson(json[RequestDataNames.user]),
+      timestamp: DateTime.parse(json[RequestDataNames.timestamp]),
+    );
+  }
 }

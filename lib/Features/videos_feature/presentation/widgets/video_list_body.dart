@@ -10,12 +10,10 @@ class VideoListBody extends StatelessWidget {
   const VideoListBody({
     super.key,
     required this.videoEntity,
-    required this.favouriteEntity,
     required this.videoProvider,
   });
 
   final VideoEntity videoEntity;
-  final FavouritesEntity favouriteEntity;
   final VideoController videoProvider;
 
   @override
@@ -34,7 +32,6 @@ class VideoListBody extends StatelessWidget {
               ThumbnailNotifier(videoUrl: videoEntity.videoUrl),
             VideoComponentsWidget(
               videoEntity: videoEntity,
-              favouriteEntity: favouriteEntity,
               videoProvider: videoProvider,
             ),
           ],

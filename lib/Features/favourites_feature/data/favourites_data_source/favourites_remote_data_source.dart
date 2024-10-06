@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_model/favourites_model.dart';
+import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 
 import '../../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
@@ -10,7 +11,7 @@ abstract class FavouritesRemoteDataSource {
     required UserEntity user,
   });
   Future<bool> toggleFavouriteVideo({
-    required String videoId,
+    required  VideoEntity videoEntity,
     required UserEntity userModel,
   });
 }
@@ -35,14 +36,14 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
 
   @override
   Future<bool> toggleFavouriteVideo({
-    required String videoId,
+    required  VideoEntity videoEntity,
     required UserEntity userModel,
   }) async {
     final userFavouritesCollection = firestore
         .collection(CollectionNames.users)
         .doc(userModel.id)
         .collection(CollectionNames.favourites)
-        .doc(videoId);
+        .doc(videoEntity.id);
 
     final favourites = await userFavouritesCollection.get();
 
@@ -51,7 +52,7 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
       return false;
     } else {
       final globalVideoRef =
-          firestore.collection(CollectionNames.videos).doc(videoId);
+          firestore.collection(CollectionNames.videos).doc(videoEntity.id);
       final globalVideoDoc = await globalVideoRef.get();
 
       if (globalVideoDoc.exists) {

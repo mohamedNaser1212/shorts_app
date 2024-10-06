@@ -11,13 +11,11 @@ import 'video_icons.dart';
 class PositionedVideoIcons extends StatelessWidget {
   final VideoController videoProvider;
   final VideoEntity? videoEntity;
-  final FavouritesEntity favouriteEntity;
 
   const PositionedVideoIcons({
     super.key,
     required this.videoProvider,
     this.videoEntity,
-    required this.favouriteEntity,
   });
 
   @override
@@ -28,7 +26,6 @@ class PositionedVideoIcons extends StatelessWidget {
       child: VideoIcons(
         videoProvider: videoProvider,
         videoEntity: videoEntity,
-        favouriteEntity: favouriteEntity,
       ),
     );
   }

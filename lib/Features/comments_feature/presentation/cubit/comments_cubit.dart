@@ -51,13 +51,15 @@ class CommentsCubit extends Cubit<CommentsState> {
       },
       (success) {
         _cachedComments.remove(videoId);
-        getComments(videoId);
+        getComments(videoId: videoId);
         emit(AddCommentsSuccessState());
       },
     );
   }
 
-  void getComments(String videoId) async {
+  void getComments({
+    required String videoId,
+  }) async {
     if (_cachedComments.containsKey(videoId)) {
       comments = _cachedComments[videoId]!;
       emit(GetCommentsSuccessState(comments: comments));

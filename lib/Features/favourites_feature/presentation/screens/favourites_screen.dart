@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
+import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_list.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
@@ -29,7 +30,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: const CustomAppBar(title: 'Favourites'),
+      appBar: CustomAppBar(title: 'Favourites'),
       body: BlocConsumer<FavouritesCubit, FavouritesState>(
         listener: (context, state) {
           if (state is GetFavoritesErrorState) {
@@ -59,14 +60,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
                     itemCount: favouriteVideos.length,
                     itemBuilder: (context, index) {
                       final favouriteEntity = favouriteVideos[index];
-                      final videoEntity = VideoEntity(
-                        id: favouriteEntity.id,
-                        videoUrl: favouriteEntity.videoUrl,
-                        description: favouriteEntity.description,
-                        user: favouriteEntity.user,
-                        comments: [],
-                        thumbnail: favouriteEntity.thumbnail,
-                      );
+                      final videoEntity = VideoCubit.get(context).videos[index];
 
                       return VideoListItem(
                         favouriteEntity: favouriteEntity,

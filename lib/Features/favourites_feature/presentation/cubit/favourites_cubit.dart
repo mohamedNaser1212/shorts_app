@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourites_use_case/favourites_use_case.dart';
+import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
 part 'favourites_state.dart';
@@ -37,16 +38,16 @@ class FavouritesCubit extends Cubit<FavouritesState> {
   }
 
   Future<void> toggleFavourite({
-    required String videoId,
+    required VideoEntity video,
     required UserEntity userModel,
   }) async {
     emit(ToggleFavoritesLoadingState());
-    favorites[videoId] = !(favorites[videoId] ?? false);
+    favorites[video.id] = !(favorites[video.id] ?? false);
 
-    emit(ToggleFavouriteSuccessState(isFavourite: favorites[videoId] ?? false));
+    emit(ToggleFavouriteSuccessState(isFavourite: favorites[video.id] ?? false));
 
     final result = await favouritesUseCase.toggleFavouriteVideo(
-      videoId: videoId,
+      videoEntity: video,
       userModel: userModel,
     );
     result.fold(
