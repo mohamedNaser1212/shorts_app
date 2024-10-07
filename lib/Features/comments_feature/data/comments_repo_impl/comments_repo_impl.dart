@@ -3,6 +3,7 @@ import 'package:shorts/Features/comments_feature/data/data_sources/comments_loca
 import 'package:shorts/Features/comments_feature/data/data_sources/comments_remote_data_source.dart';
 import 'package:shorts/Features/comments_feature/domain/ccommeints_repo/comments_repo.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
+
 import '../../../../core/managers/error_manager/failure.dart';
 import '../../../../core/managers/repo_manager/repo_manager.dart';
 import '../../../videos_feature/domain/video_entity/video_entity.dart';
@@ -34,7 +35,9 @@ class CommentsRepoImpl implements CommentsRepo {
           video: video,
         );
 
-        final comments = await commentsLocalDataSource.getComments();
+        final comments = await commentsLocalDataSource.getComments(
+          videoId: videoId,
+        );
         comments.add(comment);
         await commentsLocalDataSource.saveComments(comments);
         return comments;
@@ -48,14 +51,10 @@ class CommentsRepoImpl implements CommentsRepo {
   }) async {
     return repoManager.call(
       action: () async {
-        final cachedComments = await commentsLocalDataSource.getComments();
-        if (cachedComments.isNotEmpty) {
-          return cachedComments;
-        } else {
-          final comments = await commentsRemoteDataSource.getComments(videoId: videoId);
-          await commentsLocalDataSource.saveComments(comments);
-          return comments;
-        }
+        final comments =
+            await commentsRemoteDataSource.getComments(videoId: videoId);
+        await commentsLocalDataSource.saveComments(comments,);
+        return comments;
       },
     );
   }
