@@ -53,7 +53,9 @@ class CommentsRepoImpl implements CommentsRepo {
       action: () async {
         final comments =
             await commentsRemoteDataSource.getComments(videoId: videoId);
-        await commentsLocalDataSource.saveComments(comments,);
+        await commentsLocalDataSource.saveComments(
+          comments,
+        );
         return comments;
       },
     );
