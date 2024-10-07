@@ -35,7 +35,9 @@ class CommentsRepoImpl implements CommentsRepo {
           video: video,
         );
 
-        final comments = await commentsLocalDataSource.getComments();
+        final comments = await commentsLocalDataSource.getComments(
+          videoId: videoId,
+        );
         comments.add(comment);
         await commentsLocalDataSource.saveComments(comments);
         return comments;
@@ -43,22 +45,16 @@ class CommentsRepoImpl implements CommentsRepo {
     );
   }
 
-//asddsa adsdasdsa
   @override
   Future<Either<Failure, List<CommentEntity>>> getVideoComments({
     required String videoId,
   }) async {
     return repoManager.call(
       action: () async {
-        final cachedComments = await commentsLocalDataSource.getComments();
-        if (cachedComments.isNotEmpty) {
-          return cachedComments;
-        } else {
-          final comments =
-              await commentsRemoteDataSource.getComments(videoId: videoId);
-          await commentsLocalDataSource.saveComments(comments);
-          return comments;
-        }
+        final comments =
+            await commentsRemoteDataSource.getComments(videoId: videoId);
+        await commentsLocalDataSource.saveComments(comments,);
+        return comments;
       },
     );
   }
