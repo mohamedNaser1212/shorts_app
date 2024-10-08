@@ -7,32 +7,14 @@ class TrimViewerWidget extends StatefulWidget {
     super.key,
     required this.state,
   });
+
   final TrimmerViewBodyState state;
-  // final File file;
-  // double startValue;
-  // double endValue;
-  // bool isPlaying;
-  // final Trimmer trimmer;
-  // final VideoController videoController;
 
   @override
   State<TrimViewerWidget> createState() => _TrimViewerWidgetState();
 }
 
 class _TrimViewerWidgetState extends State<TrimViewerWidget> {
-  // double _startValue = 0.0;
-  // double _endValue = 0.0;
-  // bool _isPlaying = false;
-  // bool _progressVisibility = false;
-
-  @override
-  void initState() {
-    super.initState();
-
-    // _videoController =
-    //     VideoController(widget.file.path, isInitiallyPaused: true);
-  }
-
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -54,16 +36,18 @@ class _TrimViewerWidgetState extends State<TrimViewerWidget> {
           setState(() {
             widget.state.startValue = value;
             _updateVideoPosition();
+            widget.state.generateThumbnail(value.toInt()); // Update thumbnail on start change
           });
         },
         onChangeEnd: (value) {
           setState(() {
             widget.state.endValue = value;
 
-            if (widget.state.videoController.positionNotifier.value.inSeconds >
-                widget.state.endValue) {
+            if (widget.state.videoController.positionNotifier.value.inSeconds > widget.state.endValue) {
               _updateVideoPosition();
             }
+
+            widget.state.generateThumbnail(value.toInt()); // Update thumbnail on end change
           });
         },
         onChangePlaybackState: (value) => setState(() {
@@ -74,7 +58,6 @@ class _TrimViewerWidgetState extends State<TrimViewerWidget> {
   }
 
   void _updateVideoPosition() {
-    widget.state.videoController
-        .seekTo(Duration(seconds: widget.state.startValue.toInt()));
+    widget.state.videoController.seekTo(Duration(seconds: widget.state.startValue.toInt()));
   }
 }

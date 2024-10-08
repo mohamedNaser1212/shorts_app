@@ -36,4 +36,6 @@ abstract class RequestDataNames {
   static const String isFavourite= 'isFavourite';
   static const String price= 'price';
   static const String fcmToken= 'fcmToken';
+  static const String profilePic= 'profilePic';
+  static const String bio= 'bio';
 }

@@ -21,8 +21,7 @@ class VideoEntityAdapter extends TypeAdapter<VideoEntity> {
       thumbnail: fields[1] as String,
       videoUrl: fields[2] as String,
       description: fields[3] as String?,
-      user: fields[4] as dynamic,
-      comments: (fields[5] as List).cast<CommentEntity>(),
+      user: fields[4] as UserEntity,
     );
   }
 
@@ -39,9 +38,8 @@ class VideoEntityAdapter extends TypeAdapter<VideoEntity> {
       ..writeByte(3)
       ..write(obj.description)
       ..writeByte(4)
-      ..write(obj.user)
-      ..writeByte(5)
-      ..write(obj.comments);
+      ..write(obj.user);
+ 
   }
 
   @override

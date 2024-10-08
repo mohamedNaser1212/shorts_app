@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/thumbnail_notifier.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/video_components_widget.dart';

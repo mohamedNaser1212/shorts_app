@@ -17,6 +17,12 @@ class UserEntity {
   String? id;
   @HiveField(4)
   final String fcmToken;
+  @HiveField(5)
+  final String profilePic;
+  @HiveField(6)
+  final String bio;
+
+
 
   UserEntity({
     required this.name,
@@ -24,6 +30,8 @@ class UserEntity {
     required this.phone,
     required this.id,
     required this.fcmToken,
+    required this.profilePic,
+    required this.bio,
   });
 
   factory UserEntity.fromJson(Map<String, dynamic> json) {
@@ -33,6 +41,8 @@ class UserEntity {
       phone: json[RequestDataNames.phone],
       id: json[RequestDataNames.id],
       fcmToken: json[RequestDataNames.fcmToken],  
+      profilePic: json[RequestDataNames.profilePic],  
+      bio: json[RequestDataNames.bio],  
     );
   }
   Map<String, dynamic> toJson() {
@@ -42,6 +52,8 @@ class UserEntity {
       RequestDataNames.phone: phone,
       RequestDataNames.id: id,
      RequestDataNames.fcmToken: fcmToken,
+      RequestDataNames.profilePic: profilePic,
+      RequestDataNames.bio: bio,
     };
   }
 }

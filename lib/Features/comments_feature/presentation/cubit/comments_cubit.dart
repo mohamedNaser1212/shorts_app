@@ -25,23 +25,19 @@ class CommentsCubit extends Cubit<CommentsState> {
   List<CommentEntity> comments = [];
 
   Future<void> addComment({
-    required String videoId,
     required String comment,
     required UserEntity user,
-    required String userId,
     required VideoEntity video,
   }) async {
     emit(AddCommentsLoadingState());
 
     final result = await addCommentsUseCase.addCommentToVideo(
-      videoId: videoId,
       comment: CommentModel(
         id: DateTime.now().millisecondsSinceEpoch.toString(),
         content: comment,
         user: user,
         timestamp: DateTime.now(),
       ),
-      userId: userId,
       video: video,
     );
 
@@ -50,8 +46,8 @@ class CommentsCubit extends Cubit<CommentsState> {
         emit(AddCommentsErrorState(message: failure.toString()));
       },
       (success) {
-        _cachedComments.remove(videoId);
-        getComments(videoId: videoId);
+        _cachedComments.remove(video.id);
+        getComments(videoId: video.id);
         emit(AddCommentsSuccessState());
       },
     );

@@ -10,9 +10,7 @@ abstract class CommentsRemoteDataSource {
     required String videoId,
   });
   Future<bool> addCommentToVideo({
-    required String videoId,
     required CommentEntity comment,
-    required String userId,
     required VideoEntity video,
   });
 }
@@ -40,23 +38,17 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
 
   @override
   Future<bool> addCommentToVideo({
-    required String videoId,
     required CommentEntity comment,
-    required String userId,
     required VideoEntity video,
   }) async {
-    print('Adding comment to video with id: $videoId');
-
-    final videoRef = firestore.collection(CollectionNames.videos).doc(videoId);
+    final videoRef = firestore.collection(CollectionNames.videos).doc(video.id);
 
     final userVideoCommentsRef = firestore
         .collection(CollectionNames.users)
         .doc(video.user.id)
         .collection(CollectionNames.videos)
-        .doc(videoId)
+        .doc(video.id)
         .collection(CollectionNames.comments);
-
-    print('User ID: $userId');
 
     final videoDoc = await videoRef.get();
 

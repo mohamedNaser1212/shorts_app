@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shorts/Features/profile_feature.dart/presentation/widgets/profile_picture.dart';
 
 import '../../../../core/widgets/custom_list_tile.dart';
 import '../../../comments_feature/domain/comments_entity/comments_entity.dart';
@@ -16,10 +17,7 @@ class CommentItemWidget extends StatelessWidget {
     return CustomListTile(
       title: comment.user.name,
       subtitle: comment.content,
-      leading: const CircleAvatar(
-        backgroundColor: Colors.grey,
-        radius: 20,
-      ),
+      leading: UserProfilePicture(comment: comment),
     );
   }
 }

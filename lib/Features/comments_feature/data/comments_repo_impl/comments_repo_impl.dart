@@ -21,22 +21,18 @@ class CommentsRepoImpl implements CommentsRepo {
 
   @override
   Future<Either<Failure, List<CommentEntity>>> addCommentToVideo({
-    required String videoId,
     required CommentEntity comment,
-    required String userId,
     required VideoEntity video,
   }) async {
     return repoManager.call(
       action: () async {
         await commentsRemoteDataSource.addCommentToVideo(
-          videoId: videoId,
           comment: comment,
-          userId: userId,
           video: video,
         );
 
         final comments = await commentsLocalDataSource.getComments(
-          videoId: videoId,
+          videoId: video.id,
         );
         comments.add(comment);
         await commentsLocalDataSource.saveComments(comments);

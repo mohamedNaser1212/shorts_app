@@ -8,6 +8,8 @@ class UserModel extends UserEntity {
     required super.phone,
     required super.id,
     required super.fcmToken,
+    required super.profilePic,
+    required super.bio,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -17,6 +19,8 @@ class UserModel extends UserEntity {
       phone: json[RequestDataNames.phone],
       id: json[RequestDataNames.id],
       fcmToken: json[RequestDataNames.fcmToken],
+      profilePic: json[RequestDataNames.profilePic],
+      bio: json[RequestDataNames.bio],
     );
   }
   @override
@@ -27,6 +31,8 @@ class UserModel extends UserEntity {
       RequestDataNames.phone: phone,
       RequestDataNames.id: id,
       RequestDataNames.fcmToken: fcmToken,
+      RequestDataNames.profilePic: profilePic,
+      RequestDataNames.bio: bio,
     };
   }
 }

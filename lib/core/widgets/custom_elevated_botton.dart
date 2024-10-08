@@ -87,19 +87,21 @@ class CustomElevatedButton extends StatelessWidget {
     }
   }
 
-  static void _registerAction(
-      BuildContext context, RegisterScreenFormState state) {
-    if (state.widget.formKey.currentState!.validate()) {
-      RegisterCubit.get(context).userRegister(
-        requestModel: RegisterRequestModel(
-          email: state.emailController.text,
-          password: state.passwordController.text,
-          name: state.nameController.text,
-          phone: state.phoneController.text,
-        ),
-      );
-    }
+static void _registerAction(
+    BuildContext context, RegisterScreenFormState state) {
+  if (state.widget.formKey.currentState!.validate()) {
+    RegisterCubit.get(context).userRegister(
+      requestModel: RegisterRequestModel(
+        email: state.emailController.text,
+        password: state.passwordController.text,
+        name: state.nameController.text,
+        phone: state.phoneController.text,
+        bio: state.bioController.text.isNotEmpty ? state.bioController.text : 'Hey there i am using Shorts', // Nullable bio
+        profilePic: state.imageUrl ?? '', 
+      ),
+    );
   }
+}
 
   // Private navigation methods
   static void _navigateToFavouritesPage(

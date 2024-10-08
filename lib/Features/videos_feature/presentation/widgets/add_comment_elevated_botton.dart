@@ -16,24 +16,24 @@ class AddCommentElevatedBotton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ElevatedButton(
       onPressed: () => _onPressed(context: context),
-      child: const CustomTitle(title: 'Add a Comment',style: TitleStyle.style14,),
+      child: const CustomTitle(
+        title: 'Add a Comment',
+        style: TitleStyle.style14,
+      ),
     );
   }
 
   void _onPressed({
     required BuildContext context,
   }) {
-      final commentText = state.commentController.text;
-        if (commentText.isNotEmpty) {
-          CommentsCubit.get(context).addComment(
-            videoId: state.widget.videoEntity.id,
-            comment: commentText,
-            user: UserInfoCubit.get(context).userEntity!,
-            userId: UserInfoCubit.get(context).userEntity!.id!,
-            video: state.widget.videoEntity,
-          );
-          state.commentController.clear();
-        }
+    final commentText = state.commentController.text;
+    if (commentText.isNotEmpty) {
+      CommentsCubit.get(context).addComment(
+        comment: commentText,
+        user: UserInfoCubit.get(context).userEntity!,
+        video: state.widget.videoEntity,
+      );
+      state.commentController.clear();
     }
+  }
 }
-

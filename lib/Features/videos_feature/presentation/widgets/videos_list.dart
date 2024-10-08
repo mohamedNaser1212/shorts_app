@@ -11,13 +11,13 @@ import '../../../../core/video_notifiers/video_notifier.dart';
 class VideoListItem extends StatelessWidget {
   final VideoEntity videoEntity;
   final UserEntity userModel;
-  final FavouritesEntity favouriteEntity;
+  final FavouritesEntity? favouriteEntity;
 
   const VideoListItem({
     super.key,
     required this.videoEntity,
     required this.userModel,
-    required this.favouriteEntity,
+     this.favouriteEntity,
   });
 
   @override

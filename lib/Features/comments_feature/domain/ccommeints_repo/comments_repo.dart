@@ -10,9 +10,7 @@ abstract class CommentsRepo {
     required String videoId,
   });
   Future<Either<Failure, List<CommentEntity>>> addCommentToVideo({
-    required String videoId,
     required CommentEntity comment,
-    required String userId,
     required VideoEntity video,
   });
 }

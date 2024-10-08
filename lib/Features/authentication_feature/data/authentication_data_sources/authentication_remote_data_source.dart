@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/utils/constants/request_data_names.dart';
 import '../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../../core/network/firebase_manager/firebase_helper.dart';
@@ -75,7 +76,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     return UserModel.fromJson(userData);
   }
 
-  Future<void> createUserData({required UserModel user}) async {
+  Future<void> createUserData({required UserEntity user}) async {
     await FirebaseFirestore.instance
         .collection(CollectionNames.users)
         .doc(user.id)

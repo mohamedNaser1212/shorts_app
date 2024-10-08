@@ -7,12 +7,17 @@ class RegisterRequestModel {
   final String password;
   final String name;
   final String phone;
+  final String profilePic;
+  final String bio;
+
 
   const RegisterRequestModel({
     required this.email,
     required this.password,
     required this.name,
     required this.phone,
+    required this.profilePic,
+   required  this.bio ,
   });
 
   Map<String, dynamic> toMap() {
@@ -21,6 +26,8 @@ class RegisterRequestModel {
       RequestDataNames.password: password,
       RequestDataNames.name: name,
       RequestDataNames.phone: phone,
+      RequestDataNames.profilePic: profilePic,
+      RequestDataNames.bio: bio,
     };
   }
 }

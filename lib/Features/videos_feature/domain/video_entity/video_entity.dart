@@ -1,5 +1,5 @@
 import 'package:hive/hive.dart';
-import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
+import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
 import '../../../comments_feature/domain/comments_entity/comments_entity.dart';
 
@@ -16,9 +16,8 @@ class VideoEntity {
   @HiveField(3)
   final String? description;
   @HiveField(4)
-  final dynamic user;
-  @HiveField(5)
-  final List<CommentEntity> comments;
+  final UserEntity user;
+
 
   VideoEntity({
     required this.id,
@@ -26,7 +25,6 @@ class VideoEntity {
     required this.videoUrl,
     this.description,
     required this.user,
-    required this.comments,
   });
 
   Map<String, dynamic> toJson() {
@@ -36,7 +34,6 @@ class VideoEntity {
       'videoUrl': videoUrl,
       'description': description,
       'user': user.toJson(),
-      'comments': comments.map((e) => e.toJson()).toList(),
     };
   }
 
@@ -46,10 +43,8 @@ class VideoEntity {
       thumbnail: json['thumbnail'] ?? '',
       videoUrl: json['videoUrl'] ?? '',
       description: json['description'],
-      user: UserModel.fromJson(json['user']),
-      comments: (json['comments'] as List)
-          .map((e) => CommentEntity.fromJson(e as Map<String, dynamic>))
-          .toList(),
+      user: UserEntity.fromJson(json['user']),
+   
     );
   }
 }
