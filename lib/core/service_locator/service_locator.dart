@@ -10,6 +10,11 @@ import 'package:shorts/Features/favourites_feature/data/favourites_data_source/f
 import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_remote_data_source.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourites_repo/favourites_repo.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourites_use_case/favourites_use_case.dart';
+import 'package:shorts/Features/profile_feature.dart/data/repo_impl/user_profile_videos_repo_impl.dart';
+import 'package:shorts/Features/profile_feature.dart/data/user_profile_videos_remote_data_source/user_profile_videos_remote_data_source.dart';
+import 'package:shorts/Features/profile_feature.dart/domain/repo/user_profile_videos_repo.dart';
+import 'package:shorts/Features/profile_feature.dart/domain/use_case/user_profile_videos_use_case.dart';
+import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_profile_cubit.dart';
 import 'package:shorts/Features/videos_feature/data/data_sources/video_remote_data_source/videos_rermote_data_source.dart';
 import 'package:shorts/Features/videos_feature/data/data_sources/videos_local_data_source/video_local_data_source.dart';
 import 'package:shorts/Features/videos_feature/data/videos_repo_impl/videos_repo_impl.dart';
@@ -135,23 +140,39 @@ Future<void> setUpServiceLocator() async {
   );
   getIt.registerSingleton<UserInfoRemoteDataSource>(
       UserInfoRemoteDataSourceImpl());
+  getIt.registerSingleton<UserProfileVideosRemoteDataSource>(
+      UserProfileVideosRemoteDataSourceImpl());
+  getIt.registerSingleton<UserProfileVideosRepo>(
+    UserProfileVideosRepoImpl(
+      repoManager: getIt.get<RepoManager>(),
+      remoteDataSource: getIt.get<UserProfileVideosRemoteDataSource>(),
+    ),
+  );
+    getIt.registerSingleton<UserProfileVideosUseCase>(UserProfileVideosUseCase(
+   repository: getIt.get<UserProfileVideosRepo>(), 
+  ));
+  getIt.registerFactory<UserProfileCubit>(() => UserProfileCubit(
+      getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
+      ),);
   getIt.registerSingleton<CommentsRepo>(CommentsRepoImpl(
     repoManager: getIt.get<RepoManager>(),
     commentsRemoteDataSource: getIt.get<CommentsRemoteDataSource>(),
     commentsLocalDataSource: getIt.get<CommentsLocalDataSourceImpl>(),
   ));
-  getIt.registerFactory<UserInfoCubit>(() => UserInfoCubit(
-        getUserUseCase: getIt.get<GetUserInfoUseCase>(),
-      ));
+
+  
   getIt.registerSingleton<UserInfoRepo>(UserInfoRepoImpl(
     userLocalDataSource: getIt.get<UserLocalDataSourceImpl>(),
     remoteDataSource: getIt.get<UserInfoRemoteDataSource>(),
     repoManager: getIt.get<RepoManager>(),
   ));
+getIt.registerFactory<GetUserInfoUseCase>(() => GetUserInfoUseCase(
+  userInfoRepo: getIt.get<UserInfoRepo>(),
+));
 
-  getIt.registerSingleton<GetUserInfoUseCase>(GetUserInfoUseCase(
-    userInfoRepo: getIt.get<UserInfoRepo>(),
-  ));
+getIt.registerFactory<UserInfoCubit>(() => UserInfoCubit(
+        getUserUseCase: getIt.get<GetUserInfoUseCase>(),
+      ));
   getIt.registerSingleton<AddCommentsUseCase>(AddCommentsUseCase(
     commentsRepo: getIt.get<CommentsRepo>(),
   ));

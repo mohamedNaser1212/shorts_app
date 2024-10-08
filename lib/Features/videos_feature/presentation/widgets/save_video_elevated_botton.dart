@@ -9,7 +9,7 @@ class SaveElevatedBotton extends StatefulWidget {
       {super.key, required this.state, this.thumbnailFile});
 
   final TrimmerViewBodyState state;
-  final File? thumbnailFile; // Add thumbnailFile as a parameter
+  final File? thumbnailFile;
 
   @override
   State<SaveElevatedBotton> createState() => _SaveElevatedBottonState();
@@ -33,7 +33,6 @@ class _SaveElevatedBottonState extends State<SaveElevatedBotton> {
       widget.state.progressVisibility = true;
     });
 
-    // Here you can pass the thumbnail file with the video if needed
     widget.state.trimmer.saveTrimmedVideo(
       startValue: widget.state.startValue,
       endValue: widget.state.endValue,

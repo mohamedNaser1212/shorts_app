@@ -1,7 +1,7 @@
 import 'package:hive/hive.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
-import '../../../comments_feature/domain/comments_entity/comments_entity.dart';
+
 
 part 'video_entity.g.dart';
 
