@@ -33,12 +33,14 @@ class VideosRepoImpl extends VideosRepo {
     required String description,
     required String videoPath,
     required UserEntity user,
+    required String thumbnailPath,
   }) {
     return repoManager.call(action: () async {
       final video = await videosRemoteDataSource.uploadVideo(
         videoPath: videoPath,
         description: description,
         user: user,
+        thumbnailPath: thumbnailPath,
       );
       return video;
     });

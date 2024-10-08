@@ -16,6 +16,7 @@ abstract class VideosRemoteDataSource {
     required String description,
     required String videoPath,
     required UserEntity user,
+    required String thumbnailPath,
   });
   Future<List<VideoModel>> getFavouriteVideos();
 }
@@ -36,15 +37,18 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     required String description,
     required String videoPath,
     required UserEntity user,
+    required String thumbnailPath,
   }) async {
     final videoId = _uuid.v4();
-    final videoUrl =
-        await _uploadVideoToStorage(videoId: videoId, videoPath: videoPath);
+    
+    final videoUrl = await _uploadVideoToStorage(videoId: videoId, videoPath: videoPath);
+    final thumbnailUrl = await _uploadThumbnailToStorage(videoId: videoId, thumbnailPath: thumbnailPath);
+    
     VideoModel video = VideoModel(
       id: videoId,
       description: description,
       videoUrl: videoUrl,
-      thumbnail: '',
+      thumbnail: thumbnailUrl, 
       user: user,
     );
 
@@ -73,6 +77,18 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     return await snapshot.ref.getDownloadURL();
   }
 
+  Future<String> _uploadThumbnailToStorage({
+    required String videoId,
+    required String thumbnailPath,
+  }) async {
+    final Reference storageRef =
+        firebaseStorage.ref().child('thumbnails/$videoId.jpg'); 
+      
+    final UploadTask uploadTask = storageRef.putFile(File(thumbnailPath));
+    final TaskSnapshot snapshot = await uploadTask;
+    return await snapshot.ref.getDownloadURL();
+  }
+
   @override
   Future<List<VideoModel>> getFavouriteVideos() async {
     final querySnapshot = await firestore
@@ -84,46 +100,4 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
         .map((doc) => VideoModel.fromJson(doc.data()))
         .toList();
   }
-
-  // @override
-  // Future<bool> toggleFavouriteVideo({
-  //   required String videoId,
-  //   required UserEntity user,
-  // }) async {
-  //   final videoRef = firestore.collection(CollectionNames.videos).doc(videoId);
-  //   final userFavouritesRef = firestore
-  //       .collection(CollectionNames.users)
-  //       .doc(user.id)
-  //       .collection(CollectionNames.favourites)
-  //       .doc(videoId);
-
-  //   final videoDoc = await videoRef.get();
-
-  //   if (videoDoc.exists) {
-  //     final videoData = videoDoc.data() as Map<String, dynamic>;
-  //     final bool isCurrentlyFavourite = videoData['isFavourite'] ?? false;
-
-  //     // Update video favourite status
-  //     await videoRef.update({'isFavourite': !isCurrentlyFavourite});
-
-  //     // Update user's favourites list
-  //     if (!isCurrentlyFavourite) {
-  //       await userFavouritesRef.set({
-  //         'videoId': videoId,
-  //         'timestamp': FieldValue.serverTimestamp(),
-  //       });
-  //     } else {
-  //       await userFavouritesRef.delete();
-  //     }
-
-  //     print(isCurrentlyFavourite
-  //         ? 'Video removed from favourites'
-  //         : 'Video added to favourites');
-
-  //     return !isCurrentlyFavourite;
-  //   } else {
-  //     print('Video not found');
-  //     return false;
-  //   }
-  // }
 }

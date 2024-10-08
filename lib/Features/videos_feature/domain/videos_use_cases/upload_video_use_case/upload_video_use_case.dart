@@ -14,11 +14,13 @@ class UploadVideoUseCase {
     required String description,
     required String videoPath,
     required UserEntity user,
+    required String? thumbnailPath,
   }) async {
     return await videoRepository.uploadVideo(
       description: description,
       videoPath: videoPath,
       user: user,
+      thumbnailPath: thumbnailPath!,
     );
   }
 }

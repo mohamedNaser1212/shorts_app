@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/layout/presentation/screens/home_page.dart';
@@ -11,24 +13,24 @@ class PreviewPageBody extends StatelessWidget {
   const PreviewPageBody({
     super.key,
     required this.previewState,
+    this.thumbnailFile,
   });
 
-  // final VideoPlayerController _controller;
-  // final TextEditingController _descriptionController;
-  // final Preview widget;
   final PreviewPageState previewState;
+  final File? thumbnailFile; // Add thumbnailFile as a parameter
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<VideoCubit, VideoState>(
+    return BlocConsumer<VideoCubit, VideoState>( // Keep existing logic
       listener: (context, state) {
         if (state is VideoUploadedSuccessState) {
           previewState.descriptionController.clear();
           previewState.widget.outputPath = '';
           NavigationManager.navigateAndFinish(
-              context: context,
-              screen: HomeScreen(
-                currentUser: UserInfoCubit.get(context).userEntity!,
-              ));
+            context: context,
+            screen: HomeScreen(
+              currentUser: UserInfoCubit.get(context).userEntity!,
+            ));
         }
       },
       builder: (context, state) {
@@ -41,6 +43,17 @@ class PreviewPageBody extends StatelessWidget {
                     ? VideoPlayer(previewState.controller)
                     : const Center(child: CircularProgressIndicator()),
               ),
+              // Display thumbnail if needed
+              if (thumbnailFile != null)
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Image.file(
+                    thumbnailFile!,
+                    height: 100,
+                    width: 100,
+                    fit: BoxFit.cover,
+                  ),
+                ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
@@ -53,12 +66,14 @@ class PreviewPageBody extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   VideoCubit.get(context).uploadVideo(
-                    videoPath: previewState.widget.outputPath,
                     description: previewState.descriptionController.text,
+                    videoPath: previewState.widget.outputPath,
                     user: UserInfoCubit.get(context).userEntity!,
+                    thumbnailPath: thumbnailFile?.path,
+                    // Add logic to handle thumbnail if needed
                   );
                 },
-                child: const Text('Upload'),
+                child: const Text('Upload Video'),
               ),
             ],
           ),

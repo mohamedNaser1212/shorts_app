@@ -30,27 +30,30 @@ class VideoCubit extends Cubit<VideoState> {
     return null;
   }
 
-  Future<void> uploadVideo({
-    required String videoPath,
-    required String description,
-    required UserEntity user,
-  }) async {
-    emit(VideoUploadLoadingState());
+Future<void> uploadVideo({
+  required String videoPath,
+  required String description,
+  required UserEntity user,
+  String? thumbnailPath, // Add thumbnailPath parameter
+}) async {
+  emit(VideoUploadLoadingState());
 
-    final result = await uploadVideoUseCase.call(
-      description: description,
-      videoPath: videoPath,
-      
-      user: user,
-    );
-    result.fold(
-      (failure) {
-        print('Error uploading video: ${failure.message}');
-        emit(VideoUploadErrorState(message: failure.message));
-      },
-      (video) => emit(VideoUploadedSuccessState(videoUrl: video.videoUrl)),
-    );
-  }
+  final result = await uploadVideoUseCase.call(
+    description: description,
+    videoPath: videoPath,
+    thumbnailPath: thumbnailPath, // Pass the thumbnail path to the use case
+    user: user,
+  );
+
+  result.fold(
+    (failure) {
+      print('Error uploading video: ${failure.message}');
+      emit(VideoUploadErrorState(message: failure.message));
+    },
+    (video) => emit(VideoUploadedSuccessState(videoUrl: video.videoUrl)),
+  );
+}
+
 
   void selectVideo(String videoPath) {
     emit(VideoUploadedSuccessState(videoUrl: videoPath));

@@ -11,5 +11,6 @@ abstract class VideosRepo {
     required String description,
     required String videoPath,
     required UserEntity user,
+    required String thumbnailPath,
   });
 }
