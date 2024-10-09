@@ -36,28 +36,40 @@ class _TrimViewerWidgetState extends State<TrimViewerWidget> {
           setState(() {
             widget.state.startValue = value;
             _updateVideoPosition();
-            widget.state.generateThumbnail(value.toInt()); // Update thumbnail on start change
+            // Generate new thumbnail at the start position
+            if (widget.state.thumbnailFile != null) {
+              widget.state.generateThumbnail(
+                  value.toDouble(), widget.state.thumbnailFile!.path);
+            }
           });
         },
         onChangeEnd: (value) {
           setState(() {
             widget.state.endValue = value;
-
-            if (widget.state.videoController.positionNotifier.value.inSeconds > widget.state.endValue) {
+            // Update video position if it's beyond the end value
+            if (widget.state.videoController.positionNotifier.value.inSeconds >
+                widget.state.endValue) {
               _updateVideoPosition();
             }
 
-            widget.state.generateThumbnail(value.toInt()); // Update thumbnail on end change
+            // Generate thumbnail at the end position
+            if (widget.state.thumbnailFile != null) {
+              widget.state.generateThumbnail(
+                  value.toDouble(), widget.state.thumbnailFile!.path);
+            }
           });
         },
-        onChangePlaybackState: (value) => setState(() {
-          widget.state.isPlaying = value;
-        }),
+        onChangePlaybackState: (value) {
+          setState(() {
+            widget.state.isPlaying = value;
+          });
+        },
       ),
     );
   }
 
   void _updateVideoPosition() {
-    widget.state.videoController.seekTo(Duration(seconds: widget.state.startValue.toInt()));
+    widget.state.videoController
+        .seekTo(Duration(seconds: widget.state.startValue.toInt()));
   }
 }

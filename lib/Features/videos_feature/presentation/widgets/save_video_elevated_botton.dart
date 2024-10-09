@@ -5,8 +5,11 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/preview_page
 import 'package:shorts/Features/videos_feature/presentation/widgets/trimmer_view_body.dart';
 
 class SaveElevatedBotton extends StatefulWidget {
-  const SaveElevatedBotton(
-      {super.key, required this.state, this.thumbnailFile});
+  const SaveElevatedBotton({
+    super.key,
+    required this.state,
+    this.thumbnailFile,
+  });
 
   final TrimmerViewBodyState state;
   final File? thumbnailFile;
@@ -36,18 +39,26 @@ class _SaveElevatedBottonState extends State<SaveElevatedBotton> {
     widget.state.trimmer.saveTrimmedVideo(
       startValue: widget.state.startValue,
       endValue: widget.state.endValue,
-      onSave: (outputPath) {
+      onSave: (outputPath) async {
         setState(() {
           widget.state.progressVisibility = false;
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(
-              builder: (context) => PreviewPage(
-                  outputPath: outputPath ?? '',
-                  thumbnailFile: widget.thumbnailFile),
-            ),
-          );
         });
+
+        await widget.state.generateThumbnail(
+          widget.state.startValue,
+          outputPath!,
+        );
+
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+            builder: (context) => PreviewPage(
+              outputPath: outputPath,
+              thumbnailFile: widget
+                  .state.thumbnailFile, // Pass the newly generated thumbnail
+            ),
+          ),
+        );
       },
     );
   }

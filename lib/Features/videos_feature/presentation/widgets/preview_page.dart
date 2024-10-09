@@ -1,7 +1,9 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/preview_page_body.dart';
 import 'package:video_player/video_player.dart';
+
 import '../../../../core/widgets/custom_app_bar.dart';
 
 // ignore: must_be_immutable
@@ -44,7 +46,7 @@ class PreviewPageState extends State<PreviewPage> {
       ),
       body: PreviewPageBody(
         previewState: this,
-        thumbnailFile: widget.thumbnailFile, 
+        thumbnailFile: widget.thumbnailFile,
       ),
     );
   }

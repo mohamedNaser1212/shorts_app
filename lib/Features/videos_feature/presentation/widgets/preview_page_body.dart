@@ -19,22 +19,22 @@ class PreviewPageBody extends StatelessWidget {
   });
 
   final PreviewPageState previewState;
-  final File? thumbnailFile; 
+  final File? thumbnailFile;
   final Uuid _uuid = const Uuid();
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<VideoCubit, VideoState>(
-      // Keep existing logic
       listener: (context, state) {
         if (state is VideoUploadedSuccessState) {
           previewState.descriptionController.clear();
           previewState.widget.outputPath = '';
           NavigationManager.navigateAndFinish(
-              context: context,
-              screen: HomeScreen(
-                currentUser: UserInfoCubit.get(context).userEntity!,
-              ));
+            context: context,
+            screen: HomeScreen(
+              currentUser: UserInfoCubit.get(context).userEntity!,
+            ),
+          );
         }
       },
       builder: (context, state) {
@@ -47,7 +47,7 @@ class PreviewPageBody extends StatelessWidget {
                     ? VideoPlayer(previewState.controller)
                     : const Center(child: CircularProgressIndicator()),
               ),
-              // Display thumbnail if needed
+              // Display thumbnail if available
               if (thumbnailFile != null)
                 Padding(
                   padding: const EdgeInsets.all(8.0),
@@ -63,20 +63,28 @@ class PreviewPageBody extends StatelessWidget {
                 child: TextFormField(
                   controller: previewState.descriptionController,
                   decoration: const InputDecoration(
-                    labelText: 'Description',
+                    labelText: 'Video Description',
+                    border: OutlineInputBorder(),
                   ),
                 ),
               ),
+              const SizedBox(height: 10),
+              if (state is VideoUploadLoadingState)
+                const CircularProgressIndicator(),
               ElevatedButton(
                 onPressed: () {
-                  VideoCubit.get(context).uploadVideo(
-                      videoModel: VideoModel(
-                    id: _uuid.v4(),
-                    thumbnail: thumbnailFile!.path,
-                    videoUrl: previewState.widget.outputPath,
-                    user: UserInfoCubit.get(context).userEntity!,
-                    description: previewState.descriptionController.text,
-                  ));
+                  // Handle upload action
+                  if (previewState.descriptionController.text.isNotEmpty) {
+                    final video = VideoModel(
+                      id: _uuid.v1(),
+                      description: previewState.descriptionController.text,
+                      videoUrl: previewState.widget.outputPath,
+                      user: UserInfoCubit.get(context).userEntity!,
+                      thumbnail: thumbnailFile?.path ?? '', // Handle null case
+                    );
+
+                    VideoCubit.get(context).uploadVideo(videoModel: video);
+                  }
                 },
                 child: const Text('Upload Video'),
               ),
