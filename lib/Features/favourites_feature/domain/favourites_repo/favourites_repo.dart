@@ -3,14 +3,14 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 
 import '../../../../core/managers/error_manager/failure.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
-import '../favourite_entitiy.dart';
+import '../favourites_entity/favourite_entitiy.dart';
 
 abstract class FavouritesRepo {
   Future<Either<Failure, List<FavouritesEntity>>> getFavouriteVideos({
     required UserEntity user,
   });
   Future<Either<Failure, bool>> toggleFavouriteVideo({
-    required  VideoEntity videoEntity,
+    required VideoEntity videoEntity,
     required UserEntity userModel,
   });
 }

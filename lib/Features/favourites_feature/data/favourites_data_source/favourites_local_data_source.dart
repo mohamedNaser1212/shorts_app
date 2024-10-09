@@ -1,7 +1,7 @@
 import 'package:shorts/core/network/Hive_manager/hive_helper.dart';
 
 import '../../../../../core/network/Hive_manager/hive_boxes_names.dart';
-import '../../domain/favourite_entitiy.dart';
+import '../../domain/favourites_entity/favourite_entitiy.dart';
 
 abstract class FavouritesLocalDataSource {
   const FavouritesLocalDataSource._();

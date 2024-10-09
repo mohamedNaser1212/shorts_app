@@ -3,7 +3,7 @@ import 'package:shorts/Features/comments_feature/domain/comments_entity/comments
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
-import '../../../Features/favourites_feature/domain/favourite_entitiy.dart';
+import '../../../Features/favourites_feature/domain/favourites_entity/favourite_entitiy.dart';
 import 'hive_boxes_names.dart';
 import 'hive_helper.dart';
 
@@ -30,7 +30,7 @@ class HiveManager implements LocalStorageManager {
     ]);
   }
 
- Future<void> _openBox<T>(String boxName) async {
+  Future<void> _openBox<T>(String boxName) async {
     try {
       if (!_openedBoxes.containsKey(boxName)) {
         final box = await Hive.openBox<T>(boxName);

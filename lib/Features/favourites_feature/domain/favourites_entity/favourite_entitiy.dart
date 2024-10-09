@@ -1,6 +1,6 @@
 import 'package:hive/hive.dart';
 
-import '../../../core/user_info/domain/user_entity/user_entity.dart';
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
 part 'favourite_entitiy.g.dart';
 

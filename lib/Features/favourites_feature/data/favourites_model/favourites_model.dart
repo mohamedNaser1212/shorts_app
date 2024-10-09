@@ -1,4 +1,4 @@
-import 'package:shorts/Features/favourites_feature/domain/favourite_entitiy.dart';
+import 'package:shorts/Features/favourites_feature/domain/favourites_entity/favourite_entitiy.dart';
 import 'package:shorts/core/utils/constants/request_data_names.dart';
 
 import '../../../authentication_feature/data/user_model/user_model.dart';

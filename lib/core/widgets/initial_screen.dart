@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
 import 'package:shorts/Features/layout/presentation/screens/home_page.dart';
 
 import '../../Features/authentication_feature/presentation/screens/login_screen.dart';
@@ -54,6 +55,7 @@ class _InitialScreenState extends State<InitialScreen> {
         );
       } else {
         UserInfoCubit.get(context).userEntity = state.userEntity;
+        FavouritesCubit.get(context).getFavourites(user: state.userEntity!);
         NavigationManager.navigateAndFinish(
           context: context,
           screen: HomeScreen(currentUser: state.userEntity!),
