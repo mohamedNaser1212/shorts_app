@@ -9,8 +9,25 @@ class VideoModel extends VideoEntity {
     required super.thumbnail,
     required super.videoUrl,
     required super.user,
-    super.description,
+    required super.description,
   });
+
+  // Add the copyWith method
+  VideoModel copyWith({
+    String? id,
+    String? thumbnail,
+    String? videoUrl,
+    UserEntity? user,
+    String? description,
+  }) {
+    return VideoModel(
+      id: id ?? this.id,
+      thumbnail: thumbnail ?? this.thumbnail,
+      videoUrl: videoUrl ?? this.videoUrl,
+      user: user ?? this.user,
+      description: description ?? this.description,
+    );
+  }
 
   factory VideoModel.fromJson(Map<String, dynamic> json) {
     return VideoModel(
@@ -19,7 +36,6 @@ class VideoModel extends VideoEntity {
       videoUrl: json[RequestDataNames.videoUrl] ?? '',
       description: json[RequestDataNames.description],
       user: UserEntity.fromJson(json[RequestDataNames.user]),
-    
     );
   }
 

@@ -28,7 +28,7 @@ class UserProfileSection extends StatelessWidget {
           child: CustomListTile(
             leading: UserProfilePicture(state: state),
             title: state.widget.videoEntity.user.name,
-            subtitle: state.widget.videoEntity.description ?? '',
+            subtitle: state.widget.videoEntity.description ,
             color: Colors.white,
           ),
         ),

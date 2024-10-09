@@ -3,10 +3,12 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/layout/presentation/screens/home_page.dart';
+import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/preview_page.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
+import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 
 class PreviewPageBody extends StatelessWidget {
@@ -17,20 +19,22 @@ class PreviewPageBody extends StatelessWidget {
   });
 
   final PreviewPageState previewState;
-  final File? thumbnailFile; // Add thumbnailFile as a parameter
+  final File? thumbnailFile; 
+  final Uuid _uuid = const Uuid();
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<VideoCubit, VideoState>( // Keep existing logic
+    return BlocConsumer<VideoCubit, VideoState>(
+      // Keep existing logic
       listener: (context, state) {
         if (state is VideoUploadedSuccessState) {
           previewState.descriptionController.clear();
           previewState.widget.outputPath = '';
           NavigationManager.navigateAndFinish(
-            context: context,
-            screen: HomeScreen(
-              currentUser: UserInfoCubit.get(context).userEntity!,
-            ));
+              context: context,
+              screen: HomeScreen(
+                currentUser: UserInfoCubit.get(context).userEntity!,
+              ));
         }
       },
       builder: (context, state) {
@@ -66,12 +70,13 @@ class PreviewPageBody extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   VideoCubit.get(context).uploadVideo(
-                    description: previewState.descriptionController.text,
-                    videoPath: previewState.widget.outputPath,
+                      videoModel: VideoModel(
+                    id: _uuid.v4(),
+                    thumbnail: thumbnailFile!.path,
+                    videoUrl: previewState.widget.outputPath,
                     user: UserInfoCubit.get(context).userEntity!,
-                    thumbnailPath: thumbnailFile?.path,
-                    // Add logic to handle thumbnail if needed
-                  );
+                    description: previewState.descriptionController.text,
+                  ));
                 },
                 child: const Text('Upload Video'),
               ),

@@ -26,20 +26,12 @@ class UserInfoCubit extends Cubit<UserInfoState> {
         emit(GetUserInfoErrorState(message: failure.message));
       },
       (user) {
-        // userModel = UserModel(
-        //   id: user!.id,
-        //   name: user.name,
-        //   email: user.email,
-        //   phone: user.phone,
-        //   fcmToken: user.fcmToken,
-        // );
+   
+   
         print(userModel?.name);
         userEntity = user;
-        // print(userEntity?.name);
-        // print(userEntity?.id);
-        // print(userEntity?.phone);
-        // print(userEntity?.email);
-        // print(userEntity?.fcmToken);
+       
+       
         emit(GetUserInfoSuccessState(userEntity: userEntity));
       },
     );
