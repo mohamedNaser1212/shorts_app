@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/preview_page.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/trimmer_view_body.dart';
+import 'package:shorts/core/functions/navigations_functions.dart';
 
 class SaveElevatedBotton extends StatefulWidget {
   const SaveElevatedBotton({
@@ -48,15 +49,11 @@ class _SaveElevatedBottonState extends State<SaveElevatedBotton> {
           widget.state.startValue,
           outputPath!,
         );
-
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) => PreviewPage(
-              outputPath: outputPath,
-              thumbnailFile: widget
-                  .state.thumbnailFile, // Pass the newly generated thumbnail
-            ),
+        NavigationManager.navigateAndFinish(
+          context: context,
+          screen: PreviewPage(
+            outputPath: outputPath,
+            thumbnailFile: widget.state.thumbnailFile,
           ),
         );
       },

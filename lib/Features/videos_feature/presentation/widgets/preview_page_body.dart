@@ -43,21 +43,45 @@ class PreviewPageBody extends StatelessWidget {
             children: [
               AspectRatio(
                 aspectRatio: previewState.controller.value.aspectRatio,
-                child: previewState.controller.value.isInitialized
-                    ? VideoPlayer(previewState.controller)
-                    : const Center(child: CircularProgressIndicator()),
-              ),
-              // Display thumbnail if available
-              if (thumbnailFile != null)
-                Padding(
-                  padding: const EdgeInsets.all(8.0),
-                  child: Image.file(
-                    thumbnailFile!,
-                    height: 100,
-                    width: 100,
-                    fit: BoxFit.cover,
-                  ),
+                child: Stack(
+                  alignment: Alignment.center,
+                  children: [
+                    // Display thumbnail if available
+                    if (thumbnailFile != null)
+                      GestureDetector(
+                        onTap: () {
+                          // Navigate to a new page to show the video
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => VideoPlayerScreen(
+                                videoPath: previewState.widget.outputPath,
+                              ),
+                            ),
+                          );
+                        },
+                        child: Image.file(
+                          thumbnailFile!,
+                          fit: BoxFit.cover,
+                        ),
+                      ),
+                    // Add the play icon on top of the thumbnail
+                    if (thumbnailFile != null)
+                      const Icon(
+                        Icons.play_circle_fill,
+                        size: 60,
+                        color: Colors.white,
+                      ),
+                    // Show video player if it's initialized
+                    if (previewState.controller.value.isInitialized &&
+                        thumbnailFile == null)
+                      VideoPlayer(previewState.controller),
+                    // Show a loading indicator if the video is not initialized
+                    if (!previewState.controller.value.isInitialized)
+                      const Center(child: CircularProgressIndicator()),
+                  ],
                 ),
+              ),
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
@@ -92,6 +116,67 @@ class PreviewPageBody extends StatelessWidget {
           ),
         );
       },
+    );
+  }
+}
+
+class VideoPlayerScreen extends StatefulWidget {
+  final String videoPath;
+
+  const VideoPlayerScreen({super.key, required this.videoPath});
+
+  @override
+  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
+}
+
+class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
+  late VideoPlayerController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = VideoPlayerController.file(File(widget.videoPath))
+      ..initialize().then((_) {
+        setState(() {});
+      });
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(title: const Text('Video Player')),
+      body: Center(
+        child: AspectRatio(
+          aspectRatio: 16 / 9,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              VideoPlayer(_controller),
+              // Pause icon to play video
+              IconButton(
+                icon: Icon(
+                  _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
+                  size: 60,
+                  color: Colors.white,
+                ),
+                onPressed: () {
+                  setState(() {
+                    _controller.value.isPlaying
+                        ? _controller.pause()
+                        : _controller.play();
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
+      ),
     );
   }
 }
