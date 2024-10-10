@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/video_contents_screen.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_contents_screen.dart';
 
 class UserProfilePicture extends StatelessWidget {
   const UserProfilePicture({

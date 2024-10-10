@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/video_player_gesture.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_player_gesture.dart';
 import 'package:video_player/video_player.dart';
 
 class ThumbnailPage extends StatefulWidget {

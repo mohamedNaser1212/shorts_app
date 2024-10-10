@@ -14,7 +14,7 @@ import '../../Features/authentication_feature/data/user_model/login_request_mode
 import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
 import '../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
 import '../../Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
-import '../../Features/videos_feature/presentation/widgets/trimmer_view.dart';
+import '../../Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_view.dart';
 import '../managers/styles_manager/color_manager.dart';
 
 // ignore: must_be_immutable

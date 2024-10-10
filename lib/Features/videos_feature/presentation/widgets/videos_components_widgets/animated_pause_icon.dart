@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:shorts/core/widgets/pause_icon_widget.dart';
+import 'package:shorts/core/widgets/play_icon_widget.dart';
 
-import '../../../../core/video_notifiers/video_notifier.dart';
+import '../../../../../core/video_notifiers/video_notifier.dart';
 
 class AnimatedPauseIcon extends StatefulWidget {
   const AnimatedPauseIcon({
@@ -38,13 +40,12 @@ class _AnimatedPauseIconState extends State<AnimatedPauseIcon> {
       child: AnimatedOpacity(
         opacity: widget.videoProvider.showPlayPauseIcon ? 1.0 : 0.0,
         duration: const Duration(milliseconds: 300),
-        child: Icon(
-          widget.videoProvider.controller?.value.isPlaying ?? false
-              ? Icons.pause
-              : Icons.play_arrow,
-          color: Colors.white,
-          size: 80,
-        ),
+        child: 
+         (( widget.videoProvider.controller?.value.isPlaying ?? false)
+              ? const PauseIconWidget()
+              : const PlayIconWidget()) ,
+   
+        
       ),
     );
   }

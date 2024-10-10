@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
-import '../../Features/videos_feature/presentation/widgets/thumbnail_page.dart';
+import '../../Features/videos_feature/presentation/widgets/videos_uploading_widgets/thumbnail_page.dart';
 
 class ThumbnailWidget extends StatefulWidget {
   const ThumbnailWidget({super.key, this.videoPath});

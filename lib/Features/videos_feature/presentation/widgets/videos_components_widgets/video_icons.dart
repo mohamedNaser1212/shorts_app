@@ -7,7 +7,7 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 import 'package:shorts/core/video_notifiers/video_notifier.dart';
 import 'package:shorts/core/notification_service/notification_helper.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
-import 'comments_bottom_sheet.dart';
+import '../comments_widgets/comments_bottom_sheet.dart';
 
 class VideoIcons extends StatelessWidget {
   final VideoController videoProvider;

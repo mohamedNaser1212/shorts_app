@@ -5,21 +5,46 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/layout/presentation/screens/home_page.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/preview_page.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/play_icon_widget.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_page.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:uuid/uuid.dart';
 import 'package:video_player/video_player.dart';
 
-class PreviewPageBody extends StatelessWidget {
+class PreviewPageBody extends StatefulWidget {
   const PreviewPageBody({
     super.key,
     required this.previewState,
     this.thumbnailFile,
   });
-
   final PreviewPageState previewState;
   final File? thumbnailFile;
+
+  @override
+  State<PreviewPageBody> createState() => _PreviewPageBodyState();
+}
+
+class _PreviewPageBodyState extends State<PreviewPageBody> {
+  late VideoPlayerController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = VideoPlayerController.file(File(widget.thumbnailFile!.path))
+      ..initialize().then((_) {
+        setState(() {});
+        controller.play();
+      });
+  }
+
+  @override
+  void dispose() {
+    // TODO: implement dispose
+    super.dispose();
+    controller.dispose();
+  }
+
   final Uuid _uuid = const Uuid();
 
   @override
@@ -27,8 +52,8 @@ class PreviewPageBody extends StatelessWidget {
     return BlocConsumer<VideoCubit, VideoState>(
       listener: (context, state) {
         if (state is VideoUploadedSuccessState) {
-          previewState.descriptionController.clear();
-          previewState.widget.outputPath = '';
+          widget.previewState.descriptionController.clear();
+
           NavigationManager.navigateAndFinish(
             context: context,
             screen: HomeScreen(
@@ -42,42 +67,42 @@ class PreviewPageBody extends StatelessWidget {
           child: Column(
             children: [
               AspectRatio(
-                aspectRatio: previewState.controller.value.aspectRatio,
+                aspectRatio: controller.value.aspectRatio,
                 child: Stack(
                   alignment: Alignment.center,
                   children: [
                     // Display thumbnail if available
-                    if (thumbnailFile != null)
+                    if (widget.thumbnailFile != null)
                       GestureDetector(
                         onTap: () {
-                          // Navigate to a new page to show the video
                           Navigator.push(
                             context,
                             MaterialPageRoute(
                               builder: (context) => VideoPlayerScreen(
-                                videoPath: previewState.widget.outputPath,
+                                videoPath:
+                                    widget.previewState.widget.outputPath,
                               ),
                             ),
                           );
                         },
                         child: Image.file(
-                          thumbnailFile!,
+                          widget.thumbnailFile!,
                           fit: BoxFit.cover,
                         ),
                       ),
                     // Add the play icon on top of the thumbnail
-                    if (thumbnailFile != null)
+                    if (widget.thumbnailFile != null)
                       const Icon(
                         Icons.play_circle_fill,
                         size: 60,
                         color: Colors.white,
                       ),
                     // Show video player if it's initialized
-                    if (previewState.controller.value.isInitialized &&
-                        thumbnailFile == null)
-                      VideoPlayer(previewState.controller),
+                    if (controller.value.isInitialized &&
+                        widget.thumbnailFile == null)
+                      VideoPlayer(controller),
                     // Show a loading indicator if the video is not initialized
-                    if (!previewState.controller.value.isInitialized)
+                    if (!controller.value.isInitialized)
                       const Center(child: CircularProgressIndicator()),
                   ],
                 ),
@@ -85,7 +110,7 @@ class PreviewPageBody extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.all(8.0),
                 child: TextFormField(
-                  controller: previewState.descriptionController,
+                  controller: widget.previewState.descriptionController,
                   decoration: const InputDecoration(
                     labelText: 'Video Description',
                     border: OutlineInputBorder(),
@@ -98,13 +123,16 @@ class PreviewPageBody extends StatelessWidget {
               ElevatedButton(
                 onPressed: () {
                   // Handle upload action
-                  if (previewState.descriptionController.text.isNotEmpty) {
+                  if (widget
+                      .previewState.descriptionController.text.isNotEmpty) {
                     final video = VideoModel(
                       id: _uuid.v1(),
-                      description: previewState.descriptionController.text,
-                      videoUrl: previewState.widget.outputPath,
+                      description:
+                          widget.previewState.descriptionController.text,
+                      videoUrl: widget.previewState.widget.outputPath,
                       user: UserInfoCubit.get(context).userEntity!,
-                      thumbnail: thumbnailFile?.path ?? '', // Handle null case
+                      thumbnail:
+                          widget.thumbnailFile?.path ?? '', // Handle null case
                     );
 
                     VideoCubit.get(context).uploadVideo(videoModel: video);
@@ -126,16 +154,16 @@ class VideoPlayerScreen extends StatefulWidget {
   const VideoPlayerScreen({super.key, required this.videoPath});
 
   @override
-  _VideoPlayerScreenState createState() => _VideoPlayerScreenState();
+  VideoPlayerScreenState createState() => VideoPlayerScreenState();
 }
 
-class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
-  late VideoPlayerController _controller;
+class VideoPlayerScreenState extends State<VideoPlayerScreen> {
+  late VideoPlayerController controller;
 
   @override
   void initState() {
     super.initState();
-    _controller = VideoPlayerController.file(File(widget.videoPath))
+    controller = VideoPlayerController.file(File(widget.videoPath))
       ..initialize().then((_) {
         setState(() {});
       });
@@ -143,7 +171,7 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
 
   @override
   void dispose() {
-    _controller.dispose();
+    controller.dispose();
     super.dispose();
   }
 
@@ -157,22 +185,12 @@ class _VideoPlayerScreenState extends State<VideoPlayerScreen> {
           child: Stack(
             alignment: Alignment.center,
             children: [
-              VideoPlayer(_controller),
-              // Pause icon to play video
-              IconButton(
-                icon: Icon(
-                  _controller.value.isPlaying ? Icons.pause : Icons.play_arrow,
-                  size: 60,
-                  color: Colors.white,
-                ),
-                onPressed: () {
-                  setState(() {
-                    _controller.value.isPlaying
-                        ? _controller.pause()
-                        : _controller.play();
-                  });
-                },
+              VideoPlayer(controller),
+
+              PlayIcon(
+                videoPlayerScreenState: controller,
               ),
+            
             ],
           ),
         ),

@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/trimmer_view_body.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_view_body.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
 class TrimViewerWidget extends StatefulWidget {

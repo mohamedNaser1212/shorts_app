@@ -1,7 +1,7 @@
 
 import 'package:flutter/widgets.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/comment_item_widget.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/comments_bottom_sheet.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/comments_widgets/comment_item_widget.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/comments_widgets/comments_bottom_sheet.dart';
 
 class CommentsListView extends StatelessWidget {
   const CommentsListView({

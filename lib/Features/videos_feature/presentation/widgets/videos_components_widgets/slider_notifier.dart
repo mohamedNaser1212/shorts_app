@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/video_notifiers/video_notifier.dart';
+import '../../../../../core/video_notifiers/video_notifier.dart';
 import 'duration_notifier_widget.dart';
 
 class SliderNotifier extends StatefulWidget {

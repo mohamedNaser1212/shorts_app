@@ -2,14 +2,14 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/play_icon_widget.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/progress_visibility_widget.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/save_video_elevated_botton.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/trimmer_viewer_widget.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/play_icon_widget.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/progress_visibility_widget.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/save_video_elevated_botton.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_viewer_widget.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
-import '../../../../core/video_notifiers/video_notifier.dart';
+import '../../../../../core/video_notifiers/video_notifier.dart';
 
 class TrimmerViewBody extends StatefulWidget {
   const TrimmerViewBody({super.key, required this.file});
