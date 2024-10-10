@@ -32,9 +32,9 @@ class LoginScreen extends StatelessWidget {
   Widget _builder(BuildContext context, LoginState state) {
     return CustomProgressIndicator(
       isLoading: state is AppLoginLoadingState,
-      child: Scaffold(
+      child: const Scaffold(
         appBar: CustomAppBar(title: 'Login', showLeadingIcon: false),
-        body: const LoginScreenBody(),
+        body: LoginScreenBody(),
       ),
     );
   }

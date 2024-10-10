@@ -1,7 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/core/widgets/pause_icon_widget.dart';
-import 'package:shorts/core/widgets/play_icon_widget.dart';
-
 import '../../../../../core/video_notifiers/video_notifier.dart';
 
 class AnimatedPauseIcon extends StatefulWidget {
@@ -16,21 +13,37 @@ class AnimatedPauseIcon extends StatefulWidget {
   State<AnimatedPauseIcon> createState() => _AnimatedPauseIconState();
 }
 
-class _AnimatedPauseIconState extends State<AnimatedPauseIcon> {
+class _AnimatedPauseIconState extends State<AnimatedPauseIcon>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _animationController;
   late final VoidCallback _listener;
 
   @override
   void initState() {
     super.initState();
+    _animationController = AnimationController(
+      vsync: this,
+      duration: const Duration(milliseconds: 300),
+    );
+
+    // Set listener to update UI
     _listener = () {
-      setState(() {});
+      setState(() {
+        if (widget.videoProvider.controller?.value.isPlaying ?? false) {
+          _animationController.forward(); // Play icon animation
+        } else {
+          _animationController.reverse(); // Pause icon animation
+        }
+      });
     };
+
     widget.videoProvider.addListener(_listener);
   }
 
   @override
   void dispose() {
     widget.videoProvider.removeListener(_listener);
+    _animationController.dispose();
     super.dispose();
   }
 
@@ -40,12 +53,12 @@ class _AnimatedPauseIconState extends State<AnimatedPauseIcon> {
       child: AnimatedOpacity(
         opacity: widget.videoProvider.showPlayPauseIcon ? 1.0 : 0.0,
         duration: const Duration(milliseconds: 300),
-        child: 
-         (( widget.videoProvider.controller?.value.isPlaying ?? false)
-              ? const PauseIconWidget()
-              : const PlayIconWidget()) ,
-   
-        
+        child: AnimatedIcon(
+          icon: AnimatedIcons.play_pause, // Play and pause animation
+          progress: _animationController, // Animation progress
+          size: 60.0,
+          color: Colors.white, // You can customize the icon color
+        ),
       ),
     );
   }

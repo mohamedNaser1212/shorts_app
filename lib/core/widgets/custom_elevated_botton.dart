@@ -5,10 +5,15 @@ import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/login_screen_body.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
 import 'package:shorts/Features/favourites_feature/presentation/screens/favourites_screen.dart';
+import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/video_page.dart';
+import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_page.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
+import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
+import 'package:uuid/uuid.dart';
 
 import '../../Features/authentication_feature/data/user_model/login_request_model.dart';
 import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
@@ -58,6 +63,31 @@ class CustomElevatedButton extends StatelessWidget {
     );
   }
 
+  factory CustomElevatedButton.uploadVideo({
+    required BuildContext context,
+    required PreviewPageState previewState,
+    required File? thumbnailFile,
+  }) {
+    return CustomElevatedButton._(
+      onPressed: () {
+        const Uuid uuid = Uuid();
+
+        if (previewState.descriptionController.text.isNotEmpty) {
+          final video = VideoModel(
+            id: uuid.v1(),
+            description: previewState.descriptionController.text,
+            videoUrl: previewState.widget.outputPath,
+            user: UserInfoCubit.get(context).userEntity!,
+            thumbnail: thumbnailFile?.path ?? '',
+          );
+
+          VideoCubit.get(context).uploadVideo(videoModel: video);
+        }
+      },
+      label: 'Upload Video',
+    );
+  }
+
   factory CustomElevatedButton.videoPageBotton({
     required BuildContext context,
   }) {
@@ -87,21 +117,23 @@ class CustomElevatedButton extends StatelessWidget {
     }
   }
 
-static void _registerAction(
-    BuildContext context, RegisterScreenFormState state) {
-  if (state.widget.formKey.currentState!.validate()) {
-    RegisterCubit.get(context).userRegister(
-      requestModel: RegisterRequestModel(
-        email: state.emailController.text,
-        password: state.passwordController.text,
-        name: state.nameController.text,
-        phone: state.phoneController.text,
-        bio: state.bioController.text.isNotEmpty ? state.bioController.text : 'Hey there i am using Shorts', // Nullable bio
-        profilePic: state.imageUrl ?? '', 
-      ),
-    );
+  static void _registerAction(
+      BuildContext context, RegisterScreenFormState state) {
+    if (state.widget.formKey.currentState!.validate()) {
+      RegisterCubit.get(context).userRegister(
+        requestModel: RegisterRequestModel(
+          email: state.emailController.text,
+          password: state.passwordController.text,
+          name: state.nameController.text,
+          phone: state.phoneController.text,
+          bio: state.bioController.text.isNotEmpty
+              ? state.bioController.text
+              : 'Hey there i am using Shorts', // Nullable bio
+          profilePic: state.imageUrl ?? '',
+        ),
+      );
+    }
   }
-}
 
   // Private navigation methods
   static void _navigateToFavouritesPage(
