@@ -5,11 +5,14 @@ import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/login_screen_body.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
 import 'package:shorts/Features/favourites_feature/presentation/screens/favourites_screen.dart';
+import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
+import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/video_page.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_page.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
+import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
@@ -53,6 +56,19 @@ class CustomElevatedButton extends StatelessWidget {
       label: 'Register',
     );
   }
+  factory CustomElevatedButton.editProfileButton({
+    required BuildContext context,
+    required EditProfileScreenState state,
+  }) {
+    return CustomElevatedButton._(
+      onPressed: () => _editProfileButtonOnPressed(
+        context: context,
+        editState: state,
+      ),
+      label: 'Edit Profile',
+    );
+  }
+
 
   factory CustomElevatedButton.favouritesPageBotton({
     required BuildContext context,
@@ -92,21 +108,11 @@ class CustomElevatedButton extends StatelessWidget {
     required File? thumbnailFile,
   }) {
     return CustomElevatedButton._(
-      onPressed: () {
-        const Uuid uuid = Uuid();
-
-        if (previewState.descriptionController.text.isNotEmpty) {
-          final video = VideoModel(
-            id: uuid.v1(),
-            description: previewState.descriptionController.text,
-            videoUrl: previewState.widget.outputPath,
-            user: UserInfoCubit.get(context).userEntity!,
-            thumbnail: thumbnailFile?.path ?? '',
-          );
-
-          VideoCubit.get(context).uploadVideo(videoModel: video);
-        }
-      },
+      onPressed: () => _uploadVideoOnPressed(
+        context: context,
+        previewState: previewState,
+        thumbnailFile: thumbnailFile,
+      ),
       label: 'Upload Video',
     );
   }
@@ -140,6 +146,37 @@ class CustomElevatedButton extends StatelessWidget {
     }
   }
 
+  static void _editProfileButtonOnPressed({
+    required BuildContext context,
+    required EditProfileScreenState editState,
+  }) {
+    if (editState.formKey.currentState!.validate()) {
+      final cubit = UpdateUserDataCubit.get(context);
+      UpdateUserDataCubit.get(context).userEntity =
+          UserInfoCubit.get(context).userEntity;
+      if (cubit.checkDataChanges(
+        name: editState.nameController.text,
+        email: editState.emailController.text,
+        phone: editState.phoneController.text,
+      )) {
+        cubit.updateUserData(
+          updateUserRequestModel: UpdateUserRequestModel(
+            name: editState.nameController.text,
+            email: editState.emailController.text,
+            phone: editState.phoneController.text,
+          ),
+          userId: UserInfoCubit.get(context).userEntity!.id!,
+        );
+      } else {
+        ToastHelper.showToast(
+          message: 'No changes detected. Your data is up-to-date.',
+          color: ColorController.greenAccent,
+        );
+     
+     
+      }
+    }
+  }
   static void _registerAction(
       BuildContext context, RegisterScreenFormState state) {
     if (state.widget.formKey.currentState!.validate()) {
@@ -151,10 +188,30 @@ class CustomElevatedButton extends StatelessWidget {
           phone: state.phoneController.text,
           bio: state.bioController.text.isNotEmpty
               ? state.bioController.text
-              : 'Hey there i am using Shorts', // Nullable bio
+              : 'Hey there i am using Shorts',
           profilePic: state.imageUrl ?? '',
         ),
       );
+    }
+  }
+
+  static void _uploadVideoOnPressed({
+    required BuildContext context,
+    required PreviewPageState previewState,
+    required File? thumbnailFile,
+  }) {
+    const Uuid uuid = Uuid();
+
+    if (previewState.descriptionController.text.isNotEmpty) {
+      final video = VideoModel(
+        id: uuid.v1(),
+        description: previewState.descriptionController.text,
+        videoUrl: previewState.widget.outputPath,
+        user: UserInfoCubit.get(context).userEntity!,
+        thumbnail: thumbnailFile?.path ?? '',
+      );
+
+      VideoCubit.get(context).uploadVideo(videoModel: video);
     }
   }
 
@@ -178,12 +235,12 @@ class CustomElevatedButton extends StatelessWidget {
     );
   }
 
-  static void pickImage({
-    required BuildContext context,
-    required EditProfileScreenState editState,
-  }) {
-    editState.pickImage;
-  }
+  // static void pickImage({
+  //   required BuildContext context,
+  //   required EditProfileScreenState editState,
+  // }) {
+  //   editState.pickImage;
+  // }
 
   static void _navigateToVideoPage(BuildContext context) {
     NavigationManager.navigateTo(

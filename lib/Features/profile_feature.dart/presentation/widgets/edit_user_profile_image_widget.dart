@@ -1,17 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
 
-class EditUserProfileImageWidgetState extends StatefulWidget {
-  const EditUserProfileImageWidgetState({super.key, required this.editState});
+class EditUserProfileImageWidget extends StatefulWidget {
+  const EditUserProfileImageWidget({super.key, required this.editState});
   final EditProfileScreenState editState;
 
   @override
-  State<EditUserProfileImageWidgetState> createState() =>
+  State<EditUserProfileImageWidget> createState() =>
       __EditUserProfileImageWidgetStateState();
 }
 
 class __EditUserProfileImageWidgetStateState
-    extends State<EditUserProfileImageWidgetState> {
+    extends State<EditUserProfileImageWidget> {
   @override
   Widget build(BuildContext context) {
     return GestureDetector(

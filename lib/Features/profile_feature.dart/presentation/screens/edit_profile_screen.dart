@@ -3,8 +3,10 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shorts/Features/profile_feature.dart/domain/use_case/update_user_data_use_case.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/edit_profile_screen_body.dart';
+import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/widgets/custom_progress_indicator.dart';
 
@@ -19,8 +21,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   final nameController = TextEditingController();
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
   String? profilePic;
-    File? imageFile;
+  File? imageFile;
   final ImagePicker _picker = ImagePicker();
 
   Future<void> pickImage() async {
@@ -31,7 +34,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       });
     }
   }
-  final formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
@@ -44,6 +46,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     nameController.dispose();
     emailController.dispose();
     phoneController.dispose();
+    profilePic = null;
+    imageFile = null;
     super.dispose();
   }
 
@@ -52,7 +56,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     return MultiBlocProvider(
       providers: [
         BlocProvider(
-          create: (context) => UpdateUserDataCubit(),
+          create: (context) => UpdateUserDataCubit(
+            updateUserDataUseCase: getIt.get<UpdateUserDataUseCase>(),
+          ),
         ),
       ],
       child: BlocBuilder<UserInfoCubit, UserInfoState>(

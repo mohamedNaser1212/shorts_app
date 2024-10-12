@@ -38,24 +38,26 @@ class _PreviewPageBodyState extends State<PreviewPageBody> {
   @override
   Widget build(BuildContext context) {
     return Center(
-      child: Column(
-        children: [
-          ThumbnailPreviewWidget(controller: controller, widget: widget),
-          const SizedBox(height: 10),
-          CustomTextFormField(
-            label: 'Video Description',
-            controller: widget.previewState.descriptionController,
-            keyboardType: TextInputType.text,
-          ),
-          const SizedBox(height: 10),
-        
-   
-          CustomElevatedButton.uploadVideo(
-            context: context,
-            previewState: widget.previewState,
-            thumbnailFile: widget.thumbnailFile,
-          ),
-        ],
+      child: SingleChildScrollView(
+        child: Column(
+          children: [
+            ThumbnailPreviewWidget(controller: controller, widget: widget),
+            const SizedBox(height: 10),
+            CustomTextFormField(
+              label: 'Video Description',
+              controller: widget.previewState.descriptionController,
+              keyboardType: TextInputType.text,
+            ),
+            const SizedBox(height: 10),
+          
+           
+            CustomElevatedButton.uploadVideo(
+              context: context,
+              previewState: widget.previewState,
+              thumbnailFile: widget.thumbnailFile,
+            ),
+          ],
+        ),
       ),
     );
     
