@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/login_screen_body.dart';
@@ -12,12 +11,10 @@ import 'package:shorts/Features/videos_feature/presentation/screens/video_page.d
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_page.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
-import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
 import 'package:uuid/uuid.dart';
-
 import '../../Features/authentication_feature/data/user_model/login_request_model.dart';
 import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
 import '../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';

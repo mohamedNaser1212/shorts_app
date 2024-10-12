@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-
 import '../../../../../core/video_notifiers/video_notifier.dart';
 
 class ThumbnailNotifier extends StatelessWidget {

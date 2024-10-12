@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/name_text_field.dart';
-import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
-
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/change_profile_picture_elevated_botton.dart';

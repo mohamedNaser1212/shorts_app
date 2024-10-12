@@ -1,4 +1,3 @@
-
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/use_case/update_user_data_use_case.dart';
@@ -25,8 +24,7 @@ class UpdateUserDataCubit extends Cubit<UpdateUserDataState> {
         (name != userEntity!.name ||
             email != userEntity!.email ||
             phone != userEntity!.phone ||
-            imageUrl != userEntity!.profilePic
-           );
+            imageUrl != userEntity!.profilePic);
   }
 
   Future<void> updateUserData({
