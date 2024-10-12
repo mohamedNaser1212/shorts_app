@@ -5,33 +5,44 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_compo
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_player_widget.dart';
 import 'package:shorts/core/video_notifiers/video_notifier.dart';
 
-class VideoListBody extends StatelessWidget {
+class VideoListBody extends StatefulWidget {
   const VideoListBody({
     super.key,
     required this.videoEntity,
-    required this.videoProvider,
+    required this.videoController,
   });
 
   final VideoEntity videoEntity;
-  final VideoController videoProvider;
+  final VideoController videoController;
+
+  @override
+  State<VideoListBody> createState() => _VideoListBodyState();
+}
+
+class _VideoListBodyState extends State<VideoListBody> {
+  @override
+  void dispose() {
+    super.dispose();
+    widget.videoController.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Colors.black,
       body: GestureDetector(
-        onTap: () => videoProvider.togglePlayPause(),
+        onTap: () => widget.videoController.togglePlayPause(),
         child: Stack(
           children: [
-            if (videoProvider.controller?.value.isInitialized ?? false)
+            if (widget.videoController.controller?.value.isInitialized ?? false)
               VideoPlayerWidget(
-                videoProvider: videoProvider,
+                videoProvider: widget.videoController,
               )
             else
-              ThumbnailNotifier(videoUrl: videoEntity.videoUrl),
+              ThumbnailNotifier(videoUrl: widget.videoEntity.videoUrl),
             VideoComponentsWidget(
-              videoEntity: videoEntity,
-              videoProvider: videoProvider,
+              videoEntity: widget.videoEntity,
+              videoProvider: widget.videoController,
             ),
           ],
         ),

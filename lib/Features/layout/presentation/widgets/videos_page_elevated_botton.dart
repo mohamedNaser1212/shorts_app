@@ -8,6 +8,6 @@ class VideoPageElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomElevatedButton.videoPageBotton(context: context);
+    return CustomElevatedButton.videoPageButton(context: context);
   }
 }

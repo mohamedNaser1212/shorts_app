@@ -32,7 +32,7 @@ class VideoListItem extends StatelessWidget {
   Widget _builder(context, videoProvider, child) {
     return VideoListBody(
       videoEntity: videoEntity,
-      videoProvider: videoProvider,
+      videoController: videoProvider,
     );
   }
 }

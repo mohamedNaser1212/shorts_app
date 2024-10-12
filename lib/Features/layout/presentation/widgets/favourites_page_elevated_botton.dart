@@ -12,7 +12,7 @@ class FavouritesPageElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return CustomElevatedButton.favouritesPageBotton(
+    return CustomElevatedButton.favouritesPageButton(
       context: context,
       currentUser: currentUser,
     );

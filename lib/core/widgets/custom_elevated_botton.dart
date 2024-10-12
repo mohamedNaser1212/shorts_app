@@ -66,7 +66,7 @@ class CustomElevatedButton extends StatelessWidget {
     );
   }
 
-  factory CustomElevatedButton.favouritesPageBotton({
+  factory CustomElevatedButton.favouritesPageButton({
     required BuildContext context,
     required UserEntity currentUser,
   }) {
@@ -113,7 +113,7 @@ class CustomElevatedButton extends StatelessWidget {
     );
   }
 
-  factory CustomElevatedButton.videoPageBotton({
+  factory CustomElevatedButton.videoPageButton({
     required BuildContext context,
   }) {
     return CustomElevatedButton._(
@@ -122,7 +122,7 @@ class CustomElevatedButton extends StatelessWidget {
     );
   }
 
-  factory CustomElevatedButton.chooseVideoPageBotton({
+  factory CustomElevatedButton.chooseVideoPageButton({
     required BuildContext context,
   }) {
     return CustomElevatedButton._(
@@ -142,7 +142,7 @@ class CustomElevatedButton extends StatelessWidget {
     }
   }
 
-static void _editProfileButtonOnPressed({
+  static void _editProfileButtonOnPressed({
     required BuildContext context,
     required EditProfileScreenState editState,
   }) {
@@ -161,16 +161,16 @@ static void _editProfileButtonOnPressed({
         imageUrl: newImageUrl,
       )) {
         //2233if (newImageUrl != currentImageUrl) {
-          
-          cubit.updateUserData(
-            updateUserRequestModel: UpdateUserRequestModel(
-              name: editState.nameController.text,
-              email: editState.emailController.text,
-              phone: editState.phoneController.text,
-              imageUrl: newImageUrl,
-            ),
-            userId: UserInfoCubit.get(context).userEntity!.id!,
-          );
+
+        cubit.updateUserData(
+          updateUserRequestModel: UpdateUserRequestModel(
+            name: editState.nameController.text,
+            email: editState.emailController.text,
+            phone: editState.phoneController.text,
+            imageUrl: newImageUrl,
+          ),
+          userId: UserInfoCubit.get(context).userEntity!.id!,
+        );
         // } else {
         //   ToastHelper.showToast(
         //     message: 'No changes detected. Your data is up-to-date.',
