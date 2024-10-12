@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/custom_elevated_botton.dart';
 
-class FavouritesPageElevatedBotton extends StatelessWidget {
-  const FavouritesPageElevatedBotton({
+class FavouritesPageElevatedButton extends StatelessWidget {
+  const FavouritesPageElevatedButton({
     super.key,
     required this.currentUser,
   });

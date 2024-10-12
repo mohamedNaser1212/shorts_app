@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
 import 'package:shorts/core/widgets/bio_text_form.dart';
 import 'package:shorts/core/widgets/password_text_field.dart';
 import 'package:shorts/core/widgets/phone_text_field.dart';
-import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
+
 import '../../../../core/widgets/email_text_field.dart';
 import 'name_text_field.dart';
 
@@ -18,20 +21,22 @@ class RegisterFormBody extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        const SizedBox(height: 30), 
+        const SizedBox(height: 30),
         Center(
           child: CircleAvatar(
             radius: 50,
-            backgroundImage:
-                state.imageFile != null ? FileImage(state.imageFile!) : null,
+            backgroundImage: state.imageFile != null
+                ? FileImage(File(state.imageFile!.path))
+                : null,
             child: state.imageFile == null
-                ? const Icon(Icons.person, size: 50) 
+                ? const Icon(Icons.person, size: 50)
                 : null,
           ),
         ),
         const SizedBox(height: 10),
         ElevatedButton(
-          onPressed: state.pickImage, // Call the pickImage method from the state
+          onPressed:
+              state.pickImage, // Call the pickImage method from the state
           child: const Text('Pick Image'),
         ),
         const SizedBox(height: 20),

@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/widgets/custom_icon_widget.dart';
 
 class PauseIconWidget extends StatelessWidget {

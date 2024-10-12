@@ -4,6 +4,8 @@ import 'package:shorts/Features/layout/presentation/widgets/favourites_page_elev
 import 'package:shorts/Features/layout/presentation/widgets/videos_page_elevated_botton.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
+import 'edit_profile_page_elevated_botton.dart';
+
 class HomeScreenBody extends StatelessWidget {
   const HomeScreenBody({
     super.key,
@@ -20,11 +22,14 @@ class HomeScreenBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const ChooseVideoPageElevatedBotton(),
+          const ChooseVideoPageElevatedButton(),
           const SizedBox(height: 20),
-          const VideoPageElevatedBotton(),
+          const VideoPageElevatedButton(),
           const SizedBox(height: 20),
-          FavouritesPageElevatedBotton(currentUser: currentUser),
+          FavouritesPageElevatedButton(currentUser: currentUser),
+          const SizedBox(height: 20),
+          const EditProfilePageElevatedButton(),
+          const SizedBox(height: 10),
         ],
       ),
     );

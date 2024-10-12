@@ -19,6 +19,7 @@ import '../../Features/authentication_feature/data/user_model/login_request_mode
 import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
 import '../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
 import '../../Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
+import '../../Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
 import '../../Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_view.dart';
 import '../managers/styles_manager/color_manager.dart';
 
@@ -58,8 +59,30 @@ class CustomElevatedButton extends StatelessWidget {
     required UserEntity currentUser,
   }) {
     return CustomElevatedButton._(
-      onPressed: () => _navigateToFavouritesPage(context, currentUser),
+      onPressed: () => _navigateToFavouritesPage(
+        context: context,
+        currentUser: currentUser,
+      ),
       label: 'Favourites',
+    );
+  }
+  factory CustomElevatedButton.editProfilePage({
+    required BuildContext context,
+  }) {
+    return CustomElevatedButton._(
+      onPressed: () => _navigateToEditProfilePage(
+        context: context,
+      ),
+      label: 'Edit Profile',
+    );
+  }
+  factory CustomElevatedButton.editProfileImagePickerButton({
+    required BuildContext context,
+    required EditProfileScreenState editState,
+  }) {
+    return CustomElevatedButton._(
+      label: 'Change Profile Picture',
+      onPressed: editState.pickImage,
     );
   }
 
@@ -136,12 +159,30 @@ class CustomElevatedButton extends StatelessWidget {
   }
 
   // Private navigation methods
-  static void _navigateToFavouritesPage(
-      BuildContext context, UserEntity currentUser) {
+  static void _navigateToFavouritesPage({
+    required BuildContext context,
+    required UserEntity currentUser,
+  }) {
     NavigationManager.navigateTo(
       context: context,
       screen: FavouritesPage(currentUser: currentUser),
     );
+  }
+
+  static void _navigateToEditProfilePage({
+    required BuildContext context,
+  }) {
+    NavigationManager.navigateTo(
+      context: context,
+      screen: const EditProfileScreen(),
+    );
+  }
+
+  static void pickImage({
+    required BuildContext context,
+    required EditProfileScreenState editState,
+  }) {
+    editState.pickImage;
   }
 
   static void _navigateToVideoPage(BuildContext context) {

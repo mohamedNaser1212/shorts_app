@@ -3,6 +3,7 @@ import 'package:shorts/Features/profile_feature.dart/presentation/widgets/profil
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_contents_screen.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/widgets/custom_list_tile.dart';
+
 import '../../../../profile_feature.dart/presentation/screens/user_profile_screen.dart';
 
 class UserProfileSection extends StatelessWidget {
@@ -28,7 +29,7 @@ class UserProfileSection extends StatelessWidget {
           child: CustomListTile(
             leading: UserProfilePicture(state: state),
             title: state.widget.videoEntity.user.name,
-            subtitle: state.widget.videoEntity.description ,
+            subtitle: state.widget.videoEntity.description,
             color: Colors.white,
           ),
         ),

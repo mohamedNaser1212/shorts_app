@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/core/widgets/custom_elevated_botton.dart';
 
-class ChooseVideoPageElevatedBotton extends StatelessWidget {
-  const ChooseVideoPageElevatedBotton({
+class ChooseVideoPageElevatedButton extends StatelessWidget {
+  const ChooseVideoPageElevatedButton({
     super.key,
   });
 
