@@ -18,6 +18,7 @@ class VideoPage extends StatelessWidget {
       backgroundColor: ColorController.blackColor,
       appBar: const CustomAppBar(
         title: 'Videos',
+        backColor: Colors.transparent,
       ),
       body: BlocConsumer<UserInfoCubit, UserInfoState>(
         listener: _userInfoListener,

@@ -29,7 +29,10 @@ class _FavouritesPageState extends State<FavouritesPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: CustomAppBar(title: 'Favourites'),
+      appBar: const CustomAppBar(
+        title: 'Favourites',
+        backColor: Colors.transparent,
+      ),
       body: BlocConsumer<FavouritesCubit, FavouritesState>(
         listener: (context, state) {
           if (state is GetFavoritesErrorState) {
@@ -60,7 +63,6 @@ class _FavouritesPageState extends State<FavouritesPage> {
                     itemBuilder: (context, index) {
                       final favouriteEntity = favouriteVideos[index];
                       final videoEntity = VideoCubit.get(context).videos[index];
-
                       return VideoListItem(
                         favouriteEntity: favouriteEntity,
                         videoEntity: videoEntity,

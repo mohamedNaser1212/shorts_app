@@ -4,7 +4,7 @@ import 'package:video_thumbnail/video_thumbnail.dart';
 
 class VideoController extends ChangeNotifier {
   VideoController(String videoUrl, {bool isInitiallyPaused = false}) {
-    _initializeController(videoUrl, isInitiallyPaused);
+    initializeController(videoUrl: videoUrl, isInitiallyPaused: isInitiallyPaused);
   }
 
   VideoPlayerController? _controller;
@@ -27,8 +27,8 @@ class VideoController extends ChangeNotifier {
   ValueNotifier<bool> get isLikedNotifier => _isLikedNotifier;
   bool get isPaused => _isPaused;
 
-  Future<void> _initializeController(
-      String videoUrl, bool isInitiallyPaused) async {
+  Future<void> initializeController(
+      {required String videoUrl, required bool isInitiallyPaused}) async {
     _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl))
       ..setLooping(true);
 
