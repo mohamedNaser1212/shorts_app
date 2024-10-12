@@ -38,4 +38,6 @@ abstract class RequestDataNames {
   static const String fcmToken= 'fcmToken';
   static const String profilePic= 'profilePic';
   static const String bio= 'bio';
+  static const String videos= 'videos';
+  static const String favourites= 'favourites';
 }

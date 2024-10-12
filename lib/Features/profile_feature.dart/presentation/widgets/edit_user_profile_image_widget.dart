@@ -1,19 +1,23 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
 
+// Other related classes remain unchanged...
+
 class EditUserProfileImageWidget extends StatefulWidget {
   const EditUserProfileImageWidget({super.key, required this.editState});
   final EditProfileScreenState editState;
 
   @override
   State<EditUserProfileImageWidget> createState() =>
-      __EditUserProfileImageWidgetStateState();
+      _EditUserProfileImageWidgetState();
 }
 
-class __EditUserProfileImageWidgetStateState
+class _EditUserProfileImageWidgetState
     extends State<EditUserProfileImageWidget> {
   @override
   Widget build(BuildContext context) {
+    print('image file: ${widget.editState.imageFile}');
+    print('profile pic: ${widget.editState.profilePic}');
     return GestureDetector(
       onTap: widget.editState.pickImage,
       child: CircleAvatar(

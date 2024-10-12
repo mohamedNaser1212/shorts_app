@@ -69,7 +69,6 @@ class CustomElevatedButton extends StatelessWidget {
     );
   }
 
-
   factory CustomElevatedButton.favouritesPageBotton({
     required BuildContext context,
     required UserEntity currentUser,
@@ -146,7 +145,7 @@ class CustomElevatedButton extends StatelessWidget {
     }
   }
 
-  static void _editProfileButtonOnPressed({
+static void _editProfileButtonOnPressed({
     required BuildContext context,
     required EditProfileScreenState editState,
   }) {
@@ -154,29 +153,37 @@ class CustomElevatedButton extends StatelessWidget {
       final cubit = UpdateUserDataCubit.get(context);
       UpdateUserDataCubit.get(context).userEntity =
           UserInfoCubit.get(context).userEntity;
+
+      final newImageUrl = editState.profilePic!;
+      // final currentImageUrl = UserInfoCubit.get(context).userEntity!.profilePic;
+
       if (cubit.checkDataChanges(
         name: editState.nameController.text,
         email: editState.emailController.text,
         phone: editState.phoneController.text,
+        imageUrl: newImageUrl,
       )) {
-        cubit.updateUserData(
-          updateUserRequestModel: UpdateUserRequestModel(
-            name: editState.nameController.text,
-            email: editState.emailController.text,
-            phone: editState.phoneController.text,
-          ),
-          userId: UserInfoCubit.get(context).userEntity!.id!,
-        );
-      } else {
-        ToastHelper.showToast(
-          message: 'No changes detected. Your data is up-to-date.',
-          color: ColorController.greenAccent,
-        );
-     
-     
+        //2233if (newImageUrl != currentImageUrl) {
+          
+          cubit.updateUserData(
+            updateUserRequestModel: UpdateUserRequestModel(
+              name: editState.nameController.text,
+              email: editState.emailController.text,
+              phone: editState.phoneController.text,
+              imageUrl: newImageUrl,
+            ),
+            userId: UserInfoCubit.get(context).userEntity!.id!,
+          );
+        // } else {
+        //   ToastHelper.showToast(
+        //     message: 'No changes detected. Your data is up-to-date.',
+        //     color: ColorController.greenAccent,
+        //   );
+        // }
       }
     }
   }
+
   static void _registerAction(
       BuildContext context, RegisterScreenFormState state) {
     if (state.widget.formKey.currentState!.validate()) {

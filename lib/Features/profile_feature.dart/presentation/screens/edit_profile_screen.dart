@@ -1,8 +1,9 @@
 import 'dart:io';
-
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/use_case/update_user_data_use_case.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/edit_profile_screen_body.dart';
@@ -32,6 +33,27 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       setState(() {
         imageFile = File(pickedFile.path);
       });
+      await uploadImage();
+    }
+  }
+
+  Future<void> uploadImage() async {
+    if (imageFile == null) return;
+
+    try {
+      String fileName = 'profile_images/${emailController.text}_${DateTime.now().millisecondsSinceEpoch}.jpg';
+      Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
+
+      UploadTask uploadTask = storageRef.putFile(imageFile!);
+      TaskSnapshot snapshot = await uploadTask;
+
+      String downloadUrl = await snapshot.ref.getDownloadURL();
+
+      setState(() {
+        profilePic = downloadUrl;  
+      });
+    } catch (e) {
+      print('Error uploading image: $e');
     }
   }
 
@@ -46,8 +68,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     nameController.dispose();
     emailController.dispose();
     phoneController.dispose();
-    profilePic = null;
-    imageFile = null;
     super.dispose();
   }
 
@@ -72,8 +92,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       nameController.text = userState.userEntity!.name;
       emailController.text = userState.userEntity!.email;
       phoneController.text = userState.userEntity!.phone;
-      profilePic = userState.userEntity!.profilePic;
+      profilePic ??= userState.userEntity!.profilePic; 
     }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Edit Profile'),
@@ -83,5 +104,22 @@ class EditProfileScreenState extends State<EditProfileScreen> {
         child: EditProfileScreenBody(state: this),
       ),
     );
+  }
+
+  void updateUser() {
+    if (formKey.currentState!.validate()) {
+      final cubit = UpdateUserDataCubit.get(context);
+      if (profilePic != null) {
+        cubit.updateUserData(
+          updateUserRequestModel: UpdateUserRequestModel(
+            name: nameController.text,
+            email: emailController.text,
+            phone: phoneController.text,
+            imageUrl: profilePic!, 
+          ),
+          userId: UserInfoCubit.get(context).userEntity!.id!,
+        );
+      }
+    }
   }
 }

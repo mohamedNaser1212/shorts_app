@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/name_text_field.dart';
+import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
@@ -31,7 +32,7 @@ class _SettingsFormBodyState extends State<SettingsFormBody> {
     );
   }
 
-  Widget _builder(context, state) {
+  Widget _builder(BuildContext context, UpdateUserDataState state) {
     return Column(
       children: [
         EditUserProfileImageWidget(editState: widget.editState),
@@ -45,11 +46,11 @@ class _SettingsFormBodyState extends State<SettingsFormBody> {
         PhoneField(controller: widget.editState.phoneController),
         const SizedBox(height: 20.0),
         UpdateProfileElevatedButton(editState: widget.editState),
-      
       ],
     );
   }
 
+  
   void _updateListener(BuildContext context, UpdateUserDataState state) {
     if (state is UpdateUserDataErrorState) {
       ToastHelper.showToast(
