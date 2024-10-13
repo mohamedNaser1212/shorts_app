@@ -28,7 +28,6 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
   
   File? imageFile;
   final ImagePicker _picker = ImagePicker();
-  String? imageUrl;
 
   @override
   void initState() {
@@ -50,6 +49,9 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
     bioController.dispose();
   }
 
+  String? profilePic;
+
+
   Future<void> pickImage() async {
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
@@ -64,23 +66,21 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
     if (imageFile == null) return;
 
     try {
-      String fileName = 'profile_images/${emailController.text}.jpg';
+      String fileName = 'profile_images/${emailController.text}_${DateTime.now().millisecondsSinceEpoch}.jpg';
       Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
 
       UploadTask uploadTask = storageRef.putFile(imageFile!);
-
       TaskSnapshot snapshot = await uploadTask;
+
       String downloadUrl = await snapshot.ref.getDownloadURL();
 
       setState(() {
-        imageUrl = downloadUrl;
+        profilePic = downloadUrl;  
       });
-
     } catch (e) {
       print('Error uploading image: $e');
     }
   }
-
   @override
   Widget build(BuildContext context) {
     return Form(

@@ -20,50 +20,120 @@ class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
     required UpdateUserRequestModel updateUserRequestModel,
     required String userId,
   }) async {
-    await firestore.collection(CollectionNames.users).doc(userId).update(
-      updateUserRequestModel.toMap(),
-    );
-
-    await firestore.collection(CollectionNames.users)
-        .doc(userId)
-        .collection(CollectionNames.videos)
-        .get()
-        .then((videoQuerySnapshot) {
-      for (var videoDoc in videoQuerySnapshot.docs) {
-        videoDoc.reference.update({
-          'user.name': updateUserRequestModel.name, 
-          'user.profilePic': updateUserRequestModel.imageUrl,
-        });
-      }
-    });
-    await firestore.collection(CollectionNames.videos)
-        .where('user.id', isEqualTo: userId) 
-        .get()
-        .then((videoQuerySnapshot) {
-      for (var videoDoc in videoQuerySnapshot.docs) {
-        videoDoc.reference.update({
-          'user.name': updateUserRequestModel.name, 
-          'user.profilePic': updateUserRequestModel.imageUrl, 
-        });
-      }
-    });
-
-    await firestore.collection(CollectionNames.favourites)
-        .where('user.id', isEqualTo: userId) 
-        .get()
-        .then((favoritesQuerySnapshot) {
-      for (var favoriteDoc in favoritesQuerySnapshot.docs) {
-        favoriteDoc.reference.update({
-          'user.name': updateUserRequestModel.name, 
-          'user.profilePic': updateUserRequestModel.imageUrl, 
-        });
-      }
-    });
+    await _updateUserCollection(userId, updateUserRequestModel);
+    await _usersVideos(userId, updateUserRequestModel);
+    await _videosCollectionComments(userId, updateUserRequestModel);
+    await _videosCollection(userId, updateUserRequestModel);
+    await _usersFavourites(userId, updateUserRequestModel);
+    await _usersComments(userId, updateUserRequestModel);
 
     DocumentSnapshot userDoc =
         await firestore.collection(CollectionNames.users).doc(userId).get();
     final userData = userDoc.data() as Map<String, dynamic>;
 
     return UserModel.fromJson(userData);
+  }
+
+  Future<void> _updateUserCollection(
+      String userId, UpdateUserRequestModel updateUserRequestModel) async {
+    await firestore.collection(CollectionNames.users).doc(userId).update(
+          updateUserRequestModel.toMap(),
+        );
+  }
+
+  Future<void> _usersComments(
+      String userId, UpdateUserRequestModel updateUserRequestModel) async {
+    await firestore
+        .collection(CollectionNames.users)
+        .doc(userId)
+        .collection(CollectionNames.videos)
+        .get()
+        .then((videosQuerySnapshot) {
+      for (var videoDoc in videosQuerySnapshot.docs) {
+        videoDoc.reference
+            .collection(CollectionNames.comments)
+            .where('user.id', isEqualTo: userId)
+            .get()
+            .then((commentsQuerySnapshot) {
+          for (var commentDoc in commentsQuerySnapshot.docs) {
+            _userUpdatedData(commentDoc, updateUserRequestModel);
+          }
+        });
+      }
+    });
+  }
+
+  Future<void> _usersFavourites(
+      String userId, UpdateUserRequestModel updateUserRequestModel) async {
+    await firestore
+        .collection(CollectionNames.users)
+        .doc(userId)
+        .collection(CollectionNames.favourites)
+        .where('user.id', isEqualTo: userId)
+        .get()
+        .then((favoritesQuerySnapshot) {
+      for (var favoriteDoc in favoritesQuerySnapshot.docs) {
+        _userUpdatedData(favoriteDoc, updateUserRequestModel);
+      }
+    });
+  }
+
+  Future<void> _videosCollectionComments(
+      String userId, UpdateUserRequestModel updateUserRequestModel) async {
+    await firestore
+        .collection(CollectionNames.videos)
+        .where('user.id', isEqualTo: userId)
+        .get()
+        .then((videoQuerySnapshot) {
+      for (var videoDoc in videoQuerySnapshot.docs) {
+        videoDoc.reference
+            .collection(CollectionNames.comments)
+            .where('user.id', isEqualTo: userId)
+            .get()
+            .then((commentsQuerySnapshot) {
+          for (var commentDoc in commentsQuerySnapshot.docs) {
+            _userUpdatedData(commentDoc, updateUserRequestModel);
+          }
+        });
+      }
+    });
+  }
+
+  Future<void> _videosCollection(
+      String userId, UpdateUserRequestModel updateUserRequestModel) async {
+    await firestore
+        .collection(CollectionNames.videos)
+        .where('user.id', isEqualTo: userId)
+        .get()
+        .then((videoQuerySnapshot) {
+      for (var videoDoc in videoQuerySnapshot.docs) {
+        _userUpdatedData(videoDoc, updateUserRequestModel);
+      }
+    });
+  }
+
+  Future<void> _usersVideos(
+      String userId, UpdateUserRequestModel updateUserRequestModel) async {
+    await firestore
+        .collection(CollectionNames.users)
+        .doc(userId)
+        .collection(CollectionNames.videos)
+        .get()
+        .then((videoQuerySnapshot) {
+      for (var videoDoc in videoQuerySnapshot.docs) {
+        _userUpdatedData(videoDoc, updateUserRequestModel);
+      }
+    });
+  }
+
+  Future<void> _userUpdatedData(
+      QueryDocumentSnapshot<Map<String, dynamic>> videoDoc,
+      UpdateUserRequestModel updateUserRequestModel) {
+    return videoDoc.reference.update({
+      'user.name': updateUserRequestModel.name,
+      'user.profilePic': updateUserRequestModel.imageUrl,
+      'user.email': updateUserRequestModel.email,
+      'user.phone': updateUserRequestModel.phone,
+    });
   }
 }

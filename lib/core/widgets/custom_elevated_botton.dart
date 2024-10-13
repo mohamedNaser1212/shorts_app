@@ -193,7 +193,7 @@ class CustomElevatedButton extends StatelessWidget {
           bio: state.bioController.text.isNotEmpty
               ? state.bioController.text
               : 'Hey there i am using Shorts',
-          profilePic: state.imageUrl ?? '',
+          profilePic: state.profilePic ?? '',
         ),
       );
     }

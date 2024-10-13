@@ -8,7 +8,6 @@ import '../../../../core/network/firebase_manager/firebase_helper.dart';
 import '../user_model/login_request_model.dart';
 import '../user_model/register_request_model.dart';
 import '../user_model/user_model.dart';
-
 abstract class AuthenticationRemoteDataSource {
   const AuthenticationRemoteDataSource._();
 
@@ -32,19 +31,44 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
   Future<UserModel> login({
     required LoginRequestModel requestModel,
   }) async {
+    UserCredential userCredential = await _signInWithEmailAndPassword(requestModel);
+
+    DocumentSnapshot<Object?> userDoc = await _accessUsersCollection(userCredential);
+
+    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+
+    if (userData[RequestDataNames.fcmToken] == null ||
+        userData[RequestDataNames.fcmToken].isEmpty) {
+      String? newFcmToken = await FirebaseMessaging.instance.getToken();
+
+      await FirebaseFirestore.instance
+          .collection(CollectionNames.users)
+          .doc(userCredential.user!.uid)
+          .update({
+        RequestDataNames.fcmToken: newFcmToken ?? '',
+      });
+
+      userData[RequestDataNames.fcmToken] = newFcmToken;
+    }
+
+    return UserModel.fromJson(userData);
+  }
+
+  Future<DocumentSnapshot<Object?>> _accessUsersCollection(UserCredential userCredential) async {
+    DocumentSnapshot userDoc = await FirebaseFirestore.instance
+        .collection(CollectionNames.users)
+        .doc(userCredential.user!.uid)
+        .get();
+    return userDoc;
+  }
+
+  Future<UserCredential> _signInWithEmailAndPassword(LoginRequestModel requestModel) async {
     UserCredential userCredential =
         await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: requestModel.email,
       password: requestModel.password,
     );
-
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection(CollectionNames.users)
-        .doc(userCredential.user!.uid)
-        .get();
-
-    Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
-    return UserModel.fromJson(userData);
+    return userCredential;
   }
 
   @override
@@ -67,10 +91,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
 
     await createUserData(user: user);
 
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection(CollectionNames.users)
-        .doc(userCredential.user!.uid)
-        .get();
+      DocumentSnapshot<Object?> userDoc = await _accessUsersCollection(userCredential);
 
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
     return UserModel.fromJson(userData);

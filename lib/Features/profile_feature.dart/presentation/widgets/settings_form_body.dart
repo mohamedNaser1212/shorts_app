@@ -12,7 +12,6 @@ import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/widgets/email_text_field.dart';
 import 'package:shorts/core/widgets/phone_text_field.dart';
 
-
 class SettingsFormBody extends StatefulWidget {
   const SettingsFormBody({super.key, required this.editState});
   final EditProfileScreenState editState;
@@ -43,12 +42,14 @@ class _SettingsFormBodyState extends State<SettingsFormBody> {
         const SizedBox(height: 20.0),
         PhoneField(controller: widget.editState.phoneController),
         const SizedBox(height: 20.0),
-        UpdateProfileElevatedButton(editState: widget.editState),
+        UpdateProfileElevatedButton(
+          editState: widget.editState,
+          state: state,
+        ),
       ],
     );
   }
 
-  
   void _updateListener(BuildContext context, UpdateUserDataState state) {
     if (state is UpdateUserDataErrorState) {
       ToastHelper.showToast(
