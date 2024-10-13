@@ -1,12 +1,12 @@
 import 'dart:io';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/use_case/update_user_data_use_case.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/edit_profile_screen_body.dart';
+import 'package:shorts/core/functions/toast_function.dart';
+import 'package:shorts/core/managers/image_picker_manager/image_picker_manager.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/widgets/custom_progress_indicator.dart';
@@ -23,38 +23,31 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final formKey = GlobalKey<FormState>();
-  String? profilePic;
-  File? imageFile;
-  final ImagePicker _picker = ImagePicker();
+
+  final ValueNotifier<File?> imageFileNotifier = ValueNotifier<File?>(null);
+  final ValueNotifier<String?> profilePicNotifier =
+      ValueNotifier<String?>(null);
 
   Future<void> pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePickerHelper.pickImageFromGallery();
     if (pickedFile != null) {
-      setState(() {
-        imageFile = File(pickedFile.path);
-      });
+      imageFileNotifier.value = pickedFile;
       await uploadImage();
     }
   }
 
   Future<void> uploadImage() async {
-    if (imageFile == null) return;
+    if (imageFileNotifier.value == null) return;
 
-    try {
-      String fileName = 'profile_images/${emailController.text}_${DateTime.now().millisecondsSinceEpoch}.jpg';
-      Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
+    String fileName = 'profile_images/${emailController.text}.jpg';
+    final uploadedProfilePic =
+        await ImagePickerHelper.uploadImage(imageFileNotifier.value!, fileName);
 
-      UploadTask uploadTask = storageRef.putFile(imageFile!);
-      TaskSnapshot snapshot = await uploadTask;
-
-      String downloadUrl = await snapshot.ref.getDownloadURL();
-
-      setState(() {
-        profilePic = downloadUrl;  
-      });
-    } catch (e) {
-      print('Error uploading image: $e');
-    }
+    profilePicNotifier.value = uploadedProfilePic;
+    ToastHelper.showToast(
+      message: 'Image uploaded successfully',
+      color: Colors.green,
+    );
   }
 
   @override
@@ -68,6 +61,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     nameController.dispose();
     emailController.dispose();
     phoneController.dispose();
+    imageFileNotifier.dispose();
+    profilePicNotifier.dispose();
     super.dispose();
   }
 
@@ -87,12 +82,12 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget _builder(context, userState) {
+  Widget _builder(BuildContext context, UserInfoState userState) {
     if (userState is GetUserInfoSuccessState) {
       nameController.text = userState.userEntity!.name;
       emailController.text = userState.userEntity!.email;
       phoneController.text = userState.userEntity!.phone;
-      profilePic ??= userState.userEntity!.profilePic; 
+      profilePicNotifier.value ??= userState.userEntity!.profilePic;
     }
 
     return Scaffold(
@@ -109,13 +104,13 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   void updateUser() {
     if (formKey.currentState!.validate()) {
       final cubit = UpdateUserDataCubit.get(context);
-      if (profilePic != null) {
+      if (profilePicNotifier.value != null) {
         cubit.updateUserData(
           updateUserRequestModel: UpdateUserRequestModel(
             name: nameController.text,
             email: emailController.text,
             phone: phoneController.text,
-            imageUrl: profilePic!, 
+            imageUrl: profilePicNotifier.value!,
           ),
           userId: UserInfoCubit.get(context).userEntity!.id!,
         );

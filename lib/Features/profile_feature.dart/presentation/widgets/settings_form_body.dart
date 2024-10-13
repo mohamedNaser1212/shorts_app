@@ -44,7 +44,8 @@ class _SettingsFormBodyState extends State<SettingsFormBody> {
         const SizedBox(height: 20.0),
         UpdateProfileElevatedButton(
           editState: widget.editState,
-          state: state,
+          
+          
         ),
       ],
     );

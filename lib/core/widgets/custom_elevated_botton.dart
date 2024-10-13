@@ -142,44 +142,42 @@ class CustomElevatedButton extends StatelessWidget {
     }
   }
 
-  static void _editProfileButtonOnPressed({
-    required BuildContext context,
-    required EditProfileScreenState editState,
-  }) {
-    if (editState.formKey.currentState!.validate()) {
-      final cubit = UpdateUserDataCubit.get(context);
-      UpdateUserDataCubit.get(context).userEntity =
-          UserInfoCubit.get(context).userEntity;
+static void _editProfileButtonOnPressed({
+  required BuildContext context,
+  required EditProfileScreenState editState,
+}) async {
+  if (editState.formKey.currentState!.validate()) {
+    final cubit = UpdateUserDataCubit.get(context);
+    UpdateUserDataCubit.get(context).userEntity =
+        UserInfoCubit.get(context).userEntity;
 
-      final newImageUrl = editState.profilePic!;
-      // final currentImageUrl = UserInfoCubit.get(context).userEntity!.profilePic;
+    final newImageUrl = editState.profilePicNotifier.value;
 
-      if (cubit.checkDataChanges(
-        name: editState.nameController.text,
-        email: editState.emailController.text,
-        phone: editState.phoneController.text,
-        imageUrl: newImageUrl,
-      )) {
-        //2233if (newImageUrl != currentImageUrl) {
-
-        cubit.updateUserData(
-          updateUserRequestModel: UpdateUserRequestModel(
-            name: editState.nameController.text,
-            email: editState.emailController.text,
-            phone: editState.phoneController.text,
-            imageUrl: newImageUrl,
-          ),
-          userId: UserInfoCubit.get(context).userEntity!.id!,
-        );
-        // } else {
-        //   ToastHelper.showToast(
-        //     message: 'No changes detected. Your data is up-to-date.',
-        //     color: ColorController.greenAccent,
-        //   );
-        // }
+    // Check if data has changed
+    if (cubit.checkDataChanges(
+      name: editState.nameController.text,
+      email: editState.emailController.text,
+      phone: editState.phoneController.text,
+      imageUrl: newImageUrl ?? '',
+    )) {
+      // If the image has changed, upload it first
+      if (editState.imageFileNotifier.value != null) {
+        await editState.uploadImage(); // Upload image if available
       }
+
+      // Update user data regardless of whether other fields changed
+      cubit.updateUserData(
+        updateUserRequestModel: UpdateUserRequestModel(
+          name: editState.nameController.text,
+          email: editState.emailController.text,
+          phone: editState.phoneController.text,
+          imageUrl: editState.profilePicNotifier.value ?? '',
+        ),
+        userId: UserInfoCubit.get(context).userEntity!.id!,
+      );
     }
   }
+}
 
   static void _registerAction(
       BuildContext context, RegisterScreenFormState state) {
@@ -193,7 +191,7 @@ class CustomElevatedButton extends StatelessWidget {
           bio: state.bioController.text.isNotEmpty
               ? state.bioController.text
               : 'Hey there i am using Shorts',
-          profilePic: state.profilePic ?? '',
+          profilePic: state.imageUrl ?? '',
         ),
       );
     }

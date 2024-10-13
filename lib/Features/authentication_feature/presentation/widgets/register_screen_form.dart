@@ -1,10 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/auth_status_text_widget.dart';
+import 'package:shorts/Features/authentication_feature/presentation/widgets/register_form_body.dart';
+import 'package:shorts/core/managers/image_picker_manager/image_picker_manager.dart';
 import 'package:shorts/core/widgets/register_botton.dart';
-import 'package:shorts/Features/authentication_feature/presentation/widgets/register_form.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_header.dart';
-import 'package:image_picker/image_picker.dart';
-import 'package:firebase_storage/firebase_storage.dart';
 import 'dart:io';
 
 class RegisterScreenForm extends StatefulWidget {
@@ -25,9 +24,9 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
   late final TextEditingController phoneController;
   late final TextEditingController passwordController;
   late final TextEditingController bioController;
-  
+
   File? imageFile;
-  final ImagePicker _picker = ImagePicker();
+  String? imageUrl;
 
   @override
   void initState() {
@@ -49,14 +48,11 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
     bioController.dispose();
   }
 
-  String? profilePic;
-
-
   Future<void> pickImage() async {
-    final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
+    final pickedFile = await ImagePickerHelper.pickImageFromGallery();
     if (pickedFile != null) {
       setState(() {
-        imageFile = File(pickedFile.path);
+        imageFile = pickedFile;
       });
       await uploadImage();
     }
@@ -65,22 +61,12 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
   Future<void> uploadImage() async {
     if (imageFile == null) return;
 
-    try {
-      String fileName = 'profile_images/${emailController.text}_${DateTime.now().millisecondsSinceEpoch}.jpg';
-      Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
-
-      UploadTask uploadTask = storageRef.putFile(imageFile!);
-      TaskSnapshot snapshot = await uploadTask;
-
-      String downloadUrl = await snapshot.ref.getDownloadURL();
-
-      setState(() {
-        profilePic = downloadUrl;  
-      });
-    } catch (e) {
-      print('Error uploading image: $e');
-    }
+    String fileName = 'profile_images/${emailController.text}.jpg';
+    imageUrl = await ImagePickerHelper.uploadImage(imageFile!, fileName);
+    setState(() {
+    });
   }
+
   @override
   Widget build(BuildContext context) {
     return Form(
@@ -90,7 +76,7 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
         children: [
           const RegisterHeader(),
           const SizedBox(height: 15),
-          RegisterFormBody(state: this), 
+          RegisterFormBody(state: this),
           const SizedBox(height: 10),
           RegisterButton(state: this),
           const SizedBox(height: 10),

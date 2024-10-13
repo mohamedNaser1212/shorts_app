@@ -5,16 +5,8 @@ import 'package:firebase_storage/firebase_storage.dart';
 abstract class ImagePickerHelper {
   const ImagePickerHelper();
 
-  Future<File?> pickImageFromGallery();
-
-  Future<String?> uploadImage(File imageFile, String fileName);
-}
-
-class ImagePickerHelperImpl extends ImagePickerHelper {
-  final ImagePicker _picker = ImagePicker();
-
-  @override
-  Future<File?> pickImageFromGallery() async {
+  static Future<File?> pickImageFromGallery() async {
+    final ImagePicker _picker = ImagePicker();
     final pickedFile = await _picker.pickImage(source: ImageSource.gallery);
     if (pickedFile != null) {
       return File(pickedFile.path);
@@ -22,8 +14,7 @@ class ImagePickerHelperImpl extends ImagePickerHelper {
     return null;
   }
 
-  @override
-  Future<String?> uploadImage(File imageFile, String fileName) async {
+  static Future<String?> uploadImage(File imageFile, String fileName) async {
     try {
       Reference storageRef = FirebaseStorage.instance.ref().child(fileName);
       UploadTask uploadTask = storageRef.putFile(imageFile);
