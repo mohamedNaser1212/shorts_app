@@ -2,7 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-import 'package:shorts/core/video_notifiers/video_notifier.dart';
+import 'package:shorts/core/video_controller/video_controller.dart';
 
 import 'video_icons.dart';
 

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_icons.dart';
-import 'package:shorts/core/video_notifiers/video_notifier.dart';
+import 'package:shorts/core/video_controller/video_controller.dart';
 
 class VideoIconsSection extends StatelessWidget {
   const VideoIconsSection({

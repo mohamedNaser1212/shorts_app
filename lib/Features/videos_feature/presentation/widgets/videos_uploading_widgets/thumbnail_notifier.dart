@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import '../../../../../core/video_notifiers/video_notifier.dart';
+import '../../../../../core/video_controller/video_controller.dart';
 
 class ThumbnailNotifier extends StatelessWidget {
   const ThumbnailNotifier({super.key, required this.videoUrl});

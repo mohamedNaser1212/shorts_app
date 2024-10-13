@@ -3,7 +3,7 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/thumbnail_notifier.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_components_widget.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_player_widget.dart';
-import 'package:shorts/core/video_notifiers/video_notifier.dart';
+import 'package:shorts/core/video_controller/video_controller.dart';
 
 class VideoListBody extends StatefulWidget {
   const VideoListBody({

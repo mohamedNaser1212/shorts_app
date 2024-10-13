@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/core/video_notifiers/video_notifier.dart';
+import 'package:shorts/core/video_controller/video_controller.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatelessWidget {

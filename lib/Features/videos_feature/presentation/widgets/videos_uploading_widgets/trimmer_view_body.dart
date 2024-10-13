@@ -9,7 +9,7 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploa
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 
-import '../../../../../core/video_notifiers/video_notifier.dart';
+import '../../../../../core/video_controller/video_controller.dart';
 
 class TrimmerViewBody extends StatefulWidget {
   const TrimmerViewBody({super.key, required this.file});

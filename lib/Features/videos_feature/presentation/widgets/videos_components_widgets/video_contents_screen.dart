@@ -6,7 +6,7 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/user_profile_section.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_icons_section.dart';
-import 'package:shorts/core/video_notifiers/video_notifier.dart';
+import 'package:shorts/core/video_controller/video_controller.dart';
 
 
 class VideoContentsScreen extends StatefulWidget {

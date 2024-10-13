@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../../../../../core/video_notifiers/video_notifier.dart';
+import '../../../../../core/video_controller/video_controller.dart';
 
 class AnimatedPauseIcon extends StatefulWidget {
   const AnimatedPauseIcon({
