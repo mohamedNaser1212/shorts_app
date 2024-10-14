@@ -13,4 +13,5 @@ abstract class AuthenticationRepo {
   Future<Either<Failure, UserEntity>> register({
     required RegisterRequestModel requestModel,
   });
+  Future<Either<Failure, void>> signOut();
 }

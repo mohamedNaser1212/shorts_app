@@ -1,7 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/use_case/update_user_data_use_case.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/edit_profile_screen_body.dart';
@@ -25,8 +24,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   final formKey = GlobalKey<FormState>();
 
   final ValueNotifier<File?> imageFileNotifier = ValueNotifier<File?>(null);
-  final ValueNotifier<String?> profilePicNotifier =
-      ValueNotifier<String?>(null);
+  final ValueNotifier<String?> profilePicNotifier = ValueNotifier<String?>(null);
 
   Future<void> pickImage() async {
     final pickedFile = await ImagePickerHelper.pickImageFromGallery();
@@ -40,9 +38,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     if (imageFileNotifier.value == null) return;
 
     String fileName = 'profile_images/${emailController.text}.jpg';
-    final uploadedProfilePic =
-        await ImagePickerHelper.uploadImage(imageFileNotifier.value!, fileName);
-
+    final uploadedProfilePic = await ImagePickerHelper.uploadImage(imageFileNotifier.value!, fileName);
+    
     profilePicNotifier.value = uploadedProfilePic;
     ToastHelper.showToast(
       message: 'Image uploaded successfully',
@@ -87,7 +84,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       nameController.text = userState.userEntity!.name;
       emailController.text = userState.userEntity!.email;
       phoneController.text = userState.userEntity!.phone;
-      profilePicNotifier.value ??= userState.userEntity!.profilePic;
+      profilePicNotifier.value == userState.userEntity!.profilePic;
     }
 
     return Scaffold(
@@ -101,20 +98,5 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  void updateUser() {
-    if (formKey.currentState!.validate()) {
-      final cubit = UpdateUserDataCubit.get(context);
-      if (profilePicNotifier.value != null) {
-        cubit.updateUserData(
-          updateUserRequestModel: UpdateUserRequestModel(
-            name: nameController.text,
-            email: emailController.text,
-            phone: phoneController.text,
-            imageUrl: profilePicNotifier.value!,
-          ),
-          userId: UserInfoCubit.get(context).userEntity!.id!,
-        );
-      }
-    }
-  }
+
 }

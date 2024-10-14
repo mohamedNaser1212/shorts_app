@@ -65,6 +65,16 @@ class CustomElevatedButton extends StatelessWidget {
       label: 'Edit Profile',
     );
   }
+  factory CustomElevatedButton.signOutElevatedButton({
+    required BuildContext context,
+  }) {
+    return CustomElevatedButton._(
+      onPressed:()=> _signOutOnPressed(context: context),
+      label: 'Sign Out',
+    );
+  }
+
+
 
   factory CustomElevatedButton.favouritesPageButton({
     required BuildContext context,
@@ -141,31 +151,28 @@ class CustomElevatedButton extends StatelessWidget {
       );
     }
   }
+ static void _signOutOnPressed({
+    required BuildContext context,
 
-static void _editProfileButtonOnPressed({
-  required BuildContext context,
-  required EditProfileScreenState editState,
-}) async {
-  if (editState.formKey.currentState!.validate()) {
+  }) {
+    UserInfoCubit.get(context).signOut();
+  }
+  static void _editProfileButtonOnPressed({
+    required BuildContext context,
+    required EditProfileScreenState editState,
+  }) async {
     final cubit = UpdateUserDataCubit.get(context);
-    UpdateUserDataCubit.get(context).userEntity =
-        UserInfoCubit.get(context).userEntity;
 
-    final newImageUrl = editState.profilePicNotifier.value;
+    if (editState.imageFileNotifier.value != null) {
+      await editState.uploadImage();
+    }
 
-    // Check if data has changed
     if (cubit.checkDataChanges(
       name: editState.nameController.text,
       email: editState.emailController.text,
       phone: editState.phoneController.text,
-      imageUrl: newImageUrl ?? '',
+      imageUrl: editState.profilePicNotifier.value ?? '',
     )) {
-      // If the image has changed, upload it first
-      if (editState.imageFileNotifier.value != null) {
-        await editState.uploadImage(); // Upload image if available
-      }
-
-      // Update user data regardless of whether other fields changed
       cubit.updateUserData(
         updateUserRequestModel: UpdateUserRequestModel(
           name: editState.nameController.text,
@@ -177,11 +184,11 @@ static void _editProfileButtonOnPressed({
       );
     }
   }
-}
 
   static void _registerAction(
       BuildContext context, RegisterScreenFormState state) {
     if (state.widget.formKey.currentState!.validate()) {
+      state.uploadImage();
       RegisterCubit.get(context).userRegister(
         requestModel: RegisterRequestModel(
           email: state.emailController.text,
@@ -191,7 +198,7 @@ static void _editProfileButtonOnPressed({
           bio: state.bioController.text.isNotEmpty
               ? state.bioController.text
               : 'Hey there i am using Shorts',
-          profilePic: state.imageUrl ?? '',
+          profilePic: state.imageUrlNotifier.value ?? '',
         ),
       );
     }

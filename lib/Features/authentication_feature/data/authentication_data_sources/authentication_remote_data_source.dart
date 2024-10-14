@@ -1,13 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:shorts/core/network/firebase_manager/collection_names.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/utils/constants/request_data_names.dart';
-import '../../../../core/network/firebase_manager/collection_names.dart';
-import '../../../../core/network/firebase_manager/firebase_helper.dart';
 import '../user_model/login_request_model.dart';
 import '../user_model/register_request_model.dart';
 import '../user_model/user_model.dart';
+
 abstract class AuthenticationRemoteDataSource {
   const AuthenticationRemoteDataSource._();
 
@@ -18,25 +18,27 @@ abstract class AuthenticationRemoteDataSource {
   Future<UserModel> register({
     required RegisterRequestModel requestModel,
   });
+
+  Future<void> signOut();
 }
 
 class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
-  final FirebaseHelper firebaseHelper;
 
-  AuthenticationDataSourceImpl({
-    required this.firebaseHelper,
-  });
+
+  bool fcmTokenAssigned = false; 
+  
 
   @override
   Future<UserModel> login({
     required LoginRequestModel requestModel,
   }) async {
-    UserCredential userCredential = await _signInWithEmailAndPassword(requestModel);
-
-    DocumentSnapshot<Object?> userDoc = await _accessUsersCollection(userCredential);
-
+    UserCredential userCredential =
+        await _signInWithEmailAndPassword(requestModel);
+    DocumentSnapshot<Object?> userDoc =
+        await _accessUsersCollection(userCredential);
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
 
+    // Check if FCM token exists
     if (userData[RequestDataNames.fcmToken] == null ||
         userData[RequestDataNames.fcmToken].isEmpty) {
       String? newFcmToken = await FirebaseMessaging.instance.getToken();
@@ -49,12 +51,19 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       });
 
       userData[RequestDataNames.fcmToken] = newFcmToken;
+      await _clearFcmTokenInRelatedDocs(
+        userId: userCredential.user!.uid,
+        fcmToken: newFcmToken,
+      ); // Pass the new FCM token
     }
+
+    fcmTokenAssigned = true;
 
     return UserModel.fromJson(userData);
   }
 
-  Future<DocumentSnapshot<Object?>> _accessUsersCollection(UserCredential userCredential) async {
+  Future<DocumentSnapshot<Object?>> _accessUsersCollection(
+      UserCredential userCredential) async {
     DocumentSnapshot userDoc = await FirebaseFirestore.instance
         .collection(CollectionNames.users)
         .doc(userCredential.user!.uid)
@@ -62,9 +71,10 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     return userDoc;
   }
 
-  Future<UserCredential> _signInWithEmailAndPassword(LoginRequestModel requestModel) async {
-    UserCredential userCredential =
-        await FirebaseAuth.instance.signInWithEmailAndPassword(
+  Future<UserCredential> _signInWithEmailAndPassword(
+      LoginRequestModel requestModel) async {
+    UserCredential userCredential = await FirebaseAuth.instance
+        .signInWithEmailAndPassword(
       email: requestModel.email,
       password: requestModel.password,
     );
@@ -88,12 +98,12 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     userMap[RequestDataNames.fcmToken] = fcmToken ?? '';
 
     UserModel user = UserModel.fromJson(userMap);
-
     await createUserData(user: user);
 
-      DocumentSnapshot<Object?> userDoc = await _accessUsersCollection(userCredential);
-
+    DocumentSnapshot<Object?> userDoc =
+        await _accessUsersCollection(userCredential);
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
+
     return UserModel.fromJson(userData);
   }
 
@@ -102,5 +112,126 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
         .collection(CollectionNames.users)
         .doc(user.id)
         .set(user.toJson());
+  }
+
+  @override
+  Future<void> signOut() async {
+    final user = FirebaseAuth.instance.currentUser;
+    if (user != null) {
+      if (fcmTokenAssigned) {
+        // Only clear the FCM token if it was previously assigned
+        await FirebaseFirestore.instance
+            .collection(CollectionNames.users)
+            .doc(user.uid)
+            .update({RequestDataNames.fcmToken: ''});
+
+        await _clearFcmTokenInRelatedDocs(
+          userId: user.uid,
+          fcmToken: '',
+        ); // Clear FCM tokens in related docs
+      }
+      await FirebaseAuth.instance.signOut();
+      fcmTokenAssigned = false; // Reset the FCM token assignment status
+    }
+  }
+
+  Future<void> _clearFcmTokenInRelatedDocs({
+    required String userId,
+    String? fcmToken,
+  }) async {
+    // Clear FCM token in comments subcollection inside videos subcollection under users collection
+    await FirebaseFirestore.instance
+        .collection(CollectionNames.users)
+        .doc(userId)
+        .collection(CollectionNames.videos)
+        .get()
+        .then((videosQuerySnapshot) {
+      for (var videoDoc in videosQuerySnapshot.docs) {
+        videoDoc.reference
+            .collection(CollectionNames.comments)
+            .get()
+            .then((commentsQuerySnapshot) {
+          for (var commentDoc in commentsQuerySnapshot.docs) {
+            if (commentDoc.data()['user.id'] == userId) {
+              commentDoc.reference.update({'user.fcmToken': fcmToken ?? ''});
+            }
+          }
+        });
+      }
+    });
+
+    // Clear FCM token in comments inside the main videos collection
+    await FirebaseFirestore.instance
+        .collection(CollectionNames.videos)
+        .where('user.id', isEqualTo: userId)
+        .get()
+        .then((videoQuerySnapshot) {
+      for (var videoDoc in videoQuerySnapshot.docs) {
+        videoDoc.reference
+            .collection(CollectionNames.comments)
+            .where('user.id', isEqualTo: userId)
+            .get()
+            .then((commentsQuerySnapshot) {
+          for (var commentDoc in commentsQuerySnapshot.docs) {
+            commentDoc.reference.update({'user.fcmToken': fcmToken ?? ''});
+          }
+        });
+      }
+    });
+
+    // Clear FCM token in favourites subcollection under users collection
+    await FirebaseFirestore.instance
+        .collection(CollectionNames.users)
+        .doc(userId)
+        .collection(CollectionNames.favourites)
+        .get()
+        .then((favoritesQuerySnapshot) {
+      for (var favoriteDoc in favoritesQuerySnapshot.docs) {
+        favoriteDoc.reference.update({'user.fcmToken': fcmToken ?? ''});
+      }
+    });
+
+    // Clear FCM token in videos subcollection under users collection
+    await FirebaseFirestore.instance
+        .collection(CollectionNames.users)
+        .doc(userId)
+        .collection(CollectionNames.videos)
+        .get()
+        .then((videoQuerySnapshot) {
+      for (var videoDoc in videoQuerySnapshot.docs) {
+        videoDoc.reference.update({'user.fcmToken': fcmToken ?? ''});
+      }
+    });
+
+    // Clear FCM token in videos collection
+    await FirebaseFirestore.instance
+        .collection(CollectionNames.videos)
+        .where('user.id', isEqualTo: userId)
+        .get()
+        .then((videoQuerySnapshot) {
+      for (var videoDoc in videoQuerySnapshot.docs) {
+        videoDoc.reference.update({'user.fcmToken': fcmToken ?? ''});
+      }
+    });
+
+    // Clear FCM token in comments collection that is a subcollection of videos collection which is a subcollection of users collection
+    await FirebaseFirestore.instance
+        .collection(CollectionNames.users)
+        .doc(userId)
+        .collection(CollectionNames.videos)
+        .get()
+        .then((videosQuerySnapshot) {
+      for (var videoDoc in videosQuerySnapshot.docs) {
+        videoDoc.reference
+            .collection(CollectionNames.comments)
+            .where('user.id', isEqualTo: userId)
+            .get()
+            .then((commentsQuerySnapshot) {
+          for (var commentDoc in commentsQuerySnapshot.docs) {
+            commentDoc.reference.update({'user.fcmToken': fcmToken ?? ''});
+          }
+        });
+      }
+    });
   }
 }

@@ -12,7 +12,6 @@ class VideoModel extends VideoEntity {
     required super.description,
   });
 
-  // Add the copyWith method
   VideoModel copyWith({
     String? id,
     String? thumbnail,

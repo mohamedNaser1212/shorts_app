@@ -1,6 +1,7 @@
 import 'package:get_it/get_it.dart';
 import 'package:shorts/Features/authentication_feature/data/authentication_repo_impl/authentication_repo_impl.dart';
 import 'package:shorts/Features/authentication_feature/domain/authentication_use_case/register_use_case.dart';
+import 'package:shorts/Features/authentication_feature/domain/authentication_use_case/sign_out_use_case.dart';
 import 'package:shorts/Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
 import 'package:shorts/Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
 import 'package:shorts/Features/comments_feature/data/data_sources/comments_local_data_source.dart';
@@ -122,7 +123,7 @@ Future<void> setUpServiceLocator() async {
   // UserInfo and Authentication related registrations
   getIt.registerSingleton<AuthenticationRemoteDataSource>(
       AuthenticationDataSourceImpl(
-    firebaseHelper: getIt.get<FirebaseHelper>(),
+
   ));
 
   getIt.registerSingleton<UserLocalDataSourceImpl>(UserLocalDataSourceImpl(
@@ -178,6 +179,7 @@ Future<void> setUpServiceLocator() async {
 
   getIt.registerFactory<UserInfoCubit>(() => UserInfoCubit(
         getUserUseCase: getIt.get<GetUserInfoUseCase>(),
+        signOutUseCase: getIt.get<SignOutUseCase>(),
       ));
   getIt.registerSingleton<AddCommentsUseCase>(AddCommentsUseCase(
     commentsRepo: getIt.get<CommentsRepo>(),
@@ -187,6 +189,9 @@ Future<void> setUpServiceLocator() async {
   ));
 
   getIt.registerSingleton<LoginUseCase>(LoginUseCase(
+    authenticationRepo: getIt.get<AuthenticationRepo>(),
+  ));
+  getIt.registerSingleton<SignOutUseCase>(SignOutUseCase(
     authenticationRepo: getIt.get<AuthenticationRepo>(),
   ));
 
@@ -205,7 +210,7 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<UpdateUserDataUseCase>(UpdateUserDataUseCase(
     updateRepo: getIt.get<UpdateUserDataRepo>(),
   ));
-   getIt.registerFactory<UpdateUserDataCubit>(() => UpdateUserDataCubit(
+  getIt.registerFactory<UpdateUserDataCubit>(() => UpdateUserDataCubit(
         updateUserDataUseCase: getIt.get<UpdateUserDataUseCase>(),
       ));
 

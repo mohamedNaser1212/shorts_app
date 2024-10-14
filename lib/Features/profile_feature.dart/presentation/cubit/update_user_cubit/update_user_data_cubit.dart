@@ -18,13 +18,15 @@ class UpdateUserDataCubit extends Cubit<UpdateUserDataState> {
     required String name,
     required String email,
     required String phone,
-    required String imageUrl,
+    required String imageUrl
+ 
   }) {
     return userEntity != null &&
         (name != userEntity!.name ||
             email != userEntity!.email ||
             phone != userEntity!.phone ||
-            imageUrl != userEntity!.profilePic);
+            imageUrl != userEntity!.profilePic
+          );
   }
 
   Future<void> updateUserData({

@@ -5,6 +5,7 @@ import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_u
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/change_profile_picture_elevated_botton.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/edit_user_profile_image_widget.dart';
+import 'package:shorts/Features/profile_feature.dart/presentation/widgets/sign_out_elevated_button.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/update_profile_elevated_button.dart';
 import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
@@ -42,11 +43,9 @@ class _SettingsFormBodyState extends State<SettingsFormBody> {
         const SizedBox(height: 20.0),
         PhoneField(controller: widget.editState.phoneController),
         const SizedBox(height: 20.0),
-        UpdateProfileElevatedButton(
-          editState: widget.editState,
-          
-          
-        ),
+        UpdateProfileElevatedButton(editState: widget.editState),
+        const SizedBox(height: 20.0),
+        SignOutElevatedButton(editState: widget.editState),
       ],
     );
   }

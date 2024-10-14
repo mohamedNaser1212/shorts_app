@@ -25,8 +25,8 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
   late final TextEditingController passwordController;
   late final TextEditingController bioController;
 
-  File? imageFile;
-  String? imageUrl;
+  final ValueNotifier<File?> imageFileNotifier = ValueNotifier(null);
+  final ValueNotifier<String?> imageUrlNotifier = ValueNotifier(null);
 
   @override
   void initState() {
@@ -46,25 +46,23 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
     phoneController.dispose();
     passwordController.dispose();
     bioController.dispose();
+    imageFileNotifier.dispose();
+    imageUrlNotifier.dispose();
   }
 
   Future<void> pickImage() async {
     final pickedFile = await ImagePickerHelper.pickImageFromGallery();
     if (pickedFile != null) {
-      setState(() {
-        imageFile = pickedFile;
-      });
-      await uploadImage();
+      imageFileNotifier.value = pickedFile;
+     // await uploadImage();
     }
   }
 
   Future<void> uploadImage() async {
-    if (imageFile == null) return;
+    if (imageFileNotifier.value == null) return;
 
     String fileName = 'profile_images/${emailController.text}.jpg';
-    imageUrl = await ImagePickerHelper.uploadImage(imageFile!, fileName);
-    setState(() {
-    });
+    imageUrlNotifier.value = await ImagePickerHelper.uploadImage(imageFileNotifier.value!, fileName);
   }
 
   @override

@@ -19,24 +19,26 @@ class LoginCubit extends Cubit<LoginState> {
   Future<void> login({
     required LoginRequestModel requestModel,
   }) async {
-    emit(AppLoginLoadingState());
+    emit(LoginLoadingState());
 
     final result = await loginUseCase.call(requestModel: requestModel);
     result.fold(
       (failure) {
-        emit(AppLoginErrorState(error: failure.message));
+        emit(LoginErrorState(error: failure.message));
       },
       (success) async {
         final userDataResult = await userDataUseCase.call();
         userDataResult.fold(
           (failure) {
-            emit(AppLoginErrorState(error: failure.message));
+            emit(LoginErrorState(error: failure.message));
           },
           (userData) {
-            emit(AppLoginSuccessState(userModel: userData!));
+            emit(LoginSuccessState(userModel: userData!));
           },
         );
       },
     );
   }
+
+
 }

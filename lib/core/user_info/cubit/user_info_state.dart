@@ -23,3 +23,13 @@ class InternetFailureState extends UserInfoState {
 
   InternetFailureState({required this.message});
 }
+class SignOutLoadingState extends UserInfoState {}
+
+class SignOutSuccessState extends UserInfoState {}
+
+class SignOutErrorState extends UserInfoState {
+  final String error;
+  SignOutErrorState({
+    required this.error,
+  });
+}

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
+import 'package:shorts/Features/authentication_feature/domain/authentication_use_case/sign_out_use_case.dart';
 
 import '../domain/use_cases/get_user_info_use_case.dart';
 import '../domain/user_entity/user_entity.dart';
@@ -9,7 +10,9 @@ part 'user_info_state.dart';
 class UserInfoCubit extends Cubit<UserInfoState> {
   UserInfoCubit({
     required this.getUserUseCase,
+    required this.signOutUseCase,
   }) : super(UserInfoState());
+  final SignOutUseCase signOutUseCase;
 
   static UserInfoCubit get(context) => BlocProvider.of(context);
 
@@ -33,6 +36,18 @@ class UserInfoCubit extends Cubit<UserInfoState> {
        
        
         emit(GetUserInfoSuccessState(userEntity: userEntity));
+      },
+    );
+  }
+    Future<void> signOut() async {
+   emit(SignOutLoadingState());
+    final result = await signOutUseCase.call();
+    result.fold(
+      (failure) {
+        emit(SignOutErrorState(error: failure.message));
+      },
+      (success) {
+        emit(SignOutSuccessState());
       },
     );
   }

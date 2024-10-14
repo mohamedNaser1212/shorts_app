@@ -49,4 +49,13 @@ class AuthRepoImpl implements AuthenticationRepo {
       },
     );
   }
+@override
+  Future<Either<Failure, void>> signOut() {
+    return repoManager.call(
+      action: () async {
+        await loginDataSource.signOut(); 
+        await userInfoLocalDataSourceImpl.clearUserData(); 
+      },
+    );
+  }
 }

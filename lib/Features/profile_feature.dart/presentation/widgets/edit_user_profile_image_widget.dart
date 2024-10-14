@@ -31,10 +31,10 @@ class EditUserProfileImageWidgetState
         }
       },
       child: ValueListenableBuilder<File?>(
-        valueListenable: widget.editState?.imageFileNotifier ?? ValueNotifier<File?>(null),
+        valueListenable: widget.editState?.imageFileNotifier ??  widget.registerFormState?.imageFileNotifier ?? ValueNotifier<File?>(null),
         builder: (context, imageFile, child) {
           return ValueListenableBuilder<String?>(
-            valueListenable: widget.editState?.profilePicNotifier ?? ValueNotifier<String?>(null),
+            valueListenable: widget.editState?.profilePicNotifier ?? widget.registerFormState?.imageUrlNotifier ?? ValueNotifier<String?>(null),
             builder: (context, profilePic, child) {
               return CircleAvatar(
                 backgroundColor: Colors.grey,
