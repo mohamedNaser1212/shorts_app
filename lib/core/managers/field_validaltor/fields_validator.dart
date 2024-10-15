@@ -10,15 +10,16 @@ class FieldsValidator {
     if (value == null || value.trim().isEmpty) {
       return 'Email address is required';
     }
-    const emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$';
-    final regex = RegExp(emailPattern);
-    if (!regex.hasMatch(value)) {
-      return 'Please enter a valid email address format (e.g., user@example.com)';
-    }
-    if (!value.contains('@')) {
-      return 'Email address must contain an "@" symbol';
-    }
     return null;
+    // const emailPattern = r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$';
+    // final regex = RegExp(emailPattern);
+    // if (!regex.hasMatch(value)) {
+    //   return 'Please enter a valid email address format (e.g., user@example.com)';
+    // }
+    // if (!value.contains('@')) {
+    //   return 'Email address must contain an "@" symbol';
+    // }
+    // return null;
   }
 
   static String? isValidPassword(String? value, {int minLength = 8}) {

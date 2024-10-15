@@ -69,12 +69,10 @@ class CustomElevatedButton extends StatelessWidget {
     required BuildContext context,
   }) {
     return CustomElevatedButton._(
-      onPressed:()=> _signOutOnPressed(context: context),
+      onPressed: () => _signOutOnPressed(context: context),
       label: 'Sign Out',
     );
   }
-
-
 
   factory CustomElevatedButton.favouritesPageButton({
     required BuildContext context,
@@ -104,7 +102,7 @@ class CustomElevatedButton extends StatelessWidget {
   }) {
     return CustomElevatedButton._(
       label: 'Change Profile Picture',
-      onPressed: editState.pickImage,
+      onPressed: editState.imageNotifierController.pickImage,
     );
   }
 
@@ -151,44 +149,49 @@ class CustomElevatedButton extends StatelessWidget {
       );
     }
   }
- static void _signOutOnPressed({
-    required BuildContext context,
 
+  static void _signOutOnPressed({
+    required BuildContext context,
   }) {
     UserInfoCubit.get(context).signOut();
   }
+
   static void _editProfileButtonOnPressed({
     required BuildContext context,
     required EditProfileScreenState editState,
   }) async {
     final cubit = UpdateUserDataCubit.get(context);
 
-    if (editState.imageFileNotifier.value != null) {
-      await editState.uploadImage();
-    }
+    // if (editState.imageFileNotifier.value != null) {
+    //   await editState.uploadImage();
+    // }
 
-    if (cubit.checkDataChanges(
-      name: editState.nameController.text,
-      email: editState.emailController.text,
-      phone: editState.phoneController.text,
-      imageUrl: editState.profilePicNotifier.value ?? '',
-    )) {
-      cubit.updateUserData(
-        updateUserRequestModel: UpdateUserRequestModel(
-          name: editState.nameController.text,
-          email: editState.emailController.text,
-          phone: editState.phoneController.text,
-          imageUrl: editState.profilePicNotifier.value ?? '',
-        ),
-        userId: UserInfoCubit.get(context).userEntity!.id!,
-      );
-    }
+    // if (cubit.checkDataChanges(
+    //   name: editState.nameController.text,
+    //   email: editState.emailController.text,
+    //   phone: editState.phoneController.text,
+    //   imageUrl: editState.profilePicNotifier.value ?? '',
+    // )) {
+    cubit.updateUserData(
+      updateUserRequestModel: UpdateUserRequestModel(
+        name: editState.nameController.text,
+        email: editState.emailController.text,
+        phone: editState.phoneController.text,
+        imageUrl: editState.imageNotifierController.profilePicNotifier.value ?? '',
+      ),
+      userId: UserInfoCubit.get(context).userEntity!.id!,
+    );
+    // }
   }
 
-  static void _registerAction(
-      BuildContext context, RegisterScreenFormState state) {
+  static Future<void> _registerAction(
+      BuildContext context, RegisterScreenFormState state) async {
     if (state.widget.formKey.currentState!.validate()) {
-      state.uploadImage();
+      print('image url ${state.imageNotifierController.profilePicNotifier.value}');
+      if (state.imageNotifierController.profilePicNotifier.value != null) {
+       state.imageNotifierController.uploadImage();
+        print('image is uploaded');
+      }
       RegisterCubit.get(context).userRegister(
         requestModel: RegisterRequestModel(
           email: state.emailController.text,
@@ -198,7 +201,7 @@ class CustomElevatedButton extends StatelessWidget {
           bio: state.bioController.text.isNotEmpty
               ? state.bioController.text
               : 'Hey there i am using Shorts',
-          profilePic: state.imageUrlNotifier.value ?? '',
+          profilePic: state.imageNotifierController.profilePicNotifier.value ?? '',
         ),
       );
     }

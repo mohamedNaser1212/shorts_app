@@ -25,16 +25,16 @@ class EditUserProfileImageWidgetState
     return GestureDetector(
       onTap: () {
         if (widget.editState != null) {
-          widget.editState?.pickImage();
+          widget.editState?.imageNotifierController.pickImage();
         } else {
-          widget.registerFormState?.pickImage();
+          widget.registerFormState?.imageNotifierController.pickImage();
         }
       },
       child: ValueListenableBuilder<File?>(
-        valueListenable: widget.editState?.imageFileNotifier ??  widget.registerFormState?.imageFileNotifier ?? ValueNotifier<File?>(null),
+        valueListenable:  widget.editState?.imageNotifierController.imageFileNotifier ??  widget.registerFormState!.imageNotifierController.imageFileNotifier,
         builder: (context, imageFile, child) {
           return ValueListenableBuilder<String?>(
-            valueListenable: widget.editState?.profilePicNotifier ?? widget.registerFormState?.imageUrlNotifier ?? ValueNotifier<String?>(null),
+            valueListenable:  widget.editState?.imageNotifierController.profilePicNotifier ??  widget.registerFormState!.imageNotifierController.profilePicNotifier,
             builder: (context, profilePic, child) {
               return CircleAvatar(
                 backgroundColor: Colors.grey,

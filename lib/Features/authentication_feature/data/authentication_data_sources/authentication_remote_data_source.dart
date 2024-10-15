@@ -28,19 +28,15 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
   bool fcmTokenAssigned = false; 
   
 
-  @override
+    @override
   Future<UserModel> login({
     required LoginRequestModel requestModel,
   }) async {
-    UserCredential userCredential =
-        await _signInWithEmailAndPassword(requestModel);
-    DocumentSnapshot<Object?> userDoc =
-        await _accessUsersCollection(userCredential);
+    UserCredential userCredential = await _signInWithEmailAndPassword(requestModel);
+    DocumentSnapshot<Object?> userDoc = await _accessUsersCollection(userCredential);
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
 
-    // Check if FCM token exists
-    if (userData[RequestDataNames.fcmToken] == null ||
-        userData[RequestDataNames.fcmToken].isEmpty) {
+    if (userData[RequestDataNames.fcmToken] == null || userData[RequestDataNames.fcmToken].isEmpty) {
       String? newFcmToken = await FirebaseMessaging.instance.getToken();
 
       await FirebaseFirestore.instance
@@ -54,11 +50,10 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       await _clearFcmTokenInRelatedDocs(
         userId: userCredential.user!.uid,
         fcmToken: newFcmToken,
-      ); // Pass the new FCM token
+      );
     }
 
     fcmTokenAssigned = true;
-
     return UserModel.fromJson(userData);
   }
 
@@ -71,10 +66,10 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     return userDoc;
   }
 
-  Future<UserCredential> _signInWithEmailAndPassword(
-      LoginRequestModel requestModel) async {
-    UserCredential userCredential = await FirebaseAuth.instance
-        .signInWithEmailAndPassword(
+Future<UserCredential> _signInWithEmailAndPassword(
+    LoginRequestModel requestModel,
+  ) async {
+    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: requestModel.email,
       password: requestModel.password,
     );
@@ -119,7 +114,6 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       if (fcmTokenAssigned) {
-        // Only clear the FCM token if it was previously assigned
         await FirebaseFirestore.instance
             .collection(CollectionNames.users)
             .doc(user.uid)
@@ -128,10 +122,12 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
         await _clearFcmTokenInRelatedDocs(
           userId: user.uid,
           fcmToken: '',
-        ); // Clear FCM tokens in related docs
+        ); 
+        
       }
       await FirebaseAuth.instance.signOut();
-      fcmTokenAssigned = false; // Reset the FCM token assignment status
+      fcmTokenAssigned = false; 
+      
     }
   }
 
@@ -139,7 +135,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     required String userId,
     String? fcmToken,
   }) async {
-    // Clear FCM token in comments subcollection inside videos subcollection under users collection
+
     await FirebaseFirestore.instance
         .collection(CollectionNames.users)
         .doc(userId)

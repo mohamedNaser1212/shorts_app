@@ -27,7 +27,7 @@ class RegisterFormBody extends StatelessWidget {
         const SizedBox(height: 10),
         ElevatedButton(
           onPressed:
-              state.pickImage,
+              state.imageNotifierController.pickImage, 
           child: const Text('Pick Image'),
         ),
         const SizedBox(height: 20),

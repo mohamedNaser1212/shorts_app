@@ -1,4 +1,5 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 import 'package:shorts/core/network/firebase_manager/collection_names.dart';
@@ -14,13 +15,30 @@ abstract class UpdateUserDataRemoteDataSource {
 
 class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseAuth auth = FirebaseAuth.instance;
 
   @override
   Future<UserModel> updateUserData({
     required UpdateUserRequestModel updateUserRequestModel,
     required String userId,
   }) async {
+    // Get the current user from Firebase Auth
+    User? currentUser = auth.currentUser;
+
+    if (currentUser != null) {
+      // If the email is being updated, update it in Firebase Authentication
+      if (updateUserRequestModel.email != currentUser.email) {
+        await _updateUserEmailInAuth(
+          currentUser: currentUser,
+          newEmail: updateUserRequestModel.email,
+        );
+      }
+    }
+
+    // Update Firestore document
     await _updateUserCollection(userId, updateUserRequestModel);
+
+    // Call functions to update all associated Firestore records
     await _usersVideos(userId, updateUserRequestModel);
     await _videosCollectionComments(userId, updateUserRequestModel);
     await _videosCollection(userId, updateUserRequestModel);
@@ -32,6 +50,14 @@ class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
     final userData = userDoc.data() as Map<String, dynamic>;
 
     return UserModel.fromJson(userData);
+  }
+
+  Future<void> _updateUserEmailInAuth({
+    required User currentUser,
+    required String newEmail,
+  }) async {
+    await currentUser.verifyBeforeUpdateEmail(newEmail);// Verify the new email
+    await currentUser.reload(); // Reload user to apply the updated email
   }
 
   Future<void> _updateUserCollection(

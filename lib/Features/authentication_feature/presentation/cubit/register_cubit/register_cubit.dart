@@ -39,15 +39,6 @@ class RegisterCubit extends Cubit<RegisterState> {
         emit(RegisterErrorState(message: failure.message));
       },
       (userModel) async {
-        final userDataResult = await userDataUseCase.call();
-        userDataResult.fold(
-          (failure) {
-            emit(RegisterErrorState(message: failure.message));
-          },
-          (userData) {
-            emit(RegisterSuccessState(userModel: userData!));
-          },
-        );
         emit(RegisterSuccessState(userModel: userModel));
       },
     );

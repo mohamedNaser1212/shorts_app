@@ -1,10 +1,10 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/auth_status_text_widget.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_form_body.dart';
-import 'package:shorts/core/managers/image_picker_manager/image_picker_manager.dart';
+import 'package:shorts/core/image_notifiere_controller/image_notifiere_controller.dart';
 import 'package:shorts/core/widgets/register_botton.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_header.dart';
-import 'dart:io';
 
 class RegisterScreenForm extends StatefulWidget {
   const RegisterScreenForm({
@@ -25,8 +25,7 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
   late final TextEditingController passwordController;
   late final TextEditingController bioController;
 
-  final ValueNotifier<File?> imageFileNotifier = ValueNotifier(null);
-  final ValueNotifier<String?> imageUrlNotifier = ValueNotifier(null);
+  late final ImageNotifierController imageNotifierController;
 
   @override
   void initState() {
@@ -36,33 +35,19 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
     phoneController = TextEditingController();
     passwordController = TextEditingController();
     bioController = TextEditingController();
+
+    imageNotifierController = ImageNotifierController(emailController: emailController);
   }
 
   @override
   void dispose() {
-    super.dispose();
     emailController.dispose();
     nameController.dispose();
     phoneController.dispose();
     passwordController.dispose();
     bioController.dispose();
-    imageFileNotifier.dispose();
-    imageUrlNotifier.dispose();
-  }
-
-  Future<void> pickImage() async {
-    final pickedFile = await ImagePickerHelper.pickImageFromGallery();
-    if (pickedFile != null) {
-      imageFileNotifier.value = pickedFile;
-     // await uploadImage();
-    }
-  }
-
-  Future<void> uploadImage() async {
-    if (imageFileNotifier.value == null) return;
-
-    String fileName = 'profile_images/${emailController.text}.jpg';
-    imageUrlNotifier.value = await ImagePickerHelper.uploadImage(imageFileNotifier.value!, fileName);
+    imageNotifierController.dispose(); // Dispose the image controller
+    super.dispose();
   }
 
   @override
@@ -79,6 +64,18 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
           RegisterButton(state: this),
           const SizedBox(height: 10),
           AuthStatusTextWidget.register(context: context),
+          const SizedBox(height: 10),
+          ValueListenableBuilder<File?>(
+            valueListenable: imageNotifierController.imageFileNotifier,
+            builder: (context, imageFile, child) {
+              return imageFile != null
+                  ? Image.file(imageFile, height: 100, width: 100)
+                  : TextButton(
+                      onPressed: imageNotifierController.pickImage,
+                      child: const Text("Pick Image"),
+                    );
+            },
+          ),
         ],
       ),
     );
