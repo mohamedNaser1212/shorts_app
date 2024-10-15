@@ -34,6 +34,7 @@ import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/user_info/data/user_info_data_sources/user_info_local_data_source.dart';
 import 'package:shorts/core/user_info/data/user_info_data_sources/user_info_remote_data_source.dart';
 import 'package:shorts/core/user_info/domain/user_info_repo/user_info_repo.dart';
+import 'package:shorts/firebase_helper.dart';
 
 import '../../Features/authentication_feature/data/authentication_data_sources/authentication_remote_data_source.dart';
 import '../../Features/authentication_feature/domain/authentication_repo/authentication_repo.dart';
@@ -66,6 +67,7 @@ Future<void> setUpServiceLocator() async {
   await getIt.get<LocalStorageManager>().initialize();
 
   getIt.registerSingleton<FirebaseHelper>(FirebaseManagerImpl());
+  getIt.registerSingleton<FirebaseHelperManager>(FirebaseHelperManagerImpl());
 
   getIt.registerSingleton<RepoManager>(RepoManagerImpl(
     internetManager: getIt.get<InternetManager>(),
@@ -137,7 +139,9 @@ Future<void> setUpServiceLocator() async {
   ));
 
   getIt.registerSingleton<CommentsRemoteDataSource>(
-    CommentsRemoteDataSourceImpl(),
+    CommentsRemoteDataSourceImpl(
+      firebaseHelper: getIt.get<FirebaseHelperManager>(),
+    ),
   );
   getIt.registerSingleton<CommentsLocalDataSourceImpl>(
     CommentsLocalDataSourceImpl(
