@@ -30,9 +30,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
   final FirebaseHelperManager firebaseHelper;
 
   AuthenticationDataSourceImpl({
-
     required this.firebaseHelper,
-
   });
 
   @override
@@ -126,16 +124,22 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       if (fcmTokenAssigned) {
-        await FirebaseFirestore.instance
-            .collection(CollectionNames.users)
-            .doc(user.uid)
-            .update({RequestDataNames.fcmToken: ''});
+
+        await firebaseHelper.updateDocument(
+          collectionPath: CollectionNames.users,
+          docId: user.uid,
+          data: {RequestDataNames.fcmToken: ''},
+        );
+        
+        // await FirebaseFirestore.instance
+        //     .collection(CollectionNames.users)
+        //     .doc(user.uid)
+        //     .update({RequestDataNames.fcmToken: ''});
 
         await ClearToken.clearToken(
           userId: user.uid,
           fcmToken: '',
           firebaseHelper: firebaseHelper,
-
         );
       }
       await FirebaseAuth.instance.signOut();

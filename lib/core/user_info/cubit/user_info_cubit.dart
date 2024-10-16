@@ -44,6 +44,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
     final result = await signOutUseCase.call();
     result.fold(
       (failure) {
+        print(failure.message);
         emit(SignOutErrorState(error: failure.message));
       },
       (success) {

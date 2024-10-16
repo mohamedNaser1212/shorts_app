@@ -109,32 +109,33 @@ abstract class ClearToken {
     }
   }
 
- static Future<void> _usersFavourites({
-  required String userId,
-  required String fcmToken,
-  required FirebaseHelperManager firebaseHelper,
-}) async {
-  // Fetch favorites for the specified user
-  List<Map<String, dynamic>> favorites = await firebaseHelper.getCollectionDocuments(
-    collectionPath: CollectionNames.users,
-    docId: userId,
-    subCollectionPath: CollectionNames.favourites,
-  );
-
-  // Update the fcmToken for each favorite
-  for (var favorite in favorites) {
-    String favoriteId = favorite['id']; // Assuming 'id' is the document ID field
-
-    await firebaseHelper.updateDocument(
+  static Future<void> _usersFavourites({
+    required String userId,
+    required String fcmToken,
+    required FirebaseHelperManager firebaseHelper,
+  }) async {
+    // Fetch favorites for the specified user
+    List<Map<String, dynamic>> favorites =
+        await firebaseHelper.getCollectionDocuments(
       collectionPath: CollectionNames.users,
       docId: userId,
       subCollectionPath: CollectionNames.favourites,
-      subDocId: favoriteId,
-      data: {'user.fcmToken': fcmToken},
     );
-  }
-}
 
+    // Update the fcmToken for each favorite
+    for (var favorite in favorites) {
+      String favoriteId =
+          favorite['id']; // Assuming 'id' is the document ID field
+
+      await firebaseHelper.updateDocument(
+        collectionPath: CollectionNames.users,
+        docId: userId,
+        subCollectionPath: CollectionNames.favourites,
+        subDocId: favoriteId,
+        data: {'user.fcmToken': fcmToken},
+      );
+    }
+  }
 
   static Future<void> _videosComments(String userId, String fcmToken) async {
     await FirebaseFirestore.instance
@@ -149,7 +150,7 @@ abstract class ClearToken {
             .get()
             .then((commentsQuerySnapshot) {
           for (var commentDoc in commentsQuerySnapshot.docs) {
-            commentDoc.reference.update({'user.fcmToken': fcmToken ?? ''});
+            commentDoc.reference.update({'user.fcmToken': fcmToken });
           }
         });
       }
