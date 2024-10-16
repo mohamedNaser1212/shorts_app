@@ -48,7 +48,7 @@ abstract class ClearToken {
             .get()
             .then((commentsQuerySnapshot) {
           for (var commentDoc in commentsQuerySnapshot.docs) {
-            commentDoc.reference.update({'user.fcmToken': fcmToken });
+            commentDoc.reference.update({'user.fcmToken': fcmToken});
           }
         });
       }
@@ -76,55 +76,55 @@ abstract class ClearToken {
       await firebaseHelper.updateDocument(
         collectionPath: CollectionNames.videos,
         docId: videoId,
-        data: {'user.fcmToken': fcmToken },
+        data: {'user.fcmToken': fcmToken},
       );
     }
   }
-static Future<void> _usersVideos({
-  required String userId,
-  required String fcmToken,
-  required FirebaseHelperManager firebaseHelper,
-}) async {
-  // Fetch videos from the user's video collection
-  List<Map<String, dynamic>> videoDocs = await firebaseHelper.getCollectionDocuments(
-    collectionPath: CollectionNames.users,
-    docId: userId,
-    subCollectionPath: CollectionNames.videos,
-  );
 
-  // Loop through each video document and update the fcmToken
-  for (var videoDoc in videoDocs) {
-    String videoId = videoDoc['id']; // Assuming 'id' is the document ID field
-
-    // Update the fcmToken for the video
-    await firebaseHelper.updateDocument(
+  static Future<void> _usersVideos({
+    required String userId,
+    required String fcmToken,
+    required FirebaseHelperManager firebaseHelper,
+  }) async {
+    // Fetch videos from the user's video collection
+    List<Map<String, dynamic>> videoDocs =
+        await firebaseHelper.getCollectionDocuments(
       collectionPath: CollectionNames.users,
       docId: userId,
       subCollectionPath: CollectionNames.videos,
-      subDocId: videoId,
-      data: {'user.fcmToken': fcmToken},
     );
+
+    // Loop through each video document and update the fcmToken
+    for (var videoDoc in videoDocs) {
+      String videoId = videoDoc['id']; // Assuming 'id' is the document ID field
+
+      // Update the fcmToken for the video
+      await firebaseHelper.updateDocument(
+        collectionPath: CollectionNames.users,
+        docId: userId,
+        subCollectionPath: CollectionNames.videos,
+        subDocId: videoId,
+        data: {'user.fcmToken': fcmToken},
+      );
+    }
   }
-}
 
-
-  static Future<void> _usersFavourites({
+ static Future<void> _usersFavourites({
   required String userId,
   required String fcmToken,
   required FirebaseHelperManager firebaseHelper,
 }) async {
-  // Fetch favorites from the user's favorites collection
-  List<Map<String, dynamic>> favoritesDocs = await firebaseHelper.getCollectionDocuments(
+  // Fetch favorites for the specified user
+  List<Map<String, dynamic>> favorites = await firebaseHelper.getCollectionDocuments(
     collectionPath: CollectionNames.users,
     docId: userId,
     subCollectionPath: CollectionNames.favourites,
   );
 
-  // Loop through each favorite document and update the fcmToken
-  for (var favoriteDoc in favoritesDocs) {
-    String favoriteId = favoriteDoc['id']; // Assuming 'id' is the document ID field
+  // Update the fcmToken for each favorite
+  for (var favorite in favorites) {
+    String favoriteId = favorite['id']; // Assuming 'id' is the document ID field
 
-    // Update the fcmToken for the favorite
     await firebaseHelper.updateDocument(
       collectionPath: CollectionNames.users,
       docId: userId,
