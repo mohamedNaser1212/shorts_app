@@ -22,16 +22,13 @@ class VideosRepoImpl extends VideosRepo {
   @override
   Future<Either<Failure, List<VideoEntity>>> getVideos() async {
     return repoManager.call(action: () async {
-      final cachedVideos = await videoLocalDataSource.getVideos();
-      if (cachedVideos.isNotEmpty) {
-        print('cachedVideos: ${cachedVideos.length}');
-        return cachedVideos;
-      } else {
+     // final cachedVideos = await videoLocalDataSource.getVideos();
+    
         final videos = await videosRemoteDataSource.getVideos();
         await videoLocalDataSource.saveVideos(videos);
         print('videos: ${videos.length}');
         return videos;
-      }
+     
     });
   }
 

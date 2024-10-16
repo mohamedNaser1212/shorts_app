@@ -19,6 +19,7 @@ abstract class FirebaseHelperManager {
     required Map<String, dynamic> data,
     String? docId, // Ensure docId is used
     String? subCollectionPath,
+    String? subDocId,
   });
 
   // Method to update a document
@@ -86,28 +87,35 @@ Future<List<Map<String, dynamic>>> getCollectionDocuments({
       .map((doc) => doc.data() as Map<String, dynamic>)
       .toList();
 }
-  @override
-  Future<void> addDocument({
-    required String collectionPath,
-    required Map<String, dynamic> data,
-    String? docId, // Ensure docId is used
-    String? subCollectionPath,
-  }) async {
-    CollectionReference collection = firestore.collection(collectionPath);
+ @override
+Future<void> addDocument({
+  required String collectionPath,
+  required Map<String, dynamic> data,
+  String? docId, // Ensure docId is used
+  String? subCollectionPath,
+  String? subDocId,
+}) async {
+  CollectionReference collection = firestore.collection(collectionPath);
 
-    // Handle sub-collection
-    if (docId != null && subCollectionPath != null) {
-      collection = collection.doc(docId).collection(subCollectionPath);
-    }
+  // Handle sub-collection if docId and subCollectionPath are provided
+  if (docId != null && subCollectionPath != null) {
+    collection = collection.doc(docId).collection(subCollectionPath);
+  }
 
-    if (docId != null) {
+  if (docId != null) {
+    // If subDocId is provided, set the document with that ID in the sub-collection
+    if (subDocId != null) {
+      await collection.doc(subDocId).set(data);
+    } else {
       // Use set() with docId to add the document with a specific ID
       await collection.doc(docId).set(data);
-    } else {
-      // Otherwise, add a document with a random ID
-      await collection.add(data);
     }
+  } else {
+    // Otherwise, add a document with a random ID
+    await collection.add(data);
   }
+}
+
 
   @override
   Future<void> updateDocument({

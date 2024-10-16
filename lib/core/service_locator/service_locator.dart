@@ -73,7 +73,9 @@ Future<void> setUpServiceLocator() async {
     internetManager: getIt.get<InternetManager>(),
   ));
 
-  getIt.registerSingleton<VideosRemoteDataSource>(VideosRemoteDataSourceImpl());
+  getIt.registerSingleton<VideosRemoteDataSource>(VideosRemoteDataSourceImpl(
+    firebaseHelperManager: getIt.get<FirebaseHelperManager>(),
+  ));
 
   getIt.registerSingleton<NotificationHelper>(PushNotificationService());
 

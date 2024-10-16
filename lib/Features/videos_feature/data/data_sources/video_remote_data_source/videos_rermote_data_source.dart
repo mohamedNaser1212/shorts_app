@@ -2,6 +2,7 @@ import 'dart:io';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
+import 'package:shorts/firebase_helper.dart';
 import '../../../../../core/network/firebase_manager/collection_names.dart';
 
 abstract class VideosRemoteDataSource {
@@ -10,18 +11,21 @@ abstract class VideosRemoteDataSource {
   Future<VideoModel> uploadVideo({
     required VideoModel videoModel,
   });
-
 }
 
 class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
+  final FirebaseHelperManager firebaseHelperManager;
 
+  VideosRemoteDataSourceImpl({required this.firebaseHelperManager});
   @override
   Future<List<VideoModel>> getVideos() async {
-    final data = await firestore.collection(CollectionNames.videos).get();
-    return data.docs.map((doc) => VideoModel.fromJson(doc.data())).toList();
+    final data = await firebaseHelperManager.getCollectionDocuments(
+      collectionPath: CollectionNames.videos,
+    );
+    return data.map((video) => VideoModel.fromJson(video)).toList();
   }
 
   @override
@@ -38,22 +42,24 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
       thumbnail: thumbnailUrl,
     );
 
-
     await _uploadVideoToVideosCollection(videoModel, updatedVideoModel);
     await _uploadVideoToUserCollection(videoModel, updatedVideoModel);
 
     return updatedVideoModel;
   }
 
-  _uploadVideoToVideosCollection(VideoModel videoModel, VideoModel updatedVideoModel) async {
-    await firestore
-      .collection(CollectionNames.videos)
-      .doc(videoModel.id)
-      .set(updatedVideoModel.toJson());
+  _uploadVideoToVideosCollection(
+      VideoModel videoModel, VideoModel updatedVideoModel) async {
+    await firebaseHelperManager.addDocument(
+      collectionPath: CollectionNames.videos,
+      data: updatedVideoModel.toJson(),
+      docId: videoModel.id,
+    );
   }
 
-  Future<void> _uploadVideoToUserCollection(VideoModel videoModel, VideoModel updatedVideoModel) async {
-     await firestore
+  Future<void> _uploadVideoToUserCollection(
+      VideoModel videoModel, VideoModel updatedVideoModel) async {
+    await firestore
         .collection(CollectionNames.users)
         .doc(videoModel.user.id)
         .collection(CollectionNames.videos)
@@ -82,6 +88,4 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     final TaskSnapshot snapshot = await uploadTask;
     return await snapshot.ref.getDownloadURL();
   }
-
-
 }

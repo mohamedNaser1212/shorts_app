@@ -5,15 +5,16 @@ import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cu
 
 class VideosPageViewWidget extends StatelessWidget {
   const VideosPageViewWidget({
-    super.key, required this.state,
+    super.key,
+    required this.state,
   });
-  final GetVideoSuccess state ;
+  final GetVideoSuccess state;
 
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
       itemCount: state.videos.length,
-      scrollBehavior: const ScrollBehavior(),
+      physics: const BouncingScrollPhysics(),
       scrollDirection: Axis.vertical,
       itemBuilder: (context, index) {
         final video = state.videos[index];
