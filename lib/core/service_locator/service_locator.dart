@@ -127,6 +127,7 @@ Future<void> setUpServiceLocator() async {
   // UserInfo and Authentication related registrations
   getIt.registerSingleton<AuthenticationRemoteDataSource>(
       AuthenticationDataSourceImpl(
+    firebaseHelper: getIt.get<FirebaseHelperManager>(),
 
   ));
 

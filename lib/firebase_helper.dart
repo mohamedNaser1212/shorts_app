@@ -4,12 +4,14 @@ abstract class FirebaseHelperManager {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<List<Map<String, dynamic>>> getCollectionDocuments({
-    required String collectionPath,
-    String? docId,
-    String? subCollectionPath,
-    int? limit,
-    String? orderBy,
-    bool descending = false,
+ required String collectionPath,
+  String? docId,
+  String? subCollectionPath,
+  String? whereField,
+  dynamic whereValue,
+  int? limit,
+  String? orderBy,
+  bool descending = false,
   });
 
   Future<void> addDocument({
@@ -25,6 +27,7 @@ abstract class FirebaseHelperManager {
     required String docId,
     required Map<String, dynamic> data,
     String? subCollectionPath,
+    String? subDocId,
   });
 
   Future<void> deleteDocument({
@@ -41,35 +44,48 @@ abstract class FirebaseHelperManager {
 }
 
 class FirebaseHelperManagerImpl extends FirebaseHelperManager {
-  @override
-  Future<List<Map<String, dynamic>>> getCollectionDocuments({
-    required String collectionPath,
-    String? docId,
-    String? subCollectionPath,
-    int? limit,
-    String? orderBy,
-    bool descending = false,
-  }) async {
-    CollectionReference collection = firestore.collection(collectionPath);
+@override
+Future<List<Map<String, dynamic>>> getCollectionDocuments({
+  required String collectionPath,
+  String? docId,
+  String? subCollectionPath,
+  String? whereField,
+  dynamic whereValue,
+  int? limit,
+  String? orderBy,
+  bool descending = false,
+}) async {
+  CollectionReference collection = firestore.collection(collectionPath);
 
-    if (docId != null && subCollectionPath != null) {
-      collection = collection.doc(docId).collection(subCollectionPath);
-    }
-
-    Query query = collection;
-    if (orderBy != null) {
-      query = query.orderBy(orderBy, descending: descending);
-    }
-    if (limit != null) {
-      query = query.limit(limit);
-    }
-
-    final querySnapshot = await query.get();
-    return querySnapshot.docs
-        .map((doc) => doc.data() as Map<String, dynamic>)
-        .toList();
+  // Accessing the sub-collection if provided
+  if (docId != null && subCollectionPath != null) {
+    collection = collection.doc(docId).collection(subCollectionPath);
   }
 
+  Query query = collection;
+
+  // Applying the 'where' clause if specified
+  if (whereField != null && whereValue != null) {
+    query = query.where(whereField, isEqualTo: whereValue);
+  }
+
+  // Applying ordering if specified
+  if (orderBy != null) {
+    query = query.orderBy(orderBy, descending: descending);
+  }
+
+  // Applying limit if specified
+  if (limit != null) {
+    query = query.limit(limit);
+  }
+
+  final querySnapshot = await query.get();
+  
+  // Returning the documents data as a list of maps
+  return querySnapshot.docs
+      .map((doc) => doc.data() as Map<String, dynamic>)
+      .toList();
+}
   @override
   Future<void> addDocument({
     required String collectionPath,
@@ -95,16 +111,17 @@ class FirebaseHelperManagerImpl extends FirebaseHelperManager {
 
   @override
   Future<void> updateDocument({
-    required String collectionPath,
+     required String collectionPath,
     required String docId,
     required Map<String, dynamic> data,
     String? subCollectionPath,
+    String? subDocId,
   }) async {
     DocumentReference document =
         firestore.collection(collectionPath).doc(docId);
 
     if (subCollectionPath != null) {
-      document = document.collection(subCollectionPath).doc();
+      document = document.collection(subCollectionPath).doc(subDocId);
     }
 
     await document.update(data);

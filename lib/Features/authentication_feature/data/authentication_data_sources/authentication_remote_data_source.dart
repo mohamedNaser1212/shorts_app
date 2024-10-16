@@ -5,6 +5,7 @@ import 'package:shorts/core/clear_token/clear_token.dart';
 import 'package:shorts/core/network/firebase_manager/collection_names.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/utils/constants/request_data_names.dart';
+import 'package:shorts/firebase_helper.dart';
 import '../user_model/login_request_model.dart';
 import '../user_model/register_request_model.dart';
 import '../user_model/user_model.dart';
@@ -24,23 +25,28 @@ abstract class AuthenticationRemoteDataSource {
 }
 
 class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
+  bool fcmTokenAssigned = false;
 
+  final FirebaseHelperManager firebaseHelper;
 
-  bool fcmTokenAssigned = false; 
+  AuthenticationDataSourceImpl({
 
-  
-  
-  
+    required this.firebaseHelper,
 
-    @override
+  });
+
+  @override
   Future<UserModel> login({
     required LoginRequestModel requestModel,
   }) async {
-    UserCredential userCredential = await _signInWithEmailAndPassword(requestModel);
-    DocumentSnapshot<Object?> userDoc = await _accessUsersCollection(userCredential);
+    UserCredential userCredential =
+        await _signInWithEmailAndPassword(requestModel);
+    DocumentSnapshot<Object?> userDoc =
+        await _accessUsersCollection(userCredential);
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
 
-    if (userData[RequestDataNames.fcmToken] == null || userData[RequestDataNames.fcmToken].isEmpty) {
+    if (userData[RequestDataNames.fcmToken] == null ||
+        userData[RequestDataNames.fcmToken].isEmpty) {
       String? newFcmToken = await FirebaseMessaging.instance.getToken();
 
       await FirebaseFirestore.instance
@@ -54,6 +60,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       await ClearToken.clearToken(
         userId: userCredential.user!.uid,
         fcmToken: newFcmToken!,
+        firebaseHelper: firebaseHelper,
       );
     }
 
@@ -70,10 +77,11 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     return userDoc;
   }
 
-Future<UserCredential> _signInWithEmailAndPassword(
+  Future<UserCredential> _signInWithEmailAndPassword(
     LoginRequestModel requestModel,
   ) async {
-    UserCredential userCredential = await FirebaseAuth.instance.signInWithEmailAndPassword(
+    UserCredential userCredential =
+        await FirebaseAuth.instance.signInWithEmailAndPassword(
       email: requestModel.email,
       password: requestModel.password,
     );
@@ -126,14 +134,12 @@ Future<UserCredential> _signInWithEmailAndPassword(
         await ClearToken.clearToken(
           userId: user.uid,
           fcmToken: '',
-        ); 
-        
+          firebaseHelper: firebaseHelper,
+
+        );
       }
       await FirebaseAuth.instance.signOut();
-      fcmTokenAssigned = false; 
-      
+      fcmTokenAssigned = false;
     }
   }
-
-
 }
