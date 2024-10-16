@@ -83,8 +83,8 @@ Future<void> setUpServiceLocator() async {
 
   getIt.registerSingleton<FavouritesRemoteDataSource>(
       FavouritesRemoteDataSourceImpl(
-        firebaseHelperManager: getIt.get<FirebaseHelperManager>(),
-      ));
+    firebaseHelperManager: getIt.get<FirebaseHelperManager>(),
+  ));
   getIt.registerSingleton<FavouritesLocalDataSource>(
       FavouritesLocalDataSourceImpl(
     hiveHelper: getIt.get<LocalStorageManager>(),
@@ -128,7 +128,6 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<AuthenticationRemoteDataSource>(
       AuthenticationDataSourceImpl(
     firebaseHelper: getIt.get<FirebaseHelperManager>(),
-
   ));
 
   getIt.registerSingleton<UserLocalDataSourceImpl>(UserLocalDataSourceImpl(
@@ -151,12 +150,13 @@ Future<void> setUpServiceLocator() async {
       localStorageManager: getIt.get<LocalStorageManager>(),
     ),
   );
-  getIt.registerSingleton<UserInfoRemoteDataSource>(
-      UserInfoRemoteDataSourceImpl(
+  getIt
+      .registerSingleton<UserInfoRemoteDataSource>(UserInfoRemoteDataSourceImpl(
     firebaseHelper: getIt.get<FirebaseHelperManager>(),
-      ));
+  ));
   getIt.registerSingleton<UserProfileVideosRemoteDataSource>(
-      UserProfileVideosRemoteDataSourceImpl());
+      UserProfileVideosRemoteDataSourceImpl(
+          firebaseHelper: getIt.get<FirebaseHelperManager>()));
   getIt.registerSingleton<UserProfileVideosRepo>(
     UserProfileVideosRepoImpl(
       repoManager: getIt.get<RepoManager>(),

@@ -1,5 +1,5 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
+import 'package:shorts/firebase_helper.dart';
 
 abstract class UserProfileVideosRemoteDataSource {
   Future<List<VideoModel>> getUserVideos({required String userId});
@@ -7,20 +7,16 @@ abstract class UserProfileVideosRemoteDataSource {
 
 class UserProfileVideosRemoteDataSourceImpl
     extends UserProfileVideosRemoteDataSource {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseHelperManager firebaseHelper;
+
+  UserProfileVideosRemoteDataSourceImpl({required this.firebaseHelper});
 
   @override
   Future<List<VideoModel>> getUserVideos({required String userId}) async {
-    // Access the user's videos collection
-    final querySnapshot = await firestore
-        .collection('users')
-        .doc(userId)
-        .collection('videos') 
-        .get();
+    final querySnapshot = await firebaseHelper.getCollectionDocuments(
+      collectionPath: 'users/$userId/videos',
+    );
 
-    // Map the documents to VideoModel
-    return querySnapshot.docs
-        .map((doc) => VideoModel.fromJson(doc.data()))
-        .toList();
+    return querySnapshot.map((doc) => VideoModel.fromJson(doc)).toList();
   }
 }
