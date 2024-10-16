@@ -1,6 +1,7 @@
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_model/favourites_model.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
+import 'package:shorts/firebase_helper.dart';
+
 import '../../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
@@ -10,58 +11,62 @@ abstract class FavouritesRemoteDataSource {
     required UserEntity user,
   });
   Future<bool> toggleFavouriteVideo({
-    required  VideoEntity videoEntity,
+    required VideoEntity videoEntity,
     required UserEntity userModel,
   });
 }
 
 class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  final FirebaseHelperManager firebaseHelperManager;
 
-
+  FavouritesRemoteDataSourceImpl({required this.firebaseHelperManager});
 
   @override
   Future<List<FavouritesVideoModel>> getFavouriteVideos({
     required UserEntity user,
   }) async {
-    final querySnapshot = await firestore
-        .collection(CollectionNames.users)
-        .doc(user.id)
-        .collection(CollectionNames.favourites)
-        .get();
+    final querySnapshot = await firebaseHelperManager.getCollectionDocuments(
+      collectionPath: CollectionNames.users,
+      docId: user.id,
+      subCollectionPath: CollectionNames.favourites,
+    );
 
-    return querySnapshot.docs
-        .map((doc) => FavouritesVideoModel.fromJson(doc.data()))
+    return querySnapshot
+        .map((data) => FavouritesVideoModel.fromJson(data))
         .toList();
   }
 
   @override
   Future<bool> toggleFavouriteVideo({
-    required  VideoEntity videoEntity,
+    required VideoEntity videoEntity,
     required UserEntity userModel,
   }) async {
-    final userFavouritesCollection = firestore
-        .collection(CollectionNames.users)
-        .doc(userModel.id)
-        .collection(CollectionNames.favourites)
-        .doc(videoEntity.id);
+    final favouriteVideoDoc = await firebaseHelperManager.getDocument(
+      collectionPath:
+          '${CollectionNames.users}/${userModel.id}/${CollectionNames.favourites}',
+      docId: videoEntity.id,
+    );
 
-    final favourites = await userFavouritesCollection.get();
-
-    if (favourites.exists) {
-      await userFavouritesCollection.delete();
+    if (favouriteVideoDoc != null) {
+      await firebaseHelperManager.deleteDocument(
+          collectionPath: CollectionNames.users,
+          docId: userModel.id!,
+          subCollectionPath: CollectionNames.favourites,
+          subDocId: videoEntity.id);
       return false;
     } else {
-      final globalVideoRef =
-          firestore.collection(CollectionNames.videos).doc(videoEntity.id);
-      final globalVideoDoc = await globalVideoRef.get();
+      final globalVideoDoc = await firebaseHelperManager.getDocument(
+        collectionPath: CollectionNames.videos,
+        docId: videoEntity.id,
+      );
 
-      if (globalVideoDoc.exists) {
-        final videoData = globalVideoDoc.data() as Map<String, dynamic>;
-
-        await userFavouritesCollection.set(videoData);
-
-        print('Video added to favourites collection');
+      if (globalVideoDoc != null) {
+        await firebaseHelperManager.addDocument(
+          collectionPath:
+              '${CollectionNames.users}/${userModel.id}/${CollectionNames.favourites}',
+          data: globalVideoDoc,
+          docId: videoEntity.id,
+        );
         return true;
       } else {
         return false;

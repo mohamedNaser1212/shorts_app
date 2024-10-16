@@ -82,7 +82,9 @@ Future<void> setUpServiceLocator() async {
   ));
 
   getIt.registerSingleton<FavouritesRemoteDataSource>(
-      FavouritesRemoteDataSourceImpl());
+      FavouritesRemoteDataSourceImpl(
+        firebaseHelperManager: getIt.get<FirebaseHelperManager>(),
+      ));
   getIt.registerSingleton<FavouritesLocalDataSource>(
       FavouritesLocalDataSourceImpl(
     hiveHelper: getIt.get<LocalStorageManager>(),

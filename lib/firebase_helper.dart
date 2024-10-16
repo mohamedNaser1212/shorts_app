@@ -17,7 +17,7 @@ abstract class FirebaseHelperManager {
   Future<void> addDocument({
     required String collectionPath,
     required Map<String, dynamic> data,
-    String? docId,
+    String? docId, // Ensure docId is used
     String? subCollectionPath,
   });
 
@@ -34,6 +34,7 @@ abstract class FirebaseHelperManager {
     required String collectionPath,
     required String docId,
     String? subCollectionPath,
+    String? subDocId,
   });
 
   // Method to get a single document
@@ -77,16 +78,23 @@ class FirebaseHelperManagerImpl extends FirebaseHelperManager {
   Future<void> addDocument({
     required String collectionPath,
     required Map<String, dynamic> data,
-    String? docId,
+    String? docId, // Ensure docId is used
     String? subCollectionPath,
   }) async {
     CollectionReference collection = firestore.collection(collectionPath);
 
+    // Handle sub-collection
     if (docId != null && subCollectionPath != null) {
       collection = collection.doc(docId).collection(subCollectionPath);
     }
 
-    await collection.add(data);
+    if (docId != null) {
+      // Use set() with docId to add the document with a specific ID
+      await collection.doc(docId).set(data);
+    } else {
+      // Otherwise, add a document with a random ID
+      await collection.add(data);
+    }
   }
 
   @override
@@ -111,12 +119,15 @@ class FirebaseHelperManagerImpl extends FirebaseHelperManager {
     required String collectionPath,
     required String docId,
     String? subCollectionPath,
+    String? subDocId,
   }) async {
     DocumentReference document =
         firestore.collection(collectionPath).doc(docId);
 
     if (subCollectionPath != null) {
-      document = document.collection(subCollectionPath).doc();
+      document = document.collection(subCollectionPath).doc(
+            subDocId,
+          );
     }
 
     await document.delete();
