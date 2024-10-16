@@ -20,11 +20,11 @@ class FavouritesPage extends StatefulWidget {
 }
 
 class _FavouritesPageState extends State<FavouritesPage> {
-  @override
-  void initState() {
-    super.initState();
-    FavouritesCubit.get(context).getFavourites(user: widget.currentUser);
-  }
+  // @override
+  // void initState() {
+  //   super.initState();
+  //   FavouritesCubit.get(context).getFavourites(user: widget.currentUser);
+  // }
 
   @override
   Widget build(BuildContext context) {

@@ -1,61 +1,46 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
-import '../../Features/videos_feature/presentation/widgets/videos_uploading_widgets/thumbnail_page.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/thumbnail_page.dart';
+import 'package:provider/provider.dart';
+import 'package:shorts/core/video_controller/video_controller.dart';
 
-class ThumbnailWidget extends StatefulWidget {
+class ThumbnailWidget extends StatelessWidget {
   const ThumbnailWidget({super.key, this.videoPath});
   final String? videoPath;
 
   @override
-  State<ThumbnailWidget> createState() => _ThumbnailWidgetState();
-}
-class _ThumbnailWidgetState extends State<ThumbnailWidget> {
-  String? _thumbnailPath;
-  @override
-  void initState() {
-    super.initState();
-    if (widget.videoPath != null) {
-      _generateThumbnail(widget.videoPath!);
-    }
-  }
-  @override
   Widget build(BuildContext context) {
-    return _thumbnailPath != null
-        ? GestureDetector(
-            onTap: () => _navigateToThumbnailPage(context),
-            child: Image.file(
-              File(_thumbnailPath!),
-              fit: BoxFit.cover,
-              width: 150,
-              height: 150,
-            ),
-          )
-        : const SizedBox.shrink();
+    if (videoPath == null) {
+      return const SizedBox.shrink();
+    }
+
+    return ChangeNotifierProvider(
+      create: (_) => VideoController(videoPath!),
+      child: Consumer<VideoController>(
+        builder: (context, videoController, child) {
+          final thumbnail = videoController.thumbnail;
+          return thumbnail != null
+              ? GestureDetector(
+                  onTap: () => _navigateToThumbnailPage(context),
+                  child: Image.memory(
+                    thumbnail,
+                    fit: BoxFit.cover,
+                    width: 150,
+                    height: 150,
+                  ),
+                )
+              : const CircularProgressIndicator();
+        },
+      ),
+    );
   }
-    void _navigateToThumbnailPage(BuildContext context) {
-    if (widget.videoPath != null) {
+
+  void _navigateToThumbnailPage(BuildContext context) {
+    if (videoPath != null) {
       NavigationManager.navigateTo(
         context: context,
-        screen: ThumbnailPage(videoPath: widget.videoPath!),
+        screen: ThumbnailPage(videoPath: videoPath!),
       );
     }
   }
-    Future<void> _generateThumbnail(String videoPath) async {
-    final tempDir = await getTemporaryDirectory();
-    final thumbnailPath = await VideoThumbnail.thumbnailFile(
-      video: videoPath,
-      thumbnailPath: tempDir.path,
-      imageFormat: ImageFormat.JPEG,
-      maxHeight: 100,
-      quality: 75,
-    );
-
-    setState(() {
-      _thumbnailPath = thumbnailPath;
-    });
-  }
-
 }

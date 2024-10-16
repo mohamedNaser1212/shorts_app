@@ -21,47 +21,47 @@ class VideoIcons extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FavouritesCubit, FavouritesState>(
-      builder: (context, state) {
-        final notificationHelper = GetIt.instance.get<NotificationHelper>();
-        final isFavorite =
-            FavouritesCubit.get(context).favorites[videoEntity?.id] ?? false;
-
-        return Column(
-          children: [
-            IconButton(
+    return Column(
+      children: [
+        BlocConsumer<FavouritesCubit, FavouritesState>(
+          listener: _toggleFavouriteListener,
+          builder: (context, state) {
+            final notificationHelper = GetIt.instance.get<NotificationHelper>();
+            final isFavorite =
+                FavouritesCubit.get(context).favorites[videoEntity!.id] ??
+                    false;
+            return IconButton(
               onPressed: () => _toggleFavourite(context, notificationHelper),
               icon: CircleAvatar(
                 backgroundColor: isFavorite ? Colors.red : Colors.grey,
-                radius: 15,
                 child: Icon(
                   isFavorite ? Icons.favorite : Icons.favorite_border,
                   size: 15,
                   color: Colors.white,
                 ),
               ),
-            ),
-            const SizedBox(height: 10),
-            IconButton(
-              onPressed: () => _commentsOnPressed(context: context),
-              icon: const Icon(
-                Icons.comment,
-                color: Colors.white,
-                size: 35,
-              ),
-            ),
-            const SizedBox(height: 10),
-            IconButton(
-              onPressed: _shareOnPressed,
-              icon: const Icon(
-                Icons.share,
-                color: Colors.white,
-                size: 35,
-              ),
-            ),
-          ],
-        );
-      },
+            );
+          },
+        ),
+        const SizedBox(height: 10),
+        IconButton(
+          onPressed: () => _commentsOnPressed(context: context),
+          icon: const Icon(
+            Icons.comment,
+            color: Colors.white,
+            size: 35,
+          ),
+        ),
+        const SizedBox(height: 10),
+        IconButton(
+          onPressed: _shareOnPressed,
+          icon: const Icon(
+            Icons.share,
+            color: Colors.white,
+            size: 35,
+          ),
+        ),
+      ],
     );
   }
 
@@ -77,13 +77,22 @@ class VideoIcons extends StatelessWidget {
     }
   }
 
+  void _toggleFavouriteListener(BuildContext context, FavouritesState state) {
+    if (state is ToggleFavouriteSuccessState) {
+      FavouritesCubit.get(context).getFavourites(
+        user: UserInfoCubit.get(context).userEntity!,
+      );
+    }
+  }
+
   void _shareOnPressed() {}
   void _toggleFavourite(
       BuildContext context, NotificationHelper notificationHelper) {
-    if (videoEntity != null) {
+    
       final favouritesCubit = FavouritesCubit.get(context);
       final userEntity = UserInfoCubit.get(context).userEntity!;
-
+      final isFavorite = favouritesCubit.favorites[videoEntity!.id] ?? false;
+      favouritesCubit.favorites[videoEntity!.id] = !isFavorite;
       favouritesCubit.toggleFavourite(
         video: videoEntity!,
         userModel: userEntity,
@@ -98,4 +107,4 @@ class VideoIcons extends StatelessWidget {
       );
     }
   }
-}
+

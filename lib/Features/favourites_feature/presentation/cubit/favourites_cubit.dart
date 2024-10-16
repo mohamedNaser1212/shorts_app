@@ -42,10 +42,6 @@ class FavouritesCubit extends Cubit<FavouritesState> {
     required UserEntity userModel,
   }) async {
     emit(ToggleFavoritesLoadingState());
-    favorites[video.id] = !(favorites[video.id] ?? false);
-
-    emit(
-        ToggleFavouriteSuccessState(isFavourite: favorites[video.id] ?? false));
 
     final result = await favouritesUseCase.toggleFavouriteVideo(
       videoEntity: video,
@@ -56,7 +52,7 @@ class FavouritesCubit extends Cubit<FavouritesState> {
         print('Failed to toggle favourite: ${failure.message}');
         emit(ToggleFavoriteErrorState(message: failure.message));
       },
-      (favourites) async {
+      (favourites) {
         emit(ToggleFavouriteSuccessState(isFavourite: favourites));
       },
     );

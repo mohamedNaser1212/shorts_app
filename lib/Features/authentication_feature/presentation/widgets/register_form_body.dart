@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/edit_user_profile_image_widget.dart';
 import 'package:shorts/core/widgets/bio_text_form.dart';
+import 'package:shorts/core/widgets/custom_title.dart';
 import 'package:shorts/core/widgets/password_text_field.dart';
 import 'package:shorts/core/widgets/phone_text_field.dart';
 
@@ -26,9 +27,9 @@ class RegisterFormBody extends StatelessWidget {
         ),
         const SizedBox(height: 10),
         ElevatedButton(
-          onPressed:
-              state.imageNotifierController.pickImage, 
-          child: const Text('Pick Image'),
+          onPressed: state.imageNotifierController.pickImage,
+          child:
+              const CustomTitle(title: 'Pick Image', style: TitleStyle.style14),
         ),
         const SizedBox(height: 20),
         EmailField(controller: state.emailController),

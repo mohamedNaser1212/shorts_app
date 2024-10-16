@@ -7,7 +7,7 @@ class VideoController extends ChangeNotifier {
     initializeController(videoUrl: videoUrl, isInitiallyPaused: isInitiallyPaused);
   }
 
-  VideoPlayerController? _controller;
+  VideoPlayerController? videoController;
   Uint8List? _thumbnail;
   bool _isLiked = false;
   bool _showPlayPauseIcon = false;
@@ -18,7 +18,7 @@ class VideoController extends ChangeNotifier {
   final ValueNotifier<bool> _isLikedNotifier = ValueNotifier(false);
   bool _isPaused = false;
 
-  VideoPlayerController? get controller => _controller;
+  VideoPlayerController? get controller => videoController;
   Uint8List? get thumbnail => _thumbnail;
   bool get isLiked => _isLikedNotifier.value;
   bool get showPlayPauseIcon => _showPlayPauseIcon;
@@ -29,24 +29,24 @@ class VideoController extends ChangeNotifier {
 
   Future<void> initializeController(
       {required String videoUrl, required bool isInitiallyPaused}) async {
-    _controller = VideoPlayerController.networkUrl(Uri.parse(videoUrl))
+    videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl))
       ..setLooping(true);
 
-    await _controller!.initialize();
+    await videoController!.initialize();
 
     if (isInitiallyPaused) {
-      _controller!.pause();
+      videoController!.pause();
       _isPaused = true;
     } else {
-      _controller!.play();
+      videoController!.play();
       _isPaused = false;
     }
 
-    _durationNotifier.value = _controller!.value.duration;
+    _durationNotifier.value = videoController!.value.duration;
 
-    _controller!.addListener(() {
-      _positionNotifier.value = _controller!.value.position;
-      _isPaused = !_controller!.value.isPlaying;
+    videoController!.addListener(() {
+      _positionNotifier.value = videoController!.value.position;
+      _isPaused = !videoController!.value.isPlaying;
       notifyListeners();
     });
 
@@ -66,14 +66,14 @@ class VideoController extends ChangeNotifier {
   }
 
   void togglePlayPause() {
-    if (_controller != null) {
-      if (_controller!.value.isPlaying) {
-        _controller!.pause();
+    if (videoController != null) {
+      if (videoController!.value.isPlaying) {
+        videoController!.pause();
       } else {
-        _controller!.play();
+        videoController!.play();
       }
       _showPlayPauseIcon = true;
-      _isPaused = !_controller!.value.isPlaying;
+      _isPaused = !videoController!.value.isPlaying;
       notifyListeners();
 
       Future.delayed(const Duration(seconds: 1), () {
@@ -90,8 +90,8 @@ class VideoController extends ChangeNotifier {
   }
 
   void seekTo(Duration position) {
-    if (_controller != null) {
-      _controller!.seekTo(position);
+    if (videoController != null) {
+      videoController!.seekTo(position);
     }
   }
 
@@ -100,7 +100,7 @@ class VideoController extends ChangeNotifier {
     _positionNotifier.dispose();
     _durationNotifier.dispose();
     _isLikedNotifier.dispose();
-    _controller?.dispose();
+    videoController?.dispose();
     super.dispose();
   }
 }

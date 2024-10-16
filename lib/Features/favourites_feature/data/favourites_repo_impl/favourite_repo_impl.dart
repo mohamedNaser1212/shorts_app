@@ -26,18 +26,16 @@ class FavouritesRepoImpl implements FavouritesRepo {
   }) async {
     return repoManager.call(
       action: () async {
-        final cachedFavourites =
-            await favouritesLocalDataSource.getFavouriteVideos();
-        if (cachedFavourites.isNotEmpty) {
-          return cachedFavourites;
-        } else {
+        // final cachedFavourites =
+        //     await favouritesLocalDataSource.getFavouriteVideos();
+        
           final favourites = await remoteDataSource.getFavouriteVideos(
             user: user,
           );
 
           await favouritesLocalDataSource.saveFavouriteVideos(favourites);
           return favourites;
-        }
+      
       },
     );
     // try {
@@ -63,11 +61,13 @@ class FavouritesRepoImpl implements FavouritesRepo {
           // final updatedFavourites = await remoteDataSource.getFavouriteVideos(
           //   user: user,
           // );
-
-          await favouritesLocalDataSource.saveFavouriteVideos(
-              await remoteDataSource.getFavouriteVideos(user: userModel));
+          final updatedFavourites = await remoteDataSource.getFavouriteVideos(
+            user: userModel,
+          );
+          await favouritesLocalDataSource
+              .saveFavouriteVideos(updatedFavourites);
         }
-        return result;
+        return result ;
       },
     );
 

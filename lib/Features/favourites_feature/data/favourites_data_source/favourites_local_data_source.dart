@@ -6,7 +6,9 @@ import '../../domain/favourites_entity/favourite_entitiy.dart';
 abstract class FavouritesLocalDataSource {
   const FavouritesLocalDataSource._();
 
-  Future<List<FavouritesEntity>> getFavouriteVideos();
+  Future<List<FavouritesEntity>> getFavouriteVideos(
+    
+  );
   Future<void> saveFavouriteVideos(List<FavouritesEntity> favourites);
   Future<void> removeFavouriteVideo(String videoId);
   Future<void> clearFavouriteVideos();
@@ -21,7 +23,7 @@ class FavouritesLocalDataSourceImpl implements FavouritesLocalDataSource {
   Future<List<FavouritesEntity>> getFavouriteVideos() async {
     final favouriteItems = await hiveHelper
         .loadData<FavouritesEntity>(HiveBoxesNames.kFavouritesBox);
-    return favouriteItems.cast<FavouritesEntity>().toList();
+    return favouriteItems;
   }
 
   @override

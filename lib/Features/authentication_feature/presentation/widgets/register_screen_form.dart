@@ -1,4 +1,4 @@
-import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/auth_status_text_widget.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_form_body.dart';
@@ -46,7 +46,8 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
     phoneController.dispose();
     passwordController.dispose();
     bioController.dispose();
-    imageNotifierController.dispose(); // Dispose the image controller
+    imageNotifierController.dispose(); 
+    
     super.dispose();
   }
 
@@ -65,17 +66,17 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
           const SizedBox(height: 10),
           AuthStatusTextWidget.register(context: context),
           const SizedBox(height: 10),
-          ValueListenableBuilder<File?>(
-            valueListenable: imageNotifierController.imageFileNotifier,
-            builder: (context, imageFile, child) {
-              return imageFile != null
-                  ? Image.file(imageFile, height: 100, width: 100)
-                  : TextButton(
-                      onPressed: imageNotifierController.pickImage,
-                      child: const Text("Pick Image"),
-                    );
-            },
-          ),
+          // ValueListenableBuilder<File?>(
+          //   valueListenable: imageNotifierController.imageFileNotifier,
+          //   builder: (context, imageFile, child) {
+          //     return imageFile != null
+          //         ? Image.file(imageFile, height: 100, width: 100)
+          //         : TextButton(
+          //             onPressed: imageNotifierController.pickImage,
+          //             child: const Text("Pick Image"),
+          //           );
+          //   },
+          // ),
         ],
       ),
     );

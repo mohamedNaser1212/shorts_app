@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_model/favourites_model.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-
 import '../../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
@@ -18,6 +17,8 @@ abstract class FavouritesRemoteDataSource {
 
 class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+
+
 
   @override
   Future<List<FavouritesVideoModel>> getFavouriteVideos({
