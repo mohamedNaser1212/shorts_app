@@ -3,7 +3,6 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 abstract class FirebaseHelperManager {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  // Method to get documents from a collection
   Future<List<Map<String, dynamic>>> getCollectionDocuments({
     required String collectionPath,
     String? docId,
@@ -13,7 +12,6 @@ abstract class FirebaseHelperManager {
     bool descending = false,
   });
 
-  // Method to add a document
   Future<void> addDocument({
     required String collectionPath,
     required Map<String, dynamic> data,
@@ -29,7 +27,6 @@ abstract class FirebaseHelperManager {
     String? subCollectionPath,
   });
 
-  // Method to delete a document
   Future<void> deleteDocument({
     required String collectionPath,
     required String docId,
@@ -37,7 +34,6 @@ abstract class FirebaseHelperManager {
     String? subDocId,
   });
 
-  // Method to get a single document
   Future<Map<String, dynamic>?> getDocument({
     required String collectionPath,
     required String docId,
