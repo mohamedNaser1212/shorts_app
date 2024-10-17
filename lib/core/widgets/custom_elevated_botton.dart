@@ -167,21 +167,8 @@ class CustomElevatedButton extends StatelessWidget {
 
     final currentEmail = userCubit.userEntity!.email;
     final newEmail = editState.emailController.text;
-    final currentName = userCubit.userEntity!.name;
     final newName = editState.nameController.text;
-    final currentPhone = userCubit.userEntity!.phone;
     final newPhone = editState.phoneController.text;
-
-    if (currentEmail == newEmail &&
-        currentName == newName &&
-        currentPhone == newPhone) {
-      ToastHelper.showToast(
-        message: "Your data is up to date.",
-        color: ColorController.greenAccent,
-      );
-
-      return;
-    }
 
     if (currentEmail != newEmail) {
       final shouldUpdateEmail = await showDialog<bool>(

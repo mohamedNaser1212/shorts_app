@@ -14,7 +14,7 @@ class ImageNotifierController extends ChangeNotifier {
     final pickedFile = await ImagePickerHelper.pickImageFromGallery();
     if (pickedFile != null) {
       imageFileNotifier.value = pickedFile;
-      await uploadImage();
+     // await uploadImage();
     }
   }
 

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../utils/constants/consts.dart';
-import '../managers/field_validaltor/fields_validator.dart';
 import 'reusable_text_form_field.dart';
 
 class BioField extends StatelessWidget {
@@ -11,8 +10,8 @@ class BioField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomTextFormField(
-      label: 'bio',
-      validator: FieldsValidator.isNotEmpty,
+      label: 'bio (Optional)',
+      hintText: 'hey there i am a developer',
       controller: controller,
       keyboardType: TextInputType.text,
       activeColor: defaultLightColor,

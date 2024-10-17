@@ -4,6 +4,7 @@ import 'package:shorts/core/utils/constants/consts.dart';
 
 class CustomTextFormField extends StatelessWidget {
   final String label;
+  final String? hintText;
   final double borderRadius;
   final Color activeColor;
   // final void Function() onTap;
@@ -28,6 +29,7 @@ class CustomTextFormField extends StatelessWidget {
     this.prefix,
     this.suffix,
     this.obscure = false,
+    this.hintText,
   });
 
   @override
@@ -49,6 +51,7 @@ class CustomTextFormField extends StatelessWidget {
         decoration: InputDecoration(
           suffixIcon: suffix,
           prefixIcon: prefix,
+          hintText:hintText ,
           enabledBorder: OutlineInputBorder(
             borderSide:
                 const BorderSide(width: 2.0, color: ColorController.greyColor),
