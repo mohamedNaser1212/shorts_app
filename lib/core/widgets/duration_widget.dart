@@ -1,9 +1,7 @@
-
 import 'package:flutter/material.dart';
 
-
-class DurationDisplay extends StatelessWidget {
-  const DurationDisplay({
+class DurationWidget extends StatelessWidget {
+  const DurationWidget({
     super.key,
     required this.positionNotifier,
   });
