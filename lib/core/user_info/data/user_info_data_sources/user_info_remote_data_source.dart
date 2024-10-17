@@ -1,5 +1,4 @@
-
-import 'package:shorts/firebase_helper.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 import '../../../../Features/authentication_feature/data/user_model/user_model.dart';
 import '../../../network/firebase_manager/collection_names.dart';
 
@@ -9,11 +8,11 @@ abstract class UserInfoRemoteDataSource {
   Future<UserModel> getUser({
     required String uId,
   });
- // Future<List<Map<String, UserModel>>> getUserVideos();
+  // Future<List<Map<String, UserModel>>> getUserVideos();
 }
 
 class UserInfoRemoteDataSourceImpl implements UserInfoRemoteDataSource {
-  final FirebaseHelperManager firebaseHelper;
+  final FirebaseHelper firebaseHelper;
 
   const UserInfoRemoteDataSourceImpl({
     required this.firebaseHelper,
@@ -28,10 +27,6 @@ class UserInfoRemoteDataSourceImpl implements UserInfoRemoteDataSource {
       docId: uId,
     );
 
-  
-      return UserModel.fromJson(userData??{});
- 
+    return UserModel.fromJson(userData ?? {});
   }
-
-
 }

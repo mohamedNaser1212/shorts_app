@@ -25,16 +25,13 @@ class _PreviewPageBodyState extends State<PreviewPageBody> {
   void initState() {
     super.initState();
     controller = VideoPlayerController.file(File(widget.thumbnailFile!.path))
-      ..initialize().then((_) {
-        setState(() {});
-        controller.play();
-      });
+      ..initialize();
   }
-  @override
-  void dispose() {
-    super.dispose();
-    controller.dispose();
-  }
+  // @override
+  // void dispose() {
+  //   super.dispose();
+  //   controller.dispose();
+  // }
   @override
   Widget build(BuildContext context) {
     return Center(

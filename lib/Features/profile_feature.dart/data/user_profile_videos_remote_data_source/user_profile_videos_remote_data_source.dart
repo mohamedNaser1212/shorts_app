@@ -1,5 +1,5 @@
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
-import 'package:shorts/firebase_helper.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 
 abstract class UserProfileVideosRemoteDataSource {
   Future<List<VideoModel>> getUserVideos({required String userId});
@@ -7,7 +7,7 @@ abstract class UserProfileVideosRemoteDataSource {
 
 class UserProfileVideosRemoteDataSourceImpl
     extends UserProfileVideosRemoteDataSource {
-  final FirebaseHelperManager firebaseHelper;
+  final FirebaseHelper firebaseHelper;
 
   UserProfileVideosRemoteDataSourceImpl({required this.firebaseHelper});
 

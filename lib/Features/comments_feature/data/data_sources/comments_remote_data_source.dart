@@ -1,5 +1,5 @@
 import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
-import 'package:shorts/firebase_helper.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 import '../../../videos_feature/domain/video_entity/video_entity.dart';
 import '../model/comments_model.dart';
 
@@ -12,10 +12,11 @@ abstract class CommentsRemoteDataSource {
     required VideoEntity video,
   });
 }
-class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
-  final FirebaseHelperManager firebaseHelper;
 
- const CommentsRemoteDataSourceImpl({
+class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
+  final FirebaseHelper firebaseHelper;
+
+  const CommentsRemoteDataSourceImpl({
     required this.firebaseHelper,
   });
 

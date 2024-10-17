@@ -1,6 +1,6 @@
 import 'package:shorts/Features/favourites_feature/data/favourites_model/favourites_model.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-import 'package:shorts/firebase_helper.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 
 import '../../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
@@ -17,7 +17,7 @@ abstract class FavouritesRemoteDataSource {
 }
 
 class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
-  final FirebaseHelperManager firebaseHelperManager;
+  final FirebaseHelper firebaseHelperManager;
 
   FavouritesRemoteDataSourceImpl({required this.firebaseHelperManager});
 

@@ -30,11 +30,12 @@ import 'package:shorts/Features/videos_feature/domain/videos_use_cases/upload_vi
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/core/network/Hive_manager/hive_helper.dart';
 import 'package:shorts/core/network/Hive_manager/hive_manager.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper_impl.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/user_info/data/user_info_data_sources/user_info_local_data_source.dart';
 import 'package:shorts/core/user_info/data/user_info_data_sources/user_info_remote_data_source.dart';
 import 'package:shorts/core/user_info/domain/user_info_repo/user_info_repo.dart';
-import 'package:shorts/firebase_helper.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 
 import '../../Features/authentication_feature/data/authentication_data_sources/authentication_remote_data_source.dart';
 import '../../Features/authentication_feature/domain/authentication_repo/authentication_repo.dart';
@@ -49,8 +50,6 @@ import '../managers/internet_manager/internet_manager.dart';
 import '../managers/internet_manager/internet_manager_impl.dart';
 import '../managers/repo_manager/repo_manager.dart';
 import '../managers/repo_manager/repo_manager_impl.dart';
-import '../network/firebase_manager/firebase_helper.dart';
-import '../network/firebase_manager/firebase_manager.dart';
 import '../notification_service/notification_helper.dart';
 import '../notification_service/push_notification_service.dart';
 import '../user_info/data/user_info_repo_impl/user_info_repo_impl.dart';
@@ -59,22 +58,19 @@ import '../user_info/domain/use_cases/get_user_info_use_case.dart';
 final getIt = GetIt.instance;
 
 Future<void> setUpServiceLocator() async {
-  // Register dependencies in the correct order
   getIt.registerSingleton<InternetManager>(InternetManagerImpl());
 
-  // Register HiveService
   getIt.registerSingleton<LocalStorageManager>(HiveManager());
   await getIt.get<LocalStorageManager>().initialize();
 
-  getIt.registerSingleton<FirebaseHelper>(FirebaseManagerImpl());
-  getIt.registerSingleton<FirebaseHelperManager>(FirebaseHelperManagerImpl());
+  getIt.registerSingleton<FirebaseHelper>(FirebaseHelperImpl());
 
   getIt.registerSingleton<RepoManager>(RepoManagerImpl(
     internetManager: getIt.get<InternetManager>(),
   ));
 
   getIt.registerSingleton<VideosRemoteDataSource>(VideosRemoteDataSourceImpl(
-    firebaseHelperManager: getIt.get<FirebaseHelperManager>(),
+    firebaseHelperManager: getIt.get<FirebaseHelper>(),
   ));
 
   getIt.registerSingleton<NotificationHelper>(PushNotificationService());
@@ -85,7 +81,7 @@ Future<void> setUpServiceLocator() async {
 
   getIt.registerSingleton<FavouritesRemoteDataSource>(
       FavouritesRemoteDataSourceImpl(
-    firebaseHelperManager: getIt.get<FirebaseHelperManager>(),
+    firebaseHelperManager: getIt.get<FirebaseHelper>(),
   ));
   getIt.registerSingleton<FavouritesLocalDataSource>(
       FavouritesLocalDataSourceImpl(
@@ -129,7 +125,7 @@ Future<void> setUpServiceLocator() async {
   // UserInfo and Authentication related registrations
   getIt.registerSingleton<AuthenticationRemoteDataSource>(
       AuthenticationDataSourceImpl(
-    firebaseHelper: getIt.get<FirebaseHelperManager>(),
+    firebaseHelper: getIt.get<FirebaseHelper>(),
   ));
 
   getIt.registerSingleton<UserLocalDataSourceImpl>(UserLocalDataSourceImpl(
@@ -144,7 +140,7 @@ Future<void> setUpServiceLocator() async {
 
   getIt.registerSingleton<CommentsRemoteDataSource>(
     CommentsRemoteDataSourceImpl(
-      firebaseHelper: getIt.get<FirebaseHelperManager>(),
+      firebaseHelper: getIt.get<FirebaseHelper>(),
     ),
   );
   getIt.registerSingleton<CommentsLocalDataSourceImpl>(
@@ -154,11 +150,11 @@ Future<void> setUpServiceLocator() async {
   );
   getIt
       .registerSingleton<UserInfoRemoteDataSource>(UserInfoRemoteDataSourceImpl(
-    firebaseHelper: getIt.get<FirebaseHelperManager>(),
+    firebaseHelper: getIt.get<FirebaseHelper>(),
   ));
   getIt.registerSingleton<UserProfileVideosRemoteDataSource>(
       UserProfileVideosRemoteDataSourceImpl(
-          firebaseHelper: getIt.get<FirebaseHelperManager>()));
+          firebaseHelper: getIt.get<FirebaseHelper>()));
   getIt.registerSingleton<UserProfileVideosRepo>(
     UserProfileVideosRepoImpl(
       repoManager: getIt.get<RepoManager>(),
@@ -212,8 +208,8 @@ Future<void> setUpServiceLocator() async {
 
   getIt.registerSingleton<UpdateUserDataRemoteDataSource>(
       UpdateUserDataSourceImpl(
-    firebaseHelper: getIt.get<FirebaseHelperManager>(),
-      ));
+    firebaseHelper: getIt.get<FirebaseHelper>(),
+  ));
 
   getIt.registerSingleton<UpdateUserDataRepo>(UpdateUserDataRepoImpl(
     repoManager: getIt.get<RepoManager>(),

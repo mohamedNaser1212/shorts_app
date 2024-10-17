@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
-import 'package:shorts/firebase_helper.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 import '../../../../../core/network/firebase_manager/collection_names.dart';
 
 abstract class VideosRemoteDataSource {
@@ -13,10 +13,9 @@ abstract class VideosRemoteDataSource {
 }
 
 class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
-
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
-  final FirebaseHelperManager firebaseHelperManager;
+  final FirebaseHelper firebaseHelperManager;
 
   VideosRemoteDataSourceImpl({required this.firebaseHelperManager});
   @override

@@ -46,7 +46,6 @@ class _TrimViewerWidgetState extends State<TrimViewerWidget> {
         onChangeEnd: (value) {
           setState(() {
             widget.state.endValue = value;
-            // Update video position if it's beyond the end value
             if (widget.state.videoController.positionNotifier.value.inSeconds >
                 widget.state.endValue) {
               _updateVideoPosition();

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/play_icon_widget.dart';
+import 'package:shorts/core/widgets/custom_app_bar.dart';
 import 'package:video_player/video_player.dart';
 
 class VideoPlayerScreenBody extends StatelessWidget {
@@ -13,7 +14,7 @@ class VideoPlayerScreenBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Video Player')),
+      appBar: const CustomAppBar(title: 'Video Player'),
       body: Center(
         child: AspectRatio(
           aspectRatio: 16 / 9,
@@ -21,11 +22,9 @@ class VideoPlayerScreenBody extends StatelessWidget {
             alignment: Alignment.center,
             children: [
               VideoPlayer(controller),
-    
               PlayIcon(
                 videoPlayerScreenState: controller,
               ),
-            
             ],
           ),
         ),

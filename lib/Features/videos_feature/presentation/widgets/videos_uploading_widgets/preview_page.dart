@@ -23,12 +23,12 @@ class PreviewPage extends StatefulWidget {
 }
 
 class PreviewPageState extends State<PreviewPage> {
-  // late VideoPlayerController controller;
+
   final TextEditingController descriptionController = TextEditingController();
 
   @override
   void dispose() {
-    // controller.dispose();
+
     descriptionController.dispose();
     super.dispose();
   }

@@ -4,7 +4,7 @@ import 'package:shorts/Features/authentication_feature/data/user_model/user_mode
 import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 import 'package:shorts/core/network/firebase_manager/collection_names.dart';
 import 'package:shorts/core/update_user_data/update_user_data.dart';
-import 'package:shorts/firebase_helper.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 
 abstract class UpdateUserDataRemoteDataSource {
   const UpdateUserDataRemoteDataSource._();
@@ -18,7 +18,7 @@ abstract class UpdateUserDataRemoteDataSource {
 class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final FirebaseHelperManager firebaseHelper;
+  final FirebaseHelper firebaseHelper;
 
   UpdateUserDataSourceImpl({required this.firebaseHelper});
 

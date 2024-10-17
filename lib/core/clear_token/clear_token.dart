@@ -1,6 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shorts/core/network/firebase_manager/collection_names.dart';
-import 'package:shorts/firebase_helper.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 
 abstract class ClearToken {
   const ClearToken();
@@ -8,7 +8,7 @@ abstract class ClearToken {
   static Future<void> clearToken({
     required String userId,
     required String fcmToken,
-    required FirebaseHelperManager firebaseHelper,
+    required FirebaseHelper firebaseHelper,
   }) async {
     await _videosComments(userId, fcmToken);
 
@@ -58,7 +58,7 @@ abstract class ClearToken {
   static Future<void> _videosCollection({
     required String userId,
     required String fcmToken,
-    required FirebaseHelperManager firebaseHelper,
+    required FirebaseHelper firebaseHelper,
   }) async {
     // Fetch videos where 'user.id' is equal to the provided userId
     List<Map<String, dynamic>> videoDocs =
@@ -84,7 +84,7 @@ abstract class ClearToken {
   static Future<void> _usersVideos({
     required String userId,
     required String fcmToken,
-    required FirebaseHelperManager firebaseHelper,
+    required FirebaseHelper firebaseHelper,
   }) async {
     // Fetch videos from the user's video collection
     List<Map<String, dynamic>> videoDocs =
@@ -112,7 +112,7 @@ abstract class ClearToken {
   static Future<void> _usersFavourites({
     required String userId,
     required String fcmToken,
-    required FirebaseHelperManager firebaseHelper,
+    required FirebaseHelper firebaseHelper,
   }) async {
     // Fetch favorites for the specified user
     List<Map<String, dynamic>> favorites =
@@ -150,7 +150,7 @@ abstract class ClearToken {
             .get()
             .then((commentsQuerySnapshot) {
           for (var commentDoc in commentsQuerySnapshot.docs) {
-            commentDoc.reference.update({'user.fcmToken': fcmToken });
+            commentDoc.reference.update({'user.fcmToken': fcmToken});
           }
         });
       }

@@ -2,7 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 import 'package:shorts/core/network/firebase_manager/collection_names.dart';
-import 'package:shorts/firebase_helper.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 
 abstract class UpdateUserData {
   const UpdateUserData._();
@@ -10,7 +10,7 @@ abstract class UpdateUserData {
   static Future<void> updateUserData({
     required UpdateUserRequestModel updateUserRequestModel,
     required String userId,
-    required FirebaseHelperManager firebaseHelper,
+    required FirebaseHelper firebaseHelper,
     required FirebaseFirestore firestore,
     required FirebaseAuth auth,
   }) async {
@@ -44,26 +44,25 @@ abstract class UpdateUserData {
       userId: userId,
       updateUserRequestModel: updateUserRequestModel,
       firebaseHelper: firebaseHelper,
-    );  
+    );
   }
 
-
- static Future<void> _updateUserCollection({
-   required String userId,
+  static Future<void> _updateUserCollection({
+    required String userId,
     required UpdateUserRequestModel updateUserRequestModel,
-    required FirebaseHelperManager firebaseHelper,
- }) async {
+    required FirebaseHelper firebaseHelper,
+  }) async {
     await firebaseHelper.updateDocument(
-  collectionPath: CollectionNames.users,
-  docId: userId,
-  data: updateUserRequestModel.toMap(),
-);
+      collectionPath: CollectionNames.users,
+      docId: userId,
+      data: updateUserRequestModel.toMap(),
+    );
   }
 
   static Future<void> _usersComments({
-     required String userId,
-      required UpdateUserRequestModel updateUserRequestModel,
-      required FirebaseFirestore firestore,
+    required String userId,
+    required UpdateUserRequestModel updateUserRequestModel,
+    required FirebaseFirestore firestore,
   }) async {
     await firestore
         .collection(CollectionNames.users)
@@ -88,7 +87,7 @@ abstract class UpdateUserData {
   static Future<void> _usersFavourites({
     required String userId,
     required UpdateUserRequestModel updateUserRequestModel,
-    required FirebaseHelperManager firebaseHelper,
+    required FirebaseHelper firebaseHelper,
   }) async {
     // Fetch the user's favorite documents where the user's ID matches
     List<Map<String, dynamic>> favourites =
@@ -141,7 +140,7 @@ abstract class UpdateUserData {
   static Future<void> _videosCollection({
     required String userId,
     required UpdateUserRequestModel updateUserRequestModel,
-    required FirebaseHelperManager firebaseHelper,
+    required FirebaseHelper firebaseHelper,
   }) async {
     List<Map<String, dynamic>> videos =
         await firebaseHelper.getCollectionDocuments(
@@ -167,7 +166,7 @@ abstract class UpdateUserData {
   static Future<void> _usersVideos({
     required String userId,
     required UpdateUserRequestModel updateUserRequestModel,
-    required FirebaseHelperManager firebaseHelper,
+    required FirebaseHelper firebaseHelper,
   }) async {
     List<Map<String, dynamic>> videos =
         await firebaseHelper.getCollectionDocuments(

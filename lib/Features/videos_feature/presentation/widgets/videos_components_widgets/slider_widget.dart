@@ -3,8 +3,8 @@ import 'package:flutter/material.dart';
 import '../../../../../core/video_controller/video_controller.dart';
 import 'duration_notifier_widget.dart';
 
-class SliderNotifier extends StatefulWidget {
-  const SliderNotifier({
+class SliderWidget extends StatefulWidget {
+  const SliderWidget({
     super.key,
     required this.videoProvider,
   });
@@ -12,10 +12,10 @@ class SliderNotifier extends StatefulWidget {
   final VideoController videoProvider;
 
   @override
-  State<SliderNotifier> createState() => _SliderNotifierState();
+  State<SliderWidget> createState() => _SliderWidgetState();
 }
 
-class _SliderNotifierState extends State<SliderNotifier> {
+class _SliderWidgetState extends State<SliderWidget> {
   late final VoidCallback _positionListener;
   late final VoidCallback _durationListener;
 

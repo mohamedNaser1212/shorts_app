@@ -42,11 +42,10 @@ class ThumbnailPreviewWidget extends StatelessWidget {
                 size: 60,
                 color: Colors.white,
               ),
-            if (controller.value.isInitialized &&
-                widget.thumbnailFile == null)
+            if (controller.value.isInitialized && widget.thumbnailFile == null)
               VideoPlayer(controller),
-            if (!controller.value.isInitialized)
-              const Center(child: CircularProgressIndicator()),
+            // if (!controller.value.isInitialized)
+            //   const Center(child: CircularProgressIndicator()),
           ],
         ),
       ),

@@ -1,39 +1,45 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+
 abstract class FirebaseHelper {
-  const FirebaseHelper._();
+  final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
-  Future<Map<String, dynamic>> getDocument({
+  Future<List<Map<String, dynamic>>> getCollectionDocuments({
     required String collectionPath,
-    required String documentId,
+    String? docId,
+    String? subCollectionPath,
+    String? whereField,
+    dynamic whereValue,
+    int? limit,
+    String? orderBy,
+    bool descending = false,
   });
 
-  Future<List<Map<String, dynamic>>> get({
-    required String collectionPath,
-  });
-
-  Future<void> post({
+  Future<void> addDocument({
     required String collectionPath,
     required Map<String, dynamic> data,
-    String? documentId,
+    String? docId,
+    String? subCollectionPath,
+    String? subDocId,
   });
 
-  Future<void> update({
+  Future<void> updateDocument({
     required String collectionPath,
-    required String documentId,
+    required String docId,
     required Map<String, dynamic> data,
+    String? subCollectionPath,
+    String? subDocId,
   });
 
-  Future<void> delete({
+  Future<void> deleteDocument({
     required String collectionPath,
-    required String documentId,
+    required String docId,
+    String? subCollectionPath,
+    String? subDocId,
   });
 
-  Future<String> uploadToStorage({
-    required String videoPath,
-    required String videoId,
-    required String collectionName,
-  });
-
-  Future<Map<String, dynamic>> getUserById({
-    required String userId,
+  Future<Map<String, dynamic>?> getDocument({
+    required String collectionPath,
+    required String docId,
   });
 }
+

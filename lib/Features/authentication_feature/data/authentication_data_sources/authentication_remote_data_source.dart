@@ -5,7 +5,7 @@ import 'package:shorts/core/clear_token/clear_token.dart';
 import 'package:shorts/core/network/firebase_manager/collection_names.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/utils/constants/request_data_names.dart';
-import 'package:shorts/firebase_helper.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 import '../user_model/login_request_model.dart';
 import '../user_model/register_request_model.dart';
 import '../user_model/user_model.dart';
@@ -27,7 +27,7 @@ abstract class AuthenticationRemoteDataSource {
 class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
   bool fcmTokenAssigned = false;
 
-  final FirebaseHelperManager firebaseHelper;
+  final FirebaseHelper firebaseHelper;
 
   AuthenticationDataSourceImpl({
     required this.firebaseHelper,
@@ -124,13 +124,12 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       if (fcmTokenAssigned) {
-
         await firebaseHelper.updateDocument(
           collectionPath: CollectionNames.users,
           docId: user.uid,
           data: {RequestDataNames.fcmToken: ''},
         );
-        
+
         // await FirebaseFirestore.instance
         //     .collection(CollectionNames.users)
         //     .doc(user.uid)
