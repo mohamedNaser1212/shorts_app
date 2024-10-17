@@ -17,7 +17,7 @@ abstract class UpdateUserDataRemoteDataSource {
 class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
-  final FirebaseHelperManager firebaseHelper ;
+  final FirebaseHelperManager firebaseHelper;
 
   UpdateUserDataSourceImpl({required this.firebaseHelper});
 
@@ -59,7 +59,7 @@ class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
     required String newEmail,
   }) async {
     await currentUser.verifyBeforeUpdateEmail(newEmail);
-    await currentUser.reload(); 
+    await currentUser.reload();
   }
 
   Future<void> _updateUserCollection(
@@ -91,30 +91,32 @@ class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
     });
   }
 
-Future<void> _usersFavourites(
-    String userId, UpdateUserRequestModel updateUserRequestModel) async {
-  // Fetch the user's favorite documents where the user's ID matches
-  List<Map<String, dynamic>> favourites = await firebaseHelper.getCollectionDocuments(
-    collectionPath: '${CollectionNames.users}/$userId/${CollectionNames.favourites}',
-    whereField: 'user.id',
-    whereValue: userId,
-  );
-
-  // Update each favorite document with the new user data
-  for (var favourite in favourites) {
-    await firebaseHelper.updateDocument(
-      collectionPath: '${CollectionNames.users}/$userId/${CollectionNames.favourites}',
-      docId: favourite['id'], // Assuming each favorite has an 'id' field
-      data: {
-        'user.name': updateUserRequestModel.name,
-        'user.profilePic': updateUserRequestModel.imageUrl,
-        'user.email': updateUserRequestModel.email,
-        'user.phone': updateUserRequestModel.phone,
-      },
+  Future<void> _usersFavourites(
+      String userId, UpdateUserRequestModel updateUserRequestModel) async {
+    // Fetch the user's favorite documents where the user's ID matches
+    List<Map<String, dynamic>> favourites =
+        await firebaseHelper.getCollectionDocuments(
+      collectionPath:
+          '${CollectionNames.users}/$userId/${CollectionNames.favourites}',
+      whereField: 'user.id',
+      whereValue: userId,
     );
-  }
-}
 
+    // Update each favorite document with the new user data
+    for (var favourite in favourites) {
+      await firebaseHelper.updateDocument(
+        collectionPath:
+            '${CollectionNames.users}/$userId/${CollectionNames.favourites}',
+        docId: favourite['id'], // Assuming each favorite has an 'id' field
+        data: {
+          'user.name': updateUserRequestModel.name,
+          'user.profilePic': updateUserRequestModel.imageUrl,
+          'user.email': updateUserRequestModel.email,
+          'user.phone': updateUserRequestModel.phone,
+        },
+      );
+    }
+  }
 
   Future<void> _videosCollectionComments(
       String userId, UpdateUserRequestModel updateUserRequestModel) async {
@@ -139,15 +141,25 @@ Future<void> _usersFavourites(
 
   Future<void> _videosCollection(
       String userId, UpdateUserRequestModel updateUserRequestModel) async {
-    await firestore
-        .collection(CollectionNames.videos)
-        .where('user.id', isEqualTo: userId)
-        .get()
-        .then((videoQuerySnapshot) {
-      for (var videoDoc in videoQuerySnapshot.docs) {
-        _userUpdatedData(videoDoc, updateUserRequestModel);
-      }
-    });
+    List<Map<String, dynamic>> videos =
+        await firebaseHelper.getCollectionDocuments(
+      collectionPath: CollectionNames.videos,
+      whereField: 'user.id',
+      whereValue: userId,
+    );
+
+    for (var video in videos) {
+      await firebaseHelper.updateDocument(
+        collectionPath: CollectionNames.videos,
+        docId: video['id'],
+        data: {
+          'user.name': updateUserRequestModel.name,
+          'user.profilePic': updateUserRequestModel.imageUrl,
+          'user.email': updateUserRequestModel.email,
+          'user.phone': updateUserRequestModel.phone,
+        },
+      );
+    }
   }
 
   Future<void> _usersVideos(
