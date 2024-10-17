@@ -25,7 +25,8 @@ class _SaveElevatedButtonState extends State<SaveElevatedButton> {
   @override
   void initState() {
     super.initState();
-    _progressVisibilityNotifier = ValueNotifier<bool>(widget.state.progressVisibility);
+    _progressVisibilityNotifier =
+        ValueNotifier<bool>(widget.state.progressVisibility);
   }
 
   @override

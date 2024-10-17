@@ -25,8 +25,8 @@ class ThumbnailWidget extends StatelessWidget {
                   child: Image.memory(
                     thumbnail,
                     fit: BoxFit.cover,
-                    width: double.infinity,
-                    height: MediaQuery.of(context).size.height * 0.3,
+                    width: 150,
+                    height: 150,
                   ),
                 )
               : const CircularProgressIndicator();

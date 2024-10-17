@@ -24,7 +24,7 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
   bool isPlaying = false;
   bool progressVisibility = false;
   late VideoController videoController;
-  File? thumbnailFile; // Variable to store the thumbnail
+  File? thumbnailFile; 
 
   @override
   void initState() {
@@ -90,7 +90,7 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
                 scrollDirection: Axis.horizontal,
                 child: Row(
                   children: [
-                    Image.file(thumbnailFile!, width: 200, height: 200),
+                    Image.file(thumbnailFile!, width: 200, height: 300),
                   ],
                 ),
               ),
