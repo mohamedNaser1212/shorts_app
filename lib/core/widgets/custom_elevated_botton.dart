@@ -11,8 +11,10 @@ import 'package:shorts/Features/videos_feature/presentation/screens/video_page.d
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_page.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
+import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
+import 'package:shorts/core/widgets/email_verification_dialogue_widget.dart';
 import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
 import 'package:uuid/uuid.dart';
 import '../../Features/authentication_feature/data/user_model/login_request_model.dart';
@@ -161,35 +163,58 @@ class CustomElevatedButton extends StatelessWidget {
     required EditProfileScreenState editState,
   }) async {
     final cubit = UpdateUserDataCubit.get(context);
+    final userCubit = UserInfoCubit.get(context);
 
-    // if (editState.imageFileNotifier.value != null) {
-    //   await editState.uploadImage();
-    // }
+    final currentEmail = userCubit.userEntity!.email;
+    final newEmail = editState.emailController.text;
+    final currentName = userCubit.userEntity!.name;
+    final newName = editState.nameController.text;
+    final currentPhone = userCubit.userEntity!.phone;
+    final newPhone = editState.phoneController.text;
 
-    // if (cubit.checkDataChanges(
-    //   name: editState.nameController.text,
-    //   email: editState.emailController.text,
-    //   phone: editState.phoneController.text,
-    //   imageUrl: editState.profilePicNotifier.value ?? '',
-    // )) {
+    if (currentEmail == newEmail &&
+        currentName == newName &&
+        currentPhone == newPhone) {
+      ToastHelper.showToast(
+        message: "Your data is up to date.",
+        color: ColorController.greenAccent,
+      );
+
+      return;
+    }
+
+    if (currentEmail != newEmail) {
+      final shouldUpdateEmail = await showDialog<bool>(
+        context: context,
+        builder: (context) {
+          return const EmailVerificationDialogueWidget();
+        },
+      );
+
+      if (shouldUpdateEmail == false) {
+        return;
+      }
+    }
+
     cubit.updateUserData(
       updateUserRequestModel: UpdateUserRequestModel(
-        name: editState.nameController.text,
-        email: editState.emailController.text,
-        phone: editState.phoneController.text,
-        imageUrl: editState.imageNotifierController.profilePicNotifier.value ?? '',
+        name: newName,
+        email: newEmail,
+        phone: newPhone,
+        imageUrl:
+            editState.imageNotifierController.profilePicNotifier.value ?? '',
       ),
-      userId: UserInfoCubit.get(context).userEntity!.id!,
+      userId: userCubit.userEntity!.id!,
     );
-    // }
   }
 
   static Future<void> _registerAction(
       BuildContext context, RegisterScreenFormState state) async {
     if (state.widget.formKey.currentState!.validate()) {
-      print('image url ${state.imageNotifierController.profilePicNotifier.value}');
+      print(
+          'image url ${state.imageNotifierController.profilePicNotifier.value}');
       if (state.imageNotifierController.profilePicNotifier.value != null) {
-       state.imageNotifierController.uploadImage();
+        state.imageNotifierController.uploadImage();
         print('image is uploaded');
       }
       RegisterCubit.get(context).userRegister(
@@ -201,7 +226,8 @@ class CustomElevatedButton extends StatelessWidget {
           bio: state.bioController.text.isNotEmpty
               ? state.bioController.text
               : 'Hey there i am using Shorts',
-          profilePic: state.imageNotifierController.profilePicNotifier.value ?? '',
+          profilePic:
+              state.imageNotifierController.profilePicNotifier.value ?? '',
         ),
       );
     }
