@@ -14,7 +14,7 @@ abstract class VideosRemoteDataSource {
 }
 
 class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  // final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
 
   final FirebaseHelperManager firebaseHelperManager;
@@ -59,12 +59,20 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
 
   Future<void> _uploadVideoToUserCollection(
       VideoModel videoModel, VideoModel updatedVideoModel) async {
-    await firestore
-        .collection(CollectionNames.users)
-        .doc(videoModel.user.id)
-        .collection(CollectionNames.videos)
-        .doc(videoModel.id)
-        .set(updatedVideoModel.toJson());
+    await firebaseHelperManager.addDocument(
+      collectionPath: CollectionNames.users,
+      docId: videoModel.user.id,
+      subCollectionPath: CollectionNames.videos,
+      subDocId: videoModel.id,
+      data: updatedVideoModel.toJson(),
+    );
+
+    // await firestore
+    //     .collection(CollectionNames.users)
+    //     .doc(videoModel.user.id)
+    //     .collection(CollectionNames.videos)
+    //     .doc(videoModel.id)
+    //     .set(updatedVideoModel.toJson());
   }
 
   Future<String> _uploadVideoToStorage({
