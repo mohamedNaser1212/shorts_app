@@ -79,7 +79,7 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
           children: [
             ProgressVisibilityWidget(progressVisibility: progressVisibility),
             const SizedBox(height: 20),
-            SaveElevatedBotton(
+            SaveElevatedButton(
               state: this,
               thumbnailFile: thumbnailFile,
             ),

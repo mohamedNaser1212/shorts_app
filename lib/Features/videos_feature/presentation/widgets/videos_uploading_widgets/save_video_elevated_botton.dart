@@ -5,8 +5,8 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploa
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_view_body.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 
-class SaveElevatedBotton extends StatefulWidget {
-  const SaveElevatedBotton({
+class SaveElevatedButton extends StatefulWidget {
+  const SaveElevatedButton({
     super.key,
     required this.state,
     this.thumbnailFile,
@@ -16,34 +16,49 @@ class SaveElevatedBotton extends StatefulWidget {
   final File? thumbnailFile;
 
   @override
-  State<SaveElevatedBotton> createState() => _SaveElevatedBottonState();
+  State<SaveElevatedButton> createState() => _SaveElevatedButtonState();
 }
 
-class _SaveElevatedBottonState extends State<SaveElevatedBotton> {
+class _SaveElevatedButtonState extends State<SaveElevatedButton> {
+  late final ValueNotifier<bool> _progressVisibilityNotifier;
+
+  @override
+  void initState() {
+    super.initState();
+    _progressVisibilityNotifier = ValueNotifier<bool>(widget.state.progressVisibility);
+  }
+
+  @override
+  void dispose() {
+    _progressVisibilityNotifier.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ElevatedButton(
-      onPressed: widget.state.progressVisibility
-          ? null
-          : () async {
-              await _saveVideo();
-            },
-      child: const Text('Save Video'),
+    return ValueListenableBuilder<bool>(
+      valueListenable: _progressVisibilityNotifier,
+      builder: (context, isVisible, child) {
+        return ElevatedButton(
+          onPressed: isVisible
+              ? null
+              : () async {
+                  await _saveVideo();
+                },
+          child: const Text('Save Video'),
+        );
+      },
     );
   }
 
   Future<void> _saveVideo() async {
-    setState(() {
-      widget.state.progressVisibility = true;
-    });
+    _progressVisibilityNotifier.value = true;
 
     widget.state.trimmer.saveTrimmedVideo(
       startValue: widget.state.startValue,
       endValue: widget.state.endValue,
       onSave: (outputPath) async {
-        setState(() {
-          widget.state.progressVisibility = false;
-        });
+        _progressVisibilityNotifier.value = false;
 
         await widget.state.generateThumbnail(
           widget.state.startValue,

@@ -18,6 +18,7 @@ class PreviewPageBody extends StatefulWidget {
   @override
   State<PreviewPageBody> createState() => _PreviewPageBodyState();
 }
+
 class _PreviewPageBodyState extends State<PreviewPageBody> {
   late VideoPlayerController controller;
 
@@ -27,11 +28,7 @@ class _PreviewPageBodyState extends State<PreviewPageBody> {
     controller = VideoPlayerController.file(File(widget.thumbnailFile!.path))
       ..initialize();
   }
-  // @override
-  // void dispose() {
-  //   super.dispose();
-  //   controller.dispose();
-  // }
+
   @override
   Widget build(BuildContext context) {
     return Center(
@@ -46,8 +43,6 @@ class _PreviewPageBodyState extends State<PreviewPageBody> {
               keyboardType: TextInputType.text,
             ),
             const SizedBox(height: 10),
-          
-           
             CustomElevatedButton.uploadVideo(
               context: context,
               previewState: widget.previewState,
@@ -57,25 +52,5 @@ class _PreviewPageBodyState extends State<PreviewPageBody> {
         ),
       ),
     );
-    
-    
-    
-    // BlocConsumer<VideoCubit, VideoState>(
-    //   listener: _listener,
-    //   builder: _builder,
-    // );
   }
-
-
-  // void _listener(context, state) {
-  //   if (state is VideoUploadedSuccessState) {
-  //     widget.previewState.descriptionController.clear();
-  //     NavigationManager.navigateAndFinish(
-  //       context: context,
-  //       screen: HomeScreen(
-  //         currentUser: UserInfoCubit.get(context).userEntity!,
-  //       ),
-  //     );
-  //   }
-  // }
 }

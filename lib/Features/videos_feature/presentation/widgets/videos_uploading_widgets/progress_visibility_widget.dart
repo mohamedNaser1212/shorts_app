@@ -10,6 +10,7 @@ class ProgressVisibilityWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+      bool progressVisibility = false;
     return Visibility(
       visible: progressVisibility,
       child: const LinearProgressIndicator(

@@ -17,9 +17,9 @@ class VideoPreviewSliderWidget extends StatelessWidget {
       right: 20,
       child: Column(
         children: [
-         VideoPreviewDurationWidget(
+          VideoPreviewDurationWidget(
             state: state,
-         ),
+          ),
           VideoSlider(
             positionNotifier: state.positionNotifier,
             durationNotifier: state.durationNotifier,
@@ -30,4 +30,3 @@ class VideoPreviewSliderWidget extends StatelessWidget {
     );
   }
 }
-

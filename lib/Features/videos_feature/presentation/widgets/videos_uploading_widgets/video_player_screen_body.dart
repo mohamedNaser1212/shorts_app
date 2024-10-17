@@ -35,11 +35,6 @@ class VideoPlayerScreenBodyState extends State<VideoPlayerScreenBody> {
     super.dispose();
   }
 
-  void _updateState() {
-    positionNotifier.value = widget.controller.value.position;
-    durationNotifier.value = widget.controller.value.duration;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -63,5 +58,9 @@ class VideoPlayerScreenBodyState extends State<VideoPlayerScreenBody> {
       ),
     );
   }
-}
 
+  void _updateState() {
+    positionNotifier.value = widget.controller.value.position;
+    durationNotifier.value = widget.controller.value.duration;
+  }
+}
