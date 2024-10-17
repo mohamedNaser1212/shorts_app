@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/play_icon_widget.dart';
@@ -8,7 +7,6 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploa
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_viewer_widget.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:video_trimmer/video_trimmer.dart';
-
 import '../../../../../core/video_controller/video_controller.dart';
 
 class TrimmerViewBody extends StatefulWidget {
@@ -83,14 +81,19 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
             const SizedBox(height: 20),
             SaveElevatedBotton(
               state: this,
-              // Pass thumbnailFile only if needed
               thumbnailFile: thumbnailFile,
             ),
             TrimViewerWidget(state: this),
             PlayIcon(state: this),
-            // Optionally display thumbnail if available
             if (thumbnailFile != null)
-              Image.file(thumbnailFile!, width: 200, height: 200),
+              SingleChildScrollView(
+                scrollDirection: Axis.horizontal,
+                child: Row(
+                  children: [
+                    Image.file(thumbnailFile!, width: 200, height: 200),
+                  ],
+                ),
+              ),
           ],
         ),
       ),
