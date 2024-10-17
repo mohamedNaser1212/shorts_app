@@ -19,7 +19,8 @@ class VideoPlayerScreenState extends State<VideoPlayerScreen> {
   void initState() {
     super.initState();
     controller = VideoPlayerController.file(File(widget.videoPath))
-      ..initialize();
+      ..initialize()
+      ;
   }
 
   @override
