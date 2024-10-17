@@ -3,6 +3,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 import 'package:shorts/core/network/firebase_manager/collection_names.dart';
+import 'package:shorts/firebase_helper.dart';
 
 abstract class UpdateUserDataRemoteDataSource {
   const UpdateUserDataRemoteDataSource._();
@@ -16,17 +17,18 @@ abstract class UpdateUserDataRemoteDataSource {
 class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
   final FirebaseAuth auth = FirebaseAuth.instance;
+  final FirebaseHelperManager firebaseHelper ;
+
+  UpdateUserDataSourceImpl({required this.firebaseHelper});
 
   @override
   Future<UserModel> updateUserData({
     required UpdateUserRequestModel updateUserRequestModel,
     required String userId,
   }) async {
-    // Get the current user from Firebase Auth
     User? currentUser = auth.currentUser;
 
     if (currentUser != null) {
-      // If the email is being updated, update it in Firebase Authentication
       if (updateUserRequestModel.email != currentUser.email) {
         await _updateUserEmailInAuth(
           currentUser: currentUser,
@@ -56,8 +58,8 @@ class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
     required User currentUser,
     required String newEmail,
   }) async {
-    await currentUser.verifyBeforeUpdateEmail(newEmail);// Verify the new email
-    await currentUser.reload(); // Reload user to apply the updated email
+    await currentUser.verifyBeforeUpdateEmail(newEmail);
+    await currentUser.reload(); 
   }
 
   Future<void> _updateUserCollection(
@@ -89,20 +91,30 @@ class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
     });
   }
 
-  Future<void> _usersFavourites(
-      String userId, UpdateUserRequestModel updateUserRequestModel) async {
-    await firestore
-        .collection(CollectionNames.users)
-        .doc(userId)
-        .collection(CollectionNames.favourites)
-        .where('user.id', isEqualTo: userId)
-        .get()
-        .then((favoritesQuerySnapshot) {
-      for (var favoriteDoc in favoritesQuerySnapshot.docs) {
-        _userUpdatedData(favoriteDoc, updateUserRequestModel);
-      }
-    });
+Future<void> _usersFavourites(
+    String userId, UpdateUserRequestModel updateUserRequestModel) async {
+  // Fetch the user's favorite documents where the user's ID matches
+  List<Map<String, dynamic>> favourites = await firebaseHelper.getCollectionDocuments(
+    collectionPath: '${CollectionNames.users}/$userId/${CollectionNames.favourites}',
+    whereField: 'user.id',
+    whereValue: userId,
+  );
+
+  // Update each favorite document with the new user data
+  for (var favourite in favourites) {
+    await firebaseHelper.updateDocument(
+      collectionPath: '${CollectionNames.users}/$userId/${CollectionNames.favourites}',
+      docId: favourite['id'], // Assuming each favorite has an 'id' field
+      data: {
+        'user.name': updateUserRequestModel.name,
+        'user.profilePic': updateUserRequestModel.imageUrl,
+        'user.email': updateUserRequestModel.email,
+        'user.phone': updateUserRequestModel.phone,
+      },
+    );
   }
+}
+
 
   Future<void> _videosCollectionComments(
       String userId, UpdateUserRequestModel updateUserRequestModel) async {

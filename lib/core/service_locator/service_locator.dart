@@ -211,7 +211,9 @@ Future<void> setUpServiceLocator() async {
   ));
 
   getIt.registerSingleton<UpdateUserDataRemoteDataSource>(
-      UpdateUserDataSourceImpl());
+      UpdateUserDataSourceImpl(
+    firebaseHelper: getIt.get<FirebaseHelperManager>(),
+      ));
 
   getIt.registerSingleton<UpdateUserDataRepo>(UpdateUserDataRepoImpl(
     repoManager: getIt.get<RepoManager>(),
