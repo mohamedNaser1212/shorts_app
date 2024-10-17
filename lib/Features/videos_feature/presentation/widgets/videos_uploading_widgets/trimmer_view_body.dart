@@ -51,7 +51,10 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
     });
   }
 
-  Future<void> generateThumbnail(double seconds, String video) async {
+  Future<void> generateThumbnail({
+    required double seconds,
+    required String video,
+  }) async {
     final thumbnailPath = await VideoThumbnail.thumbnailFile(
       video: video,
       thumbnailPath: (await getTemporaryDirectory()).path,
@@ -65,7 +68,11 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
       setState(() {
         thumbnailFile = File(thumbnailPath);
       });
+
     }
+   
+
+
   }
 
   @override

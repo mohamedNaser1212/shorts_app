@@ -62,17 +62,20 @@ class _SaveElevatedButtonState extends State<SaveElevatedButton> {
         _progressVisibilityNotifier.value = false;
 
         await widget.state.generateThumbnail(
-          widget.state.startValue,
-          outputPath!,
+         seconds:  widget.state.startValue,
+       video:  outputPath!,
         );
-        NavigationManager.navigateAndFinish(
+        if(!mounted) return;
+         NavigationManager.navigateAndFinish(
           context: context,
           screen: PreviewPage(
             outputPath: outputPath,
             thumbnailFile: widget.state.thumbnailFile,
           ),
         );
+       
       },
     );
   }
+  
 }
