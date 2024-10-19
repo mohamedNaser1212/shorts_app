@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'package:file_picker/file_picker.dart';
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/login_screen_body.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
@@ -21,7 +20,6 @@ import '../../Features/authentication_feature/data/user_model/register_request_m
 import '../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
 import '../../Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
 import '../../Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
-import '../../Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_view.dart';
 import '../managers/styles_manager/color_manager.dart';
 
 // ignore: must_be_immutable
@@ -133,11 +131,10 @@ class CustomElevatedButton extends StatelessWidget {
 
   factory CustomElevatedButton.chooseVideoPageButton({
     required BuildContext context,
-    required void Function() onPressed
   }) {
     return CustomElevatedButton._(
-      onPressed: onPressed,
-      // onPressed: () => _navigateToChooseVideoPage(context),
+      // onPressed: onPressed,
+     onPressed: () => _navigateToChooseVideoPage(context),
       label: 'Upload Video',
     );
   }
@@ -276,16 +273,7 @@ class CustomElevatedButton extends StatelessWidget {
   }
 
   static Future<void> _navigateToChooseVideoPage(BuildContext context) async {
-    final result = await FilePicker.platform.pickFiles(
-      type: FileType.video,
-      allowCompression: true,
-    );
-    if (result != null) {
-      final file = File(result.files.single.path!);
-
-      Navigator.of(context).push(
-          MaterialPageRoute(builder: (context) => TrimmerView(file: file)));
-    }
+      await VideoCubit.get(context).pickVideo();
   }
 
   @override
