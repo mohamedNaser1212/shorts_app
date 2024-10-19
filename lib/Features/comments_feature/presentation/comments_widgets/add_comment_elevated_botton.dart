@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/comments_cubit.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/comments_widgets/comments_bottom_sheet.dart';
+import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 

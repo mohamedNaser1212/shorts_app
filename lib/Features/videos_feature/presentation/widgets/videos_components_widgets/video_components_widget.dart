@@ -20,7 +20,7 @@ class VideoComponentsWidget extends StatelessWidget {
     return Positioned.fill(
       child: Stack(
         children: [
-          AnimatedPauseIcon(videoProvider: videoProvider),
+          AnimatedPauseIcon(videoController: videoProvider),
           VideoContentsScreen(
             videoEntity: videoEntity,
             videoProvider: videoProvider,

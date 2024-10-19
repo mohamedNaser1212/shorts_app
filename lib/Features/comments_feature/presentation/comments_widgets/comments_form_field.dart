@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/comments_widgets/comments_bottom_sheet.dart';
+import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
 import 'package:shorts/core/widgets/reusable_text_form_field.dart';
 
 class CommentsFormFieldWidget extends StatelessWidget {

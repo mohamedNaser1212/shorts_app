@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/play_icon_widget.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/animated_pause_icon.dart';
+
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/video_preview_slider_widget.dart';
 import 'package:shorts/core/widgets/custom_app_bar.dart';
 import 'package:video_player/video_player.dart';
@@ -46,8 +47,8 @@ class VideoPlayerScreenBodyState extends State<VideoPlayerScreenBody> {
             alignment: Alignment.center,
             children: [
               VideoPlayer(widget.controller),
-              PlayIcon(
-                videoPlayerScreenState: widget.controller,
+              AnimatedPauseIcon(
+                controller: widget.controller,
               ),
               VideoPreviewSliderWidget(
                 state: this,

@@ -4,6 +4,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/play_icon_widget.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/progress_visibility_widget.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/save_video_elevated_botton.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_view_thumbnail_image_widget.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_viewer_widget.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:video_trimmer/video_trimmer.dart';
@@ -93,17 +94,11 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
             TrimViewerWidget(state: this),
             PlayIcon(state: this),
             if (thumbnailFile != null)
-              SingleChildScrollView(
-                scrollDirection: Axis.horizontal,
-                child: Row(
-                  children: [
-                    Image.file(thumbnailFile!, width: 200, height: 300),
-                  ],
-                ),
-              ),
+              TrimmerViewImageWidget(thumbnailFile: thumbnailFile),
           ],
         ),
       ),
     );
   }
 }
+

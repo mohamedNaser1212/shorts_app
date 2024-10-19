@@ -4,8 +4,8 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploa
 import 'package:provider/provider.dart';
 import 'package:shorts/core/video_controller/video_controller.dart';
 
-class ThumbnailWidget extends StatelessWidget {
-  const ThumbnailWidget({super.key, this.videoPath});
+class VideoThumbnailWidget extends StatelessWidget {
+  const VideoThumbnailWidget({super.key, this.videoPath});
   final String? videoPath;
 
   @override

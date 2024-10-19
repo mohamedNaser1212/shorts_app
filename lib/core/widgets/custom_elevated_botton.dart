@@ -11,7 +11,6 @@ import 'package:shorts/Features/videos_feature/presentation/screens/video_page.d
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_page.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
-
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/email_verification_dialogue_widget.dart';

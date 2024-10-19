@@ -1,9 +1,9 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_page.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_view_body.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
+import 'package:shorts/core/widgets/custom_title.dart';
 
 class SaveElevatedButton extends StatefulWidget {
   const SaveElevatedButton({
@@ -46,7 +46,10 @@ class _SaveElevatedButtonState extends State<SaveElevatedButton> {
               : () async {
                   await _saveVideo();
                 },
-          child: const Text('Save Video'),
+          child: const CustomTitle(
+            title: 'Save Video',
+            style: TitleStyle.style12,
+          ),
         );
       },
     );
@@ -62,20 +65,18 @@ class _SaveElevatedButtonState extends State<SaveElevatedButton> {
         _progressVisibilityNotifier.value = false;
 
         await widget.state.generateThumbnail(
-         seconds:  widget.state.startValue,
-       video:  outputPath!,
+          seconds: widget.state.startValue,
+          video: outputPath!,
         );
-        if(!mounted) return;
-         NavigationManager.navigateAndFinish(
+        if (!mounted) return;
+        NavigationManager.navigateAndFinish(
           context: context,
           screen: PreviewPage(
             outputPath: outputPath,
             thumbnailFile: widget.state.thumbnailFile,
           ),
         );
-       
       },
     );
   }
-  
 }

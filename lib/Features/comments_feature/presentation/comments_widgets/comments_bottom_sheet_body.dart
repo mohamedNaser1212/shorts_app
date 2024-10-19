@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/comments_widgets/add_comment_elevated_botton.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/comments_widgets/comments_bottom_sheet.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/comments_widgets/comments_form_field.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/comments_widgets/comments_list_view.dart';
+import 'package:shorts/Features/comments_feature/presentation/comments_widgets/add_comment_elevated_botton.dart';
+import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
+import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_form_field.dart';
+import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_list_view.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
 class CommentsBottomSheetBody extends StatelessWidget {

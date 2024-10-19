@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/comments_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/comments_widgets/comments_bottom_sheet_body.dart';
+import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet_body.dart';
 import 'package:shorts/core/widgets/custom_progress_indicator.dart';
-import '../../../../comments_feature/domain/comments_entity/comments_entity.dart';
+import '../../domain/comments_entity/comments_entity.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
   const CommentsBottomSheet({super.key, required this.videoEntity});

@@ -8,23 +8,12 @@ import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/custom_app_bar.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
-class FavouritesPage extends StatefulWidget {
+class FavouritesPage extends StatelessWidget {
   const FavouritesPage({
     super.key,
     required this.currentUser,
   });
   final UserEntity currentUser;
-
-  @override
-  State<FavouritesPage> createState() => _FavouritesPageState();
-}
-
-class _FavouritesPageState extends State<FavouritesPage> {
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   FavouritesCubit.get(context).getFavourites(user: widget.currentUser);
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -66,7 +55,7 @@ class _FavouritesPageState extends State<FavouritesPage> {
                       return VideoListItem(
                         favouriteEntity: favouriteEntity,
                         videoEntity: videoEntity,
-                        userModel: widget.currentUser,
+                        userModel: currentUser,
                       );
                     },
                   );
