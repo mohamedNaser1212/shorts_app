@@ -37,27 +37,41 @@ class _SaveElevatedButtonState extends State<SaveElevatedButton> {
 
   @override
   Widget build(BuildContext context) {
-    return ValueListenableBuilder<bool>(
-      valueListenable: _progressVisibilityNotifier,
-      builder: (context, isVisible, child) {
-        return ElevatedButton(
-          onPressed: isVisible
-              ? null
-              : () async {
-                  await _saveVideo();
-                },
-          child: const CustomTitle(
-            title: 'Save Video',
-            style: TitleStyle.style12,
-          ),
-        );
-      },
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        ValueListenableBuilder<bool>(
+          valueListenable: _progressVisibilityNotifier,
+          builder: (context, isVisible, child) {
+            return ElevatedButton(
+              onPressed: isVisible
+                  ? null
+                  : () async {
+                      await _saveVideo();
+                    },
+              child: isVisible
+                  ? const SizedBox(
+                      height: 16,
+                      width: 16,
+                      child: CircularProgressIndicator(
+                        strokeWidth: 2.0,
+                        color: Colors.white,
+                      ),
+                    )
+                  : const CustomTitle(
+                      title: 'Save Video',
+                      style: TitleStyle.style12,
+                    ),
+            );
+          },
+        ),
+        const SizedBox(height: 20),
+      ],
     );
   }
 
   Future<void> _saveVideo() async {
     _progressVisibilityNotifier.value = true;
-
     widget.state.trimmer.saveTrimmedVideo(
       startValue: widget.state.startValue,
       endValue: widget.state.endValue,
@@ -69,6 +83,7 @@ class _SaveElevatedButtonState extends State<SaveElevatedButton> {
           video: outputPath!,
         );
         if (!mounted) return;
+
         NavigationManager.navigateAndFinish(
           context: context,
           screen: PreviewPage(

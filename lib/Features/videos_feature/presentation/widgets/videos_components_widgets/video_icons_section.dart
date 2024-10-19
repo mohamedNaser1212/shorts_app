@@ -21,7 +21,6 @@ class VideoIconsSection extends StatelessWidget {
       bottom: MediaQuery.of(context).size.height * 0.15,
       right: 10,
       child: VideoIcons(
-        videoProvider:videoProvider,
         videoEntity: videoEntity,
       ),
     );

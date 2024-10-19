@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_player_gesture.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_preview_icon_widget.dart';
 import 'package:provider/provider.dart';
 import 'package:shorts/core/video_controller/video_controller.dart';
 
@@ -23,7 +23,7 @@ class ThumbnailPage extends StatelessWidget {
             ),
             body: Center(
               child: controller != null && controller.value.isInitialized
-                  ? VideoPlayerGesture(
+                  ? VideoPreviewIconWidget(
                       controller: controller,
                       togglePlayPause: videoController.togglePlayPause,
                     )

@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
 
-class VideoPlayerGesture extends StatelessWidget {
+class VideoPreviewIconWidget extends StatelessWidget {
   final VideoPlayerController controller;
   final VoidCallback togglePlayPause;
 
-  const VideoPlayerGesture({
+  const VideoPreviewIconWidget({
     super.key,
     required this.controller,
     required this.togglePlayPause,

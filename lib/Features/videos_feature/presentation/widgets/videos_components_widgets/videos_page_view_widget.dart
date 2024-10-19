@@ -21,12 +21,6 @@ class VideosPageViewWidget extends StatelessWidget {
         return VideoListItem(
           videoEntity: video,
           userModel: video.user,
-          // favouriteEntity: FavouritesEntity(
-          //   id: video.id,
-          //   videoUrl: video.videoUrl,
-          //   user: video.user,
-          //   thumbnail: '',
-          // ),
         );
       },
     );

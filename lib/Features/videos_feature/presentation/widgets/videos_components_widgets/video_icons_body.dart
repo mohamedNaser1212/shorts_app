@@ -1,19 +1,13 @@
-
-
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-import 'package:shorts/core/video_controller/video_controller.dart';
-
 import 'video_icons.dart';
 
 class PositionedVideoIcons extends StatelessWidget {
-  final VideoController videoProvider;
-  final VideoEntity? videoEntity;
+  final VideoEntity videoEntity;
 
   const PositionedVideoIcons({
     super.key,
-    required this.videoProvider,
-    this.videoEntity,
+   required this.videoEntity,
   });
 
   @override
@@ -22,7 +16,6 @@ class PositionedVideoIcons extends StatelessWidget {
       right: 20,
       bottom: 100,
       child: VideoIcons(
-        videoProvider: videoProvider,
         videoEntity: videoEntity,
       ),
     );
