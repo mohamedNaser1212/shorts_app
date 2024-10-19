@@ -37,3 +37,17 @@ class VideoSelected extends VideoState {
 
   VideoSelected({required this.videoPath});
 }
+
+class VideoPickedLoading extends VideoState {}
+
+class VideoPickedSuccess extends VideoState {
+  final File file ;
+
+  VideoPickedSuccess({required this.file});
+}
+
+class VideoPickedError extends VideoState {
+  final String message;
+
+  VideoPickedError({required this.message});
+}

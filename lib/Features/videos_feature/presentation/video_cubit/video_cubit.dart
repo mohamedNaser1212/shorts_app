@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
@@ -18,15 +20,15 @@ class VideoCubit extends Cubit<VideoState> {
   static VideoCubit get(context) => BlocProvider.of(context);
   List<VideoEntity> videos = [];
 
-  Future<String?> pickVideo() async {
-    final result = await FilePicker.platform.pickFiles(type: FileType.video);
-    if (result != null && result.files.isNotEmpty) {
-      final path = result.files.single.path;
-      print('Picked file path: $path');
-      return path;
-    }
-    return null;
-  }
+  // Future<String?> pickVideo() async {
+  //   final result = await FilePicker.platform.pickFiles(type: FileType.video);
+  //   if (result != null && result.files.isNotEmpty) {
+  //     final path = result.files.single.path;
+  //     print('Picked file path: $path');
+  //     return path;
+  //   }
+  //   return null;
+  // }
 
   Future<void> uploadVideo({required VideoModel videoModel}) async {
     emit(VideoUploadLoadingState());
@@ -42,10 +44,6 @@ class VideoCubit extends Cubit<VideoState> {
     );
   }
 
-  void selectVideo(String videoPath) {
-    emit(VideoUploadedSuccessState(videoUrl: videoPath));
-  }
-
   Future<void> getVideos() async {
     emit(GetVideoLoading());
     final result = await getVideosUseCase.call();
@@ -57,5 +55,24 @@ class VideoCubit extends Cubit<VideoState> {
 
       emit(GetVideoSuccess(videos: videos));
     });
+  }
+
+  Future<void> pickVideo() async {
+    emit(VideoPickedLoading());
+    try {
+      final result = await FilePicker.platform.pickFiles(
+        type: FileType.video,
+        allowCompression: true,
+      );
+
+      if (result != null) {
+        final file = File(result.files.single.path!);
+        emit(VideoPickedSuccess(file: file));
+      } else {
+        emit(VideoPickedError(message: 'No file selected'));
+      }
+    } catch (e) {
+      emit(VideoPickedError(message: e.toString()));
+    }
   }
 }

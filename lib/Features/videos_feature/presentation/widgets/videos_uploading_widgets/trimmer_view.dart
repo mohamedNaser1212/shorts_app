@@ -2,7 +2,6 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_view_body.dart';
 
-
 class TrimmerView extends StatefulWidget {
   const TrimmerView({super.key, required this.file});
 
@@ -13,18 +12,15 @@ class TrimmerView extends StatefulWidget {
 }
 
 class TrimmerViewState extends State<TrimmerView> {
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: const Text('Video Trimmer'),
       ),
-      body:  TrimmerViewBody(
+      body: TrimmerViewBody(
         file: widget.file,
       ),
     );
   }
 }
-
-

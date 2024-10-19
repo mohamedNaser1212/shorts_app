@@ -133,9 +133,11 @@ class CustomElevatedButton extends StatelessWidget {
 
   factory CustomElevatedButton.chooseVideoPageButton({
     required BuildContext context,
+    required void Function() onPressed
   }) {
     return CustomElevatedButton._(
-      onPressed: () => _navigateToChooseVideoPage(context),
+      onPressed: onPressed,
+      // onPressed: () => _navigateToChooseVideoPage(context),
       label: 'Upload Video',
     );
   }

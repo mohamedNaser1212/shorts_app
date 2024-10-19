@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
-import 'package:shorts/Features/layout/presentation/screens/home_page.dart';
+import 'package:shorts/Features/layout/presentation/screens/home_screen.dart';
 
 import '../../Features/authentication_feature/presentation/screens/login_screen.dart';
 import '../functions/navigations_functions.dart';
