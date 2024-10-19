@@ -3,8 +3,8 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploa
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/video_preview_duration_widget.dart';
 import 'package:shorts/core/widgets/video_slider_widget.dart';
 
-class VideoPreviewSliderWidget extends StatelessWidget {
-  const VideoPreviewSliderWidget({
+class VideoSliderWidget extends StatelessWidget {
+  const VideoSliderWidget({
     super.key,
     required this.state,
   });

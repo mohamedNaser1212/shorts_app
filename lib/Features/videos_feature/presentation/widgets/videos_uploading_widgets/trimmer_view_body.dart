@@ -25,7 +25,7 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
   bool isPlaying = false;
   bool progressVisibility = false;
   late VideoController videoController;
-  File? thumbnailFile; 
+  File? thumbnailFile;
 
   @override
   void initState() {
@@ -69,11 +69,7 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
       setState(() {
         thumbnailFile = File(thumbnailPath);
       });
-
     }
-   
-
-
   }
 
   @override
@@ -87,10 +83,7 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
           children: [
             ProgressVisibilityWidget(progressVisibility: progressVisibility),
             const SizedBox(height: 20),
-            SaveElevatedButton(
-              state: this,
-              thumbnailFile: thumbnailFile,
-            ),
+            SaveElevatedButton(state: this, thumbnailFile: thumbnailFile),
             TrimViewerWidget(state: this),
             PlayIcon(state: this),
             if (thumbnailFile != null)
@@ -101,4 +94,3 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
     );
   }
 }
-

@@ -1,6 +1,6 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_page.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_screen.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_view_body.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
@@ -86,7 +86,7 @@ class _SaveElevatedButtonState extends State<SaveElevatedButton> {
 
         NavigationManager.navigateAndFinish(
           context: context,
-          screen: PreviewPage(
+          screen: PreviewScreen(
             outputPath: outputPath,
             thumbnailFile: widget.state.thumbnailFile,
           ),

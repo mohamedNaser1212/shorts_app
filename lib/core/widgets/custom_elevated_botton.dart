@@ -9,7 +9,7 @@ import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_u
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/video_page.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_page.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_screen.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
@@ -109,7 +109,7 @@ class CustomElevatedButton extends StatelessWidget {
 
   factory CustomElevatedButton.uploadVideo({
     required BuildContext context,
-    required PreviewPageState previewState,
+    required PreviewScreenState previewState,
     required File? thumbnailFile,
   }) {
     return CustomElevatedButton._(
@@ -221,7 +221,7 @@ class CustomElevatedButton extends StatelessWidget {
 
   static void _uploadVideoOnPressed({
     required BuildContext context,
-    required PreviewPageState previewState,
+    required PreviewScreenState previewState,
     required File? thumbnailFile,
   }) {
     const Uuid uuid = Uuid();

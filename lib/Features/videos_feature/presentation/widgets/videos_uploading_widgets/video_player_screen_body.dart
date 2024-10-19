@@ -50,7 +50,7 @@ class VideoPlayerScreenBodyState extends State<VideoPlayerScreenBody> {
               AnimatedPauseIcon(
                 controller: widget.controller,
               ),
-              VideoPreviewSliderWidget(
+              VideoSliderWidget(
                 state: this,
               ),
             ],
