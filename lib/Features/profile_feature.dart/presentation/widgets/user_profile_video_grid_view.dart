@@ -4,32 +4,37 @@ import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_p
 
 class UserProfileVideosGridView extends StatelessWidget {
   const UserProfileVideosGridView({
-    super.key, required this.state,
+    super.key,
+    required this.state,
   });
-final GetUserVideosSuccessState  state;
+  final GetUserVideosSuccessState state;
   @override
   Widget build(BuildContext context) {
     return Expanded(
       child: GridView.builder(
         gridDelegate: _gridDelegate(),
-        itemCount: state.videos.length, 
+        itemCount: state.videos.length,
         itemBuilder: _builder,
       ),
     );
   }
 
   Widget? _builder(context, index) {
-        final video = state.videos[index];
-        return UserProfileVideosGridViewBody(video: video);
-      }
+    final video = state.videos[index];
+
+    return UserProfileVideosGridViewBody(
+      video: video,
+      videos: [...state.videos],  
+      index:  index,
+    );
+  }
 
   SliverGridDelegateWithFixedCrossAxisCount _gridDelegate() {
     return const SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2, 
-        childAspectRatio: 0.75, 
-        crossAxisSpacing: 10.0,
-        mainAxisSpacing: 10.0,
-      );
+      crossAxisCount: 2,
+      childAspectRatio: 0.75,
+      crossAxisSpacing: 10.0,
+      mainAxisSpacing: 10.0,
+    );
   }
 }
-

@@ -49,7 +49,7 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
 
                     const Text('Videos'),
                     const SizedBox(height: 10),
-                    // GridView for video thumbnails
+
                     UserProfileVideosGridView(
                       state: state,
                     ),
