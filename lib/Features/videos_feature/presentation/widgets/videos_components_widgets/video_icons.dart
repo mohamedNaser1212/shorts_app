@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-import 'package:shorts/core/widgets/comments_icon_widget.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/comments_icon_widget.dart';
 import 'package:shorts/core/widgets/favourite_icon_widget.dart';
 
 class VideoIcons extends StatelessWidget {
