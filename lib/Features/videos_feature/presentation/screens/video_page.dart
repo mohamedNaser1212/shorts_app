@@ -8,7 +8,7 @@ import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/widgets/custom_app_bar.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
-import '../../../favourites_feature/presentation/cubit/favourites_cubit.dart';
+import '../../../favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
 
 class VideoPage extends StatelessWidget {
   const VideoPage({super.key});

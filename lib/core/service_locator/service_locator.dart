@@ -10,7 +10,9 @@ import 'package:shorts/Features/comments_feature/presentation/cubit/comments_cub
 import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_local_data_source.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_remote_data_source.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourites_repo/favourites_repo.dart';
-import 'package:shorts/Features/favourites_feature/domain/favourites_use_case/favourites_use_case.dart';
+import 'package:shorts/Features/favourites_feature/domain/favourites_use_case/get_favourites_use_case.dart';
+import 'package:shorts/Features/favourites_feature/domain/favourites_use_case/toggle_favourites_use_case.dart';
+import 'package:shorts/Features/favourites_feature/presentation/cubit/toggle_favourites_cubit/toggle_favourites_cubit_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/data/repo_impl/update_user_data_repo_impl.dart';
 import 'package:shorts/Features/profile_feature.dart/data/repo_impl/user_profile_videos_repo_impl.dart';
 import 'package:shorts/Features/profile_feature.dart/data/user_profile_videos_remote_data_source/update_user_data_remote_data_source.dart';
@@ -46,7 +48,7 @@ import '../../Features/comments_feature/data/data_sources/comments_remote_data_s
 import '../../Features/comments_feature/domain/ccommeints_repo/comments_repo.dart';
 import '../../Features/comments_feature/domain/comments_use_case/add_comments_use_case.dart';
 import '../../Features/favourites_feature/data/favourites_repo_impl/favourite_repo_impl.dart';
-import '../../Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
+import '../../Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
 import '../managers/internet_manager/internet_manager.dart';
 import '../managers/internet_manager/internet_manager_impl.dart';
 import '../managers/repo_manager/repo_manager.dart';
@@ -96,12 +98,17 @@ Future<void> setUpServiceLocator() async {
   ));
 
   // Register FavouritesUseCase and FavouritesCubit
-  getIt.registerFactory<FavouritesUseCase>(() => FavouritesUseCase(
+  getIt.registerFactory<GetFavouritesUseCase>(() => GetFavouritesUseCase(
         favouritesRepo: getIt.get<FavouritesRepo>(),
       ));
-
+ getIt.registerFactory<ToggleFavouritesUseCase>(() => ToggleFavouritesUseCase(
+  favouritesRepo: getIt.get<FavouritesRepo>(),
+      ));
   getIt.registerFactory<FavouritesCubit>(() => FavouritesCubit(
-        favouritesUseCase: getIt.get<FavouritesUseCase>(),
+        favouritesUseCase: getIt.get<GetFavouritesUseCase>(),
+      ));
+  getIt.registerFactory<ToggleFavouritesCubit>(() => ToggleFavouritesCubit(
+        favouritesUseCase: getIt.get<ToggleFavouritesUseCase>(),
       ));
 
   getIt.registerFactory<VideosRepo>(() => VideosRepoImpl(
@@ -113,6 +120,7 @@ Future<void> setUpServiceLocator() async {
   getIt.registerFactory<GetVideosUseCase>(() => GetVideosUseCase(
         videosRepository: getIt.get<VideosRepo>(),
       ));
+ 
 
   getIt.registerFactory<UploadVideoUseCase>(() => UploadVideoUseCase(
         videoRepository: getIt.get<VideosRepo>(),

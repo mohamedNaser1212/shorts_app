@@ -59,16 +59,15 @@ class VideoController extends ChangeNotifier {
     //await _loadThumbnail(videoUrl);
   }
 
-  
-Future<void> loadVideo({
+  Future<void> loadVideo({
     required File videoFile,
-  
-}) async {
+  }) async {
     videoController = VideoPlayerController.file(videoFile);
     await videoController!.initialize();
     _durationNotifier.value = videoController!.value.duration;
     notifyListeners();
   }
+
   Future<void> _loadThumbnail(String videoUrl) async {
     final thumbnailData = await VideoThumbnail.thumbnailData(
       video: videoUrl,
@@ -129,7 +128,7 @@ Future<void> loadVideo({
   }
 
   @override
-  void dispose() {
+  void dispose() async {
     _positionNotifier.dispose();
     _durationNotifier.dispose();
     _isLikedNotifier.dispose();

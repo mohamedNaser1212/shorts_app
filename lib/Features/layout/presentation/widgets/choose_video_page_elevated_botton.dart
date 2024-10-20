@@ -12,7 +12,6 @@ class ChooseVideoPageElevatedButton extends StatefulWidget {
   const ChooseVideoPageElevatedButton({
     super.key,
   });
-
   @override
   State<ChooseVideoPageElevatedButton> createState() =>
       _ChooseVideoPageElevatedButtonState();
@@ -29,14 +28,16 @@ class _ChooseVideoPageElevatedButtonState
           uploadVideoUseCase: getIt.get<UploadVideoUseCase>()),
       child: BlocConsumer<UploadVideosCubit, UploadVideosState>(
         listener: _listener,
-        builder: (context, state) => _isLoading
-            ? const CircularProgressIndicator()
-            : CustomElevatedButton.chooseVideoPageButton(
-                context: context,
-              ),
+        builder: _builder,
       ),
     );
   }
+
+  Widget _builder(context, state) => _isLoading
+          ? const CircularProgressIndicator()
+          : CustomElevatedButton.chooseVideoPageButton(
+              context: context,
+            );
 
   void _listener(context, state) {
     if (state is VideoPickedSuccess) {

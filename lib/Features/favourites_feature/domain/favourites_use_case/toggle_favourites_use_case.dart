@@ -3,20 +3,13 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
-class FavouritesUseCase {
+class ToggleFavouritesUseCase {
   final FavouritesRepo favouritesRepo;
 
-  FavouritesUseCase({required this.favouritesRepo});
+  ToggleFavouritesUseCase({required this.favouritesRepo});
 
-  Future getFavouriteVideos({
-    required UserEntity user,
-  }) async {
-    return await favouritesRepo.getFavouriteVideos(
-      user: user,
-    );
-  }
 
-  Future toggleFavouriteVideo({
+ Future toggleFavouriteVideo({
     required  VideoEntity videoEntity,
     required UserEntity userModel,
   }) async {
@@ -25,4 +18,5 @@ class FavouritesUseCase {
       userModel: userModel,
     );
   }
+
 }
