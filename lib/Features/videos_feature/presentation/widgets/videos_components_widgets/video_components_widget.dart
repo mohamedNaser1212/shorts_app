@@ -23,7 +23,6 @@ class VideoComponentsWidget extends StatelessWidget {
           AnimatedPauseIcon(videoController: videoProvider),
           VideoContentsScreen(
             videoEntity: videoEntity,
-            videoProvider: videoProvider,
           ),
           SliderWidget(videoProvider: videoProvider),
         ],

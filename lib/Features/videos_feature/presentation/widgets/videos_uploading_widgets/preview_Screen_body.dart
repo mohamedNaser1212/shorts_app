@@ -25,7 +25,8 @@ class _PreviewScreeBodyState extends State<PreviewScreeBody> {
   @override
   void initState() {
     super.initState();
-    controller = VideoPlayerController.file(File(widget.thumbnailFile!.path))
+    controller = VideoPlayerController.file(File(
+        widget.thumbnailFile?.path ?? widget.previewState.widget.outputPath),)
       ..initialize();
   }
 

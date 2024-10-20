@@ -4,17 +4,21 @@ import 'package:shorts/Features/videos_feature/domain/video_repo/video_repo.dart
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
 import '../../../../../core/managers/error_manager/failure.dart';
-import '../../video_entity/video_entity.dart';
 
-class UploadVideoUseCase {
+class ShareVideoUseCase {
   final VideosRepo videoRepository;
 
-  UploadVideoUseCase({required this.videoRepository});
+  ShareVideoUseCase({required this.videoRepository});
 
-  Future<Either<Failure, VideoEntity>> call({
-    required VideoModel videoModel,
-    UserEntity? sharedBy,
+  Future<Either<Failure, void>> call({
+    required VideoModel model,
+    required String text,
+    required UserEntity user,
   }) async {
-    return await videoRepository.uploadVideo(videoModel: videoModel,sharedBy: sharedBy);
+    return await videoRepository.shareVideo(
+      model: model,
+      text: text,
+      user: user,
+    );
   }
 }

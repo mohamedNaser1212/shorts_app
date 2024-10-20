@@ -235,7 +235,7 @@ class CustomElevatedButton extends StatelessWidget {
         thumbnail: thumbnailFile?.path ?? '',
       );
 
-      UploadVideosCubit.get(context).uploadVideo(videoModel: video);
+      UploadVideosCubit.get(context).uploadVideo(videoModel: video, sharedBy: null);
     }
   }
 

@@ -30,6 +30,7 @@ import 'package:shorts/Features/videos_feature/data/data_sources/videos_local_da
 import 'package:shorts/Features/videos_feature/data/videos_repo_impl/videos_repo_impl.dart';
 import 'package:shorts/Features/videos_feature/domain/video_repo/video_repo.dart';
 import 'package:shorts/Features/videos_feature/domain/videos_use_cases/get_videos_use_case/get_videos_use_case.dart';
+import 'package:shorts/Features/videos_feature/domain/videos_use_cases/shared_videos_use_case/shared_videos_use_case.dart';
 import 'package:shorts/Features/videos_feature/domain/videos_use_cases/upload_video_use_case/upload_video_use_case.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
@@ -126,12 +127,16 @@ Future<void> setUpServiceLocator() async {
   getIt.registerFactory<UploadVideoUseCase>(() => UploadVideoUseCase(
         videoRepository: getIt.get<VideosRepo>(),
       ));
+  getIt.registerFactory<ShareVideoUseCase>(() => ShareVideoUseCase(
+        videoRepository: getIt.get<VideosRepo>(),
+      ));
 
   getIt.registerFactory<VideoCubit>(() => VideoCubit(
         getVideosUseCase: getIt.get<GetVideosUseCase>(),
       ));
   getIt.registerFactory<UploadVideosCubit>(() => UploadVideosCubit(
         uploadVideoUseCase: getIt.get<UploadVideoUseCase>(),
+        shareVideoUseCase: getIt.get<ShareVideoUseCase>(),
       ));
 
   // UserInfo and Authentication related registrations

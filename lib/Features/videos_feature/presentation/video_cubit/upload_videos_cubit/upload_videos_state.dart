@@ -28,3 +28,14 @@ class VideoPickedError extends UploadVideosState {
 
   VideoPickedError({required this.message});
 }
+class ShareVideoLoadingState extends UploadVideosState {}
+
+class ShareVideoSuccessState extends UploadVideosState {
+
+}
+
+class ShareVideoErrorState extends UploadVideosState {
+  final String message;
+
+  ShareVideoErrorState({required this.message});
+}

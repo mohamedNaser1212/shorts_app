@@ -6,18 +6,16 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/user_profile_section.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_icons_section.dart';
-import 'package:shorts/core/video_controller/video_controller.dart';
+
 
 
 class VideoContentsScreen extends StatefulWidget {
   const VideoContentsScreen({
     super.key,
     required this.videoEntity,
-    required this.videoProvider,
   });
 
   final VideoEntity videoEntity;
-  final VideoController videoProvider;
 
   @override
   State<VideoContentsScreen> createState() => VideoContentsScreenState();
@@ -58,7 +56,6 @@ class VideoContentsScreenState extends State<VideoContentsScreen> {
         ),
         VideoIconsSection(
           videoEntity: widget.videoEntity,
-          videoProvider: widget.videoProvider,
         ),
       ],
     );

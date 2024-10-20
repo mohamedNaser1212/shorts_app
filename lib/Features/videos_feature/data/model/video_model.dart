@@ -1,15 +1,17 @@
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/utils/constants/request_data_names.dart';
-
 import '../../domain/video_entity/video_entity.dart';
 
 class VideoModel extends VideoEntity {
+  final UserEntity? sharedBy; // Optional field for the user who shared
+
   VideoModel({
     required super.id,
     required super.thumbnail,
     required super.videoUrl,
     required super.user,
     required super.description,
+    this.sharedBy,
   });
 
   VideoModel copyWith({
@@ -17,6 +19,7 @@ class VideoModel extends VideoEntity {
     String? thumbnail,
     String? videoUrl,
     UserEntity? user,
+    UserEntity? sharedBy, // Optional shared user
     String? description,
   }) {
     return VideoModel(
@@ -24,6 +27,7 @@ class VideoModel extends VideoEntity {
       thumbnail: thumbnail ?? this.thumbnail,
       videoUrl: videoUrl ?? this.videoUrl,
       user: user ?? this.user,
+      sharedBy: sharedBy ?? this.sharedBy,
       description: description ?? this.description,
     );
   }
@@ -35,6 +39,9 @@ class VideoModel extends VideoEntity {
       videoUrl: json[RequestDataNames.videoUrl] ?? '',
       description: json[RequestDataNames.description],
       user: UserEntity.fromJson(json[RequestDataNames.user]),
+      sharedBy: json[RequestDataNames.sharedBy] != null
+          ? UserEntity.fromJson(json[RequestDataNames.sharedBy])
+          : null, // Shared user if available
     );
   }
 
@@ -45,6 +52,8 @@ class VideoModel extends VideoEntity {
       RequestDataNames.videoUrl: videoUrl,
       RequestDataNames.description: description,
       RequestDataNames.user: user.toJson(),
+      if (sharedBy != null)
+        RequestDataNames.sharedBy: sharedBy!.toJson(), // Shared user if exists
     };
   }
 }
