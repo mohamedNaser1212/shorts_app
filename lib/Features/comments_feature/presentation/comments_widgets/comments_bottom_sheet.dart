@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shorts/Features/comments_feature/presentation/cubit/comments_cubit.dart';
+import 'package:shorts/Features/comments_feature/presentation/cubit/add_comments_cubit/add_comments_cubit.dart';
+import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet_body.dart';
 import 'package:shorts/core/widgets/custom_progress_indicator.dart';
@@ -50,11 +51,15 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
           return Center(child: Text(state.message));
         }
 
-        return CustomProgressIndicator(
-          isLoading: state is AddCommentsLoadingState,
-          child: CommentsBottomSheetBody(
-            state: this,
-          ),
+        return BlocBuilder<AddCommentsCubit, AddCommentsState>(
+          builder: (context, state) {
+            return CustomProgressIndicator(
+              isLoading: state is AddCommentsLoadingState,
+              child: CommentsBottomSheetBody(
+                state: this,
+              ),
+            );
+          },
         );
       },
     );

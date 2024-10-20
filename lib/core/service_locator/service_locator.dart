@@ -6,7 +6,8 @@ import 'package:shorts/Features/authentication_feature/presentation/cubit/login_
 import 'package:shorts/Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
 import 'package:shorts/Features/comments_feature/data/data_sources/comments_local_data_source.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/show_comments_use_case.dart';
-import 'package:shorts/Features/comments_feature/presentation/cubit/comments_cubit.dart';
+import 'package:shorts/Features/comments_feature/presentation/cubit/add_comments_cubit/add_comments_cubit.dart';
+import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_local_data_source.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_data_source/favourites_remote_data_source.dart';
 import 'package:shorts/Features/favourites_feature/domain/favourites_repo/favourites_repo.dart';
@@ -101,8 +102,8 @@ Future<void> setUpServiceLocator() async {
   getIt.registerFactory<GetFavouritesUseCase>(() => GetFavouritesUseCase(
         favouritesRepo: getIt.get<FavouritesRepo>(),
       ));
- getIt.registerFactory<ToggleFavouritesUseCase>(() => ToggleFavouritesUseCase(
-  favouritesRepo: getIt.get<FavouritesRepo>(),
+  getIt.registerFactory<ToggleFavouritesUseCase>(() => ToggleFavouritesUseCase(
+        favouritesRepo: getIt.get<FavouritesRepo>(),
       ));
   getIt.registerFactory<FavouritesCubit>(() => FavouritesCubit(
         favouritesUseCase: getIt.get<GetFavouritesUseCase>(),
@@ -120,7 +121,6 @@ Future<void> setUpServiceLocator() async {
   getIt.registerFactory<GetVideosUseCase>(() => GetVideosUseCase(
         videosRepository: getIt.get<VideosRepo>(),
       ));
- 
 
   getIt.registerFactory<UploadVideoUseCase>(() => UploadVideoUseCase(
         videoRepository: getIt.get<VideosRepo>(),
@@ -239,8 +239,10 @@ Future<void> setUpServiceLocator() async {
         registerUseCase: getIt.get<RegisterUseCase>(),
       ));
   getIt.registerFactory<CommentsCubit>(() => CommentsCubit(
-        addCommentsUseCase: getIt.get<AddCommentsUseCase>(),
         getCommentsUseCase: getIt.get<GetCommentsUseCase>(),
+      ));
+  getIt.registerFactory<AddCommentsCubit>(() => AddCommentsCubit(
+        addCommentsUseCase: getIt.get<AddCommentsUseCase>(),
       ));
   getIt.registerFactory<LoginCubit>(() => LoginCubit(
         loginUseCase: getIt.get<LoginUseCase>(),
