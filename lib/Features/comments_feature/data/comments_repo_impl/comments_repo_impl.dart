@@ -56,4 +56,18 @@ class CommentsRepoImpl implements CommentsRepo {
       },
     );
   }
+
+  @override
+  Future<Either<Failure, num>> getCommentsCount(
+      {required String videoId}) async {
+
+    return repoManager.call(
+      action: () async {
+        final commentsCount =
+            await commentsRemoteDataSource.getCommentsCount(videoId: videoId);
+        return commentsCount;
+      },
+    );
+    
+  }
 }

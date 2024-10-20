@@ -7,6 +7,11 @@ abstract class CommentsRemoteDataSource {
   Future<List<CommentModel>> getComments({
     required String videoId,
   });
+
+  Future<num> getCommentsCount({
+    required String videoId,
+  });
+
   Future<bool> addCommentToVideo({
     required CommentEntity comment,
     required VideoEntity video,
@@ -34,6 +39,19 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     );
 
     return commentsData.map((data) => CommentModel.fromJson(data)).toList();
+  }
+
+  @override
+  Future<num> getCommentsCount({
+    required String videoId,
+  }) async {
+    final commentsData = await firebaseHelper.getCollectionDocuments(
+      collectionPath: 'videos',
+      docId: videoId,
+      subCollectionPath: 'comments',
+    );
+
+    return commentsData.length;
   }
 
   @override

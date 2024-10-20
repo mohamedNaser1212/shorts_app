@@ -13,4 +13,7 @@ abstract class CommentsRepo {
     required CommentEntity comment,
     required VideoEntity video,
   });
+  Future<Either<Failure, num>> getCommentsCount({
+    required String videoId,
+  });
 }
