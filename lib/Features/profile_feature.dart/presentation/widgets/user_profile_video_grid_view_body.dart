@@ -3,6 +3,7 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/videos_page_view_widget.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
+import 'package:shorts/core/widgets/videos_screen_AppBar.dart';
 
 class UserProfileVideosGridViewBody extends StatelessWidget {
   const UserProfileVideosGridViewBody({
@@ -18,7 +19,9 @@ class UserProfileVideosGridViewBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return GestureDetector(
+    return Scaffold(
+      appBar:const VideosScreenAppBarWidget() ,
+      body: GestureDetector(
       onTap: () {
         NavigationManager.navigateTo(
           context: context,
@@ -55,6 +58,7 @@ class UserProfileVideosGridViewBody extends StatelessWidget {
           ],
         ),
       ),
+    )
     );
   }
 }
