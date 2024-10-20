@@ -7,7 +7,8 @@ import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/video_page.dart';
-import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
+
+import 'package:shorts/Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_screen.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
@@ -134,7 +135,7 @@ class CustomElevatedButton extends StatelessWidget {
   }) {
     return CustomElevatedButton._(
       // onPressed: onPressed,
-     onPressed: () => _navigateToChooseVideoPage(context),
+      onPressed: () => _navigateToChooseVideoPage(context),
       label: 'Upload Video',
     );
   }
@@ -234,7 +235,7 @@ class CustomElevatedButton extends StatelessWidget {
         thumbnail: thumbnailFile?.path ?? '',
       );
 
-      VideoCubit.get(context).uploadVideo(videoModel: video);
+      UploadVideosCubit.get(context).uploadVideo(videoModel: video);
     }
   }
 
@@ -273,7 +274,7 @@ class CustomElevatedButton extends StatelessWidget {
   }
 
   static Future<void> _navigateToChooseVideoPage(BuildContext context) async {
-      await VideoCubit.get(context).pickVideo();
+    await UploadVideosCubit.get(context).pickVideo();
   }
 
   @override

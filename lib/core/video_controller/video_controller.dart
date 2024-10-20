@@ -56,7 +56,7 @@ class VideoController extends ChangeNotifier {
       notifyListeners();
     });
 
-    await _loadThumbnail(videoUrl);
+    //await _loadThumbnail(videoUrl);
   }
 
   

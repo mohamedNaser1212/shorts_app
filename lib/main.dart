@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/comments_cubit.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/favourites_cubit.dart';
-import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
+import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
+import 'package:shorts/Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 
@@ -40,6 +41,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt<CommentsCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<UploadVideosCubit>(),
         ),
       ],
       child: MaterialApp(

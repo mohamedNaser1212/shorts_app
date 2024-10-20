@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/videos_feature/presentation/video_cubit/video_cubit.dart';
+import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/videos_list.dart';
 
 // ignore: must_be_immutable
