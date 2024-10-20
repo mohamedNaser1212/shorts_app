@@ -34,7 +34,7 @@ class _TrimViewerWidgetState extends State<TrimViewerWidget> {
         areaProperties: TrimAreaProperties.edgeBlur(thumbnailQuality: 10),
         onChangeStart: (value) {
           setState(() {
-            widget.state.startValue = value;
+            widget.state.videoController.startValue = value;
             _updateVideoPosition();
 
             if (widget.state.videoController.thumbnailFile != null) {
@@ -47,9 +47,9 @@ class _TrimViewerWidgetState extends State<TrimViewerWidget> {
         },
         onChangeEnd: (value) {
           setState(() {
-            widget.state.endValue = value;
+            widget.state.videoController.endValue = value;
             if (widget.state.videoController.positionNotifier.value.inSeconds >
-                widget.state.endValue) {
+                widget.state.videoController.endValue) {
               _updateVideoPosition();
             }
 
@@ -72,6 +72,6 @@ class _TrimViewerWidgetState extends State<TrimViewerWidget> {
 
   void _updateVideoPosition() {
     widget.state.videoController
-        .seekTo(Duration(seconds: widget.state.startValue.toInt()));
+        .seekTo(Duration(seconds: widget.state.videoController.startValue.toInt()));
   }
 }

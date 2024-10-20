@@ -31,7 +31,8 @@ class VideoController extends ChangeNotifier {
   ValueNotifier<Duration> get durationNotifier => _durationNotifier;
   ValueNotifier<bool> get isLikedNotifier => _isLikedNotifier;
   bool get isPaused => _isPaused;
-
+  double startValue = 0.0;
+  double endValue = 0.0;
   Future<void> initializeController(
       {required String videoUrl, required bool isInitiallyPaused}) async {
     videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl))
@@ -57,7 +58,12 @@ class VideoController extends ChangeNotifier {
 
     await _loadThumbnail(videoUrl);
   }
-Future<void> loadVideo(File videoFile) async {
+
+  
+Future<void> loadVideo({
+    required File videoFile,
+  
+}) async {
     videoController = VideoPlayerController.file(videoFile);
     await videoController!.initialize();
     _durationNotifier.value = videoController!.value.duration;

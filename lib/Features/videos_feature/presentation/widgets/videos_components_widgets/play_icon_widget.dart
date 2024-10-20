@@ -22,10 +22,10 @@ class _PlayIconState extends State<PlayIcon> {
         if (widget.state != null) {
           final playBackState =
               await widget.state?.trimmer.videoPlaybackControl(
-            endValue: widget.state?.endValue ??
+            endValue: widget.state?.videoController.endValue ??
                 widget.videoPlayerScreenState!.value.duration.inSeconds
                     .toDouble(),
-            startValue: widget.state?.startValue ??
+            startValue: widget.state?.videoController.startValue ??
                 widget.videoPlayerScreenState!.value.duration.inSeconds
                     .toDouble(),
           );

@@ -18,11 +18,11 @@ class TrimmerViewBody extends StatefulWidget {
 
 class TrimmerViewBodyState extends State<TrimmerViewBody> {
   final trimmer = Trimmer();
-  double startValue = 0.0;
-  double endValue = 0.0;
+
   bool isPlaying = false;
   bool progressVisibility = false;
   late VideoController videoController;
+
   @override
   void initState() {
     super.initState();
@@ -43,8 +43,8 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
         trimmer.videoPlayerController!.value.duration.inSeconds;
 
     setState(() {
-      startValue = 0.0;
-      endValue = videoDuration < 60 ? videoDuration.toDouble() : 60.0;
+     videoController. startValue = 0.0;
+      videoController.endValue = videoDuration < 60 ? videoDuration.toDouble() : 60.0;
     });
   }
 
@@ -79,11 +79,13 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
           children: [
             ProgressVisibilityWidget(progressVisibility: progressVisibility),
             const SizedBox(height: 20),
-            SaveElevatedButton(state: this, thumbnailFile: videoController.thumbnailFile),
+            SaveElevatedButton(
+                state: this, thumbnailFile: videoController.thumbnailFile),
             TrimViewerWidget(state: this),
             PlayIcon(state: this),
             if (videoController.thumbnailFile != null)
-              TrimmerViewImageWidget(thumbnailFile: videoController.thumbnailFile),
+              TrimmerViewImageWidget(
+                  thumbnailFile: videoController.thumbnailFile),
           ],
         ),
       ),

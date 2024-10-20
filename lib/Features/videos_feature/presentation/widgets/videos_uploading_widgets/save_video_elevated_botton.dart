@@ -73,13 +73,13 @@ class _SaveElevatedButtonState extends State<SaveElevatedButton> {
   Future<void> _saveVideo() async {
     _progressVisibilityNotifier.value = true;
     widget.state.trimmer.saveTrimmedVideo(
-      startValue: widget.state.startValue,
-      endValue: widget.state.endValue,
+      startValue: widget.state.videoController.startValue,
+      endValue: widget.state.videoController.endValue,
       onSave: (outputPath) async {
         _progressVisibilityNotifier.value = false;
 
         await widget.state.videoController.generateThumbnail(
-          seconds: widget.state.startValue,
+          seconds: widget.state.videoController.startValue,
           videoPath: outputPath!,
         );
         if (!mounted) return;
