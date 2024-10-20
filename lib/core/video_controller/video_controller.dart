@@ -1,11 +1,16 @@
+import 'dart:io';
+import 'package:path_provider/path_provider.dart';
+
 import 'package:flutter/foundation.dart';
 import 'package:video_player/video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class VideoController extends ChangeNotifier {
   VideoController(String videoUrl, {bool isInitiallyPaused = false}) {
-    initializeController(videoUrl: videoUrl, isInitiallyPaused: isInitiallyPaused);
+    initializeController(
+        videoUrl: videoUrl, isInitiallyPaused: isInitiallyPaused);
   }
+  File? thumbnailFile;
 
   VideoPlayerController? videoController;
   Uint8List? _thumbnail;
@@ -52,7 +57,12 @@ class VideoController extends ChangeNotifier {
 
     await _loadThumbnail(videoUrl);
   }
-
+Future<void> loadVideo(File videoFile) async {
+    videoController = VideoPlayerController.file(videoFile);
+    await videoController!.initialize();
+    _durationNotifier.value = videoController!.value.duration;
+    notifyListeners();
+  }
   Future<void> _loadThumbnail(String videoUrl) async {
     final thumbnailData = await VideoThumbnail.thumbnailData(
       video: videoUrl,
@@ -63,6 +73,23 @@ class VideoController extends ChangeNotifier {
 
     _thumbnail = thumbnailData;
     notifyListeners();
+  }
+
+  Future<void> generateThumbnail(
+      {required String videoPath, required double seconds}) async {
+    final thumbnailPath = await VideoThumbnail.thumbnailFile(
+      video: videoPath,
+      thumbnailPath: (await getTemporaryDirectory()).path,
+      imageFormat: ImageFormat.PNG,
+      maxWidth: 200,
+      quality: 75,
+      timeMs: (seconds * 1000).toInt(),
+    );
+
+    if (thumbnailPath != null) {
+      thumbnailFile = File(thumbnailPath);
+      notifyListeners();
+    }
   }
 
   void togglePlayPause() {

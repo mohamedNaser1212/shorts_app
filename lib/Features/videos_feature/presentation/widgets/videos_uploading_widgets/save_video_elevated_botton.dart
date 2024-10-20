@@ -78,9 +78,9 @@ class _SaveElevatedButtonState extends State<SaveElevatedButton> {
       onSave: (outputPath) async {
         _progressVisibilityNotifier.value = false;
 
-        await widget.state.generateThumbnail(
+        await widget.state.videoController.generateThumbnail(
           seconds: widget.state.startValue,
-          video: outputPath!,
+          videoPath: outputPath!,
         );
         if (!mounted) return;
 
@@ -88,7 +88,7 @@ class _SaveElevatedButtonState extends State<SaveElevatedButton> {
           context: context,
           screen: PreviewScreen(
             outputPath: outputPath,
-            thumbnailFile: widget.state.thumbnailFile,
+            thumbnailFile: widget.state.videoController.thumbnailFile,
           ),
         );
       },

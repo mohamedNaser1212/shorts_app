@@ -1,12 +1,10 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
-import 'package:path_provider/path_provider.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/play_icon_widget.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/progress_visibility_widget.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/save_video_elevated_botton.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_view_thumbnail_image_widget.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_viewer_widget.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
 import 'package:video_trimmer/video_trimmer.dart';
 import '../../../../../core/video_controller/video_controller.dart';
 
@@ -25,8 +23,6 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
   bool isPlaying = false;
   bool progressVisibility = false;
   late VideoController videoController;
-  File? thumbnailFile;
-
   @override
   void initState() {
     super.initState();
@@ -52,25 +48,25 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
     });
   }
 
-  Future<void> generateThumbnail({
-    required double seconds,
-    required String video,
-  }) async {
-    final thumbnailPath = await VideoThumbnail.thumbnailFile(
-      video: video,
-      thumbnailPath: (await getTemporaryDirectory()).path,
-      imageFormat: ImageFormat.PNG,
-      maxWidth: 200,
-      quality: 75,
-      timeMs: (seconds * 1000).toInt(),
-    );
+  // Future<void> generateThumbnail({
+  //   required double seconds,
+  //   required String video,
+  // }) async {
+  //   final thumbnailPath = await VideoThumbnail.thumbnailFile(
+  //     video: video,
+  //     thumbnailPath: (await getTemporaryDirectory()).path,
+  //     imageFormat: ImageFormat.PNG,
+  //     maxWidth: 200,
+  //     quality: 75,
+  //     timeMs: (seconds * 1000).toInt(),
+  //   );
 
-    if (thumbnailPath != null) {
-      setState(() {
-        thumbnailFile = File(thumbnailPath);
-      });
-    }
-  }
+  //   if (thumbnailPath != null) {
+  //     setState(() {
+  //       thumbnailFile = File(thumbnailPath);
+  //     });
+  //   }
+  // }
 
   @override
   Widget build(BuildContext context) {
@@ -83,11 +79,11 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
           children: [
             ProgressVisibilityWidget(progressVisibility: progressVisibility),
             const SizedBox(height: 20),
-            SaveElevatedButton(state: this, thumbnailFile: thumbnailFile),
+            SaveElevatedButton(state: this, thumbnailFile: videoController.thumbnailFile),
             TrimViewerWidget(state: this),
             PlayIcon(state: this),
-            if (thumbnailFile != null)
-              TrimmerViewImageWidget(thumbnailFile: thumbnailFile),
+            if (videoController.thumbnailFile != null)
+              TrimmerViewImageWidget(thumbnailFile: videoController.thumbnailFile),
           ],
         ),
       ),

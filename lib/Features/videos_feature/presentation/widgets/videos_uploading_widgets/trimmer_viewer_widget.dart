@@ -37,10 +37,10 @@ class _TrimViewerWidgetState extends State<TrimViewerWidget> {
             widget.state.startValue = value;
             _updateVideoPosition();
 
-            if (widget.state.thumbnailFile != null) {
-              widget.state.generateThumbnail(
+            if (widget.state.videoController.thumbnailFile != null) {
+              widget.state.videoController.generateThumbnail(
                 seconds: value.toDouble(),
-                video: widget.state.thumbnailFile!.path,
+                videoPath: widget.state.videoController.thumbnailFile!.path,
               );
             }
           });
@@ -53,10 +53,10 @@ class _TrimViewerWidgetState extends State<TrimViewerWidget> {
               _updateVideoPosition();
             }
 
-            if (widget.state.thumbnailFile != null) {
-              widget.state.generateThumbnail(
+            if (widget.state.videoController.thumbnailFile != null) {
+              widget.state.videoController.generateThumbnail(
                 seconds: value.toDouble(),
-                video: widget.state.thumbnailFile!.path,
+                videoPath: widget.state.videoController.thumbnailFile!.path,
               );
             }
           });
