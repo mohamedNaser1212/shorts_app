@@ -65,14 +65,15 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     );
 
     if (videoData != null) {
-      await firebaseHelper.addDocument(
+
+      await firebaseHelper.addDocumentWithAutoId(
         collectionPath: 'videos',
         docId: video.id,
         subCollectionPath: 'comments',
         data: comment.toJson(),
       );
 
-      await firebaseHelper.addDocument(
+      await firebaseHelper.addDocumentWithAutoId(
         collectionPath: 'users',
         docId: video.user.id,
         subCollectionPath: 'videos/${video.id}/comments',

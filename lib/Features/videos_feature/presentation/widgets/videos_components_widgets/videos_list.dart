@@ -10,12 +10,14 @@ class VideoListItem extends StatelessWidget {
   final VideoEntity videoEntity;
   final UserEntity userModel;
   final FavouritesEntity? favouriteEntity;
+  final bool isShared;
 
   const VideoListItem({
     super.key,
     required this.videoEntity,
     required this.userModel,
     this.favouriteEntity,
+    required this.isShared,
   });
 
   @override
@@ -31,6 +33,7 @@ class VideoListItem extends StatelessWidget {
   Widget _builder(context, videoProvider, child) {
     return VideoListBody(
       videoEntity: videoEntity,
+      isShared: isShared,
       videoController: videoProvider,
     );
   }

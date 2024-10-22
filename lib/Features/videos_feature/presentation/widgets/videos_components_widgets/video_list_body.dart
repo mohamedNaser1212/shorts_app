@@ -10,10 +10,12 @@ class VideoListBody extends StatefulWidget {
     super.key,
     required this.videoEntity,
     required this.videoController,
+    required this.isShared,
   });
 
   final VideoEntity videoEntity;
   final VideoController videoController;
+  final bool isShared ;
 
   @override
   State<VideoListBody> createState() => _VideoListBodyState();
@@ -44,6 +46,7 @@ class _VideoListBodyState extends State<VideoListBody> {
               VideoComponentsWidget(
                 videoEntity: widget.videoEntity,
                 videoProvider: widget.videoController,
+                isShared: widget.isShared,
               ),
           ],
         ),

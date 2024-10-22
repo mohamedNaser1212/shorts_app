@@ -94,9 +94,7 @@ class FirebaseHelperImpl extends FirebaseHelper {
         firestore.collection(collectionPath).doc(docId);
 
     if (subCollectionPath != null) {
-      document = document.collection(subCollectionPath).doc(
-            subDocId,
-          );
+      document = document.collection(subCollectionPath).doc(subDocId);
     }
 
     await document.delete();
@@ -111,9 +109,27 @@ class FirebaseHelperImpl extends FirebaseHelper {
         await firestore.collection(collectionPath).doc(docId).get();
     return documentSnapshot.data() as Map<String, dynamic>?;
   }
-    @override
+
+  @override
   Future<String> generateDocumentId({required String collectionPath}) async {
-    // Generate a new document ID for the given collection
+
     return firestore.collection(collectionPath).doc().id;
+  }
+
+  @override
+  Future<void> addDocumentWithAutoId({
+    required String collectionPath,
+    required Map<String, dynamic> data,
+    String? docId,
+    String? subCollectionPath,
+  }) async {
+    CollectionReference collection = firestore.collection(collectionPath);
+
+    if (docId != null && subCollectionPath != null) {
+      collection = collection.doc(docId).collection(subCollectionPath);
+    }
+
+
+    await collection.add(data);
   }
 }

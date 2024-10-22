@@ -41,6 +41,14 @@ abstract class FirebaseHelper {
     required String collectionPath,
     required String docId,
   });
-   Future<String> generateDocumentId({required String collectionPath});
-}
 
+  Future<String> generateDocumentId({required String collectionPath});
+
+  // New method to add a document with an auto-generated ID
+  Future<void> addDocumentWithAutoId({
+    required String collectionPath,
+    required Map<String, dynamic> data,
+    String? docId,
+    String? subCollectionPath,
+  });
+}

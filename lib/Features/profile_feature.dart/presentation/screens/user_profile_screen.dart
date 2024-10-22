@@ -7,21 +7,33 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_compo
 import 'package:shorts/core/service_locator/service_locator.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen({super.key, required this.state});
+  const UserProfileScreen(
+      {super.key, required this.state, required this.isShared});
   final VideoContentsScreenState state;
+  final bool isShared;
 
   @override
-  State<UserProfileScreen> createState() => _UserProfileScreenState();
+  State<UserProfileScreen> createState() => UserProfileScreenState();
 }
 
-class _UserProfileScreenState extends State<UserProfileScreen> {
+class UserProfileScreenState extends State<UserProfileScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    print(widget.isShared);
+  }
+
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => UserProfileCubit(
+      create: (context) => GetUserVideosCubit(
         getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
-      )..getUserVideos(userId: widget.state.widget.videoEntity.user.id!),
-      child: UserProfileScreenBody(state: widget.state),
+      )..getUserVideos(
+          userId: widget.isShared == false
+              ? widget.state.widget.videoEntity.user.id!
+              : widget.state.widget.videoEntity.sharedBy!.id!),
+      child: UserProfileScreenBody(state: widget.state, userProfileState: this),
     );
   }
 }

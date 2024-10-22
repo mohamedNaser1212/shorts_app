@@ -10,10 +10,12 @@ class VideoComponentsWidget extends StatelessWidget {
     super.key,
     required this.videoEntity,
     required this.videoProvider,
+    required this.isShared,
   });
 
   final VideoEntity videoEntity;
   final VideoController videoProvider;
+  final bool  isShared;
 
   @override
   Widget build(BuildContext context) {
@@ -23,6 +25,7 @@ class VideoComponentsWidget extends StatelessWidget {
           AnimatedPauseIcon(videoController: videoProvider),
           VideoContentsScreen(
             videoEntity: videoEntity,
+            isShared: isShared,
           ),
           SliderWidget(videoProvider: videoProvider),
         ],

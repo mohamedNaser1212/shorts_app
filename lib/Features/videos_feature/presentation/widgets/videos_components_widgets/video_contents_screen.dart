@@ -7,21 +7,23 @@ import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_vide
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/user_profile_section.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_icons_section.dart';
 
-
-
 class VideoContentsScreen extends StatefulWidget {
   const VideoContentsScreen({
     super.key,
     required this.videoEntity,
+    required this.isShared,
   });
 
   final VideoEntity videoEntity;
+  final bool isShared;
 
   @override
   State<VideoContentsScreen> createState() => VideoContentsScreenState();
 }
 
 class VideoContentsScreenState extends State<VideoContentsScreen> {
+
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<CommentsCubit, CommentsState>(

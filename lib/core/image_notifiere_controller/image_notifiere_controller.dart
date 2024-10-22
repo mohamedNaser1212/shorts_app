@@ -6,7 +6,8 @@ import 'package:shorts/core/functions/toast_function.dart';
 class ImageNotifierController extends ChangeNotifier {
   final TextEditingController emailController;
   final ValueNotifier<File?> imageFileNotifier = ValueNotifier<File?>(null);
-  final ValueNotifier<String?> profilePicNotifier = ValueNotifier<String?>(null);
+  final ValueNotifier<String?> profilePicNotifier =
+      ValueNotifier<String?>(null);
 
   ImageNotifierController({required this.emailController});
 
@@ -14,7 +15,7 @@ class ImageNotifierController extends ChangeNotifier {
     final pickedFile = await ImagePickerHelper.pickImageFromGallery();
     if (pickedFile != null) {
       imageFileNotifier.value = pickedFile;
-     // await uploadImage();
+      await uploadImage();
     }
   }
 

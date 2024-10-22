@@ -181,8 +181,8 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<UserProfileVideosUseCase>(UserProfileVideosUseCase(
     repository: getIt.get<UserProfileVideosRepo>(),
   ));
-  getIt.registerFactory<UserProfileCubit>(
-    () => UserProfileCubit(
+  getIt.registerFactory<GetUserVideosCubit>(
+    () => GetUserVideosCubit(
       getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
     ),
   );

@@ -52,9 +52,11 @@ class FavouritesPage extends StatelessWidget {
                     itemBuilder: (context, index) {
                       final favouriteEntity = favouriteVideos[index];
                       final videoEntity = VideoCubit.get(context).videos[index];
+                      final isShared= videoEntity.sharedBy != null;
                       return VideoListItem(
                         favouriteEntity: favouriteEntity,
                         videoEntity: videoEntity,
+                        isShared: isShared,
                         userModel: currentUser,
                       );
                     },

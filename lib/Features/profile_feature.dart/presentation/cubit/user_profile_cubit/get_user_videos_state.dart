@@ -1,4 +1,7 @@
-part of 'user_profile_cubit.dart';
+
+
+
+import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 
 class UserProfileState {}
 
