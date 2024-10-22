@@ -1,7 +1,4 @@
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
-import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
-import 'package:shorts/core/utils/constants/request_data_names.dart';
-import '../../domain/video_entity/video_entity.dart';
 import 'package:intl/intl.dart';
 
 class ShareVideoModel {
@@ -43,8 +40,7 @@ class ShareVideoModel {
 
   Map<String, dynamic> toMap() {
     return {
-      ...videoModel!.toJson
-      (),
+      ...videoModel!.toJson(),
       'videoId': videoModel!.id,
       'shareUserId': shareUserId,
       'shareUserName': shareUserName,

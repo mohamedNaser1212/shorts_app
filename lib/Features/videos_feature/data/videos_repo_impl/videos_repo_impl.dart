@@ -8,6 +8,7 @@ import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import '../../../../core/managers/error_manager/failure.dart';
 import '../../../../core/managers/repo_manager/repo_manager.dart';
 import '../data_sources/video_remote_data_source/videos_rermote_data_source.dart';
+
 class VideosRepoImpl extends VideosRepo {
   final VideosRemoteDataSource videosRemoteDataSource;
   final VideoLocalDataSource videoLocalDataSource;
@@ -22,8 +23,11 @@ class VideosRepoImpl extends VideosRepo {
   @override
   Future<Either<Failure, List<VideoEntity>>> getVideos() async {
     return repoManager.call(action: () async {
+      // final cachedVideos = await videoLocalDataSource.getVideos();
+
       final videos = await videosRemoteDataSource.getVideos();
       await videoLocalDataSource.saveVideos(videos);
+      print('videos: ${videos.length}');
       return videos;
     });
   }
@@ -35,19 +39,17 @@ class VideosRepoImpl extends VideosRepo {
   }) {
     return repoManager.call(action: () async {
       final video = await videosRemoteDataSource.uploadVideo(
-        videoModel: videoModel,
-        sharedBy: sharedBy,
-      );
+          videoModel: videoModel, sharedBy: sharedBy);
       return video;
     });
   }
 
   @override
-  Future<Either<Failure, void>> shareVideo({
-    required VideoModel model,
-    required String text,
-    required UserEntity user,
-  }) {
+  Future<Either<Failure, void>> shareVideo(
+      {required VideoModel model,
+      required String text,
+      required UserEntity user}) {
+
     return repoManager.call(action: () async {
       await videosRemoteDataSource.shareVideo(
         model: model,
@@ -55,5 +57,7 @@ class VideosRepoImpl extends VideosRepo {
         user: user,
       );
     });
+    
+   
   }
 }

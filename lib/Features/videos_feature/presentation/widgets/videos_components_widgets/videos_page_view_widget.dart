@@ -3,6 +3,7 @@ import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments
 
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/videos_list.dart';
+import 'package:shorts/core/widgets/custom_title.dart';
 
 // ignore: must_be_immutable
 class VideosPageViewWidget extends StatelessWidget {
@@ -24,10 +25,23 @@ class VideosPageViewWidget extends StatelessWidget {
       controller: PageController(initialPage: initialIndex ?? 0),
       itemBuilder: (context, index) {
         final video = state.videos[index];
+        final isShared = video.sharedBy != null;
         CommentsCubit.get(context).getComments(videoId: video.id);
-        return VideoListItem(
-          videoEntity: video,
-          userModel: video.user,
+        return Column(
+          children: [
+            if (isShared)
+              CustomTitle(
+                title: 'Shared by: ${video.sharedBy?.name}',
+                style: TitleStyle.style20,
+                color: Colors.white,
+              ),
+            Expanded(
+              child: VideoListItem(
+                videoEntity: video,
+                userModel: video.user,
+              ),
+            ),
+          ],
         );
       },
     );

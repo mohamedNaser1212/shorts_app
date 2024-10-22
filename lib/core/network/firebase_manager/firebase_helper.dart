@@ -41,5 +41,6 @@ abstract class FirebaseHelper {
     required String collectionPath,
     required String docId,
   });
+   Future<String> generateDocumentId({required String collectionPath});
 }
 

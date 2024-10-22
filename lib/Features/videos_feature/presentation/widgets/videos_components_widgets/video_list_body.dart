@@ -20,7 +20,6 @@ class VideoListBody extends StatefulWidget {
 }
 
 class _VideoListBodyState extends State<VideoListBody> {
-
   @override
   void dispose() {
     super.dispose();
@@ -41,10 +40,11 @@ class _VideoListBodyState extends State<VideoListBody> {
               )
             else
               ThumbnailNotifier(videoUrl: widget.videoEntity.videoUrl),
-            VideoComponentsWidget(
-              videoEntity: widget.videoEntity,
-              videoProvider: widget.videoController,
-            ),
+            if (widget.videoEntity.isShared == false)
+              VideoComponentsWidget(
+                videoEntity: widget.videoEntity,
+                videoProvider: widget.videoController,
+              ),
           ],
         ),
       ),

@@ -9,10 +9,12 @@ import '../../../../../core/network/firebase_manager/collection_names.dart';
 
 abstract class VideosRemoteDataSource {
   const VideosRemoteDataSource._();
+  
   Future<List<VideoModel>> getVideos();
+  
   Future<VideoModel> uploadVideo({
     required VideoModel videoModel,
-    UserEntity? sharedBy, // Optional sharedBy user parameter
+    UserEntity? sharedBy,
   });
 
   Future<void> shareVideo({
@@ -33,30 +35,29 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     final data = await firebaseHelperManager.getCollectionDocuments(
       collectionPath: CollectionNames.videos,
     );
-    return data.map((video) => VideoModel.fromJson(video)).toList();
+    final result = data.map((video) => VideoModel.fromJson(video)).toList();
+    print('Videos: ${result.length}');
+    return result;
   }
 
   @override
   Future<VideoModel> uploadVideo({
     required VideoModel videoModel,
-    UserEntity? sharedBy, // Optional sharedBy user parameter
+    UserEntity? sharedBy,
   }) async {
-    // Upload video and thumbnail to Firebase Storage
     final videoUrl = await _uploadVideoToStorage(
         videoId: videoModel.id, videoPath: videoModel.videoUrl);
     final thumbnailUrl = await _uploadThumbnailToStorage(
         videoId: videoModel.id, thumbnailPath: videoModel.thumbnail);
 
-    // Update videoModel with sharedBy if the video is shared
     final updatedVideoModel = videoModel.copyWith(
       videoUrl: videoUrl,
       thumbnail: thumbnailUrl,
-      sharedBy: sharedBy ?? videoModel.sharedBy, // Set sharedBy if provided
+      sharedBy: sharedBy ?? videoModel.sharedBy,
     );
 
-    // Upload video to relevant collections
     await _uploadVideoToVideosCollection(videoModel, updatedVideoModel);
-    await _uploadVideoToUserCollection(videoModel, updatedVideoModel);
+    await _uploadVideoToUserCollection(videoModel);
 
     return updatedVideoModel;
   }
@@ -70,14 +71,13 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     );
   }
 
-  Future<void> _uploadVideoToUserCollection(
-      VideoModel videoModel, VideoModel updatedVideoModel) async {
+  Future<void> _uploadVideoToUserCollection(VideoModel videoModel) async {
     await firebaseHelperManager.addDocument(
       collectionPath: CollectionNames.users,
       docId: videoModel.user.id,
       subCollectionPath: CollectionNames.videos,
       subDocId: videoModel.id,
-      data: updatedVideoModel.toJson(),
+      data: videoModel.toJson(),
     );
   }
 
@@ -109,18 +109,57 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     required String text,
     required UserEntity user,
   }) async {
-    ShareVideoModel shareVideoModel = ShareVideoModel(
-      videoModel: model,
+
+    final newVideoId = await firebaseHelperManager.generateDocumentId(
+      collectionPath: CollectionNames.videos,
+    );
+    await firebaseHelperManager.addDocument(
+      collectionPath: CollectionNames.videos,
+      data: model.toJson(),
+      docId: newVideoId,
+    );
+
+
+    final sharedVideoModel = model.copyWith(
+      id: newVideoId, 
+      sharedBy: user, 
+    );
+
+
+    await _uploadSharedVideoToCollection(sharedVideoModel);
+
+
+    await _addSharedVideoToUserCollection(sharedVideoModel, user, text);
+  }
+
+  Future<void> _uploadSharedVideoToCollection(VideoModel sharedVideoModel) async {
+    await firebaseHelperManager.addDocument(
+      collectionPath: CollectionNames.videos,
+      data: sharedVideoModel.toJson(),
+      docId: sharedVideoModel.id,
+      
+    );
+  }
+
+  Future<void> _addSharedVideoToUserCollection(
+    VideoModel sharedVideoModel,
+    UserEntity user,
+    String shareText,
+  ) async {
+    final shareVideoModel = ShareVideoModel(
+      videoModel: sharedVideoModel,
       shareUserName: user.name,
       shareUserImage: user.profilePic,
       shareUserId: user.id,
-      shareVideoText: text,
+      shareVideoText: shareText,
     );
 
-    shareVideoModel.videoId = model.id;
-
-    await FirebaseFirestore.instance.collection(CollectionNames.videos).add({
-      ...shareVideoModel.toMap(),
-    });
+    await firebaseHelperManager.addDocument(
+      collectionPath: CollectionNames.users,
+      docId: user.id,
+      subCollectionPath: CollectionNames.videos,
+      subDocId: sharedVideoModel.id, // Use the same new ID for the shared video
+      data: shareVideoModel.toMap(),
+    );
   }
 }

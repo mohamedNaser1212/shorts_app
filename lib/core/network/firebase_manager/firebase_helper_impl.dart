@@ -111,4 +111,9 @@ class FirebaseHelperImpl extends FirebaseHelper {
         await firestore.collection(collectionPath).doc(docId).get();
     return documentSnapshot.data() as Map<String, dynamic>?;
   }
+    @override
+  Future<String> generateDocumentId({required String collectionPath}) async {
+    // Generate a new document ID for the given collection
+    return firestore.collection(collectionPath).doc().id;
+  }
 }
