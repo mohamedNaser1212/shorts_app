@@ -22,6 +22,7 @@ class VideoListItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // If the VideoController is already created, we reuse it, otherwise create a new one
     return ChangeNotifierProvider(
       create: (_) => VideoController(videoEntity.videoUrl),
       child: Consumer<VideoController>(

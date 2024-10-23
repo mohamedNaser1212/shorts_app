@@ -1,6 +1,6 @@
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:shorts/core/video_controller/video_controller.dart';
-import 'package:video_player/video_player.dart';
 
 class VideoPlayerWidget extends StatelessWidget {
   const VideoPlayerWidget({
@@ -18,7 +18,7 @@ class VideoPlayerWidget extends StatelessWidget {
         child: SizedBox(
           width: videoProvider.controller!.value.size.width,
           height: videoProvider.controller!.value.size.height * 2.9,
-          child: VideoPlayer(videoProvider.controller!),
+          child: CachedVideoPlayer(videoProvider.controller!),
         ),
       ),
     );

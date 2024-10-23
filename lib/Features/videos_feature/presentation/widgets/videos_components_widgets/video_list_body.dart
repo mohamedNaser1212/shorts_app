@@ -15,19 +15,13 @@ class VideoListBody extends StatefulWidget {
 
   final VideoEntity videoEntity;
   final VideoController videoController;
-  final bool isShared ;
+  final bool isShared;
 
   @override
   State<VideoListBody> createState() => _VideoListBodyState();
 }
 
 class _VideoListBodyState extends State<VideoListBody> {
-  @override
-  void dispose() {
-    super.dispose();
-    widget.videoController.dispose();
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,7 +36,7 @@ class _VideoListBodyState extends State<VideoListBody> {
               )
             else
               ThumbnailNotifier(videoUrl: widget.videoEntity.videoUrl),
-            if (widget.videoEntity.isShared == false)
+            if (!widget.isShared)
               VideoComponentsWidget(
                 videoEntity: widget.videoEntity,
                 videoProvider: widget.videoController,

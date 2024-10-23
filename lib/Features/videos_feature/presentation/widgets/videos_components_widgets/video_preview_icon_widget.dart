@@ -1,8 +1,8 @@
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
-import 'package:video_player/video_player.dart';
 
 class VideoPreviewIconWidget extends StatelessWidget {
-  final VideoPlayerController controller;
+  final CachedVideoPlayerController controller;
   final VoidCallback togglePlayPause;
 
   const VideoPreviewIconWidget({
@@ -19,7 +19,7 @@ class VideoPreviewIconWidget extends StatelessWidget {
         aspectRatio: controller.value.aspectRatio,
         child: Stack(
           children: [
-            VideoPlayer(controller),
+            CachedVideoPlayer(controller),
             Positioned(
               bottom: 20,
               left: 20,

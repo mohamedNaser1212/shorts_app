@@ -25,8 +25,9 @@ class VideosRepoImpl extends VideosRepo {
     required int pageSize,
   }) async {
     return repoManager.call(action: () async {
-      final videos = await videosRemoteDataSource.getVideos(page: page, pageSize: pageSize);
-     
+      final videos = await videosRemoteDataSource.getVideos(
+          page: page, pageSize: pageSize);
+
       await videoLocalDataSource.saveVideos(videos);
       return videos;
     });
@@ -38,7 +39,8 @@ class VideosRepoImpl extends VideosRepo {
     UserEntity? sharedBy,
   }) {
     return repoManager.call(action: () async {
-      final video = await videosRemoteDataSource.uploadVideo(videoModel: videoModel, sharedBy: sharedBy);
+      final video = await videosRemoteDataSource.uploadVideo(
+          videoModel: videoModel, sharedBy: sharedBy);
       return video;
     });
   }
@@ -50,7 +52,8 @@ class VideosRepoImpl extends VideosRepo {
     required UserEntity user,
   }) {
     return repoManager.call(action: () async {
-      await videosRemoteDataSource.shareVideo(model: model, text: text, user: user);
+      await videosRemoteDataSource.shareVideo(
+          model: model, text: text, user: user);
     });
   }
 }

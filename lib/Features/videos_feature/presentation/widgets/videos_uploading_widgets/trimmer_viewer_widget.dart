@@ -34,36 +34,26 @@ class _TrimViewerWidgetState extends State<TrimViewerWidget> {
         areaProperties: TrimAreaProperties.edgeBlur(thumbnailQuality: 10),
         onChangeStart: (value) {
           setState(() {
-            widget.state.videoController.startValue = value;
-            _updateVideoPosition();
-
-            if (widget.state.videoController.thumbnailFile != null) {
-              widget.state.videoController.generateThumbnail(
-                seconds: value.toDouble(),
-                videoPath: widget.state.videoController.thumbnailFile!.path,
-              );
-            }
+            widget.state.videoController.seekTo(Duration(seconds: value.toInt()));
+            widget.state.videoController.positionNotifier.value = Duration(seconds: value.toInt());
+            _updateThumbnail(value);
           });
         },
         onChangeEnd: (value) {
           setState(() {
             widget.state.videoController.endValue = value;
-            if (widget.state.videoController.positionNotifier.value.inSeconds >
-                widget.state.videoController.endValue) {
+            if (widget.state.videoController.positionNotifier.value.inSeconds > value) {
               _updateVideoPosition();
             }
-
-            if (widget.state.videoController.thumbnailFile != null) {
-              widget.state.videoController.generateThumbnail(
-                seconds: value.toDouble(),
-                videoPath: widget.state.videoController.thumbnailFile!.path,
-              );
-            }
+            _updateThumbnail(value);
           });
         },
         onChangePlaybackState: (value) {
           setState(() {
             widget.state.isPlaying = value;
+            if (value) {
+              widget.state.videoController.togglePlayPause();
+            }
           });
         },
       ),
@@ -71,7 +61,17 @@ class _TrimViewerWidgetState extends State<TrimViewerWidget> {
   }
 
   void _updateVideoPosition() {
-    widget.state.videoController
-        .seekTo(Duration(seconds: widget.state.videoController.startValue.toInt()));
+    widget.state.videoController.seekTo(
+      Duration(seconds: widget.state.videoController.startValue.toInt()),
+    );
+  }
+
+  void _updateThumbnail(double value) {
+    if (widget.state.videoController.thumbnailFile != null) {
+      widget.state.videoController.generateThumbnail(
+        seconds: value.toDouble(),
+        videoPath: widget.state.videoController.thumbnailFile!.path,
+      );
+    }
   }
 }

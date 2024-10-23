@@ -1,8 +1,8 @@
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_Screen_body.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/video_player_screen.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
-import 'package:video_player/video_player.dart';
 
 class ThumbnailPreviewWidget extends StatelessWidget {
   const ThumbnailPreviewWidget({
@@ -11,7 +11,7 @@ class ThumbnailPreviewWidget extends StatelessWidget {
     required this.widget,
   });
 
-  final VideoPlayerController controller;
+  final CachedVideoPlayerController controller;
   final PreviewScreeBody widget;
 
   @override

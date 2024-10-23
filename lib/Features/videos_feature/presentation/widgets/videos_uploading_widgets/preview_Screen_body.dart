@@ -1,10 +1,10 @@
 import 'dart:io';
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_screen.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/thumbnail_preview_widget.dart';
 import 'package:shorts/core/widgets/custom_elevated_botton.dart';
 import 'package:shorts/core/widgets/reusable_text_form_field.dart';
-import 'package:video_player/video_player.dart';
 
 class PreviewScreeBody extends StatefulWidget {
   const PreviewScreeBody({
@@ -20,12 +20,12 @@ class PreviewScreeBody extends StatefulWidget {
 }
 
 class _PreviewScreeBodyState extends State<PreviewScreeBody> {
-  late VideoPlayerController controller;
+  late CachedVideoPlayerController controller;
 
   @override
   void initState() {
     super.initState();
-    controller = VideoPlayerController.file(File(
+    controller = CachedVideoPlayerController.file(File(
         widget.thumbnailFile?.path ?? widget.previewState.widget.outputPath),)
       ..initialize();
   }

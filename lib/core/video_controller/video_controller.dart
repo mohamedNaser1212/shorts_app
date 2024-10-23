@@ -1,7 +1,7 @@
 import 'dart:io';
 import 'package:path_provider/path_provider.dart';
 import 'package:flutter/foundation.dart';
-import 'package:video_player/video_player.dart';
+import 'package:cached_video_player/cached_video_player.dart';
 import 'package:video_thumbnail/video_thumbnail.dart';
 
 class VideoController extends ChangeNotifier {
@@ -9,9 +9,9 @@ class VideoController extends ChangeNotifier {
     initializeController(
         videoUrl: videoUrl, isInitiallyPaused: isInitiallyPaused);
   }
-  File? thumbnailFile;
 
-  VideoPlayerController? videoController;
+  File? thumbnailFile;
+  CachedVideoPlayerController? videoController;
   Uint8List? _thumbnail;
   bool _isLiked = false;
   bool _showPlayPauseIcon = false;
@@ -21,8 +21,10 @@ class VideoController extends ChangeNotifier {
       ValueNotifier(Duration.zero);
   final ValueNotifier<bool> _isLikedNotifier = ValueNotifier(false);
   bool _isPaused = false;
+  double startValue = 0.0;
+  double endValue = 0.0;
 
-  VideoPlayerController? get controller => videoController;
+  CachedVideoPlayerController? get controller => videoController;
   Uint8List? get thumbnail => _thumbnail;
   bool get isLiked => _isLikedNotifier.value;
   bool get showPlayPauseIcon => _showPlayPauseIcon;
@@ -30,11 +32,12 @@ class VideoController extends ChangeNotifier {
   ValueNotifier<Duration> get durationNotifier => _durationNotifier;
   ValueNotifier<bool> get isLikedNotifier => _isLikedNotifier;
   bool get isPaused => _isPaused;
-  double startValue = 0.0;
-  double endValue = 0.0;
-  Future<void> initializeController(
-      {required String videoUrl, required bool isInitiallyPaused}) async {
-    videoController = VideoPlayerController.networkUrl(Uri.parse(videoUrl))
+
+  Future<void> initializeController({
+    required String videoUrl,
+    required bool isInitiallyPaused,
+  }) async {
+    videoController = CachedVideoPlayerController.network(videoUrl)
       ..setLooping(true);
 
     await videoController!.initialize();
@@ -55,13 +58,14 @@ class VideoController extends ChangeNotifier {
       notifyListeners();
     });
 
-    //await _loadThumbnail(videoUrl);
+    // Optionally load thumbnail
+    // await _loadThumbnail(videoUrl);
   }
 
   Future<void> loadVideo({
     required File videoFile,
   }) async {
-    videoController = VideoPlayerController.file(videoFile);
+    videoController = CachedVideoPlayerController.file(videoFile);
     await videoController!.initialize();
     _durationNotifier.value = videoController!.value.duration;
     notifyListeners();
@@ -79,8 +83,10 @@ class VideoController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> generateThumbnail(
-      {required String videoPath, required double seconds}) async {
+  Future<void> generateThumbnail({
+    required String videoPath,
+    required double seconds,
+  }) async {
     final thumbnailPath = await VideoThumbnail.thumbnailFile(
       video: videoPath,
       thumbnailPath: (await getTemporaryDirectory()).path,
@@ -127,7 +133,7 @@ class VideoController extends ChangeNotifier {
   }
 
   @override
-  void dispose() async {
+  void dispose() {
     _positionNotifier.dispose();
     _durationNotifier.dispose();
     _isLikedNotifier.dispose();

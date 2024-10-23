@@ -36,7 +36,7 @@ class VideoPage extends StatelessWidget {
 
   Widget _videosBuilder(BuildContext context, VideoState state) {
     if (state is GetVideoSuccess) {
-      return VideosPageViewWidget(); // Ensure this widget is used to show videos
+      return VideosPageViewWidget(); 
     } else if (state is VideoUploadErrorState) {
       return Center(
         child: CustomTitle(
