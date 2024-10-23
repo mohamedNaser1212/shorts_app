@@ -12,6 +12,7 @@ class FirebaseHelperImpl extends FirebaseHelper {
     int? limit,
     String? orderBy,
     bool descending = false,
+    DocumentSnapshot? startAfter, // Add startAfter parameter
   }) async {
     CollectionReference collection = firestore.collection(collectionPath);
 
@@ -31,6 +32,10 @@ class FirebaseHelperImpl extends FirebaseHelper {
 
     if (limit != null) {
       query = query.limit(limit);
+    }
+
+    if (startAfter != null) {
+      query = query.startAfterDocument(startAfter); // Handle pagination
     }
 
     final querySnapshot = await query.get();
@@ -131,5 +136,40 @@ class FirebaseHelperImpl extends FirebaseHelper {
 
 
     await collection.add(data);
+  }
+  @override
+  Future<QuerySnapshot<Map<String, dynamic>>> getCollectionQuerySnapshot({
+    required String collectionPath,
+    String? docId,
+    String? subCollectionPath,
+    String? whereField,
+    dynamic whereValue,
+    int? limit,
+    String? orderBy,
+    bool descending = false,
+  }) async {
+    CollectionReference<Map<String, dynamic>> collection =
+        firestore.collection(collectionPath);
+
+    if (docId != null && subCollectionPath != null) {
+      collection = collection.doc(docId).collection(subCollectionPath)
+          as CollectionReference<Map<String, dynamic>>;
+    }
+
+    Query<Map<String, dynamic>> query = collection;
+
+    if (whereField != null && whereValue != null) {
+      query = query.where(whereField, isEqualTo: whereValue);
+    }
+
+    if (orderBy != null) {
+      query = query.orderBy(orderBy, descending: descending);
+    }
+
+    if (limit != null) {
+      query = query.limit(limit);
+    }
+
+    return await query.get();
   }
 }

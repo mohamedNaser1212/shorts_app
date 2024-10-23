@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shorts/Features/videos_feature/data/model/shared_videos_model.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
@@ -8,9 +9,10 @@ import '../../../../../core/network/firebase_manager/collection_names.dart';
 
 abstract class VideosRemoteDataSource {
   const VideosRemoteDataSource._();
-  
-  Future<List<VideoModel>> getVideos();
-  
+
+  Future<List<VideoModel>> getVideos(
+      {required int pageSize, required int page});
+
   Future<VideoModel> uploadVideo({
     required VideoModel videoModel,
     UserEntity? sharedBy,
@@ -27,16 +29,44 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   final FirebaseHelper firebaseHelperManager;
 
+  static const int _defaultPageSize = 1;
+  DocumentSnapshot? _lastDocument;
+
   VideosRemoteDataSourceImpl({required this.firebaseHelperManager});
 
   @override
-  Future<List<VideoModel>> getVideos() async {
-    final data = await firebaseHelperManager.getCollectionDocuments(
-      collectionPath: CollectionNames.videos,
-    );
-    final result = data.map((video) => VideoModel.fromJson(video)).toList();
-    print('Videos: ${result.length}');
-    return result;
+  Future<List<VideoModel>> getVideos(
+      {int pageSize = _defaultPageSize, required int page}) async {
+    List<Map<String, dynamic>> documentsData;
+
+    if (page == 1) {
+      documentsData = await firebaseHelperManager.getCollectionDocuments(
+        collectionPath: CollectionNames.videos,
+        limit: pageSize,
+      );
+      print('Documents Data: $documentsData');
+    } else {
+      documentsData = await firebaseHelperManager.getCollectionDocuments(
+        collectionPath: CollectionNames.videos,
+        limit: pageSize,
+      );
+      print('Documents Data: $documentsData');
+    }
+
+    if (documentsData.isNotEmpty) {
+      _lastDocument = await FirebaseFirestore.instance
+          .collection(CollectionNames.videos)
+          .doc(documentsData.last['id'])
+          .get();
+    }
+
+    print(documentsData.map((doc) => VideoModel.fromJson(doc)).toList().length);
+
+    return documentsData.map((doc) => VideoModel.fromJson(doc)).toList();
+  }
+
+  void resetPagination() {
+    _lastDocument = null;
   }
 
   @override
@@ -108,7 +138,6 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     required String text,
     required UserEntity user,
   }) async {
-
     final newVideoId = await firebaseHelperManager.generateDocumentId(
       collectionPath: CollectionNames.videos,
     );
@@ -118,25 +147,21 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
       docId: newVideoId,
     );
 
-
     final sharedVideoModel = model.copyWith(
-      id: newVideoId, 
-      sharedBy: user, 
+      id: newVideoId,
+      sharedBy: user,
     );
 
-
     await _uploadSharedVideoToCollection(sharedVideoModel);
-
-
     await _addSharedVideoToUserCollection(sharedVideoModel, user, text);
   }
 
-  Future<void> _uploadSharedVideoToCollection(VideoModel sharedVideoModel) async {
+  Future<void> _uploadSharedVideoToCollection(
+      VideoModel sharedVideoModel) async {
     await firebaseHelperManager.addDocument(
       collectionPath: CollectionNames.videos,
       data: sharedVideoModel.toJson(),
       docId: sharedVideoModel.id,
-      
     );
   }
 
@@ -157,7 +182,7 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
       collectionPath: CollectionNames.users,
       docId: user.id,
       subCollectionPath: CollectionNames.videos,
-      subDocId: sharedVideoModel.id, // Use the same new ID for the shared video
+      subDocId: sharedVideoModel.id,
       data: shareVideoModel.toMap(),
     );
   }

@@ -120,9 +120,8 @@ Future<void> setUpServiceLocator() async {
         repoManager: getIt.get<RepoManager>(),
       ));
 
-  getIt.registerFactory<GetVideosUseCase>(() => GetVideosUseCase(
-        videosRepository: getIt.get<VideosRepo>(),
-      ));
+  getIt.registerFactory<GetVideosUseCase>(
+      () => GetVideosUseCase(videoRepository: getIt.get<VideosRepo>()));
 
   getIt.registerFactory<UploadVideoUseCase>(() => UploadVideoUseCase(
         videoRepository: getIt.get<VideosRepo>(),

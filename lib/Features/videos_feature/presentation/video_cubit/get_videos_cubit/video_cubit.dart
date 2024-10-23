@@ -5,28 +5,35 @@ part 'video_state.dart';
 
 class VideoCubit extends Cubit<VideoState> {
   final GetVideosUseCase getVideosUseCase;
+  List<VideoEntity> videos = [];
+  int _currentPage = 0;
+  // bool _isFetchingMore = false;
 
-  VideoCubit({
-    required this.getVideosUseCase,
-  }) : super(VideoInitial());
+  VideoCubit({required this.getVideosUseCase}) : super(VideoInitial());
 
   static VideoCubit get(context) => BlocProvider.of(context);
-  List<VideoEntity> videos = [];
 
-
-  
   Future<void> getVideos() async {
-    emit(GetVideoLoading());
-    final result = await getVideosUseCase.call();
+ //   emit(GetVideoLoading());  // Emit loading state when fetching videos
+    final result = await getVideosUseCase.call(page: _currentPage);
     result.fold(
-        (failure) => emit(VideoUploadErrorState(message: failure.message)),
-        (videos) {
-      this.videos = videos;
-      print('Videos: ${videos.length}');
-
-      emit(GetVideoSuccess(videos: videos));
-    });
+      (failure) {
+        emit(VideoUploadErrorState(message: failure.message));
+      //  _isFetchingMore = false;
+      },
+      (fetchedVideos) {
+        videos.addAll(fetchedVideos);
+        emit(GetVideoSuccess(videos: videos));
+      //  _isFetchingMore = false;  // Reset fetching flag
+      },
+    );
   }
 
-  
+  // Uncomment this if you want to implement load more functionality
+  // Future<void> loadMoreVideos() async {
+  //   if (_isFetchingMore) return;
+  //   _isFetchingMore = true;
+  //   _currentPage++;
+  //   await getVideos(); // Fetch more videos
+  // }
 }

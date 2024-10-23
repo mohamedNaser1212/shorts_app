@@ -7,13 +7,17 @@ import '../video_entity/video_entity.dart';
 
 abstract class VideosRepo {
   const VideosRepo();
-  Future<Either<Failure, List<VideoEntity>>> getVideos();
+
+  Future<Either<Failure, List<VideoEntity>>> getVideos({
+    required int page,
+    required int pageSize,
+  });
+
   Future<Either<Failure, VideoEntity>> uploadVideo({
     required VideoModel videoModel,
     UserEntity? sharedBy,
   });
 
-  // Add the shareVideo method
   Future<Either<Failure, void>> shareVideo({
     required VideoModel model,
     required String text,

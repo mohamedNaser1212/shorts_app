@@ -4,7 +4,7 @@ abstract class FirebaseHelper {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<List<Map<String, dynamic>>> getCollectionDocuments({
-    required String collectionPath,
+      required String collectionPath,
     String? docId,
     String? subCollectionPath,
     String? whereField,
@@ -12,6 +12,7 @@ abstract class FirebaseHelper {
     int? limit,
     String? orderBy,
     bool descending = false,
+    DocumentSnapshot? startAfter,
   });
 
   Future<void> addDocument({
@@ -50,5 +51,15 @@ abstract class FirebaseHelper {
     required Map<String, dynamic> data,
     String? docId,
     String? subCollectionPath,
+  });
+    Future<QuerySnapshot<Map<String, dynamic>>> getCollectionQuerySnapshot({
+    required String collectionPath,
+    String? docId,
+    String? subCollectionPath,
+    String? whereField,
+    dynamic whereValue,
+    int? limit,
+    String? orderBy,
+    bool descending = false,
   });
 }

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/videos_page_view_widget.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/widgets/videos_screen_AppBar.dart';
@@ -26,8 +25,7 @@ class UserProfileVideosGridViewBody extends StatelessWidget {
         NavigationManager.navigateTo(
           context: context,
           screen: VideosPageViewWidget(
-            state: GetVideoSuccess(videos: videos),
-            initialIndex: index,
+           // state: GetVideoSuccess(videos: videos),
           ),
         );
       },

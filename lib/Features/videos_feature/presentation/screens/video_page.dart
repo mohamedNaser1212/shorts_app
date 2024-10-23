@@ -36,9 +36,7 @@ class VideoPage extends StatelessWidget {
 
   Widget _videosBuilder(BuildContext context, VideoState state) {
     if (state is GetVideoSuccess) {
-      return VideosPageViewWidget(
-        state: state,
-      );
+      return VideosPageViewWidget(); // Ensure this widget is used to show videos
     } else if (state is VideoUploadErrorState) {
       return Center(
         child: CustomTitle(
@@ -55,9 +53,7 @@ class VideoPage extends StatelessWidget {
   }
 
   void _videosListener(BuildContext context, VideoState state) {
-    if (state is GetVideoLoading) {
-      const Center(child: CircularProgressIndicator());
-    }
+
   }
 
   void _favouritesListener(BuildContext context, FavouritesState state) {
@@ -73,5 +69,3 @@ class VideoPage extends StatelessWidget {
     }
   }
 }
-
-
