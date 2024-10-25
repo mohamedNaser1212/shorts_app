@@ -7,7 +7,7 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_compo
 class VideosPageViewWidget extends StatefulWidget {
   final int? initialIndex;
 
-  const VideosPageViewWidget({Key? key, this.initialIndex}) : super(key: key);
+  const VideosPageViewWidget({super.key, this.initialIndex});
 
   @override
   State<VideosPageViewWidget> createState() => _VideosPageViewWidgetState();

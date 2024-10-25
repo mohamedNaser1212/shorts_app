@@ -3,7 +3,6 @@
 part of 'video_entity.dart';
 
 // **************************************************************************
-
 // TypeAdapterGenerator
 // **************************************************************************
 
@@ -23,15 +22,16 @@ class VideoEntityAdapter extends TypeAdapter<VideoEntity> {
       videoUrl: fields[2] as String,
       description: fields[3] as String,
       user: fields[4] as UserEntity,
-      sharedBy: fields[5] as UserEntity?, 
-      isShared: fields[6] as bool, 
+      sharedBy: fields[5] as UserEntity?,
+      isShared: fields[6] as bool,
+      sharedUserDescription: fields[7] as String?, // Added field
     );
   }
 
   @override
   void write(BinaryWriter writer, VideoEntity obj) {
     writer
-      ..writeByte(7) 
+      ..writeByte(8) // Update total field count
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -42,10 +42,12 @@ class VideoEntityAdapter extends TypeAdapter<VideoEntity> {
       ..write(obj.description)
       ..writeByte(4)
       ..write(obj.user)
-      ..writeByte(5) 
+      ..writeByte(5)
       ..write(obj.sharedBy)
       ..writeByte(6)
-      ..write(obj.isShared);
+      ..write(obj.isShared)
+      ..writeByte(7) // New field index for sharedUserDescription
+      ..write(obj.sharedUserDescription);
   }
 
   @override

@@ -36,12 +36,11 @@ class _VideoListBodyState extends State<VideoListBody> {
               )
             else
               ThumbnailNotifier(videoUrl: widget.videoEntity.videoUrl),
-            if (!widget.isShared)
-              VideoComponentsWidget(
-                videoEntity: widget.videoEntity,
-                videoProvider: widget.videoController,
-                isShared: widget.isShared,
-              ),
+            VideoComponentsWidget(
+              videoEntity: widget.videoEntity,
+              videoProvider: widget.videoController,
+              isShared: widget.isShared,
+            ),
           ],
         ),
       ),

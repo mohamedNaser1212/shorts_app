@@ -42,4 +42,5 @@ abstract class RequestDataNames {
   static const String favourites= 'favourites';
   static const String sharedBy= 'SharedBy';
   static const String isShared= 'isShared';
+  static const String sharedUserDescription= 'shareVideoText';
 }

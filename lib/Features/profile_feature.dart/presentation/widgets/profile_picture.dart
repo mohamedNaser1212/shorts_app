@@ -3,11 +3,8 @@ import 'package:shorts/Features/comments_feature/domain/comments_entity/comments
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_contents_screen.dart';
 
 class UserProfilePicture extends StatelessWidget {
-  const UserProfilePicture({
-    super.key,
-    this.state,
-    this.comment,
-  });
+  const UserProfilePicture(
+      {super.key, this.state, this.comment,});
 
   final VideoContentsScreenState? state;
 

@@ -25,7 +25,6 @@ class UserProfileSection extends StatelessWidget {
           if (state.widget.videoEntity.sharedBy != null)
             InkWell(
               onTap: () {
-
                 NavigationManager.navigateTo(
                   context: context,
                   screen: UserProfileScreen(
@@ -41,7 +40,7 @@ class UserProfileSection extends StatelessWidget {
                 child: CustomListTile(
                   leading: UserProfilePicture(state: state),
                   title: state.widget.videoEntity.sharedBy!.name,
-                  subtitle: state.widget.videoEntity.description,
+                  subtitle: state.widget.videoEntity.sharedUserDescription ?? '',
                   color: ColorController.whiteColor,
                 ),
               ),
@@ -52,7 +51,6 @@ class UserProfileSection extends StatelessWidget {
           ),
           InkWell(
             onTap: () {
-
               NavigationManager.navigateTo(
                 context: context,
                 screen: UserProfileScreen(
