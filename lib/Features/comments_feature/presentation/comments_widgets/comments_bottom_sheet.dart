@@ -17,7 +17,7 @@ class CommentsBottomSheet extends StatefulWidget {
 
 class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   final TextEditingController commentController = TextEditingController();
-  final FocusNode _focusNode = FocusNode();
+  //final FocusNode _focusNode = FocusNode();
   late var screenHeight = MediaQuery.of(context).size.height;
   late var bottomSheetHeight = screenHeight * 0.75;
   List<CommentEntity> commentsList = [];
@@ -25,9 +25,9 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   @override
   void initState() {
     super.initState();
-    _focusNode.addListener(() {
-      setState(() {});
-    });
+    // _focusNode.addListener(() {
+    //   setState(() {});
+    // });
 
     CommentsCubit.get(context).getComments(videoId: widget.videoEntity.id);
   }
@@ -35,7 +35,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   @override
   void dispose() {
     commentController.dispose();
-    _focusNode.dispose();
+    // _focusNode.dispose();
     super.dispose();
   }
 
