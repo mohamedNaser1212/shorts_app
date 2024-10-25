@@ -1,4 +1,3 @@
-
 import 'package:flutter/widgets.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comment_item_widget.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
@@ -13,9 +12,9 @@ class CommentsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
+    return Flexible(
       child: ListView.builder(
-        reverse: true,
+        padding: EdgeInsets.zero, 
         itemCount: state.commentsList.length,
         itemBuilder: (context, index) {
           final comment = state.commentsList[index];

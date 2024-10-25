@@ -20,6 +20,7 @@ class CommentsBottomSheetBody extends StatelessWidget {
       child: SizedBox(
         height: state.bottomSheetHeight,
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             const CustomTitle(
               title: 'Comments',
@@ -29,7 +30,8 @@ class CommentsBottomSheetBody extends StatelessWidget {
             CommentsListView(state: state),
             const SizedBox(height: 8),
             Padding(
-              padding: EdgeInsets.only(bottom: MediaQuery.of(context).viewInsets.bottom),
+              padding: EdgeInsets.only(
+                  bottom: MediaQuery.of(context).viewInsets.bottom),
               child: Column(
                 children: [
                   CommentsFormFieldWidget(state: state),
@@ -44,4 +46,3 @@ class CommentsBottomSheetBody extends StatelessWidget {
     );
   }
 }
-

@@ -1,10 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shorts/Features/favourites_feature/domain/favourites_entity/favourite_entitiy.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
 import 'package:shorts/Features/favourites_feature/presentation/widgets/favourites_screen_body.dart';
-import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/videos_list.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/custom_app_bar.dart';
