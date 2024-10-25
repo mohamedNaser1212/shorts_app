@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/Features/favourites_feature/domain/favourites_entity/favourite_entitiy.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
+import 'package:shorts/Features/favourites_feature/presentation/widgets/favourites_screen_body.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/videos_list.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
@@ -8,8 +10,8 @@ import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/custom_app_bar.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
-class FavouritesPage extends StatelessWidget {
-  const FavouritesPage({
+class FavouritesScreen extends StatelessWidget {
+  const FavouritesScreen({
     super.key,
     required this.currentUser,
   });
@@ -47,20 +49,7 @@ class FavouritesPage extends StatelessWidget {
                       style: TitleStyle.style18,
                     ),
                   )
-                : PageView.builder(
-                    itemCount: favouriteVideos.length,
-                    itemBuilder: (context, index) {
-                      final favouriteEntity = favouriteVideos[index];
-                      final videoEntity = VideoCubit.get(context).videos[index];
-                      final isShared= videoEntity.sharedBy != null;
-                      return VideoListItem(
-                        favouriteEntity: favouriteEntity,
-                        videoEntity: videoEntity,
-                        isShared: isShared,
-                        userModel: currentUser,
-                      );
-                    },
-                  );
+                : FavouritesScreenBody(favouriteVideos: favouriteVideos, currentUser: currentUser);
           } else {
             return const Center(
               child: CircularProgressIndicator(

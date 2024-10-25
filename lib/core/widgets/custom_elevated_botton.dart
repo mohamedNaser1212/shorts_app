@@ -235,7 +235,8 @@ class CustomElevatedButton extends StatelessWidget {
         thumbnail: thumbnailFile?.path ?? '',
       );
 
-      UploadVideosCubit.get(context).uploadVideo(videoModel: video, sharedBy: null);
+      UploadVideosCubit.get(context)
+          .uploadVideo(videoModel: video, sharedBy: null);
     }
   }
 
@@ -246,7 +247,7 @@ class CustomElevatedButton extends StatelessWidget {
   }) {
     NavigationManager.navigateTo(
       context: context,
-      screen: FavouritesPage(currentUser: currentUser),
+      screen: FavouritesScreen(currentUser: currentUser),
     );
   }
 
