@@ -25,7 +25,7 @@ class AddCommentsCubit extends Cubit<AddCommentsState> {
 
     final result = await addCommentsUseCase.addCommentToVideo(
       comment: CommentModel(
-        id: DateTime.now().millisecondsSinceEpoch.toString(),
+        id: user.id!,
         content: comment,
         user: user,
         timestamp: DateTime.now(),
@@ -43,29 +43,29 @@ class AddCommentsCubit extends Cubit<AddCommentsState> {
     );
   }
 
- Future<void> deleteComment({
-  required String userId,
-  required String videoId,
-  required String commentId,
-}) async {
-  emit(DeleteCommentLoadingState());
+  Future<void> deleteComment({
+    required String userId,
+    required String videoId,
+    required String commentId,
+  }) async {
+    emit(DeleteCommentLoadingState());
 
-  final result = await deleteCommentUseCase.deleteComment(
-    userId: userId,
-    videoId: videoId,
-    commentId: commentId,
-  );
+    final result = await deleteCommentUseCase.deleteComment(
+      userId: userId,
+      videoId: videoId,
+      commentId: commentId,
+    );
 
-  result.fold(
-    (failure) {
-      emit(DeleteCommentErrorState(message: failure.toString()));
-    },
-    (success) {
-      emit(DeleteCommentSuccessState());
-      // Fetch comments only if deletion was successful
-      // CommentsCubit.get(context).getComments(videoId: videoId);
-    },
-  );
-}
-
+    result.fold(
+      (failure) {
+        emit(DeleteCommentErrorState(message: failure.toString()));
+      },
+      (success) {
+        print('Comment deleted successfully');
+        emit(DeleteCommentSuccessState());
+        // Fetch comments only if deletion was successful
+        // CommentsCubit.get(context).getComments(videoId: videoId);
+      },
+    );
+  }
 }

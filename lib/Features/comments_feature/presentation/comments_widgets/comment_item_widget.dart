@@ -69,9 +69,9 @@ class CommentItemWidget extends StatelessWidget {
                           color: ColorController.redAccent,
                         ),
                         onPressed: () {
-                          // CommentsCubit.get(context).comments.removeWhere(
-                          //       (element) => element.id == comment.id,
-                          //     );\
+                          CommentsCubit.get(context).comments.removeWhere(
+                                (element) => element.id == comment.id,
+                              );
 
                           print(comment.id);
                           AddCommentsCubit.get(context).deleteComment(

@@ -71,17 +71,19 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     );
 
     if (videoData != null) {
-      await firebaseHelper.addDocumentWithAutoId(
+      await firebaseHelper.addDocument(
         collectionPath: 'videos',
         docId: video.id,
         subCollectionPath: 'comments',
+        subDocId: comment.id,
         data: comment.toJson(),
       );
 
-      await firebaseHelper.addDocumentWithAutoId(
+      await firebaseHelper.addDocument(
         collectionPath: 'users',
         docId: video.user.id,
         subCollectionPath: 'videos/${video.id}/comments',
+        subDocId: comment.id,
         data: comment.toJson(),
       );
 
@@ -90,28 +92,27 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     return false;
   }
 
-    @override
+  @override
   Future<bool> deleteComment({
     required String userId,
     required String videoId,
     required String commentId,
   }) async {
-      await firebaseHelper.deleteDocument(
-        collectionPath: 'videos',
-        docId: videoId,
-        subCollectionPath: 'comments',
-        subDocId: commentId,
-      );
+    await firebaseHelper.deleteDocument(
+      collectionPath: 'videos',
+      docId: videoId,
+      subCollectionPath: 'comments',
+      subDocId: commentId,
+    );
 
-      await firebaseHelper.deleteDocument(
-        collectionPath: 'users',
-        docId: userId,
-        subCollectionPath: 'videos/$videoId/comments',
-        subDocId: commentId,
-      );
+    await firebaseHelper.deleteDocument(
+      collectionPath: 'users',
+      docId: userId,
+      subCollectionPath: 'videos/$videoId/comments',
+      subDocId: commentId,
+    );
 
-      // Return false after successful deletion
-      return true;
-  
+    // Return false after successful deletion
+    return true;
   }
 }
