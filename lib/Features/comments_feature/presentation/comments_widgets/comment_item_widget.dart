@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/profile_feature.dart/presentation/widgets/profile_picture.dart';
+import 'package:shorts/Features/profile_feature.dart/presentation/widgets/videos_profile_picture.dart';
 
 import '../../../../core/widgets/custom_list_tile.dart';
 import '../../domain/comments_entity/comments_entity.dart';

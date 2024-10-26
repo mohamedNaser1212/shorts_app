@@ -11,7 +11,6 @@ import 'package:shorts/Features/videos_feature/presentation/video_cubit/share_vi
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
-
 import 'core/widgets/splash_screen.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {

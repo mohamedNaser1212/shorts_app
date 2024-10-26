@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_profile_cubit/get_user_videos_state.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_profile_cubit/user_profile_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/user_profile_screen.dart';
-import 'package:shorts/Features/profile_feature.dart/presentation/widgets/profile_picture.dart';
+import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_image_widget.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_video_grid_view.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_contents_screen.dart';
 import 'package:shorts/core/widgets/custom_app_bar.dart';
@@ -48,8 +48,8 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
                 return Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
                   children: [
-                    UserProfilePicture(state: widget.state),
-                    const SizedBox(height: 10),
+                    UserProfileImageWidget(state: widget.state),
+                    const SizedBox(height: 40),
                     Text(user.name),
                     const SizedBox(height: 10),
                     Text(user.bio),
@@ -65,7 +65,6 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
                 return const Center(child: Text('No videos available.'));
               }
             }
-
             return const SizedBox.shrink();
           },
         ),

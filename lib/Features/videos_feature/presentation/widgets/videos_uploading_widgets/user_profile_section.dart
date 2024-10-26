@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/profile_feature.dart/presentation/widgets/profile_picture.dart';
+import 'package:shorts/Features/profile_feature.dart/presentation/widgets/videos_profile_picture.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_contents_screen.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';

@@ -18,13 +18,6 @@ class UserProfileScreen extends StatefulWidget {
 
 class UserProfileScreenState extends State<UserProfileScreen> {
   @override
-  void initState() {
-    super.initState();
-
-    print(widget.isShared);
-  }
-
-  @override
   Widget build(BuildContext context) {
     return BlocProvider(
       create: (context) => GetUserVideosCubit(

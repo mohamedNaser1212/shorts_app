@@ -24,8 +24,7 @@ class UserProfileVideosGridViewBody extends StatelessWidget {
       onTap: () {
         NavigationManager.navigateTo(
           context: context,
-          screen: VideosPageViewWidget(
-           // state: GetVideoSuccess(videos: videos),
+          screen: const VideosPageViewWidget(
           ),
         );
       },
