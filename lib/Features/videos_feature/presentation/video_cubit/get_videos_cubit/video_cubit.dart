@@ -14,7 +14,6 @@ class VideoCubit extends Cubit<VideoState> {
   static VideoCubit get(context) => BlocProvider.of(context);
 
   Future<void> getVideos() async {
- //   emit(GetVideoLoading());  // Emit loading state when fetching videos
     final result = await getVideosUseCase.call(page: _currentPage);
     result.fold(
       (failure) {

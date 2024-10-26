@@ -33,6 +33,7 @@ import 'package:shorts/Features/videos_feature/domain/videos_use_cases/get_video
 import 'package:shorts/Features/videos_feature/domain/videos_use_cases/shared_videos_use_case/shared_videos_use_case.dart';
 import 'package:shorts/Features/videos_feature/domain/videos_use_cases/upload_video_use_case/upload_video_use_case.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
+import 'package:shorts/Features/videos_feature/presentation/video_cubit/share_video_cubit/share_videos_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
 import 'package:shorts/core/network/Hive_manager/hive_helper.dart';
 import 'package:shorts/core/network/Hive_manager/hive_manager.dart';
@@ -135,10 +136,12 @@ Future<void> setUpServiceLocator() async {
       ));
   getIt.registerFactory<UploadVideosCubit>(() => UploadVideosCubit(
         uploadVideoUseCase: getIt.get<UploadVideoUseCase>(),
+      ));
+  getIt.registerFactory<ShareVideosCubit>(() => ShareVideosCubit(
         shareVideoUseCase: getIt.get<ShareVideoUseCase>(),
       ));
 
-  // UserInfo and Authentication related registrations
+
   getIt.registerSingleton<AuthenticationRemoteDataSource>(
       AuthenticationDataSourceImpl(
     firebaseHelper: getIt.get<FirebaseHelper>(),

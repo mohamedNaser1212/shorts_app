@@ -3,9 +3,11 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/toggle_favourites_cubit/toggle_favourites_cubit_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
+import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/notification_service/notification_helper.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
+import 'package:shorts/core/widgets/custom_icon_widget.dart';
 
 class FavouriteIconWidget extends StatelessWidget {
   const FavouriteIconWidget({super.key, required this.videoEntity});
@@ -21,11 +23,13 @@ class FavouriteIconWidget extends StatelessWidget {
         return IconButton(
           onPressed: () => _toggleFavourite(context, notificationHelper),
           icon: CircleAvatar(
-            backgroundColor: isFavorite ? Colors.red : Colors.grey,
-            child: Icon(
-              isFavorite ? Icons.favorite : Icons.favorite_border,
+            backgroundColor: isFavorite
+                ? ColorController.redColor
+                : ColorController.greyColor,
+            child: CustomIconWidget(
+              icon: isFavorite ? Icons.favorite : Icons.favorite_border,
               size: 15,
-              color: Colors.white,
+              color: ColorController.whiteColor,
             ),
           ),
         );

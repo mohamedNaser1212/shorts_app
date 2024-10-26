@@ -3,6 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
+import 'package:shorts/core/managers/styles_manager/color_manager.dart';
+import 'package:shorts/core/widgets/custom_icon_widget.dart';
+import 'package:shorts/core/widgets/custom_title.dart';
 
 class CommentsIconWidget extends StatelessWidget {
   const CommentsIconWidget({super.key, required this.videoEntity});
@@ -14,9 +17,9 @@ class CommentsIconWidget extends StatelessWidget {
       children: [
         IconButton(
           onPressed: () => _commentsOnPressed(context: context),
-          icon: const Icon(
-            Icons.comment,
-            color: Colors.white,
+          icon: const CustomIconWidget(
+            icon: Icons.comment,
+            color: ColorController.whiteColor,
             size: 35,
           ),
         ),
@@ -24,20 +27,16 @@ class CommentsIconWidget extends StatelessWidget {
         BlocBuilder<CommentsCubit, CommentsState>(
           builder: (context, state) {
             if (state is GetCommentsCountSuccessState) {
-              return Text(
-                '${state.commentsCount}',
-                style: const TextStyle(
-                  color: Colors.white,
-                  fontSize: 16,
-                ),
+              return CustomTitle(
+                title: '${state.commentsCount}',
+                style: TitleStyle.style16,
+                color: ColorController.whiteColor,
               );
             }
-            return const Text(
-              '0',
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 16,
-              ),
+            return const CustomTitle(
+              title: '0',
+              style: TitleStyle.style16,
+              color: ColorController.whiteColor,
             );
           },
         ),
