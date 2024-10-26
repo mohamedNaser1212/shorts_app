@@ -105,15 +105,24 @@ class FirebaseHelperImpl extends FirebaseHelper {
     await document.delete();
   }
 
-  @override
-  Future<Map<String, dynamic>?> getDocument({
-    required String collectionPath,
-    required String docId,
-  }) async {
-    final documentSnapshot =
-        await firestore.collection(collectionPath).doc(docId).get();
-    return documentSnapshot.data() as Map<String, dynamic>?;
+@override
+Future<Map<String, dynamic>?> getDocument({
+  required String collectionPath,
+  required String docId,
+  String? subCollectionPath,
+  String? subDocId,
+}) async {
+  DocumentReference document = firestore.collection(collectionPath).doc(docId);
+
+  if (subCollectionPath != null && subDocId != null) {
+    document = document.collection(subCollectionPath).doc(subDocId);
   }
+
+  final documentSnapshot = await document.get();
+
+  return documentSnapshot.exists ? documentSnapshot.data() as Map<String, dynamic>? : null;
+}
+
 
   @override
   Future<String> generateDocumentId({required String collectionPath}) async {

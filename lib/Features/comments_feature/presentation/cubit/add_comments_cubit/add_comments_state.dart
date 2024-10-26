@@ -10,3 +10,16 @@ class AddCommentsErrorState extends AddCommentsState {
   final String message;
   AddCommentsErrorState({required this.message});
 }
+
+
+class DeleteCommentLoadingState extends AddCommentsState {}
+
+class DeleteCommentSuccessState extends AddCommentsState {
+  // final bool isDeleted;
+  // DeleteCommentSuccessState({required this.isDeleted});
+}
+
+class DeleteCommentErrorState extends AddCommentsState {
+  final String message;
+  DeleteCommentErrorState({required this.message});
+}

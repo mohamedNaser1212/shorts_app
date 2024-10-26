@@ -4,7 +4,7 @@ abstract class FirebaseHelper {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
 
   Future<List<Map<String, dynamic>>> getCollectionDocuments({
-      required String collectionPath,
+    required String collectionPath,
     String? docId,
     String? subCollectionPath,
     String? whereField,
@@ -41,18 +41,20 @@ abstract class FirebaseHelper {
   Future<Map<String, dynamic>?> getDocument({
     required String collectionPath,
     required String docId,
+    String? subCollectionPath,
+    String? subDocId,
   });
 
   Future<String> generateDocumentId({required String collectionPath});
 
-  // New method to add a document with an auto-generated ID
+
   Future<void> addDocumentWithAutoId({
     required String collectionPath,
     required Map<String, dynamic> data,
     String? docId,
     String? subCollectionPath,
   });
-    Future<QuerySnapshot<Map<String, dynamic>>> getCollectionQuerySnapshot({
+  Future<QuerySnapshot<Map<String, dynamic>>> getCollectionQuerySnapshot({
     required String collectionPath,
     String? docId,
     String? subCollectionPath,

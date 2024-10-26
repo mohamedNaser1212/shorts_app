@@ -9,11 +9,19 @@ abstract class CommentsRepo {
   Future<Either<Failure, List<CommentEntity>>> getVideoComments({
     required String videoId,
   });
+  
   Future<Either<Failure, List<CommentEntity>>> addCommentToVideo({
     required CommentEntity comment,
     required VideoEntity video,
   });
+  
   Future<Either<Failure, num>> getCommentsCount({
     required String videoId,
+  });
+
+  Future<Either<Failure, bool>> deleteComment({
+    required String userId,
+    required String videoId,
+    required String commentId,
   });
 }

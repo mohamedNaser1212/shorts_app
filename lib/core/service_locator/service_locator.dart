@@ -6,6 +6,7 @@ import 'package:shorts/Features/authentication_feature/presentation/cubit/login_
 import 'package:shorts/Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
 import 'package:shorts/Features/comments_feature/data/data_sources/comments_local_data_source.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/comments_count_use_case.dart';
+import 'package:shorts/Features/comments_feature/domain/comments_use_case/delete_comment_use_case.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/show_comments_use_case.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/add_comments_cubit/add_comments_cubit.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
@@ -227,6 +228,9 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<RegisterUseCase>(RegisterUseCase(
     authenticationRepo: getIt.get<AuthenticationRepo>(),
   ));
+  getIt.registerSingleton<DeleteCommentUseCase>(DeleteCommentUseCase(
+     commentsRepo: getIt.get<CommentsRepo>(),
+  ));
 
   getIt.registerSingleton<UpdateUserDataRemoteDataSource>(
       UpdateUserDataSourceImpl(
@@ -255,6 +259,7 @@ Future<void> setUpServiceLocator() async {
       ));
   getIt.registerFactory<AddCommentsCubit>(() => AddCommentsCubit(
         addCommentsUseCase: getIt.get<AddCommentsUseCase>(),
+        deleteCommentUseCase: getIt.get<DeleteCommentUseCase>(),
       ));
   getIt.registerFactory<LoginCubit>(() => LoginCubit(
         loginUseCase: getIt.get<LoginUseCase>(),

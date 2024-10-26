@@ -58,9 +58,9 @@ class CommentsRepoImpl implements CommentsRepo {
   }
 
   @override
-  Future<Either<Failure, num>> getCommentsCount(
-      {required String videoId}) async {
-
+  Future<Either<Failure, num>> getCommentsCount({
+    required String videoId,
+  }) async {
     return repoManager.call(
       action: () async {
         final commentsCount =
@@ -68,6 +68,24 @@ class CommentsRepoImpl implements CommentsRepo {
         return commentsCount;
       },
     );
-    
+  }
+
+  @override
+  Future<Either<Failure, bool>> deleteComment({
+    required String userId,
+    required String videoId,
+    required String commentId,
+  }) async {
+    return repoManager.call(
+      action: () async {
+        final success = await commentsRemoteDataSource.deleteComment(
+          userId: userId,
+          videoId: videoId,
+          commentId: commentId,
+        );
+        print('success: $success');
+        return success;
+      },
+    );
   }
 }

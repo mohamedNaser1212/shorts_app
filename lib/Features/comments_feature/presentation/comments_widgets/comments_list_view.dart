@@ -14,11 +14,14 @@ class CommentsListView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Flexible(
       child: ListView.builder(
-        padding: EdgeInsets.zero, 
+        padding: EdgeInsets.zero,
         itemCount: state.commentsList.length,
         itemBuilder: (context, index) {
           final comment = state.commentsList[index];
-          return CommentItemWidget(comment: comment);
+          return CommentItemWidget(
+            comment: comment,
+            state: state,
+          );
         },
       ),
     );

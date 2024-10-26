@@ -16,6 +16,12 @@ abstract class CommentsRemoteDataSource {
     required CommentEntity comment,
     required VideoEntity video,
   });
+
+  Future<bool> deleteComment({
+    required String userId,
+    required String videoId,
+    required String commentId,
+  });
 }
 
 class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
@@ -65,7 +71,6 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     );
 
     if (videoData != null) {
-
       await firebaseHelper.addDocumentWithAutoId(
         collectionPath: 'videos',
         docId: video.id,
@@ -83,5 +88,30 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
       return true;
     }
     return false;
+  }
+
+    @override
+  Future<bool> deleteComment({
+    required String userId,
+    required String videoId,
+    required String commentId,
+  }) async {
+      await firebaseHelper.deleteDocument(
+        collectionPath: 'videos',
+        docId: videoId,
+        subCollectionPath: 'comments',
+        subDocId: commentId,
+      );
+
+      await firebaseHelper.deleteDocument(
+        collectionPath: 'users',
+        docId: userId,
+        subCollectionPath: 'videos/$videoId/comments',
+        subDocId: commentId,
+      );
+
+      // Return false after successful deletion
+      return true;
+  
   }
 }

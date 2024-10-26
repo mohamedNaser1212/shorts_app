@@ -53,8 +53,14 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
 
         return BlocBuilder<AddCommentsCubit, AddCommentsState>(
           builder: (context, state) {
+            if (state is DeleteCommentSuccessState) {
+            
+              CommentsCubit.get(context)
+                  .getComments(videoId: widget.videoEntity.id);
+            }
             return CustomProgressIndicator(
-              isLoading: state is AddCommentsLoadingState,
+              isLoading: state is AddCommentsLoadingState ||
+                  state is DeleteCommentLoadingState,
               child: CommentsBottomSheetBody(
                 state: this,
               ),
