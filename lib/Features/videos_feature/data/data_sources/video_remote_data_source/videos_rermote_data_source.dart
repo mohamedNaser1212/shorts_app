@@ -28,6 +28,7 @@ abstract class VideosRemoteDataSource {
 class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   final FirebaseHelper firebaseHelperManager;
+  // ignore: unused_field
   DocumentSnapshot? _lastDocument;
 
   static const int _defaultPageSize = 1;

@@ -1,21 +1,21 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_contents_screen.dart';
+import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 
 class UserProfileImageWidget extends StatelessWidget {
   const UserProfileImageWidget({
     super.key,
-    this.state,
+    this.videoEntity,
     this.comment,
   });
 
-  final VideoContentsScreenState? state;
+  final VideoEntity? videoEntity;
   final CommentEntity? comment;
 
   @override
   Widget build(BuildContext context) {
     const double containerHeight = 150;
-    final String profilePicUrl = state?.widget.videoEntity.user.profilePic ??
+    final String profilePicUrl = videoEntity?.user.profilePic ??
         comment?.user.profilePic ??
         '';
 

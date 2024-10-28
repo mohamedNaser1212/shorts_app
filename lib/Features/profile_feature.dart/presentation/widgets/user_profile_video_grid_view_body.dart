@@ -19,43 +19,41 @@ class UserProfileVideosGridViewBody extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar:const VideosScreenAppBarWidget() ,
-      body: GestureDetector(
-      onTap: () {
-        NavigationManager.navigateTo(
-          context: context,
-          screen: const VideosPageViewWidget(
-          ),
-        );
-      },
-      child: Card(
-        elevation: 4.0,
-        child: Column(
-          children: [
-            Expanded(
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8.0),
-                child: Image.network(
-                  video.thumbnail,
-                  fit: BoxFit.cover,
-                  width: double.infinity,
+        appBar: const VideosScreenAppBarWidget(),
+        body: GestureDetector(
+          onTap: () {
+            NavigationManager.navigateTo(
+              context: context,
+              screen: const VideosPageViewWidget(),
+            );
+          },
+          child: Card(
+            elevation: 4.0,
+            child: Column(
+              children: [
+                Expanded(
+                  child: ClipRRect(
+                    borderRadius: BorderRadius.circular(8.0),
+                    child: Image.network(
+                      video.thumbnail,
+                      fit: BoxFit.cover,
+                      width: double.infinity,
+                    ),
+                  ),
                 ),
-              ),
+                const SizedBox(height: 8.0),
+                Padding(
+                  padding: const EdgeInsets.symmetric(horizontal: 8.0),
+                  child: Text(
+                    video.description,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 14.0),
+                  ),
+                ),
+              ],
             ),
-            const SizedBox(height: 8.0),
-            Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 8.0),
-              child: Text(
-                video.description,
-                maxLines: 2,
-                overflow: TextOverflow.ellipsis,
-                style: const TextStyle(fontSize: 14.0),
-              ),
-            ),
-          ],
-        ),
-      ),
-    )
-    );
+          ),
+        ));
   }
 }

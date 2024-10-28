@@ -28,7 +28,7 @@ class UserProfileSection extends StatelessWidget {
                 NavigationManager.navigateTo(
                   context: context,
                   screen: UserProfileScreen(
-                    state: state,
+                    user: state.widget.videoEntity.sharedBy,
                     isShared: true,
                   ),
                 );
@@ -40,7 +40,8 @@ class UserProfileSection extends StatelessWidget {
                 child: CustomListTile(
                   leading: UserProfilePicture(state: state),
                   title: state.widget.videoEntity.sharedBy!.name,
-                  subtitle: state.widget.videoEntity.sharedUserDescription ?? '',
+                  subtitle:
+                      state.widget.videoEntity.sharedUserDescription ?? '',
                   color: ColorController.whiteColor,
                 ),
               ),
@@ -54,7 +55,7 @@ class UserProfileSection extends StatelessWidget {
               NavigationManager.navigateTo(
                 context: context,
                 screen: UserProfileScreen(
-                  state: state,
+                  videoEntity: state.widget.videoEntity,
                   isShared: false,
                 ),
               );

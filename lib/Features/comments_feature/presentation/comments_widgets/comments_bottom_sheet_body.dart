@@ -31,7 +31,8 @@ class CommentsBottomSheetBody extends StatelessWidget {
             const SizedBox(height: 8),
             Padding(
               padding: EdgeInsets.only(
-                  bottom: MediaQuery.of(context).viewInsets.bottom),
+                bottom: MediaQuery.of(context).viewInsets.bottom,
+              ),
               child: Column(
                 children: [
                   CommentsFormFieldWidget(state: state),

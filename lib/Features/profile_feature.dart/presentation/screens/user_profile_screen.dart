@@ -1,16 +1,27 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/use_case/user_profile_videos_use_case.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_profile_cubit/user_profile_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_screen_body.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_contents_screen.dart';
+import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
+
 import 'package:shorts/core/service_locator/service_locator.dart';
+import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
 class UserProfileScreen extends StatefulWidget {
-  const UserProfileScreen(
-      {super.key, required this.state, required this.isShared});
-  final VideoContentsScreenState state;
+  const UserProfileScreen({
+    super.key,
+    required this.isShared,
+    this.videoEntity,
+    this.user,
+    this.comment,
+  });
+  final VideoEntity? videoEntity;
+  final UserEntity? user;
+
   final bool isShared;
+  final CommentEntity? comment;
 
   @override
   State<UserProfileScreen> createState() => UserProfileScreenState();
@@ -24,9 +35,16 @@ class UserProfileScreenState extends State<UserProfileScreen> {
         getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
       )..getUserVideos(
           userId: widget.isShared == false
-              ? widget.state.widget.videoEntity.user.id!
-              : widget.state.widget.videoEntity.sharedBy!.id!),
-      child: UserProfileScreenBody(state: widget.state, userProfileState: this),
+              ? widget.videoEntity?.user.id ?? ''
+              : widget.comment?.user.id ??
+                  widget.videoEntity!.sharedBy?.id ??
+                  ''),
+      child: UserProfileScreenBody(
+        videoEntity: widget.videoEntity,
+        comment: widget.comment,
+        userProfileState: this,
+
+      ),
     );
   }
 }
