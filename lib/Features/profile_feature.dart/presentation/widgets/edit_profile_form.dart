@@ -8,18 +8,8 @@ class EditProfileForm extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      padding: const EdgeInsets.all(20.0),
-      child: Column(
-        children: [
-          Form(
-            key: state.formKey,
-            child: SettingsFormBody(
-              editState: state,
-            ),
-          ),
-        ],
-      ),
+    return SettingsFormBody(
+      editState: state,
     );
   }
 }

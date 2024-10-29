@@ -31,22 +31,28 @@ class _SettingsFormBodyState extends State<SettingsFormBody> {
   }
 
   Widget _builder(BuildContext context, UpdateUserDataState state) {
-    return Column(
-      children: [
-        EditUserProfileImageWidget(editState: widget.editState),
-        const SizedBox(height: 20.0),
-        ChangeProfilePictureElevatedBotton(editState: widget.editState),
-        const SizedBox(height: 20.0),
-        NameField(controller: widget.editState.nameController),
-        const SizedBox(height: 20.0),
-        EmailField(controller: widget.editState.emailController),
-        const SizedBox(height: 20.0),
-        PhoneField(controller: widget.editState.phoneController),
-        const SizedBox(height: 20.0),
-        UpdateProfileElevatedButton(editState: widget.editState),
-        const SizedBox(height: 20.0),
-        SignOutElevatedButton(editState: widget.editState),
-      ],
+    return SingleChildScrollView(
+      padding: const EdgeInsets.all(20.0),
+      child: Form(
+        key: widget.editState.formKey,
+        child: Column(
+          children: [
+            EditUserProfileImageWidget(editState: widget.editState),
+            const SizedBox(height: 20.0),
+            ChangeProfilePictureElevatedBotton(editState: widget.editState),
+            const SizedBox(height: 20.0),
+            NameField(controller: widget.editState.nameController),
+            const SizedBox(height: 20.0),
+            EmailField(controller: widget.editState.emailController),
+            const SizedBox(height: 20.0),
+            PhoneField(controller: widget.editState.phoneController),
+            const SizedBox(height: 20.0),
+            UpdateProfileElevatedButton(editState: widget.editState),
+            const SizedBox(height: 20.0),
+            SignOutElevatedButton(editState: widget.editState),
+          ],
+        ),
+      ),
     );
   }
 

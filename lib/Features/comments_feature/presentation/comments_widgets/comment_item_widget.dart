@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
-import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_container_widget.dart';
+import 'package:shorts/Features/comments_feature/presentation/comments_widgets/custom_container_widget.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/user_profile_screen.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/videos_profile_picture.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
@@ -29,7 +29,8 @@ class CommentItemWidget extends StatelessWidget {
           ),
           const SizedBox(width: 15),
           Flexible(
-            child: CommentsContainerWidget(comment: comment, commentsState: state),
+            child:
+                CustomContainerWidget(comment: comment, commentsState: state),
           ),
         ],
       ),

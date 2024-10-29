@@ -19,24 +19,28 @@ class DeleteCommentIconWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return IconButton(
-      icon: const CustomIconWidget(
-        icon: Icons.delete,
-        color: ColorController.redAccent,
-        size: 32,
+    return Positioned(
+           top: 0,
+              right: 8,
+      child: IconButton(
+        icon: const CustomIconWidget(
+          icon: Icons.delete,
+          color: ColorController.redAccent,
+          size: 25,
+        ),
+        onPressed: () {
+          CommentsCubit.get(context).comments.removeWhere(
+                (element) => element.id == comment.id,
+              );
+      
+          print(comment.id);
+          AddCommentsCubit.get(context).deleteComment(
+            userId: UserInfoCubit.get(context).userEntity!.id!,
+            videoId: state.widget.videoEntity.id,
+            commentId: comment.id,
+          );
+        },
       ),
-      onPressed: () {
-        CommentsCubit.get(context).comments.removeWhere(
-              (element) => element.id == comment.id,
-            );
-
-        print(comment.id);
-        AddCommentsCubit.get(context).deleteComment(
-          userId: UserInfoCubit.get(context).userEntity!.id!,
-          videoId: state.widget.videoEntity.id,
-          commentId: comment.id,
-        );
-      },
     );
   }
 }

@@ -89,7 +89,7 @@ abstract class UpdateUserData {
     required UpdateUserRequestModel updateUserRequestModel,
     required FirebaseHelper firebaseHelper,
   }) async {
-    // Fetch the user's favorite documents where the user's ID matches
+
     List<Map<String, dynamic>> favourites =
         await firebaseHelper.getCollectionDocuments(
       collectionPath:
@@ -118,23 +118,20 @@ abstract class UpdateUserData {
     required UpdateUserRequestModel updateUserRequestModel,
     required FirebaseFirestore firestore,
   }) async {
-    await firestore
-        .collection(CollectionNames.videos)
-        .where('user.id', isEqualTo: userId)
-        .get()
-        .then((videoQuerySnapshot) {
-      for (var videoDoc in videoQuerySnapshot.docs) {
-        videoDoc.reference
-            .collection(CollectionNames.comments)
-            .where('user.id', isEqualTo: userId)
-            .get()
-            .then((commentsQuerySnapshot) {
-          for (var commentDoc in commentsQuerySnapshot.docs) {
-            _userUpdatedData(commentDoc, updateUserRequestModel);
-          }
-        });
+    final videoQuerySnapshot =
+        await firestore.collection(CollectionNames.videos).get();
+
+    for (var videoDoc in videoQuerySnapshot.docs) {
+      final commentsQuerySnapshot = await videoDoc.reference
+          .collection(CollectionNames.comments)
+          .where('user.id', isEqualTo: userId)
+          .get();
+      print(commentsQuerySnapshot.docs.length);
+
+      for (var commentDoc in commentsQuerySnapshot.docs) {
+        await _userUpdatedData(commentDoc, updateUserRequestModel);
       }
-    });
+    }
   }
 
   static Future<void> _videosCollection({
