@@ -34,16 +34,18 @@ class UserProfileScreenState extends State<UserProfileScreen> {
       create: (context) => GetUserVideosCubit(
         getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
       )..getUserVideos(
-          userId: widget.isShared == false
-              ? widget.videoEntity?.user.id ?? ''
-              : widget.comment?.user.id ??
-                  widget.videoEntity!.sharedBy?.id ??
-                  ''),
+          userId: widget.comment != null
+              ? widget.comment!.user.id!
+              : widget.isShared == false
+                  ? widget.videoEntity?.user.id ?? ''
+                  : widget.comment?.user.id ??
+                      widget.videoEntity!.sharedBy?.id ??
+                      '',
+        ),
       child: UserProfileScreenBody(
         videoEntity: widget.videoEntity,
         comment: widget.comment,
         userProfileState: this,
-
       ),
     );
   }

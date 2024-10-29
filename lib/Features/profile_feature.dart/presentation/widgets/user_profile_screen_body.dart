@@ -32,8 +32,7 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
       appBar: const CustomAppBar(title: 'User Profile'),
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
-        child: BlocConsumer<GetUserVideosCubit, UserProfileState>(
-          listener: (context, state) {},
+        child: BlocBuilder<GetUserVideosCubit, UserProfileState>(
           builder: (context, state) {
             if (state is GetUserVideosLoading) {
               return const Center(child: CircularProgressIndicator());
@@ -66,10 +65,9 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
                   style: TitleStyle.style16,
                 ),
                 const SizedBox(height: 10),
-                  UserProfileVideosGridView(
-                    state: this,
-                  )
-             
+                UserProfileVideosGridView(
+                  state: this,
+                )
               ],
             );
           },

@@ -54,7 +54,6 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
         return BlocBuilder<AddCommentsCubit, AddCommentsState>(
           builder: (context, state) {
             if (state is DeleteCommentSuccessState) {
-            
               CommentsCubit.get(context)
                   .getComments(videoId: widget.videoEntity.id);
             }

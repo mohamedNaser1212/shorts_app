@@ -33,24 +33,15 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
         } else if (state is GetUserVideosSuccessState) {
           //) {
           if (state.videos.isNotEmpty) {
-            // final user =
-            //     widget.state.widget.userProfileState.widget.isShared == true
-            //         ? widget.state.widget.userProfileState.widget.videoEntity
-            //             ?.sharedBy!
-            //         : widget.state.widget.userProfileState.widget.videoEntity
-            //                 ?.user ??
-            //             widget.state.widget.userProfileState.widget.user;
-
             return Expanded(
               child: GridView.builder(
                 gridDelegate: _gridDelegate(),
                 itemCount: state.videos.length,
                 itemBuilder: (context, index) {
                   return _builder(
-                   index: index,
-                    successState: state,  
+                    index: index,
+                    successState: state,
                     state: state,
-
                   );
                 },
               ),
@@ -72,7 +63,7 @@ Widget _builder({
 
   return UserProfileVideosGridViewBody(
     video: video,
-    videos: [...successState.videos],
+    videos: [successState.videos[index]],
     index: index,
   );
 }

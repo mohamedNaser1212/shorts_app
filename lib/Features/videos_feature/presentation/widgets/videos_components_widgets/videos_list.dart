@@ -31,6 +31,8 @@ class VideoListItem extends StatelessWidget {
   }
 
   Widget _builder(context, videoProvider, child) {
+    print(videoEntity.videoUrl);
+
     return VideoListBody(
       videoEntity: videoEntity,
       isShared: isShared,
