@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_icons.dart';
 
-class VideoIconsSection extends StatelessWidget {
-  const VideoIconsSection({
+class VideoActionIcons extends StatelessWidget {
+  const VideoActionIcons({
     super.key,
     required this.videoEntity,
   });

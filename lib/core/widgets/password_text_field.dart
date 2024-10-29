@@ -4,9 +4,8 @@ import '../utils/constants/consts.dart';
 import '../managers/field_validaltor/fields_validator.dart';
 import 'reusable_text_form_field.dart';
 
-class PasswordField extends StatelessWidget {
+class PasswordField extends StatefulWidget {
   final TextEditingController controller;
-  final bool obscure = true;
 
   const PasswordField({
     super.key,
@@ -14,11 +13,19 @@ class PasswordField extends StatelessWidget {
   });
 
   @override
+  State<PasswordField> createState() => _PasswordFieldState();
+}
+
+class _PasswordFieldState extends State<PasswordField> {
+  
+   bool obscure =false;
+
+  @override
   Widget build(BuildContext context) {
     return CustomTextFormField(
       label: 'Password',
       validator: FieldsValidator.isNotEmpty,
-      controller: controller,
+      controller: widget.controller,
       obscure: obscure,
       keyboardType: TextInputType.visiblePassword,
       activeColor: defaultLightColor,
@@ -30,5 +37,10 @@ class PasswordField extends StatelessWidget {
     );
   }
 
-  void _onPressed() {}
+  void _onPressed() {
+    obscure = !obscure;
+    setState(() {
+      
+    });
+  }
 }

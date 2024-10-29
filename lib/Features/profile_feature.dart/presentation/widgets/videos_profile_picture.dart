@@ -17,7 +17,7 @@ class UserProfilePicture extends StatelessWidget {
     return CircleAvatar(
       backgroundColor: Colors.grey,
       radius: 20,
-      child: Image.network(state?.widget.videoEntity.user.profilePic ??
+      child: Image.network(  state?.widget.videoEntity.user.profilePic ??
           comment?.user.profilePic ??
           ''),
     );
