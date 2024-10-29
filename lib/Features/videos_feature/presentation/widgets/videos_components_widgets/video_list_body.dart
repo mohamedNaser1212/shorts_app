@@ -3,6 +3,7 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/thumbnail_notifier.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_components_widget.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_player_widget.dart';
+import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/video_controller/video_controller.dart';
 
 class VideoListBody extends StatefulWidget {
@@ -25,7 +26,7 @@ class _VideoListBodyState extends State<VideoListBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: ColorController.blackColor,
       body: GestureDetector(
         onTap: () => widget.videoController.togglePlayPause(),
         child: Stack(

@@ -6,14 +6,9 @@ import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_vide
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/videos_list.dart';
 
 class VideosPageViewWidget extends StatefulWidget {
-  final int? initialIndex;
-  final bool fromProfile;
   final UserProfileVideosGridViewBodyState? userProfileVideosGridViewBodyState;
   const VideosPageViewWidget(
-      {super.key,
-      this.initialIndex,
-      this.fromProfile = false,
-      this.userProfileVideosGridViewBodyState});
+      {super.key, this.userProfileVideosGridViewBodyState});
 
   @override
   State<VideosPageViewWidget> createState() => _VideosPageViewWidgetState();
@@ -25,7 +20,9 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
   @override
   void initState() {
     super.initState();
-    _pageController = PageController(initialPage: widget.initialIndex ?? 0);
+    _pageController = PageController(
+        initialPage:
+            widget.userProfileVideosGridViewBodyState?.widget.index ?? 0);
   }
 
   @override
@@ -41,17 +38,19 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
         if (state is GetVideoSuccess) {
           return PageView.builder(
             controller: _pageController,
-            itemCount: widget.fromProfile == true
-                ? widget
-                    .userProfileVideosGridViewBodyState!.widget.videos.length
-                : state.videos.length,
+            itemCount:
+                widget.userProfileVideosGridViewBodyState?.fromProfile == true
+                    ? widget.userProfileVideosGridViewBodyState!.widget.videos
+                        .length
+                    : state.videos.length,
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
-              final video = widget.fromProfile == true
-                  ? widget
-                      .userProfileVideosGridViewBodyState!.widget.videos[index]
-                  : state.videos[index];
+              final video =
+                  widget.userProfileVideosGridViewBodyState?.fromProfile == true
+                      ? widget.userProfileVideosGridViewBodyState!.widget
+                          .videos[index]
+                      : state.videos[index];
               final isShared = video.sharedBy != null;
               CommentsCubit.get(context).getComments(videoId: video.id);
 
