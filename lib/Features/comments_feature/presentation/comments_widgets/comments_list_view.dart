@@ -6,14 +6,17 @@ class CommentsListView extends StatelessWidget {
   const CommentsListView({
     super.key,
     required this.state,
+    required this.scrollController,
   });
 
   final CommentsBottomSheetState state;
+  final ScrollController scrollController; // Add scrollController as a parameter
 
   @override
   Widget build(BuildContext context) {
     return Flexible(
       child: ListView.builder(
+        controller: scrollController, // Use the scroll controller here
         padding: EdgeInsets.zero,
         itemCount: state.commentsList.length,
         itemBuilder: (context, index) {

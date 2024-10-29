@@ -22,16 +22,22 @@ class CommentsCubit extends Cubit<CommentsState> {
 
   void getComments({
     required String videoId,
+    required int page,
+    int limit = 20, // default limit for comments per page
   }) async {
-    if (cachedComments.containsKey(videoId)) {
-      comments = cachedComments[videoId]!;
+    final offset = (page - 1) * limit; // Calculate offset based on the current page
+
+    if (cachedComments.containsKey(videoId) &&
+        cachedComments[videoId]!.length > offset) {
+      // If we already have comments cached, return the required page
+      comments = cachedComments[videoId]!.skip(offset).take(limit).toList();
       emit(GetCommentsSuccessState(comments: comments));
       return;
     }
 
     emit(GetCommentsLoadingState());
 
-    final result = await getCommentsUseCase.getVideoComments(videoId: videoId);
+    final result = await getCommentsUseCase.getVideoComments(videoId: videoId, page: page, limit: limit);
     result.fold(
       (failure) => emit(GetCommentsErrorState(message: failure.toString())),
       (comments) {

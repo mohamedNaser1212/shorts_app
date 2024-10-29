@@ -27,7 +27,7 @@ class CommentsBottomSheetBody extends StatelessWidget {
               style: TitleStyle.styleBold18,
             ),
             const SizedBox(height: 8),
-            CommentsListView(state: state),
+            CommentsListView(state: state, scrollController: state.scrollController),
             const SizedBox(height: 8),
             Padding(
               padding: EdgeInsets.only(

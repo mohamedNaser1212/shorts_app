@@ -28,8 +28,10 @@ class AddCommentElevatedBottonState extends State<AddCommentElevatedBotton> {
           CommentsCubit.get(context)
               .cachedComments
               .remove(widget.state.widget.videoEntity.id);
-          CommentsCubit.get(context)
-              .getComments(videoId: widget.state.widget.videoEntity.id);
+          CommentsCubit.get(context).getComments(
+            videoId: widget.state.widget.videoEntity.id,
+            page: widget.state.currentPage,
+          );
         }
       },
       builder: (context, state) {

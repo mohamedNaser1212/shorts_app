@@ -7,7 +7,9 @@ import '../comments_entity/comments_entity.dart';
 abstract class CommentsRepo {
   const CommentsRepo();
   Future<Either<Failure, List<CommentEntity>>> getVideoComments({
-    required String videoId,
+      required String videoId,
+    required int page,
+    int limit = 20,
   });
   
   Future<Either<Failure, List<CommentEntity>>> addCommentToVideo({

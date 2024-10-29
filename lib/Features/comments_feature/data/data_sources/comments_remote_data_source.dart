@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 import '../../../videos_feature/domain/video_entity/video_entity.dart';
@@ -6,6 +7,8 @@ import '../model/comments_model.dart';
 abstract class CommentsRemoteDataSource {
   Future<List<CommentModel>> getComments({
     required String videoId,
+    required int page,
+    int limit = 20,
   });
 
   Future<num> getCommentsCount({
@@ -34,17 +37,49 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
   @override
   Future<List<CommentModel>> getComments({
     required String videoId,
+    required int page,
+    int limit = 20,
   }) async {
+    // Fetch comments based on the page and limit
+    final startAfter = (page > 1)
+        ? await _getStartAfterDocument(videoId, (page - 1) * limit)
+        : null;
+
     final commentsData = await firebaseHelper.getCollectionDocuments(
       collectionPath: 'videos',
       docId: videoId,
       subCollectionPath: 'comments',
-      limit: 20,
+      limit: limit,
+      orderBy: 'timestamp',
+      descending: true,
+      startAfter: startAfter as DocumentSnapshot<Map<String, dynamic>>?,
+    );
+
+    // Convert the fetched data to a list of CommentModel
+    return commentsData.map((data) => CommentModel.fromJson(data)).toList();
+  }
+
+// Helper method to get the starting document for pagination
+  Future<DocumentReference<Map<String, dynamic>>?> _getStartAfterDocument(
+      String videoId, int offset) async {
+    // Fetch the document at the offset position
+    final commentsSnapshot = await firebaseHelper.getCollectionDocuments(
+      collectionPath: 'videos',
+      docId: videoId,
+      subCollectionPath: 'comments',
+      limit: offset,
       orderBy: 'timestamp',
       descending: true,
     );
 
-    return commentsData.map((data) => CommentModel.fromJson(data)).toList();
+    if (commentsSnapshot.isNotEmpty) {
+      return FirebaseFirestore.instance
+          .collection('videos')
+          .doc(videoId)
+          .collection('comments')
+          .doc(commentsSnapshot.last['id']);
+    }
+    return null;
   }
 
   @override
@@ -65,31 +100,23 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     required CommentEntity comment,
     required VideoEntity video,
   }) async {
-    final videoData = await firebaseHelper.getDocument(
+    // Add the comment to the video comments sub-collection
+    await firebaseHelper.addDocumentWithAutoId(
       collectionPath: 'videos',
+      data: comment.toJson(),
       docId: video.id,
+      subCollectionPath: 'comments',
     );
 
-    if (videoData != null) {
-      await firebaseHelper.addDocument(
-        collectionPath: 'videos',
-        docId: video.id,
-        subCollectionPath: 'comments',
-        subDocId: comment.id,
-        data: comment.toJson(),
-      );
+    // Add the comment to the user's comments sub-collection
+    await firebaseHelper.addDocumentWithAutoId(
+      collectionPath: 'users',
+      data: comment.toJson(),
+      docId: video.user.id,
+      subCollectionPath: 'videos/${video.id}/comments',
+    );
 
-      await firebaseHelper.addDocument(
-        collectionPath: 'users',
-        docId: video.user.id,
-        subCollectionPath: 'videos/${video.id}/comments',
-        subDocId: comment.id,
-        data: comment.toJson(),
-      );
-
-      return true;
-    }
-    return false;
+    return true;
   }
 
   @override
@@ -112,7 +139,6 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
       subDocId: commentId,
     );
 
-    // Return false after successful deletion
     return true;
   }
 }

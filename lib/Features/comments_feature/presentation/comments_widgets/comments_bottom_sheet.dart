@@ -16,29 +16,44 @@ class CommentsBottomSheet extends StatefulWidget {
 }
 
 class CommentsBottomSheetState extends State<CommentsBottomSheet> {
-  final TextEditingController commentController = TextEditingController();
-  //final FocusNode _focusNode = FocusNode();
+final TextEditingController commentController = TextEditingController();
   late var screenHeight = MediaQuery.of(context).size.height;
   late var bottomSheetHeight = screenHeight * 0.75;
   List<CommentEntity> commentsList = [];
+  ScrollController scrollController = ScrollController();
+  int currentPage = 0;
 
   @override
   void initState() {
     super.initState();
-    // _focusNode.addListener(() {
-    //   setState(() {});
-    // });
+    
+    _loadComments();
 
-    CommentsCubit.get(context).getComments(videoId: widget.videoEntity.id);
+    scrollController.addListener(() {
+      if (scrollController.position.pixels >=
+              scrollController.position.maxScrollExtent * 0.7 &&
+          !scrollController.position.outOfRange) {
+        _loadMoreComments(); 
+      }
+    });
+  }
+  void _loadComments() {
+    CommentsCubit.get(context).getComments(
+      videoId: widget.videoEntity.id,
+      page: currentPage,
+    );
+  }
+  void _loadMoreComments() {
+    currentPage++;
+    CommentsCubit.get(context).getComments(videoId: widget.videoEntity.id, page: currentPage);
   }
 
   @override
   void dispose() {
     commentController.dispose();
-    // _focusNode.dispose();
+    scrollController.dispose(); // Dispose the scroll controller
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CommentsCubit, CommentsState>(
@@ -55,7 +70,10 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
           builder: (context, state) {
             if (state is DeleteCommentSuccessState) {
               CommentsCubit.get(context)
-                  .getComments(videoId: widget.videoEntity.id);
+                  .getComments(
+                    videoId: widget.videoEntity.id,
+                    page: currentPage,
+                  );
             }
             return CustomProgressIndicator(
               isLoading: state is AddCommentsLoadingState ||

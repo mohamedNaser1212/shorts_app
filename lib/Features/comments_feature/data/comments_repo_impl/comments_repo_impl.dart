@@ -34,7 +34,7 @@ class CommentsRepoImpl implements CommentsRepo {
         final comments = await commentsLocalDataSource.getComments(
           videoId: video.id,
         );
-        comments.add(comment);
+        // comments.add(comment);
         await commentsLocalDataSource.saveComments(comments);
         return comments;
       },
@@ -44,14 +44,17 @@ class CommentsRepoImpl implements CommentsRepo {
   @override
   Future<Either<Failure, List<CommentEntity>>> getVideoComments({
     required String videoId,
+    required int page,
+    int limit = 20,
   }) async {
     return repoManager.call(
       action: () async {
-        final comments =
-            await commentsRemoteDataSource.getComments(videoId: videoId);
-        await commentsLocalDataSource.saveComments(
-          comments,
+        final comments = await commentsRemoteDataSource.getComments(
+          videoId: videoId,
+          page: page,
+          limit: limit,
         );
+        await commentsLocalDataSource.saveComments(comments);
         return comments;
       },
     );
