@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_video_grid_view_body.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/videos_page_view_widget.dart';
 import 'package:shorts/core/functions/toast_function.dart';
@@ -10,7 +11,8 @@ import 'package:shorts/core/widgets/videos_screen_AppBar.dart';
 import '../../../favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
 
 class VideoPage extends StatelessWidget {
-  const VideoPage({super.key});
+  const VideoPage({super.key, this.userProfileVideosGridViewBody});
+  final UserProfileVideosGridViewBodyState? userProfileVideosGridViewBody;
 
   @override
   Widget build(BuildContext context) {
@@ -23,8 +25,8 @@ class VideoPage extends StatelessWidget {
           return BlocConsumer<FavouritesCubit, FavouritesState>(
             listener: _favouritesListener,
             builder: (context, favouritesState) {
-              return BlocConsumer<VideoCubit, VideoState>(
-                listener: _videosListener,
+              return BlocBuilder<VideoCubit, VideoState>(
+                //  listener: _videosListener,
                 builder: _videosBuilder,
               );
             },
@@ -36,7 +38,9 @@ class VideoPage extends StatelessWidget {
 
   Widget _videosBuilder(BuildContext context, VideoState state) {
     if (state is GetVideoSuccess) {
-      return const VideosPageViewWidget(); 
+      return VideosPageViewWidget(
+        userProfileVideosGridViewBodyState: userProfileVideosGridViewBody,
+      );
     } else if (state is VideoUploadErrorState) {
       return Center(
         child: CustomTitle(
@@ -50,10 +54,6 @@ class VideoPage extends StatelessWidget {
         color: ColorController.whiteColor,
       ),
     );
-  }
-
-  void _videosListener(BuildContext context, VideoState state) {
-
   }
 
   void _favouritesListener(BuildContext context, FavouritesState state) {

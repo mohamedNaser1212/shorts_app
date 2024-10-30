@@ -38,6 +38,7 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
                 gridDelegate: _gridDelegate(),
                 itemCount: state.videos.length,
                 itemBuilder: (context, index) {
+                  print('index: $index');
                   return _builder(
                     index: index,
                     successState: state,
@@ -60,6 +61,7 @@ Widget _builder({
   required GetUserVideosSuccessState successState,
 }) {
   final video = successState.videos[index];
+  print('VIDEOEntity: ${video.thumbnail}');
 
   return UserProfileVideosGridViewBody(
     video: video,

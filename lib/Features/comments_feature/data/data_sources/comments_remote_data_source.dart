@@ -8,7 +8,7 @@ abstract class CommentsRemoteDataSource {
   Future<List<CommentModel>> getComments({
     required String videoId,
     required int page,
-    int limit = 20,
+    int limit = 7,
   });
 
   Future<num> getCommentsCount({
@@ -34,13 +34,12 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     required this.firebaseHelper,
   });
 
-  @override
+   @override
   Future<List<CommentModel>> getComments({
     required String videoId,
     required int page,
-    int limit = 20,
+    int limit = 7,
   }) async {
-    // Fetch comments based on the page and limit
     final startAfter = (page > 1)
         ? await _getStartAfterDocument(videoId, (page - 1) * limit)
         : null;
@@ -55,7 +54,6 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
       startAfter: startAfter as DocumentSnapshot<Map<String, dynamic>>?,
     );
 
-    // Convert the fetched data to a list of CommentModel
     return commentsData.map((data) => CommentModel.fromJson(data)).toList();
   }
 

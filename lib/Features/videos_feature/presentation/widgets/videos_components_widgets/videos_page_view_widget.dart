@@ -16,6 +16,7 @@ class VideosPageViewWidget extends StatefulWidget {
 
 class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
   late PageController _pageController;
+  final bool fromProfile = true;
 
   @override
   void initState() {
@@ -24,13 +25,11 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
         initialPage:
             widget.userProfileVideosGridViewBodyState?.widget.index ?? 0);
   }
-
   @override
   void dispose() {
     _pageController.dispose();
     super.dispose();
   }
-
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<VideoCubit, VideoState>(
@@ -38,19 +37,17 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
         if (state is GetVideoSuccess) {
           return PageView.builder(
             controller: _pageController,
-            itemCount:
-                widget.userProfileVideosGridViewBodyState?.fromProfile == true
-                    ? widget.userProfileVideosGridViewBodyState!.widget.videos
-                        .length
-                    : state.videos.length,
+            itemCount: fromProfile
+                ? widget
+                    .userProfileVideosGridViewBodyState!.widget.videos.length
+                : state.videos.length,
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
-              final video =
-                  widget.userProfileVideosGridViewBodyState?.fromProfile == true
-                      ? widget.userProfileVideosGridViewBodyState!.widget
-                          .videos[index]
-                      : state.videos[index];
+              final video = fromProfile
+                  ? widget
+                      .userProfileVideosGridViewBodyState!.widget.videos[index]
+                  : state.videos[index];
               final isShared = video.sharedBy != null;
               CommentsCubit.get(context).getComments(
                 videoId: video.id,

@@ -16,28 +16,6 @@ class VideoModel extends VideoEntity {
     super.isShared = false,
   });
 
-  VideoModel copyWith({
-    String? id,
-    String? thumbnail,
-    String? videoUrl,
-    UserEntity? user,
-    UserEntity? sharedBy,
-    String? description,
-    String? sharedUserDescription,
-    bool? isShared,
-  }) {
-    return VideoModel(
-      id: id ?? this.id,
-      thumbnail: thumbnail ?? this.thumbnail,
-      videoUrl: videoUrl ?? this.videoUrl,
-      user: user ?? this.user,
-      description: description ?? this.description,
-      sharedUserDescription: sharedUserDescription ?? this.sharedUserDescription,
-      sharedBy: sharedBy ?? this.sharedBy,
-      isShared: isShared ?? this.isShared,
-    );
-  }
-
   factory VideoModel.fromJson(Map<String, dynamic> json) {
     return VideoModel(
       id: json[RequestDataNames.id] ?? '',
@@ -61,8 +39,7 @@ class VideoModel extends VideoEntity {
       RequestDataNames.description: description,
       RequestDataNames.sharedUserDescription: sharedUserDescription,
       RequestDataNames.user: user.toJson(),
-      if (sharedBy != null)
-        RequestDataNames.sharedBy: sharedBy!.toJson(),
+      if (sharedBy != null) RequestDataNames.sharedBy: sharedBy!.toJson(),
       RequestDataNames.isShared: isShared,
     };
   }
