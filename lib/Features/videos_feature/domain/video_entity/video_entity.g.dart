@@ -24,14 +24,15 @@ class VideoEntityAdapter extends TypeAdapter<VideoEntity> {
       user: fields[4] as UserEntity,
       sharedBy: fields[5] as UserEntity?,
       isShared: fields[6] as bool,
-      sharedUserDescription: fields[7] as String?, // Added field
+      sharedUserDescription: fields[7] as String?,
+      timeStamp: fields[8] != null ? DateTime.parse(fields[8]) : null,
     );
   }
 
   @override
   void write(BinaryWriter writer, VideoEntity obj) {
     writer
-      ..writeByte(8) // Update total field count
+      ..writeByte(9) 
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -46,8 +47,12 @@ class VideoEntityAdapter extends TypeAdapter<VideoEntity> {
       ..write(obj.sharedBy)
       ..writeByte(6)
       ..write(obj.isShared)
-      ..writeByte(7) // New field index for sharedUserDescription
-      ..write(obj.sharedUserDescription);
+      ..writeByte(7)
+      ..write(obj.sharedUserDescription)
+      ..writeByte(8) 
+      
+      ..write(obj.timeStamp?.toIso8601String()); 
+      
   }
 
   @override

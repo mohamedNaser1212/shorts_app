@@ -38,9 +38,17 @@ class VideoPage extends StatelessWidget {
 
   Widget _videosBuilder(BuildContext context, VideoState state) {
     if (state is GetVideoSuccess) {
-      return VideosPageViewWidget(
-        userProfileVideosGridViewBodyState: userProfileVideosGridViewBody,
-      );
+      if (userProfileVideosGridViewBody != null) {
+        return VideosPageViewWidget(
+          userProfileVideosGridViewBodyState: userProfileVideosGridViewBody,
+        );
+      } else {
+        return const VideosPageViewWidget();
+      }
+
+      // return VideosPageViewWidget(
+      //   userProfileVideosGridViewBodyState: userProfileVideosGridViewBody,
+      // );
     } else if (state is VideoUploadErrorState) {
       return Center(
         child: CustomTitle(

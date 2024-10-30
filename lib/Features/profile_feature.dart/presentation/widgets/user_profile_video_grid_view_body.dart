@@ -24,6 +24,7 @@ class UserProfileVideosGridViewBody extends StatefulWidget {
 
 class UserProfileVideosGridViewBodyState
     extends State<UserProfileVideosGridViewBody> {
+  final bool fromProfile = true;
   @override
   Widget build(BuildContext context) {
     return Scaffold(

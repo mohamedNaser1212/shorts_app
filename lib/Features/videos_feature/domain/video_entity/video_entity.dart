@@ -29,14 +29,18 @@ class VideoEntity extends HiveObject {
   @HiveField(7)
   final String? sharedUserDescription;
 
-  VideoEntity({
-    required this.id,
-    required this.thumbnail,
-    required this.videoUrl,
-    required this.description,
-    required this.user,
-    this.sharedBy,
-    this.isShared = false,
-    this.sharedUserDescription,
-  });
+@HiveField(8)
+final DateTime? timeStamp;
+
+VideoEntity({
+  required this.id,
+  required this.thumbnail,
+  required this.videoUrl,
+  required this.description,
+  required this.user,
+  this.sharedBy,
+  this.isShared = false,
+  this.sharedUserDescription,
+  this.timeStamp,
+});
 }

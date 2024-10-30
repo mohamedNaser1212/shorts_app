@@ -18,7 +18,7 @@ class PasswordField extends StatefulWidget {
 
 class _PasswordFieldState extends State<PasswordField> {
   
-   bool obscure =false;
+   bool obscure =true;
 
   @override
   Widget build(BuildContext context) {

@@ -35,34 +35,31 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
 
   VideosRemoteDataSourceImpl({required this.firebaseHelperManager});
 
-  @override
-  Future<List<VideoModel>> getVideos(
-      {int pageSize = _defaultPageSize, required int page}) async {
-    List<Map<String, dynamic>> documentsData;
+@override
+Future<List<VideoModel>> getVideos({int pageSize = _defaultPageSize, required int page}) async {
+  List<Map<String, dynamic>> documentsData;
 
-    if (page == 1) {
-      documentsData = await firebaseHelperManager.getCollectionDocuments(
-        collectionPath: CollectionNames.videos,
-        limit: pageSize,
-      );
-    } else {
-      documentsData = await firebaseHelperManager.getCollectionDocuments(
-        collectionPath: CollectionNames.videos,
-        limit: pageSize,
-      );
-    }
 
-    if (documentsData.isNotEmpty) {
-      _lastDocument = await FirebaseFirestore.instance
-          .collection(CollectionNames.videos)
-          .doc(documentsData.last['id'])
-          .get();
-    }
+  documentsData = await firebaseHelperManager.getCollectionDocuments(
+    collectionPath: CollectionNames.videos,
+    limit: pageSize,
+    descending: true,
+    orderBy: 'timeStamp',
+  );
 
-    print(documentsData.map((doc) => VideoModel.fromJson(doc)).toList().length);
+  // Update _lastDocument only if data is returned
+  // if (documentsData.isNotEmpty) {
+  //   _lastDocument = await FirebaseFirestore.instance
+  //       .collection(CollectionNames.videos)
+  //       .doc(documentsData.last['timeStamp'])
+  //       .get();
+  // }
 
-    return documentsData.map((doc) => VideoModel.fromJson(doc)).toList();
-  }
+  print(documentsData.map((doc) => VideoModel.fromJson(doc)).toList().length);
+
+  return documentsData.map((doc) => VideoModel.fromJson(doc)).toList();
+}
+
 
   void resetPagination() {
     _lastDocument = null;
@@ -82,17 +79,17 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
       thumbnailPath: videoModel.thumbnail,
     );
 
-     // Creating a new VideoModel with the updated properties
-  final updatedVideoModel = VideoModel(
-    id: videoModel.id,
-    thumbnail: thumbnailUrl,
-    videoUrl: videoUrl,
-    user: videoModel.user,
-    description: videoModel.description,
-    sharedUserDescription: videoModel.sharedUserDescription,
-    sharedBy: sharedBy ?? videoModel.sharedBy,
-    isShared: videoModel.isShared,
-  );
+    final updatedVideoModel = VideoModel(
+      id: videoModel.id,
+      thumbnail: thumbnailUrl,
+      videoUrl: videoUrl,
+      user: videoModel.user,
+      description: videoModel.description,
+      sharedUserDescription: videoModel.sharedUserDescription,
+      sharedBy: sharedBy ?? videoModel.sharedBy,
+      isShared: videoModel.isShared,
+      timeStamp: DateTime.now(),
+    );
 
     await _uploadVideoToVideosCollection(
       videoModel: updatedVideoModel,
@@ -104,10 +101,9 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
     return updatedVideoModel;
   }
 
-  Future<void> _uploadVideoToVideosCollection(
-      {
-        required VideoModel videoModel,
-      } ) async {
+  Future<void> _uploadVideoToVideosCollection({
+    required VideoModel videoModel,
+  }) async {
     await firebaseHelperManager.addDocument(
       collectionPath: CollectionNames.videos,
       data: videoModel.toJson(),
@@ -168,6 +164,7 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
       user: model.user,
       description: model.description,
       sharedUserDescription: text,
+      timeStamp: DateTime.now(),
     );
 
     await firebaseHelperManager.addDocument(
