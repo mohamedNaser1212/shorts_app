@@ -11,12 +11,10 @@ class GetCommentsUseCase {
   Future<Either<Failure, List<CommentEntity>>> getVideoComments({
     required String videoId,
     required int page,
-    int limit = 7, // default limit for comments per page
   }) async {
     return await commentsRepo.getVideoComments(
       videoId: videoId,
       page: page,
-      limit: limit,
     );
   }
 }

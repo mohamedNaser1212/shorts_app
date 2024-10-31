@@ -65,7 +65,7 @@ class UserProfileVideosGridViewBodyState
   void _onTap() {
     NavigationManager.navigateTo(
       context: context,
-      screen: VideoPage(
+      screen: VideosScreen(
         userProfileVideosGridViewBody: this,
       ),
     );

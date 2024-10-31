@@ -9,7 +9,7 @@ part 'comments_entity.g.dart';
 @HiveType(typeId: 4)
 class CommentEntity {
   @HiveField(0)
-  final String id;
+   String id;
   @HiveField(1)
   final String content;
   @HiveField(2)
@@ -17,8 +17,8 @@ class CommentEntity {
   @HiveField(3)
   final DateTime timestamp;
 
-  const CommentEntity({
-    required this.id,
+   CommentEntity({
+     this.id='',
     required this.content,
     required this.user,
     required this.timestamp,

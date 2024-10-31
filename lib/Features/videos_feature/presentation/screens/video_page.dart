@@ -10,8 +10,8 @@ import 'package:shorts/core/widgets/custom_title.dart';
 import 'package:shorts/core/widgets/videos_screen_AppBar.dart';
 import '../../../favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
 
-class VideoPage extends StatelessWidget {
-  const VideoPage({super.key, this.userProfileVideosGridViewBody});
+class VideosScreen extends StatelessWidget {
+  const VideosScreen({super.key, this.userProfileVideosGridViewBody});
   final UserProfileVideosGridViewBodyState? userProfileVideosGridViewBody;
 
   @override

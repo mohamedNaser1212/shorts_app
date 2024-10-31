@@ -35,7 +35,7 @@ class AddCommentsCubit extends Cubit<AddCommentsState> {
 
     result.fold(
       (failure) {
-        emit(AddCommentsErrorState(message: failure.toString()));
+        emit(AddCommentsErrorState(message: failure.message));
       },
       (success) {
         emit(AddCommentsSuccessState());
@@ -58,7 +58,7 @@ class AddCommentsCubit extends Cubit<AddCommentsState> {
 
     result.fold(
       (failure) {
-        emit(DeleteCommentErrorState(message: failure.toString()));
+        emit(DeleteCommentErrorState(message: failure.message));
       },
       (success) {
         print('Comment deleted successfully');

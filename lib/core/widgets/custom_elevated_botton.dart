@@ -11,6 +11,7 @@ import 'package:shorts/Features/videos_feature/presentation/screens/video_page.d
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_screen.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
+import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/email_verification_dialogue_widget.dart';
@@ -237,6 +238,8 @@ class CustomElevatedButton extends StatelessWidget {
 
       UploadVideosCubit.get(context)
           .uploadVideo(videoModel: video, sharedBy: null);
+    } else {
+      ToastHelper.showToast(message: 'Please add a description');
     }
   }
 
@@ -270,7 +273,7 @@ class CustomElevatedButton extends StatelessWidget {
   static void _navigateToVideoPage(BuildContext context) {
     NavigationManager.navigateTo(
       context: context,
-      screen: const VideoPage(),
+      screen: const VideosScreen(),
     );
   }
 

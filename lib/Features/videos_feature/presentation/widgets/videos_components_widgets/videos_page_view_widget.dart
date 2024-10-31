@@ -48,7 +48,7 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
               final video = videos[index];
               final isShared = video.sharedBy != null;
 
-              // Fetch comments for the video
+
               CommentsCubit.get(context).getComments(
                 videoId: video.id,
                 page: 0,

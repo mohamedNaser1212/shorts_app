@@ -17,46 +17,36 @@ class CommentsBottomSheet extends StatefulWidget {
 
 class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   final TextEditingController commentController = TextEditingController();
-  late var screenHeight = MediaQuery.of(context).size.height;
-  late var bottomSheetHeight = screenHeight * 0.75;
+  late double bottomSheetHeight = MediaQuery.of(context).size.height * 0.75;
   List<CommentEntity> commentsList = [];
-  ScrollController scrollController = ScrollController();
+  late final ScrollController scrollController = ScrollController();
   int currentPage = 1;
-  final int commentsPerPage = 7;
-  bool isLoadingMore = false;
+  bool allCommentsLoaded = false;
+  bool isLoading = false;
 
   @override
   void initState() {
     super.initState();
 
-    _loadComments();
-
     scrollController.addListener(() {
-      if (scrollController.position.pixels >=
-              scrollController.position.maxScrollExtent * 0.7 &&
-          !isLoadingMore) {
-        _loadMoreComments(); 
+      if (scrollController.offset ==
+              scrollController.position.maxScrollExtent &&
+          !CommentsCubit.get(context).isLastComment &&
+          CommentsCubit.get(context).lastComment != null &&
+          CommentsCubit.get(context).comments.isNotEmpty &&
+          !isLoading) {
+        //setState(() async {
+        isLoading = true;
+
+        BlocProvider.of<CommentsCubit>(context).getStartAfterDocument(
+          widget.videoEntity.id,
+        //  page: currentPage + 1,
+        );
+        //  });
+
+        isLoading = false;
       }
     });
-  }
-
-  void _loadComments() {
-    CommentsCubit.get(context).getComments(
-      videoId: widget.videoEntity.id,
-      page: currentPage,
-      limit: commentsPerPage,
-    );
-  }
-
-  void _loadMoreComments() {
-    setState(() => isLoadingMore = true);
-    currentPage++;
-    CommentsCubit.get(context).getComments(
-      videoId: widget.videoEntity.id,
-      page: currentPage,
-      limit: commentsPerPage,
-    );
-    setState(() => isLoadingMore = false);
   }
 
   @override
@@ -71,7 +61,8 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
     return BlocBuilder<CommentsCubit, CommentsState>(
       builder: (context, state) {
         if (state is GetCommentsSuccessState) {
-          commentsList = [...commentsList, ...state.comments];
+          allCommentsLoaded = state.comments.isEmpty;
+          if (!allCommentsLoaded) commentsList.addAll(state.comments);
         } else if (state is GetCommentsLoadingState && commentsList.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is GetCommentsErrorState) {
@@ -79,21 +70,11 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
         }
 
         return BlocBuilder<AddCommentsCubit, AddCommentsState>(
-          builder: (context, state) {
-            if (state is DeleteCommentSuccessState) {
-              CommentsCubit.get(context).getComments(
-                videoId: widget.videoEntity.id,
-                page: currentPage,
-              );
-            }
+          builder: (context, addState) {
             return CustomProgressIndicator(
-              isLoading: state is AddCommentsLoadingState ||
-                  state is DeleteCommentLoadingState,
-              child: CommentsBottomSheetBody(
-                state: this,
-
-                //comments: commentsList,
-              ),
+              isLoading: addState is AddCommentsLoadingState ||
+                  addState is DeleteCommentLoadingState,
+              child: CommentsBottomSheetBody(state: this),
             );
           },
         );

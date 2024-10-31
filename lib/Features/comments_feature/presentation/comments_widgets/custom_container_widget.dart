@@ -7,8 +7,6 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_compo
 
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 
-
-
 class CustomContainerWidget extends StatelessWidget {
   const CustomContainerWidget({
     super.key,
@@ -34,8 +32,8 @@ class CustomContainerWidget extends StatelessWidget {
                 videoState: videoState, comment: comment),
           ),
 
-          if (comment?.user.id == UserInfoCubit.get(context).userEntity!.id)
-            DeleteCommentIconWidget(comment: comment!, state: commentsState!),
+          // if (comment?.user.id == UserInfoCubit.get(context).userEntity!.id)
+          //   DeleteCommentIconWidget(comment: comment!, state: commentsState!),
         ],
       ),
     );
@@ -43,26 +41,24 @@ class CustomContainerWidget extends StatelessWidget {
 
   BoxDecoration _boxDecoration() {
     return BoxDecoration(
-            color: videoState != null ? Colors.transparent : Colors.white,
-            borderRadius: BorderRadius.circular(12),
-            boxShadow: _boxShadow,
-            border: Border.all(
-              color: videoState != null
-                  ? Colors.transparent
-                  : Colors.grey.shade300,
-            ),
-          );
+      color: videoState != null ? Colors.transparent : Colors.white,
+      borderRadius: BorderRadius.circular(12),
+      boxShadow: _boxShadow,
+      border: Border.all(
+        color: videoState != null ? Colors.transparent : Colors.grey.shade300,
+      ),
+    );
   }
 
   List<BoxShadow> get _boxShadow {
     return [
-              BoxShadow(
-                color: videoState != null
-                    ? Colors.transparent
-                    : Colors.grey.withOpacity(0.2),
-                blurRadius: 8,
-                offset: const Offset(0, 4),
-              ),
-            ];
+      BoxShadow(
+        color: videoState != null
+            ? Colors.transparent
+            : Colors.grey.withOpacity(0.2),
+        blurRadius: 8,
+        offset: const Offset(0, 4),
+      ),
+    ];
   }
 }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/add_comment_elevated_botton.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_form_field.dart';
@@ -9,9 +10,11 @@ class CommentsBottomSheetBody extends StatelessWidget {
   const CommentsBottomSheetBody({
     super.key,
     required this.state,
+    this.comments,
   });
 
   final CommentsBottomSheetState state;
+  final List<CommentEntity>? comments;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +30,11 @@ class CommentsBottomSheetBody extends StatelessWidget {
               style: TitleStyle.styleBold18,
             ),
             const SizedBox(height: 8),
-            CommentsListView(state: state, scrollController: state.scrollController),
+            Expanded(
+                child: CommentsListView(
+              state: state,
+              scrollController: state.scrollController,
+            )),
             const SizedBox(height: 8),
             Padding(
               padding: EdgeInsets.only(

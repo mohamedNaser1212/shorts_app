@@ -1,4 +1,8 @@
+import 'dart:math';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/Features/comments_feature/data/model/comments_model.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/comments_count_use_case.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/show_comments_use_case.dart';
 import '../../../domain/comments_entity/comments_entity.dart';
@@ -16,80 +20,89 @@ class CommentsCubit extends Cubit<CommentsState> {
   final GetCommentsUseCase getCommentsUseCase;
   final GetCommentsCountUseCase getCommentsCountUseCase;
 
-  final Map<String, List<CommentEntity>> cachedComments = {};
-
   List<CommentEntity> comments = [];
-// import 'package:flutter_bloc/flutter_bloc.dart';
-// import 'package:shorts/Features/comments_feature/domain/comments_use_case/comments_count_use_case.dart';
-// import 'package:shorts/Features/comments_feature/domain/comments_use_case/show_comments_use_case.dart';
-// import '../../../domain/comments_entity/comments_entity.dart';
-
-// part 'comments_state.dart';
-// class CommentsCubit extends Cubit<CommentsState> {
-//   final GetCommentsUseCase getCommentsUseCase;
-//   final GetCommentsCountUseCase getCommentsCountUseCase;
-
-//   CommentsCubit({
-//     required this.getCommentsUseCase,
-//     required this.getCommentsCountUseCase,
-//   }) : super(CommentsState());
-
-//   static CommentsCubit get(context) => BlocProvider.of(context);
-
-//   List<CommentEntity> comments = [];
-
-//   void getComments({
-//     required String videoId,
-//     required int page,
-//     int limit = 7,
-//   }) async {
-//     final offset = (page - 1) * limit;
-    
-//     emit(GetCommentsLoadingState());
-
-//     final result = await getCommentsUseCase.getVideoComments(
-//       videoId: videoId,
-//       page: page,
-//       limit: limit,
-//     );
-//     result.fold(
-//       (failure) => emit(GetCommentsErrorState(message: failure.toString())),
-//       (newComments) {
-//         comments = [...comments, ...newComments];
-//         emit(GetCommentsSuccessState(comments: newComments));
-//       },
-//     );
-//   }
-
-
-
-  void getComments({
+  bool hasMoreComments = true;
+  DocumentSnapshot? lastComment;
+  bool isLastComment = false;
+  Future<void> getComments({
     required String videoId,
     required int page,
-    int limit = 7, // default limit for comments per page
   }) async {
-    final offset = (page - 1) * limit; // Calculate offset based on the current page
+    comments = [];
+    FirebaseFirestore.instance
+        .collection('videos')
+        .doc(videoId)
+        .collection('comments')
+        .limit(7)
+        .orderBy('timestamp', descending: true)
+        .get()
+        .then((value) {
+      comments = [];
+      for (var element in value.docs) {
+        CommentModel currentComment = CommentModel.fromJson(element.data());
+        currentComment.id = element.id;
+        comments.add(currentComment);
+      }
+      if (value.docs.isNotEmpty) {
+        lastComment = value.docs[value.docs.length - 1];
+      }
+      if (value.docs.length < 7) {
+        isLastComment = true;
+      }
+      emit(GetCommentsSuccessState(
+        comments: comments,
+      ));
+    }).catchError((error) {
+      emit(GetCommentsErrorState(
+        message: error.toString(),
+      ));
+    });
+  }
+  //   emit(GetCommentsLoadingState());
 
-    if (cachedComments.containsKey(videoId) &&
-        cachedComments[videoId]!.length > offset) {
-      // If we already have comments cached, return the required page
-      comments = cachedComments[videoId]!.skip(offset).take(limit).toList();
+  //   final result = await getCommentsUseCase.getVideoComments(
+  //     videoId: videoId,
+  //     page: page,
+  //   );
+
+  //   result.fold(
+  //     (failure) => emit(GetCommentsErrorState(message: failure.message)),
+  //     (fetchedComments) {
+  //       if (fetchedComments.length < 7) {
+  //         hasMoreComments = false;
+  //       }
+  //       comments.addAll(fetchedComments.take(7));
+
+  //       emit(GetCommentsSuccessState(comments: comments));
+  //     },
+  //   );
+  // }
+
+  Future<void> getStartAfterDocument(String videoId) async {
+    FirebaseFirestore.instance
+        .collection('videos')
+        .doc(videoId)
+        .collection('comments')
+        .orderBy('timestamp', descending: true)
+        .startAfterDocument(lastComment!)
+        .limit(7) // Set to fetch only 7 comments
+        .get()
+        .then((value) {
+      List<CommentModel> comments = [];
+      for (var element in value.docs) {
+        CommentModel commentModel = CommentModel.fromJson(element.data());
+        commentModel.id = element.id;
+        comments.add(commentModel);
+      }
+
+      lastComment = value.docs.isNotEmpty ? value.docs.last : null;
+      if (value.docs.length < 7) {
+        isLastComment = true;
+      }
       emit(GetCommentsSuccessState(comments: comments));
-      return;
-    }
-
-    emit(GetCommentsLoadingState());
-
-    final result = await getCommentsUseCase.getVideoComments(videoId: videoId, page: page, limit: limit);
-    result.fold(
-      (failure) => emit(GetCommentsErrorState(message: failure.toString())),
-      (comments) {
-        this.comments = comments;
-        cachedComments[videoId] = comments;
-        getCommentsCount(videoId: videoId);
-        emit(GetCommentsSuccessState(comments: comments));
-      },
-    );
+    }).catchError((error) {
+      emit(GetCommentsErrorState(message: error.toString()));
+    });
   }
 
   num commentsCount = 0;
@@ -105,12 +118,7 @@ class CommentsCubit extends Cubit<CommentsState> {
       (failure) => emit(GetCommentsCountErrorState(message: failure.message)),
       (count) {
         commentsCount = count;
-
-        print('commentsCount: $commentsCount');
-
-        emit(GetCommentsCountSuccessState(
-          commentsCount: count,
-        ));
+        emit(GetCommentsCountSuccessState(commentsCount: count));
       },
     );
 

@@ -34,15 +34,15 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     required this.firebaseHelper,
   });
 
-   @override
+  @override
   Future<List<CommentModel>> getComments({
     required String videoId,
     required int page,
     int limit = 7,
   }) async {
-    final startAfter = (page > 1)
-        ? await _getStartAfterDocument(videoId, (page - 1) * limit)
-        : null;
+    // final startAfter = (page > 1)
+    //     ? await _getStartAfterDocument(videoId, (page ) * limit)
+    //     : null;
 
     final commentsData = await firebaseHelper.getCollectionDocuments(
       collectionPath: 'videos',
@@ -51,35 +51,33 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
       limit: limit,
       orderBy: 'timestamp',
       descending: true,
-      startAfter: startAfter as DocumentSnapshot<Map<String, dynamic>>?,
+      // startAfter: startAfter as DocumentSnapshot<Map<String, dynamic>>?,
     );
 
     return commentsData.map((data) => CommentModel.fromJson(data)).toList();
   }
 
-// Helper method to get the starting document for pagination
-  Future<DocumentReference<Map<String, dynamic>>?> _getStartAfterDocument(
-      String videoId, int offset) async {
-    // Fetch the document at the offset position
-    final commentsSnapshot = await firebaseHelper.getCollectionDocuments(
-      collectionPath: 'videos',
-      docId: videoId,
-      subCollectionPath: 'comments',
-      limit: offset,
-      orderBy: 'timestamp',
-      descending: true,
-    );
+// Future<DocumentReference<Map<String, dynamic>>?> _getStartAfterDocument(
+//   String videoId,
+//   int offset,
+// ) async {
+//   final commentsSnapshot = await firebaseHelper.getCollectionDocuments(
+//     collectionPath: 'videos',
+//     docId: videoId,
+//     subCollectionPath: 'comments',
+//     limit: offset,
+//     orderBy: 'timestamp',
+//     descending: true,
+//   );
 
-    if (commentsSnapshot.isNotEmpty) {
-      return FirebaseFirestore.instance
-          .collection('videos')
-          .doc(videoId)
-          .collection('comments')
-          .doc(commentsSnapshot.last['id']);
-    }
-    return null;
-  }
-
+//   return commentsSnapshot.isNotEmpty
+//       ? FirebaseFirestore.instance
+//           .collection('videos')
+//           .doc(videoId)
+//           .collection('comments')
+//           .doc(commentsSnapshot.last['id'])
+//       : null;
+// }
   @override
   Future<num> getCommentsCount({
     required String videoId,

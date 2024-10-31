@@ -9,7 +9,6 @@ abstract class CommentsRepo {
   Future<Either<Failure, List<CommentEntity>>> getVideoComments({
       required String videoId,
     required int page,
-    int limit = 7,
   });
   
   Future<Either<Failure, List<CommentEntity>>> addCommentToVideo({

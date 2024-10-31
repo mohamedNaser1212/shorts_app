@@ -45,14 +45,12 @@ class CommentsRepoImpl implements CommentsRepo {
   Future<Either<Failure, List<CommentEntity>>> getVideoComments({
     required String videoId,
     required int page,
-    int limit = 7,
   }) async {
     return repoManager.call(
       action: () async {
         final comments = await commentsRemoteDataSource.getComments(
           videoId: videoId,
           page: page,
-          limit: limit,
         );
         await commentsLocalDataSource.saveComments(comments);
         return comments;

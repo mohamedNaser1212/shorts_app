@@ -33,40 +33,48 @@ class _TrimViewerWidgetState extends State<TrimViewerWidget> {
         ),
         areaProperties: TrimAreaProperties.edgeBlur(thumbnailQuality: 10),
         onChangeStart: (value) {
-          setState(() {
-            widget.state.videoController.seekTo(Duration(seconds: value.toInt()));
-            widget.state.videoController.positionNotifier.value = Duration(seconds: value.toInt());
+         // setState(() {
+
+            widget.state.videoController.startValue = value;
+            widget.state.videoController
+                .seekTo(Duration(seconds: value.toInt()));
+            widget.state.videoController.positionNotifier.value =
+                Duration(seconds: value.toInt());
             _updateThumbnail(value);
-          });
+         // });
         },
         onChangeEnd: (value) {
-          setState(() {
+          // setState(() {
+
             widget.state.videoController.endValue = value;
-            if (widget.state.videoController.positionNotifier.value.inSeconds > value) {
+            if (widget.state.videoController.positionNotifier.value.inSeconds >
+                value) {
               _updateVideoPosition();
             }
             _updateThumbnail(value);
-          });
+      //    });
         },
         onChangePlaybackState: (value) {
-          setState(() {
+         // setState(() {
             widget.state.isPlaying = value;
             if (value) {
               widget.state.videoController.togglePlayPause();
             }
-          });
+        //  });
         },
       ),
     );
   }
 
   void _updateVideoPosition() {
+    // Seek to the start value if the current position exceeds the end value
     widget.state.videoController.seekTo(
       Duration(seconds: widget.state.videoController.startValue.toInt()),
     );
   }
 
   void _updateThumbnail(double value) {
+    // Generate a new thumbnail based on the current position
     if (widget.state.videoController.thumbnailFile != null) {
       widget.state.videoController.generateThumbnail(
         seconds: value.toDouble(),

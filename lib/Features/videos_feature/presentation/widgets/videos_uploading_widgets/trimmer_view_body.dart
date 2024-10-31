@@ -23,12 +23,15 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
   bool progressVisibility = false;
   late VideoController videoController;
 
+  // Variables to store start and end values
+  double startValue = 0.0;
+  double endValue = 60.0; // Default end value
+
   @override
   void initState() {
     super.initState();
     _loadVideo();
-    videoController =
-        VideoController(widget.file.path, isInitiallyPaused: true);
+    videoController = VideoController(widget.file.path, isInitiallyPaused: true);
   }
 
   @override
@@ -39,34 +42,15 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
 
   void _loadVideo() async {
     await trimmer.loadVideo(videoFile: widget.file);
-    final videoDuration =
-        trimmer.videoPlayerController!.value.duration.inSeconds;
+    final videoDuration = trimmer.videoPlayerController!.value.duration.inSeconds;
 
     setState(() {
-     videoController. startValue = 0.0;
-      videoController.endValue = videoDuration < 60 ? videoDuration.toDouble() : 60.0;
+      startValue = 0.0; // Initialize start value
+      endValue = videoDuration < 60 ? videoDuration.toDouble() : 60.0; // Set end value based on video duration
+      videoController.startValue = startValue;
+      videoController.endValue = endValue;
     });
   }
-
-  // Future<void> generateThumbnail({
-  //   required double seconds,
-  //   required String video,
-  // }) async {
-  //   final thumbnailPath = await VideoThumbnail.thumbnailFile(
-  //     video: video,
-  //     thumbnailPath: (await getTemporaryDirectory()).path,
-  //     imageFormat: ImageFormat.PNG,
-  //     maxWidth: 200,
-  //     quality: 75,
-  //     timeMs: (seconds * 1000).toInt(),
-  //   );
-
-  //   if (thumbnailPath != null) {
-  //     setState(() {
-  //       thumbnailFile = File(thumbnailPath);
-  //     });
-  //   }
-  // }
 
   @override
   Widget build(BuildContext context) {
@@ -79,13 +63,11 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
           children: [
             ProgressVisibilityWidget(progressVisibility: progressVisibility),
             const SizedBox(height: 20),
-            SaveElevatedButton(
-                state: this, thumbnailFile: videoController.thumbnailFile),
+            SaveElevatedButton(state: this, thumbnailFile: videoController.thumbnailFile),
             TrimViewerWidget(state: this),
             PlayIcon(state: this),
             if (videoController.thumbnailFile != null)
-              TrimmerViewImageWidget(
-                  thumbnailFile: videoController.thumbnailFile),
+              TrimmerViewImageWidget(thumbnailFile: videoController.thumbnailFile),
           ],
         ),
       ),
