@@ -20,34 +20,51 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   late double bottomSheetHeight = MediaQuery.of(context).size.height * 0.75;
   List<CommentEntity> commentsList = [];
   late final ScrollController scrollController = ScrollController();
-  int currentPage = 1;
+  int currentPage = 0;
   bool allCommentsLoaded = false;
   bool isLoading = false;
 
+// @override
+// void initState() {
+//   super.initState();
+
+//   scrollController.addListener(() {
+
+//     if (scrollController.offset >= scrollController.position.maxScrollExtent * 0.7) {
+
+//       BlocProvider.of<CommentsCubit>(context).getComments(
+//         videoId: widget.videoEntity.id,
+//         page: currentPage + 1,
+//       );
+//     }
+//   });
+// }
+// 
   @override
   void initState() {
     super.initState();
 
+  //  loadComments();
+
     scrollController.addListener(() {
-      if (scrollController.offset ==
-              scrollController.position.maxScrollExtent &&
-          !CommentsCubit.get(context).isLastComment &&
-          CommentsCubit.get(context).lastComment != null &&
-          CommentsCubit.get(context).comments.isNotEmpty &&
-          !isLoading) {
-        //setState(() async {
-        isLoading = true;
+      if (scrollController.offset == scrollController.position.maxScrollExtent 
+      ) {
+       // isLoading = true;
 
-        BlocProvider.of<CommentsCubit>(context).getStartAfterDocument(
-          widget.videoEntity.id,
-        //  page: currentPage + 1,
+        BlocProvider.of<CommentsCubit>(context).getComments(
+          videoId: widget.videoEntity.id,
+          page: currentPage +1,
         );
-        //  });
-
-        isLoading = false;
       }
     });
   }
+
+  // void loadComments() {
+  //   BlocProvider.of<CommentsCubit>(context).getComments(
+  //     videoId: widget.videoEntity.id,
+  //     page: currentPage,
+  //   );
+  // }
 
   @override
   void dispose() {
@@ -56,13 +73,14 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
     super.dispose();
   }
 
+
   @override
   Widget build(BuildContext context) {
     return BlocBuilder<CommentsCubit, CommentsState>(
       builder: (context, state) {
         if (state is GetCommentsSuccessState) {
-          allCommentsLoaded = state.comments.isEmpty;
-          if (!allCommentsLoaded) commentsList.addAll(state.comments);
+          allCommentsLoaded = state.comments!.isEmpty;
+          if (!allCommentsLoaded) commentsList.addAll(state.comments!);
         } else if (state is GetCommentsLoadingState && commentsList.isEmpty) {
           return const Center(child: CircularProgressIndicator());
         } else if (state is GetCommentsErrorState) {
