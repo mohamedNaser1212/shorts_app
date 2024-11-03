@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet_body.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/add_comments_cubit/add_comments_cubit.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet_body.dart';
 import 'package:shorts/core/widgets/custom_progress_indicator.dart';
+
 import '../../domain/comments_entity/comments_entity.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
@@ -27,12 +28,12 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   void initState() {
     super.initState();
 
-    // Load initial comments
-    _loadComments();
+    //  _loadComments();
 
-    // Set up scroll listener for pagination
     scrollController.addListener(() {
-      if (!allCommentsLoaded && scrollController.position.pixels >= scrollController.position.maxScrollExtent * 0.7) {
+      if (!allCommentsLoaded &&
+          scrollController.position.pixels ==
+              scrollController.position.maxScrollExtent) {
         _loadComments();
       }
     });
@@ -40,9 +41,9 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
 
   void _loadComments() {
     context.read<CommentsCubit>().getComments(
-      videoId: widget.videoEntity.id,
-      page: currentPage,
-    );
+          videoId: widget.videoEntity.id,
+          page: currentPage + 1,
+        );
   }
 
   @override
@@ -82,7 +83,8 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
         return BlocBuilder<AddCommentsCubit, AddCommentsState>(
           builder: (context, addState) {
             return CustomProgressIndicator(
-              isLoading: addState is AddCommentsLoadingState || addState is DeleteCommentLoadingState,
+              isLoading: addState is AddCommentsLoadingState ||
+                  addState is DeleteCommentLoadingState,
               child: CommentsBottomSheetBody(
                 comments: commentsList,
                 state: this,

@@ -1,7 +1,7 @@
 import 'package:flutter/widgets.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comment_item_widget.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
-
+import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
 
 class CommentsListView extends StatelessWidget {
   const CommentsListView({
@@ -21,9 +21,9 @@ class CommentsListView extends StatelessWidget {
       separatorBuilder: (context, index) => const SizedBox(
         height: 10,
       ),
-      itemCount: state.commentsList.length,
+      itemCount: CommentsCubit.get(context).comments.length,
       itemBuilder: (context, index) {
-        final comment = state.commentsList[index];
+        final comment = CommentsCubit.get(context).comments[index];
         return CommentItemWidget(
           comment: comment,
           state: state,

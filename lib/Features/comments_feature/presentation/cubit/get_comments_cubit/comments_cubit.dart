@@ -25,6 +25,7 @@ class CommentsCubit extends Cubit<CommentsState> {
     required String videoId,
     required int page,
   }) async {
+    
     // comments = [];
     final result = await getCommentsUseCase.getVideoComments(
       videoId: videoId,
@@ -36,6 +37,12 @@ class CommentsCubit extends Cubit<CommentsState> {
         //  _isFetchingMore = false;
       },
       (fetchedVideos) {
+        if (fetchedVideos.length < 7) {
+          hasMoreComments = false;
+
+        }
+        comments.addAll(fetchedVideos);
+
         //    comments.addAll(fetchedVideos);
         emit(GetCommentsSuccessState(comments: fetchedVideos));
         //  _isFetchingMore = false;  // Reset fetching flag

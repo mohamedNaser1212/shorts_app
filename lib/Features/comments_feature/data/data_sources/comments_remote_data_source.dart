@@ -44,7 +44,8 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     required int page,
   }) async {
  
-  comments = [];
+
+ comments = [];
     // If there are no more comments to fetch, return the existing list
     if (!hasMoreComments) return comments;
 
@@ -59,7 +60,7 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
         .orderBy('timestamp', descending: true)
         .limit(currentLimit);
 
-    // Apply pagination if we are not on the first page
+
     if (page > 0 && lastComment != null) {
       commentsQuery = commentsQuery.startAfterDocument(lastComment!);
     }
