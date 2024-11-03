@@ -22,49 +22,28 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   late final ScrollController scrollController = ScrollController();
   int currentPage = 0;
   bool allCommentsLoaded = false;
-  bool isLoading = false;
 
-// @override
-// void initState() {
-//   super.initState();
-
-//   scrollController.addListener(() {
-
-//     if (scrollController.offset >= scrollController.position.maxScrollExtent * 0.7) {
-
-//       BlocProvider.of<CommentsCubit>(context).getComments(
-//         videoId: widget.videoEntity.id,
-//         page: currentPage + 1,
-//       );
-//     }
-//   });
-// }
-// 
   @override
   void initState() {
     super.initState();
 
-  //  loadComments();
+    // Load initial comments
+    _loadComments();
 
+    // Set up scroll listener for pagination
     scrollController.addListener(() {
-      if (scrollController.offset == scrollController.position.maxScrollExtent 
-      ) {
-       // isLoading = true;
-
-        BlocProvider.of<CommentsCubit>(context).getComments(
-          videoId: widget.videoEntity.id,
-          page: currentPage +1,
-        );
+      if (!allCommentsLoaded && scrollController.position.pixels >= scrollController.position.maxScrollExtent * 0.7) {
+        _loadComments();
       }
     });
   }
 
-  // void loadComments() {
-  //   BlocProvider.of<CommentsCubit>(context).getComments(
-  //     videoId: widget.videoEntity.id,
-  //     page: currentPage,
-  //   );
-  // }
+  void _loadComments() {
+    context.read<CommentsCubit>().getComments(
+      videoId: widget.videoEntity.id,
+      page: currentPage,
+    );
+  }
 
   @override
   void dispose() {
@@ -73,26 +52,41 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
     super.dispose();
   }
 
-
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CommentsCubit, CommentsState>(
-      builder: (context, state) {
+    return BlocConsumer<CommentsCubit, CommentsState>(
+      listener: (context, state) {
         if (state is GetCommentsSuccessState) {
-          allCommentsLoaded = state.comments!.isEmpty;
-          if (!allCommentsLoaded) commentsList.addAll(state.comments!);
-        } else if (state is GetCommentsLoadingState && commentsList.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
+          // Update the current page for next request
+          currentPage++;
+
+          // Check if all comments are loaded (for disabling further pagination)
+          if (state.comments!.isEmpty) {
+            allCommentsLoaded = true;
+          } else {
+            // Accumulate comments only in success state
+            commentsList.addAll(state.comments!);
+          }
         } else if (state is GetCommentsErrorState) {
-          return Center(child: Text(state.message));
+          // Handle any error cases (show a message, etc.)
+          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+            content: Text(state.message),
+          ));
+        }
+      },
+      builder: (context, state) {
+        if (state is GetCommentsLoadingState && commentsList.isEmpty) {
+          return const Center(child: CircularProgressIndicator());
         }
 
         return BlocBuilder<AddCommentsCubit, AddCommentsState>(
           builder: (context, addState) {
             return CustomProgressIndicator(
-              isLoading: addState is AddCommentsLoadingState ||
-                  addState is DeleteCommentLoadingState,
-              child: CommentsBottomSheetBody(state: this),
+              isLoading: addState is AddCommentsLoadingState || addState is DeleteCommentLoadingState,
+              child: CommentsBottomSheetBody(
+                comments: commentsList,
+                state: this,
+              ),
             );
           },
         );
