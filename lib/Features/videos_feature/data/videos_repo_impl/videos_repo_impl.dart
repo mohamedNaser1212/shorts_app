@@ -5,6 +5,7 @@ import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/Features/videos_feature/domain/video_repo/video_repo.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
+
 import '../../../../core/managers/error_manager/failure.dart';
 import '../../../../core/managers/repo_manager/repo_manager.dart';
 
@@ -26,8 +27,8 @@ class VideosRepoImpl extends VideosRepo {
   }) async {
     return repoManager.call(action: () async {
       final videos = await videosRemoteDataSource.getVideos(
-          page: page, pageSize: pageSize);
-
+        page: page,
+      );
       await videoLocalDataSource.saveVideos(videos);
       return videos;
     });

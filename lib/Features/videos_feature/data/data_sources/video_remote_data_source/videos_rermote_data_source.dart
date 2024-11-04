@@ -1,17 +1,20 @@
 import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:shorts/Features/videos_feature/data/model/shared_videos_model.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
+
 import '../../../../../core/network/firebase_manager/collection_names.dart';
 
 abstract class VideosRemoteDataSource {
   const VideosRemoteDataSource._();
 
-  Future<List<VideoModel>> getVideos(
-      {required int pageSize, required int page});
+  Future<List<VideoModel>> getVideos({
+    required int page,
+  });
 
   Future<VideoModel> uploadVideo({
     required VideoModel videoModel,
@@ -28,38 +31,54 @@ abstract class VideosRemoteDataSource {
 class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
   final FirebaseStorage firebaseStorage = FirebaseStorage.instance;
   final FirebaseHelper firebaseHelperManager;
-  // ignore: unused_field
   DocumentSnapshot? _lastDocument;
-
-  static const int _defaultPageSize = 1;
-
+  static const int _defaultPageSize = 2;
+  Map<int, DocumentSnapshot?> lastVideos = {};
+  bool hasMoreVideos = true;
+  final int limit = _defaultPageSize;
   VideosRemoteDataSourceImpl({required this.firebaseHelperManager});
+  @override
+  Future<List<VideoModel>> getVideos({
+    required int page,
+  }) async {
+    // Check if more videos are available
+    if (!hasMoreVideos) return [];
 
-@override
-Future<List<VideoModel>> getVideos({int pageSize = _defaultPageSize, required int page}) async {
-  List<Map<String, dynamic>> documentsData;
+    // Initialize the query with ordering and limit
+    Query query = FirebaseFirestore.instance
+        .collection(CollectionNames.videos)
+        .orderBy('timeStamp', descending: true)
+        .limit(limit);
 
+    // Apply pagination by starting after the last fetched document
+    if (_lastDocument != null) {
+      query = query.startAfterDocument(_lastDocument!);
+    }
 
-  documentsData = await firebaseHelperManager.getCollectionDocuments(
-    collectionPath: CollectionNames.videos,
-    limit: pageSize,
-    descending: true,
-    orderBy: 'timeStamp',
-  );
+    // Execute the query
+    final querySnapshot = await query.get();
 
-  // Update _lastDocument only if data is returned
-  // if (documentsData.isNotEmpty) {
-  //   _lastDocument = await FirebaseFirestore.instance
-  //       .collection(CollectionNames.videos)
-  //       .doc(documentsData.last['timeStamp'])
-  //       .get();
-  // }
+    // If no documents are returned, set hasMoreVideos to false
+    if (querySnapshot.docs.isEmpty) {
+      hasMoreVideos = false;
+      return [];
+    }
 
-  print(documentsData.map((doc) => VideoModel.fromJson(doc)).toList().length);
+    // Map documents to VideoModel and store the last document for pagination
+    final videos = querySnapshot.docs.map((doc) {
+      return VideoModel.fromJson(doc.data() as Map<String, dynamic>);
+    }).toList();
 
-  return documentsData.map((doc) => VideoModel.fromJson(doc)).toList();
-}
+    _lastDocument =
+        querySnapshot.docs.last; // Update the last document for pagination
 
+    // Check if there are fewer results than the limit, meaning no more data
+    if (videos.length < limit) {
+      hasMoreVideos = false;
+    }
+
+    return videos;
+  }
 
   void resetPagination() {
     _lastDocument = null;

@@ -37,6 +37,10 @@ class AddCommentElevatedButtonState extends State<AddCommentElevatedButton> {
                 videoId: widget.state.widget.videoEntity.id,
                 page: 0,
               );
+              CommentsCubit.get(context).getCommentsCount(
+                videoId: widget.state.widget.videoEntity.id,
+                // page: 0,
+              );
             } else if (state is AddCommentsErrorState) {
               ToastHelper.showToast(
                 message: state.message,
