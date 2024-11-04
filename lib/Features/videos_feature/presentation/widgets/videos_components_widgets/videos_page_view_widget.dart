@@ -28,7 +28,6 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
     );
     _pageController.addListener(_onPageChanged);
 
-    // Load the initial set of videos
     context.read<VideoCubit>().getVideos(page: pageSize + 1);
   }
 

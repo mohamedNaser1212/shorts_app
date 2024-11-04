@@ -17,6 +17,7 @@ class FavouritesScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorController.blackColor,
       appBar: const CustomAppBar(
         title: 'Favourites',
         backColor: Colors.transparent,
@@ -46,7 +47,8 @@ class FavouritesScreen extends StatelessWidget {
                       style: TitleStyle.style18,
                     ),
                   )
-                : FavouritesScreenBody(favouriteVideos: favouriteVideos, currentUser: currentUser);
+                : FavouritesScreenBody(
+                    favouriteVideos: favouriteVideos, currentUser: currentUser);
           } else {
             return const Center(
               child: CircularProgressIndicator(
