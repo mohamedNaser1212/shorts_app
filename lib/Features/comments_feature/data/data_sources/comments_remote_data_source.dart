@@ -15,7 +15,7 @@ abstract class CommentsRemoteDataSource {
     required String videoId,
   });
 
-  Future<bool> addCommentToVideo({
+  Future<List<CommentEntity>> addCommentToVideo({
     required CommentEntity comment,
     required VideoEntity video,
   });
@@ -64,7 +64,8 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     }
 
     List<CommentModel> fetchedComments = querySnapshot.docs.map((doc) {
-      CommentModel comment = CommentModel.fromJson(doc.data() as Map<String, dynamic>);
+      CommentModel comment =
+          CommentModel.fromJson(doc.data() as Map<String, dynamic>);
       comment.id = doc.id;
       return comment;
     }).toList();
@@ -95,7 +96,7 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
   }
 
   @override
-  Future<bool> addCommentToVideo({
+  Future<List<CommentEntity>> addCommentToVideo({
     required CommentEntity comment,
     required VideoEntity video,
   }) async {
@@ -113,7 +114,7 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
       subCollectionPath: 'videos/${video.id}/comments',
     );
 
-    return true;
+    return [];
   }
 
   @override

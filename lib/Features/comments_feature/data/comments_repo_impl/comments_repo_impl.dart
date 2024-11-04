@@ -27,14 +27,14 @@ class CommentsRepoImpl implements CommentsRepo {
   }) async {
     return repoManager.call(
       action: () async {
-        await commentsRemoteDataSource.addCommentToVideo(
+        final comments = await commentsRemoteDataSource.addCommentToVideo(
           comment: comment,
           video: video,
         );
 
-        final comments = await commentsLocalDataSource.getComments(
-          videoId: video.id,
-        );
+        // await commentsLocalDataSource.getComments(
+        //   videoId: video.id,
+        // );
         // comments.add(comment);
         await commentsLocalDataSource.saveComments(comments);
         await getVideoComments(videoId: video.id, page: 0);
@@ -54,8 +54,8 @@ class CommentsRepoImpl implements CommentsRepo {
           videoId: videoId,
           page: page,
         );
-       
-       // await commentsLocalDataSource.saveComments(comments);
+
+        // await commentsLocalDataSource.saveComments(comments);
         return comments;
       },
     );
