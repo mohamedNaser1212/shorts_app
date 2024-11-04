@@ -1,6 +1,7 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/comments_count_use_case.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/show_comments_use_case.dart';
+
 import '../../../domain/comments_entity/comments_entity.dart';
 
 part 'comments_state.dart';
@@ -49,13 +50,18 @@ class CommentsCubit extends Cubit<CommentsState> {
     );
   }
 
+  final Map<String, num> commentsCount = {};
+
   Future<num> getCommentsCount({required String videoId}) async {
     emit(GetCommentsCountLoadingState());
 
-    final result = await getCommentsCountUseCase.getCommentsCount(videoId: videoId);
+    final result =
+        await getCommentsCountUseCase.getCommentsCount(videoId: videoId);
     result.fold(
       (failure) => emit(GetCommentsCountErrorState(message: failure.message)),
       (count) {
+        commentsCount[videoId] = count;
+        print('Comments count: $count');
         emit(GetCommentsCountSuccessState(commentsCount: count));
       },
     );

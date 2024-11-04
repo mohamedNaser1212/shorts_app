@@ -26,15 +26,11 @@ class CommentsIconWidget extends StatelessWidget {
         const SizedBox(height: 10),
         BlocBuilder<CommentsCubit, CommentsState>(
           builder: (context, state) {
-            if (state is GetCommentsCountSuccessState) {
-              return CustomTitle(
-                title: '${state.commentsCount}',
-                style: TitleStyle.style16,
-                color: ColorController.whiteColor,
-              );
-            }
-            return const CustomTitle(
-              title: '0',
+            final commentsCount = CommentsCubit.get(context).commentsCount;
+            final count = commentsCount[videoEntity.id] ?? 0;
+
+            return CustomTitle(
+              title: count.toString(),
               style: TitleStyle.style16,
               color: ColorController.whiteColor,
             );
