@@ -38,13 +38,12 @@ import 'package:shorts/Features/videos_feature/presentation/video_cubit/share_vi
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
 import 'package:shorts/core/network/Hive_manager/hive_helper.dart';
 import 'package:shorts/core/network/Hive_manager/hive_manager.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper_impl.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/user_info/data/user_info_data_sources/user_info_local_data_source.dart';
 import 'package:shorts/core/user_info/data/user_info_data_sources/user_info_remote_data_source.dart';
 import 'package:shorts/core/user_info/domain/user_info_repo/user_info_repo.dart';
-import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
-
 import '../../Features/authentication_feature/data/authentication_data_sources/authentication_remote_data_source.dart';
 import '../../Features/authentication_feature/domain/authentication_repo/authentication_repo.dart';
 import '../../Features/authentication_feature/domain/authentication_use_case/login_use_case.dart';
@@ -142,7 +141,6 @@ Future<void> setUpServiceLocator() async {
         shareVideoUseCase: getIt.get<ShareVideoUseCase>(),
       ));
 
-
   getIt.registerSingleton<AuthenticationRemoteDataSource>(
       AuthenticationDataSourceImpl(
     firebaseHelper: getIt.get<FirebaseHelper>(),
@@ -229,7 +227,7 @@ Future<void> setUpServiceLocator() async {
     authenticationRepo: getIt.get<AuthenticationRepo>(),
   ));
   getIt.registerSingleton<DeleteCommentUseCase>(DeleteCommentUseCase(
-     commentsRepo: getIt.get<CommentsRepo>(),
+    commentsRepo: getIt.get<CommentsRepo>(),
   ));
 
   getIt.registerSingleton<UpdateUserDataRemoteDataSource>(
@@ -245,6 +243,11 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<UpdateUserDataUseCase>(UpdateUserDataUseCase(
     updateRepo: getIt.get<UpdateUserDataRepo>(),
   ));
+  // getIt.registerSingleton<GetCollectionAfterDocUseCase>(
+  //     GetCollectionAfterDocUseCase(
+  //   commentsRepo: getIt.get<CommentsRepo>(),
+  //   //updateRepo: getIt.get<UpdateUserDataRepo>(),
+  // ));
   getIt.registerFactory<UpdateUserDataCubit>(() => UpdateUserDataCubit(
         updateUserDataUseCase: getIt.get<UpdateUserDataUseCase>(),
       ));
@@ -256,6 +259,7 @@ Future<void> setUpServiceLocator() async {
   getIt.registerFactory<CommentsCubit>(() => CommentsCubit(
         getCommentsUseCase: getIt.get<GetCommentsUseCase>(),
         getCommentsCountUseCase: getIt.get<GetCommentsCountUseCase>(),
+    //  getCollectionAfterDocUseCase: getIt.get<GetCollectionAfterDocUseCase>(),
       ));
   getIt.registerFactory<AddCommentsCubit>(() => AddCommentsCubit(
         addCommentsUseCase: getIt.get<AddCommentsUseCase>(),

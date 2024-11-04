@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 
@@ -10,7 +11,11 @@ abstract class CommentsRepo {
       required String videoId,
     required int page,
   });
-  
+    Future<Either<Failure,  DocumentSnapshot?>> getStartAfterDocument(
+    {
+      required String videoId
+    }
+  );
   Future<Either<Failure, List<CommentEntity>>> addCommentToVideo({
     required CommentEntity comment,
     required VideoEntity video,

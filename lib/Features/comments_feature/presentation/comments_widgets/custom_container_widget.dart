@@ -2,10 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/custom_container_widget_body.dart';
-import 'package:shorts/Features/comments_feature/presentation/comments_widgets/delete_comment_icon_widget.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_contents_screen.dart';
 
-import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 
 class CustomContainerWidget extends StatelessWidget {
   const CustomContainerWidget({

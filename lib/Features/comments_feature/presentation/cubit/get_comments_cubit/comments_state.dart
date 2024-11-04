@@ -6,8 +6,8 @@ class CommentsState {}
 class GetCommentsLoadingState extends CommentsState {}
 
 class GetCommentsSuccessState extends CommentsState {
-  final List<CommentEntity> comments;
-  GetCommentsSuccessState({required this.comments});
+  final List<CommentEntity>? comments;
+  GetCommentsSuccessState({ this.comments});
 }
 
 class GetCommentsErrorState extends CommentsState {

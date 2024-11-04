@@ -5,7 +5,7 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/share_video_cubit/share_videos_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_owner_info.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_icons_section.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_action_buttons.dart';
 import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 

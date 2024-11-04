@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 import 'package:shorts/Features/comments_feature/data/data_sources/comments_local_data_source.dart';
 import 'package:shorts/Features/comments_feature/data/data_sources/comments_remote_data_source.dart';
@@ -36,6 +37,7 @@ class CommentsRepoImpl implements CommentsRepo {
         );
         // comments.add(comment);
         await commentsLocalDataSource.saveComments(comments);
+        await getVideoComments(videoId: video.id, page: 0);
         return comments;
       },
     );
@@ -52,7 +54,8 @@ class CommentsRepoImpl implements CommentsRepo {
           videoId: videoId,
           page: page,
         );
-        await commentsLocalDataSource.saveComments(comments);
+       
+       // await commentsLocalDataSource.saveComments(comments);
         return comments;
       },
     );
@@ -86,6 +89,19 @@ class CommentsRepoImpl implements CommentsRepo {
         );
         print('success: $success');
         return success;
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, DocumentSnapshot?>> getStartAfterDocument(
+      {required String videoId}) {
+    return repoManager.call(
+      action: () async {
+        //  final success = await commentsRemoteDataSource.getStartAfterDocument(
+        //     videoId: videoId,
+        //   );
+        //   return success;
       },
     );
   }
