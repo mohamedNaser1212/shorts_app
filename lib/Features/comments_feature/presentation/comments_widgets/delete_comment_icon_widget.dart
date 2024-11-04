@@ -29,9 +29,9 @@ class DeleteCommentIconWidget extends StatelessWidget {
           size: 25,
         ),
         onPressed: () {
-          CommentsCubit.get(context).comments.removeWhere(
-                (element) => element.id == comment.id,
-              );
+          // CommentsCubit.get(context).comments.removeWhere(
+          //       (element) => element.id == comment.id,
+          //     );
       
           print(comment.id);
           AddCommentsCubit.get(context).deleteComment(

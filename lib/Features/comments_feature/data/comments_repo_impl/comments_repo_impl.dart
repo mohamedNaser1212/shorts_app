@@ -37,6 +37,7 @@ class CommentsRepoImpl implements CommentsRepo {
         );
         // comments.add(comment);
         await commentsLocalDataSource.saveComments(comments);
+        await getVideoComments(videoId: video.id, page: 0);
         return comments;
       },
     );

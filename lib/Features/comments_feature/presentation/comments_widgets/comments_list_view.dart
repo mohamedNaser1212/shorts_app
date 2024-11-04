@@ -15,15 +15,17 @@ class CommentsListView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final comments = CommentsCubit.get(context).videoComments[state.widget.videoEntity.id] ?? [];
+    
     return ListView.separated(
       controller: scrollController,
       padding: EdgeInsets.zero,
       separatorBuilder: (context, index) => const SizedBox(
         height: 10,
       ),
-      itemCount: CommentsCubit.get(context).comments.length,
+      itemCount: comments.length,
       itemBuilder: (context, index) {
-        final comment = CommentsCubit.get(context).comments[index];
+        final comment = comments[index];
         return CommentItemWidget(
           comment: comment,
           state: state,

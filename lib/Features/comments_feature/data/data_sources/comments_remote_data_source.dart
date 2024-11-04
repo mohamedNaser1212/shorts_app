@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
+
 import '../../../videos_feature/domain/video_entity/video_entity.dart';
 import '../model/comments_model.dart';
 
@@ -33,9 +34,7 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     required this.firebaseHelper,
   });
 
-  List<CommentModel> comments = [];
-  DocumentSnapshot? lastComment;
-  bool hasMoreComments = true;
+  final Map<String, DocumentSnapshot?> lastComments = {};
   final int limit = 7;
 
   @override
@@ -43,68 +42,42 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     required String videoId,
     required int page,
   }) async {
- 
+    List<CommentModel> comments = [];
+    bool hasMoreComments = true;
 
- comments = [];
-    // If there are no more comments to fetch, return the existing list
-    if (!hasMoreComments) return comments;
-
-    // Set the limit of comments to fetch per page
-    int currentLimit = 7;
-
-    // Create the query for fetching comments
     Query commentsQuery = FirebaseFirestore.instance
         .collection('videos')
         .doc(videoId)
         .collection('comments')
         .orderBy('timestamp', descending: true)
-        .limit(currentLimit);
+        .limit(limit);
 
-
-    if (page > 0 && lastComment != null) {
-      commentsQuery = commentsQuery.startAfterDocument(lastComment!);
+    if (page > 0 && lastComments[videoId] != null) {
+      commentsQuery = commentsQuery.startAfterDocument(lastComments[videoId]!);
     }
 
-    // Fetch the comments from Firestore
     final querySnapshot = await commentsQuery.get();
 
-
-    if (querySnapshot.docs.isEmpty) {     
+    if (querySnapshot.docs.isEmpty) {
       hasMoreComments = false;
       return comments;
     }
 
-
     List<CommentModel> fetchedComments = querySnapshot.docs.map((doc) {
-      CommentModel comment =
-          CommentModel.fromJson(doc.data() as Map<String, dynamic>);
+      CommentModel comment = CommentModel.fromJson(doc.data() as Map<String, dynamic>);
       comment.id = doc.id;
       return comment;
     }).toList();
 
-    // Update the last fetched comment for paginationA
-    lastComment = querySnapshot.docs.last;
+    lastComments[videoId] = querySnapshot.docs.last;
 
-    if(lastComment == null){
-      hasMoreComments = false;
+    comments.addAll(fetchedComments);
 
-      return comments;
-    }
-
-    // Append only new comments to avoid duplicates
-     comments=[];
-    for (var newComment in fetchedComments) {
-      if (!comments.any((c) => c.id == newComment.id)) {
-        comments.add(newComment);
-      }
-    }
-
-    // If fetched comments are less than the limit, mark no more comments are left
-    if (fetchedComments.length < currentLimit) {
+    if (fetchedComments.length < limit) {
       hasMoreComments = false;
     }
-    print('comments: ${comments.length}');
 
+    print('Comments for video $videoId: ${comments.length}');
     return comments;
   }
 
@@ -126,7 +99,6 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     required CommentEntity comment,
     required VideoEntity video,
   }) async {
-    // Add the comment to the video comments sub-collection
     await firebaseHelper.addDocumentWithAutoId(
       collectionPath: 'videos',
       data: comment.toJson(),
@@ -134,7 +106,6 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
       subCollectionPath: 'comments',
     );
 
-    // Add the comment to the user's comments sub-collection
     await firebaseHelper.addDocumentWithAutoId(
       collectionPath: 'users',
       data: comment.toJson(),
