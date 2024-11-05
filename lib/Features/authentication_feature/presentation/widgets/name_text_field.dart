@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../../../../core/utils/constants/consts.dart';
 import '../../../../core/managers/field_validaltor/fields_validator.dart';
+import '../../../../core/utils/constants/consts.dart';
 import '../../../../core/widgets/reusable_text_form_field.dart';
 
 class NameField extends StatelessWidget {
@@ -17,6 +17,7 @@ class NameField extends StatelessWidget {
       keyboardType: TextInputType.text,
       activeColor: defaultLightColor,
       prefix: const Icon(Icons.person),
+      isCharacterCountEnabled: true,
     );
   }
 }

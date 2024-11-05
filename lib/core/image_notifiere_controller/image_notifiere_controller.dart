@@ -28,10 +28,10 @@ class ImageNotifierController extends ChangeNotifier {
       final uploadedProfilePic = await ImagePickerHelper.uploadImage(
           imageFileNotifier.value!, fileName);
       profilePicNotifier.value = uploadedProfilePic;
-      ToastHelper.showToast(
-        message: 'Image uploaded successfully',
-        color: Colors.green,
-      );
+      // ToastHelper.showToast(
+      //   message: 'Image uploaded successfully',
+      //   color: Colors.green,
+      // );
       return uploadedProfilePic;
     } catch (e) {
       ToastHelper.showToast(

@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/core/widgets/password_text_field.dart';
 
+import '../../../../core/functions/navigations_functions.dart';
 import '../../../../core/widgets/email_text_field.dart';
+import '../screens/register_screen.dart';
 import 'check_user_status_text_widget.dart';
 import 'google_sign_in_widget.dart';
 import 'login_botton.dart';
@@ -60,7 +62,15 @@ class LoginScreenBodyState extends State<LoginScreenBody> {
                 const SizedBox(height: 30),
                 LoginButton(state: this),
                 const SizedBox(height: 30),
-                const AuthStatusTextWidget(),
+                AuthStatusTextWidget(
+                  title: 'Don\'t Have An Account?',
+                  onTap: () {
+                    NavigationManager.navigateTo(
+                      context: context,
+                      screen: const RegisterScreen(),
+                    );
+                  },
+                ),
 
                 const SizedBox(height: 30),
                 const ORTextWidget(),

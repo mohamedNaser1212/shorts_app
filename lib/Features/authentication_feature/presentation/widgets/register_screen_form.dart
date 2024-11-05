@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/authentication_feature/presentation/widgets/auth_status_text_widget.dart';
+import 'package:shorts/Features/authentication_feature/presentation/screens/login_screen.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/login_header.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_form_body.dart';
+import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/image_notifiere_controller/image_notifiere_controller.dart';
 import 'package:shorts/core/widgets/register_botton.dart';
+
+import 'check_user_status_text_widget.dart';
+import 'google_sign_in_widget.dart';
+import 'or_text_widget.dart';
 
 class RegisterScreenForm extends StatefulWidget {
   const RegisterScreenForm({
@@ -66,9 +71,20 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
             RegisterFormBody(state: this),
             const SizedBox(height: 10),
             RegisterButton(state: this),
-            const SizedBox(height: 10),
-            AuthStatusTextWidget.register(context: context),
-            const SizedBox(height: 10),
+            const SizedBox(height: 20),
+            AuthStatusTextWidget(
+              onTap: () {
+                NavigationManager.navigateAndFinish(
+                    context: context, screen: const LoginScreen());
+              },
+              title: 'Already have an account? ',
+            ),
+            const SizedBox(height: 20),
+            const ORTextWidget(),
+            const SizedBox(height: 20),
+
+            const GoogleSignInWidget()
+
             // ValueListenableBuilder<File?>(
             //   valueListenable: imageNotifierController.imageFileNotifier,
             //   builder: (context, imageFile, child) {

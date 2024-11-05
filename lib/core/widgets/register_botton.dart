@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
+import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
 
-import 'custom_elevated_botton.dart';
+import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
+import '../../Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
+import '../functions/toast_function.dart';
+import '../managers/styles_manager/color_manager.dart';
 
 class RegisterButton extends StatelessWidget {
   const RegisterButton({
@@ -15,11 +19,51 @@ class RegisterButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return Column(
       children: [
-        CustomElevatedButton.registerButton(
-          context: context,
-          state: state,
+        ReusableElevatedButton(
+          onPressed: () => _registerAction(
+            context: context,
+            state: state,
+          ),
+          label: 'Sign Up',
+          backColor: ColorController.purpleColor,
         ),
+        // CustomElevatedButton.loginButton(
+        //   state: state,
+        //   context: context,
+        //
+        //
+        // ),
       ],
     );
+  }
+
+  Future<void> _registerAction({
+    required BuildContext context,
+    required RegisterScreenFormState state,
+  }) async {
+    if (state.widget.formKey.currentState!.validate()) {
+      // Check if an image is selected and attempt to upload it
+      final profilePicUrl = await state.imageNotifierController.uploadImage();
+      if (profilePicUrl != null) {
+        // Set the profile picture URL in the registration model only if upload was successful
+        RegisterCubit.get(context).userRegister(
+          requestModel: RegisterRequestModel(
+            email: state.emailController.text,
+            password: state.passwordController.text,
+            name: state.nameController.text,
+            phone: state.phoneController.text,
+            bio: state.bioController.text.isNotEmpty
+                ? state.bioController.text
+                : 'Hey there I am using Shorts',
+            profilePic: profilePicUrl,
+          ),
+        );
+      } else {
+        ToastHelper.showToast(
+          message: 'Image upload failed. Please try again.',
+          color: Colors.red,
+        );
+      }
+    }
   }
 }
