@@ -4,3 +4,4 @@ import 'package:flutter/material.dart';
 var defaultLightColor = Colors.deepOrange;
 String constFontFamily = 'Inter';
 String constSplashImage = 'assets/images/groot.jpg';
+

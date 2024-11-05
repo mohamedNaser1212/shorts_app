@@ -20,7 +20,7 @@ class VideoListItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => VideoController(videoEntity.videoUrl),
+      create: (_) => VideoController(  favouriteEntity?.videoUrl??         videoEntity.videoUrl),
       child: Consumer<VideoController>(
         builder: _builder,
       ),

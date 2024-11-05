@@ -63,13 +63,13 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
             itemBuilder: (context, index) {
               final video = videos[index];
               final isShared = video.sharedBy != null;
-
+            
               CommentsCubit.get(context).getCommentsCount(
                 videoId: video.id,
               );
-              CommentsCubit.get(context)
-                  .getComments(videoId: video.id, page: 0);
-
+              // CommentsCubit.get(context)
+              //     .getComments(videoId: video.id, page: 0);
+            
               return VideoListItem(
                 videoEntity: video,
                 isShared: isShared,

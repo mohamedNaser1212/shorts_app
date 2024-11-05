@@ -76,17 +76,10 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
         }
       },
       builder: (context, state) {
-        if (state is GetCommentsLoadingState && commentsList.isEmpty) {
-          return const Center(child: CircularProgressIndicator());
-        }
-
         return BlocBuilder<AddCommentsCubit, AddCommentsState>(
           builder: (context, addState) {
             return CustomProgressIndicator(
-              isLoading: addState is AddCommentsLoadingState
-              // ||
-              //     addState is DeleteCommentLoadingState
-              ,
+              isLoading: addState is AddCommentsLoadingState,
               child: CommentsBottomSheetBody(
                 comments: commentsList,
                 state: this,

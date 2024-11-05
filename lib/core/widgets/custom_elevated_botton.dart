@@ -6,7 +6,7 @@ import 'package:shorts/Features/favourites_feature/presentation/screens/favourit
 import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
-import 'package:shorts/Features/videos_feature/presentation/screens/video_page.dart';
+import 'package:shorts/Features/videos_feature/presentation/screens/video_screen.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_screen.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';

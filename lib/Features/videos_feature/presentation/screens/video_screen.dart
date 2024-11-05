@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_video_grid_view_body.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/videos_page_view_widget.dart';
@@ -38,6 +39,9 @@ class VideosScreen extends StatelessWidget {
 
   Widget _videosBuilder(BuildContext context, VideoState state) {
     if (state is GetVideoSuccess) {
+      CommentsCubit.get(context)
+          .getCommentsCount(videoId: state.videos.first.id!);
+
       if (userProfileVideosGridViewBody != null) {
         return VideosPageViewWidget(
           userProfileVideosGridViewBodyState: userProfileVideosGridViewBody,
@@ -45,10 +49,6 @@ class VideosScreen extends StatelessWidget {
       } else {
         return const VideosPageViewWidget();
       }
-
-      // return VideosPageViewWidget(
-      //   userProfileVideosGridViewBodyState: userProfileVideosGridViewBody,
-      // );
     } else if (state is VideoUploadErrorState) {
       return Center(
         child: CustomTitle(

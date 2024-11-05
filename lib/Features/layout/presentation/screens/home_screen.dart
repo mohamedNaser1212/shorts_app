@@ -8,10 +8,9 @@ class HomeScreen extends StatelessWidget {
   final UserEntity currentUser;
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: const CustomAppBar(title: 'Shorts', showLeadingIcon: false,),
+    return const Scaffold(
+      appBar: CustomAppBar(title: 'Shorts', showLeadingIcon: false,),
       body: HomeScreenBody(
-        currentUser: currentUser,
       ),
     );
   }
