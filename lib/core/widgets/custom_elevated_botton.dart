@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/login_screen_body.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
@@ -14,6 +15,7 @@ import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
 import 'package:uuid/uuid.dart';
+
 import '../../Features/authentication_feature/data/user_model/login_request_model.dart';
 import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
 import '../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
@@ -165,21 +167,21 @@ class CustomElevatedButton extends StatelessWidget {
 
     // // Only update fields that have changed
     final updates = <String, dynamic>{};
-    //
-    // if (currentUser!.email != editState.emailController.text) {
-    //   updates['email'] = editState.emailController.text;
-    // }
-    // if (currentUser.name != editState.nameController.text) {
-    //   updates['name'] = editState.nameController.text;
-    // }
-    // if (currentUser.phone != editState.phoneController.text) {
-    //   updates['phone'] = editState.phoneController.text;
-    // }
-    // final newImageUrl =
-    //     editState.imageNotifierController.profilePicNotifier.value;
-    // if (currentUser.profilePic != newImageUrl) {
-    //   updates['imageUrl'] = newImageUrl;
-    // }
+
+    if (currentUser!.email != editState.emailController.text) {
+      updates['email'] = editState.emailController.text;
+    }
+    if (currentUser.name != editState.nameController.text) {
+      updates['name'] = editState.nameController.text;
+    }
+    if (currentUser.phone != editState.phoneController.text) {
+      updates['phone'] = editState.phoneController.text;
+    }
+    final newImageUrl =
+        editState.imageNotifierController.profilePicNotifier.value;
+    if (currentUser.profilePic != newImageUrl) {
+      updates['imageUrl'] = newImageUrl;
+    }
 
     if (updates.isNotEmpty) {
       cubit.updateUserData(

@@ -24,8 +24,9 @@ class VideoOwnerInfoBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         InkWell(
-            onTap: () => _onTap(context: context, state: state),
-            child: UserProfilePicture(state: state),),
+          onTap: () => _onTap(context: context, state: state),
+          child: UserProfilePicture(state: state),
+        ),
         const SizedBox(
           width: 20,
           height: 20,

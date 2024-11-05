@@ -21,19 +21,20 @@ class VideoOwnerNameAndFollow extends StatelessWidget {
     return Row(
       children: [
         InkWell(
-                    onTap: () => _onTap(context: context, state: state),
-                    child: CustomTitle(
-                      title: userName,
-                      style: TitleStyle.style16,
-                      color: ColorController.whiteColor,
-                    ),
-                  ),
+          onTap: () => _onTap(context: context, state: state),
+          child: CustomTitle(
+            title: userName,
+            style: TitleStyle.style16,
+            color: ColorController.whiteColor,
+          ),
+        ),
         const SizedBox(width: 10),
         const FollowTextWidget(),
       ],
     );
   }
-   void _onTap({
+
+  void _onTap({
     required BuildContext context,
     required VideoContentsScreenState state,
   }) {
