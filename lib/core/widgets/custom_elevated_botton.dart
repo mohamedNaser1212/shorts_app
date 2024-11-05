@@ -1,5 +1,4 @@
 import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/login_screen_body.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
@@ -13,10 +12,8 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploa
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
-import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
 import 'package:uuid/uuid.dart';
-
 import '../../Features/authentication_feature/data/user_model/login_request_model.dart';
 import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
 import '../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
@@ -77,12 +74,10 @@ class CustomElevatedButton extends StatelessWidget {
 
   factory CustomElevatedButton.favouritesPageButton({
     required BuildContext context,
-    required UserEntity currentUser,
   }) {
     return CustomElevatedButton._(
       onPressed: () => _navigateToFavouritesPage(
         context: context,
-        currentUser: currentUser,
       ),
       label: 'Favourites',
     );
@@ -250,11 +245,10 @@ class CustomElevatedButton extends StatelessWidget {
   // Private navigation methods
   static void _navigateToFavouritesPage({
     required BuildContext context,
-    required UserEntity currentUser,
   }) {
     NavigationManager.navigateTo(
       context: context,
-      screen: FavouritesScreen(currentUser: currentUser),
+      screen: const FavouritesScreen(),
     );
   }
 

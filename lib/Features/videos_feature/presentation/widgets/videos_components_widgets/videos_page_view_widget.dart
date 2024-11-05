@@ -72,7 +72,6 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
 
               return VideoListItem(
                 videoEntity: video,
-                userModel: video.user,
                 isShared: isShared,
               );
             },

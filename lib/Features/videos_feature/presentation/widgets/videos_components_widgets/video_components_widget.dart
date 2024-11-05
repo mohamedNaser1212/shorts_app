@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/favourites_feature/domain/favourites_entity/favourite_entitiy.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/animated_pause_icon.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/slider_widget.dart';

@@ -16,20 +16,20 @@ class HomeScreenBody extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(8.0),
+    return const Padding(
+      padding: EdgeInsets.all(8.0),
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          const ChooseVideoPageElevatedButton(),
-          const SizedBox(height: 20),
-          const VideoPageElevatedButton(),
-          const SizedBox(height: 20),
-          FavouritesPageElevatedButton(currentUser: currentUser),
-          const SizedBox(height: 20),
-          const EditProfilePageElevatedButton(),
-          const SizedBox(height: 10),
+          ChooseVideoPageElevatedButton(),
+          SizedBox(height: 20),
+          VideoPageElevatedButton(),
+          SizedBox(height: 20),
+          FavouritesPageElevatedButton(),
+          SizedBox(height: 20),
+          EditProfilePageElevatedButton(),
+          SizedBox(height: 10),
         ],
       ),
     );
