@@ -28,7 +28,8 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   void initState() {
     super.initState();
 
-    //  _loadComments();
+  
+   _loadComments();
 
     scrollController.addListener(() {
       if (!allCommentsLoaded &&
@@ -83,8 +84,10 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
         return BlocBuilder<AddCommentsCubit, AddCommentsState>(
           builder: (context, addState) {
             return CustomProgressIndicator(
-              isLoading: addState is AddCommentsLoadingState ||
-                  addState is DeleteCommentLoadingState,
+              isLoading: addState is AddCommentsLoadingState
+              // ||
+              //     addState is DeleteCommentLoadingState
+              ,
               child: CommentsBottomSheetBody(
                 comments: commentsList,
                 state: this,

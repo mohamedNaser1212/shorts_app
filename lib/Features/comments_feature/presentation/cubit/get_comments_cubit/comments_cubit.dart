@@ -18,12 +18,24 @@ class CommentsCubit extends Cubit<CommentsState> {
 
   final Map<String, List<CommentEntity>> videoComments = {};
   final Map<String, bool> hasMoreCommentsForVideo = {};
+  final Map<String, num> commentsCount = {};
+
+  Future<void> getCommentsAndCount(String videoId) async {
+    await getComments(videoId: videoId, page: 0);
+    await getCommentsCount(videoId: videoId);
+  }
+
+  Future<void> refreshCommentsForVideo({required String videoId}) async {
+    videoComments[videoId] = [];
+    hasMoreCommentsForVideo[videoId] = true;
+    await getCommentsAndCount(videoId);
+  }
 
   Future<void> getComments({
     required String videoId,
     required int page,
   }) async {
-    hasMoreCommentsForVideo[videoId] ??= true; // Initialize if null
+    hasMoreCommentsForVideo[videoId] ??= true;
 
     if (!hasMoreCommentsForVideo[videoId]!) return;
 
@@ -38,19 +50,15 @@ class CommentsCubit extends Cubit<CommentsState> {
       },
       (fetchedComments) {
         hasMoreCommentsForVideo[videoId] = fetchedComments.length == 7;
-
         final existingComments = videoComments[videoId] ?? [];
         videoComments[videoId] = [
           ...existingComments,
           ...fetchedComments,
         ];
-
         emit(GetCommentsSuccessState(comments: videoComments[videoId]!));
       },
     );
   }
-
-  final Map<String, num> commentsCount = {};
 
   Future<num> getCommentsCount({required String videoId}) async {
     emit(GetCommentsCountLoadingState());
@@ -61,7 +69,6 @@ class CommentsCubit extends Cubit<CommentsState> {
       (failure) => emit(GetCommentsCountErrorState(message: failure.message)),
       (count) {
         commentsCount[videoId] = count;
-        print('Comments count: $count');
         emit(GetCommentsCountSuccessState(commentsCount: count));
       },
     );

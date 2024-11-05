@@ -17,45 +17,32 @@ class AddCommentElevatedButton extends StatefulWidget {
 
   @override
   State<AddCommentElevatedButton> createState() =>
-      AddCommentElevatedButtonState();
+      _AddCommentElevatedButtonState();
 }
 
-class AddCommentElevatedButtonState extends State<AddCommentElevatedButton> {
+class _AddCommentElevatedButtonState extends State<AddCommentElevatedButton> {
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<CommentsCubit, CommentsState>(
+    return BlocConsumer<AddCommentsCubit, AddCommentsState>(
+      listener: (context, state) {
+        if (state is AddCommentsSuccessState) {
+          // Refresh comments on success
+          CommentsCubit.get(context).refreshCommentsForVideo(
+            videoId: widget.state.widget.videoEntity.id,
+          );
+        } else if (state is AddCommentsErrorState) {
+          ToastHelper.showToast(
+            message: state.message,
+          );
+        }
+      },
       builder: (context, state) {
-        return BlocConsumer<AddCommentsCubit, AddCommentsState>(
-          listener: (context, state) {
-            if (state is AddCommentsSuccessState) {
-              // Clear comments and reload after a successful addition
-              widget.state.commentsList.clear();
-              widget.state.currentPage = 0;
-              widget.state.allCommentsLoaded = false;
-
-              CommentsCubit.get(context).getComments(
-                videoId: widget.state.widget.videoEntity.id,
-                page: 0,
-              );
-              CommentsCubit.get(context).getCommentsCount(
-                videoId: widget.state.widget.videoEntity.id,
-                // page: 0,
-              );
-            } else if (state is AddCommentsErrorState) {
-              ToastHelper.showToast(
-                message: state.message,
-              );
-            }
-          },
-          builder: (context, state) {
-            return ElevatedButton(
-              onPressed: () => _onPressed(context: context),
-              child: const CustomTitle(
-                title: 'Add a Comment',
-                style: TitleStyle.style14,
-              ),
-            );
-          },
+        return ElevatedButton(
+          onPressed: () => _onPressed(context: context),
+          child: const CustomTitle(
+            title: 'Add a Comment',
+            style: TitleStyle.style14,
+          ),
         );
       },
     );
