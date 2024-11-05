@@ -28,8 +28,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   void initState() {
     super.initState();
 
-  
-   _loadComments();
+    _loadComments();
 
     scrollController.addListener(() {
       if (!allCommentsLoaded &&

@@ -20,16 +20,16 @@ class CommentsCubit extends Cubit<CommentsState> {
   final Map<String, bool> hasMoreCommentsForVideo = {};
   final Map<String, num> commentsCount = {};
 
-  Future<void> getCommentsAndCount(String videoId) async {
-    await getComments(videoId: videoId, page: 0);
-    await getCommentsCount(videoId: videoId);
-  }
-
-  Future<void> refreshCommentsForVideo({required String videoId}) async {
-    videoComments[videoId] = [];
-    hasMoreCommentsForVideo[videoId] = true;
-    await getCommentsAndCount(videoId);
-  }
+  // Future<void> getCommentsAndCount(String videoId) async {
+  //   await getComments(videoId: videoId, page: 0);
+  //   await getCommentsCount(videoId: videoId);
+  // }
+  //
+  // Future<void> refreshCommentsForVideo({required String videoId}) async {
+  //   videoComments[videoId] = [];
+  //   hasMoreCommentsForVideo[videoId] = true;
+  //   await getCommentsAndCount(videoId);
+  // }
 
   Future<void> getComments({
     required String videoId,
