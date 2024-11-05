@@ -4,6 +4,7 @@ import 'package:shorts/Features/profile_feature.dart/domain/use_case/update_user
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/edit_profile_screen_body.dart';
 import 'package:shorts/core/image_notifiere_controller/image_notifiere_controller.dart';
+import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/widgets/custom_app_bar.dart';
@@ -67,6 +68,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     }
 
     return Scaffold(
+      backgroundColor: ColorController.blackColor,
       appBar: const CustomAppBar(title: 'Edit Profile'),
       body: CustomProgressIndicator(
         isLoading: userState is GetUserInfoLoadingState,

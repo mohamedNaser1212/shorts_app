@@ -1,24 +1,34 @@
 import 'package:flutter/material.dart';
 
+import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/widgets/custom_title.dart';
 
-class LoginHeader extends StatelessWidget {
-  const LoginHeader({
+class AuthHeader extends StatelessWidget {
+  const AuthHeader({
     super.key,
+    required this.title,
   });
+  final String title;
 
   @override
   Widget build(BuildContext context) {
-    return const Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
+    return Row(
       children: [
-        CustomTitle(
-          title: 'Login Screen',
-          style: TitleStyle.style14,
-        ),
-        CustomTitle(
-          title: 'login now to browse our hot offers',
-          style: TitleStyle.style16,
+        Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            CustomTitle(
+              title: title,
+              style: TitleStyle.style30Bold,
+              color: ColorController.purpleColor,
+            ),
+            const SizedBox(height: 5),
+            const CustomTitle(
+              title: 'Save Soul',
+              style: TitleStyle.style16,
+              color: ColorController.greyColor,
+            ),
+          ],
         ),
       ],
     );

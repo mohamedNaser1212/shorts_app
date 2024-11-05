@@ -5,6 +5,7 @@ abstract class ColorController {
   // Primary Colors
   static const Color primaryColor = Colors.orange;
   static const Color accentColor = Colors.orangeAccent;
+  static const Color purpleColor = Color(0xff7C4DFF);
 
   // Additional Colors
   static const Color blueAccentColor = Colors.blueAccent;

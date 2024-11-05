@@ -20,7 +20,7 @@ class CustomTextFormField extends StatelessWidget {
     super.key,
     required this.label,
     this.borderRadius = 25,
-    this.activeColor = ColorController.blueAccent,
+    this.activeColor = ColorController.purpleColor,
     // required this.onTap,
     this.validator,
     this.onSubmit,
@@ -41,7 +41,7 @@ class CustomTextFormField extends StatelessWidget {
         obscureText: obscure,
         keyboardType: keyboardType,
         style: TextStyle(
-          color: ColorController.blackColor,
+          color: ColorController.whiteColor,
           fontSize: 16,
           fontFamily: constFontFamily,
         ),
@@ -51,15 +51,28 @@ class CustomTextFormField extends StatelessWidget {
         decoration: InputDecoration(
           suffixIcon: suffix,
           prefixIcon: prefix,
-          hintText:hintText ,
+          hintText: hintText,
+          hintStyle: TextStyle(
+            color: ColorController.whiteColor,
+            fontSize: 16,
+            fontFamily: constFontFamily,
+          ),
+          prefixIconColor: ColorController.whiteColor,
+          suffixIconColor: ColorController.whiteColor,
           enabledBorder: OutlineInputBorder(
             borderSide:
-                const BorderSide(width: 2.0, color: ColorController.greyColor),
+                const BorderSide(width: 2.0, color: ColorController.whiteColor),
             borderRadius: BorderRadius.all(Radius.circular(borderRadius)),
           ),
           labelText: label,
+          labelStyle: TextStyle(
+            color: ColorController.whiteColor,
+            fontSize: 16,
+            fontFamily: constFontFamily,
+          ),
           focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(color: activeColor, width: 2.0),
+            borderSide: const BorderSide(
+                color: ColorController.purpleColor, width: 2.0),
             borderRadius: BorderRadius.circular(borderRadius),
           ),
         ),

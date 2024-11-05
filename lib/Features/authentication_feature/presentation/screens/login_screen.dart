@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shorts/core/widgets/custom_app_bar.dart';
+
 import '../../../../core/functions/navigations_functions.dart';
 import '../../../../core/functions/toast_function.dart';
+import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/service_locator/service_locator.dart';
 import '../../../../core/user_info/domain/use_cases/get_user_info_use_case.dart';
 import '../../../../core/widgets/custom_progress_indicator.dart';
@@ -21,7 +22,6 @@ class LoginScreen extends StatelessWidget {
       create: (context) => LoginCubit(
         loginUseCase: getIt.get<LoginUseCase>(),
         userDataUseCase: getIt.get<GetUserInfoUseCase>(),
-
       ),
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: _loginListener,
@@ -34,7 +34,8 @@ class LoginScreen extends StatelessWidget {
     return CustomProgressIndicator(
       isLoading: state is LoginLoadingState,
       child: const Scaffold(
-        appBar: CustomAppBar(title: 'Login', showLeadingIcon: false),
+        backgroundColor: ColorController.blackColor,
+        //appBar: CustomAppBar(title: 'Login', showLeadingIcon: false),
         body: LoginScreenBody(),
       ),
     );

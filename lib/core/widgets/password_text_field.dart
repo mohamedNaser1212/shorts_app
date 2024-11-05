@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../utils/constants/consts.dart';
 import '../managers/field_validaltor/fields_validator.dart';
+import '../utils/constants/consts.dart';
 import 'reusable_text_form_field.dart';
 
 class PasswordField extends StatefulWidget {
@@ -17,8 +17,7 @@ class PasswordField extends StatefulWidget {
 }
 
 class _PasswordFieldState extends State<PasswordField> {
-  
-   bool obscure =true;
+  bool obscure = true;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +28,7 @@ class _PasswordFieldState extends State<PasswordField> {
       obscure: obscure,
       keyboardType: TextInputType.visiblePassword,
       activeColor: defaultLightColor,
-      prefix: const Icon(Icons.key_rounded),
+      prefix: const Icon(Icons.lock),
       suffix: IconButton(
         onPressed: _onPressed,
         icon: Icon(obscure ? Icons.visibility : Icons.visibility_off),
@@ -39,8 +38,6 @@ class _PasswordFieldState extends State<PasswordField> {
 
   void _onPressed() {
     obscure = !obscure;
-    setState(() {
-      
-    });
+    setState(() {});
   }
 }

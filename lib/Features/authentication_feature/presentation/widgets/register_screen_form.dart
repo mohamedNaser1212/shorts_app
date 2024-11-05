@@ -1,10 +1,9 @@
-
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/auth_status_text_widget.dart';
+import 'package:shorts/Features/authentication_feature/presentation/widgets/login_header.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_form_body.dart';
 import 'package:shorts/core/image_notifiere_controller/image_notifiere_controller.dart';
 import 'package:shorts/core/widgets/register_botton.dart';
-import 'package:shorts/Features/authentication_feature/presentation/widgets/register_header.dart';
 
 class RegisterScreenForm extends StatefulWidget {
   const RegisterScreenForm({
@@ -36,7 +35,8 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
     passwordController = TextEditingController();
     bioController = TextEditingController();
 
-    imageNotifierController = ImageNotifierController(emailController: emailController);
+    imageNotifierController =
+        ImageNotifierController(emailController: emailController);
   }
 
   @override
@@ -46,38 +46,42 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
     phoneController.dispose();
     passwordController.dispose();
     bioController.dispose();
-    imageNotifierController.dispose(); 
-    
+    imageNotifierController.dispose();
+
     super.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Form(
-      key: widget.formKey,
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          const RegisterHeader(),
-          const SizedBox(height: 15),
-          RegisterFormBody(state: this),
-          const SizedBox(height: 10),
-          RegisterButton(state: this),
-          const SizedBox(height: 10),
-          AuthStatusTextWidget.register(context: context),
-          const SizedBox(height: 10),
-          // ValueListenableBuilder<File?>(
-          //   valueListenable: imageNotifierController.imageFileNotifier,
-          //   builder: (context, imageFile, child) {
-          //     return imageFile != null
-          //         ? Image.file(imageFile, height: 100, width: 100)
-          //         : TextButton(
-          //             onPressed: imageNotifierController.pickImage,
-          //             child: const Text("Pick Image"),
-          //           );
-          //   },
-          // ),
-        ],
+    return SafeArea(
+      child: Form(
+        key: widget.formKey,
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const AuthHeader(
+              title: 'Sign Up Now',
+            ),
+            const SizedBox(height: 15),
+            RegisterFormBody(state: this),
+            const SizedBox(height: 10),
+            RegisterButton(state: this),
+            const SizedBox(height: 10),
+            AuthStatusTextWidget.register(context: context),
+            const SizedBox(height: 10),
+            // ValueListenableBuilder<File?>(
+            //   valueListenable: imageNotifierController.imageFileNotifier,
+            //   builder: (context, imageFile, child) {
+            //     return imageFile != null
+            //         ? Image.file(imageFile, height: 100, width: 100)
+            //         : TextButton(
+            //             onPressed: imageNotifierController.pickImage,
+            //             child: const Text("Pick Image"),
+            //           );
+            //   },
+            // ),
+          ],
+        ),
       ),
     );
   }

@@ -70,4 +70,11 @@ abstract class StylesManager {
     color: Colors.black,
     letterSpacing: 1.2,
   );
+  static const style30Bold = TextStyle(
+    fontSize: 30,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Inter',
+    color: Colors.black,
+    letterSpacing: 1.2,
+  );
 }
