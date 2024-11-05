@@ -2,10 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/user_profile_screen.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/videos_profile_picture.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_contents_screen.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_owner_name_and_follow_text.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
-import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/widgets/custom_read_more_widget.dart';
-import 'package:shorts/core/widgets/custom_title.dart';
 
 class VideoOwnerInfoBody extends StatelessWidget {
   const VideoOwnerInfoBody({
@@ -26,7 +25,7 @@ class VideoOwnerInfoBody extends StatelessWidget {
       children: [
         InkWell(
             onTap: () => _onTap(context: context, state: state),
-            child: UserProfilePicture(state: state)),
+            child: UserProfilePicture(state: state),),
         const SizedBox(
           width: 20,
           height: 20,
@@ -35,10 +34,9 @@ class VideoOwnerInfoBody extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              CustomTitle(
-                title: userName,
-                style: TitleStyle.style16,
-                color: ColorController.whiteColor,
+              VideoOwnerNameAndFollow(
+                userName: userName,
+                state: state,
               ),
               const SizedBox(
                 height: 20,
