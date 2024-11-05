@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
+import 'package:shorts/Features/favourites_feature/domain/favourites_entity/favourite_entitiy.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/share_video_cubit/share_videos_cubit.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_owner_info.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_action_buttons.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_owner_info.dart';
 import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 
@@ -14,10 +15,12 @@ class VideoContentsScreen extends StatefulWidget {
     super.key,
     required this.videoEntity,
     required this.isShared,
+    this.favouriteEntity,
   });
 
   final VideoEntity videoEntity;
   final bool isShared;
+  final FavouritesEntity? favouriteEntity;
 
   @override
   State<VideoContentsScreen> createState() => VideoContentsScreenState();
@@ -58,7 +61,6 @@ class VideoContentsScreenState extends State<VideoContentsScreen> {
       children: [
         VideoOwnerInfo(
           state: this,
-
         ),
         VideoActionIcons(
           videoEntity: widget.videoEntity,

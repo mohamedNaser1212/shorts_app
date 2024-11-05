@@ -12,6 +12,11 @@ abstract class StylesManager {
     fontWeight: FontWeight.normal,
     fontFamily: 'Inter',
   );
+  static const textStyle14Bold = TextStyle(
+    fontSize: 14,
+    fontWeight: FontWeight.bold,
+    fontFamily: 'Inter',
+  );
 
   static const textStyle16 = TextStyle(
     fontSize: 16,

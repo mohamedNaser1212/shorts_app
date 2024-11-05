@@ -5,6 +5,7 @@ import 'package:shorts/core/utils/constants/consts.dart';
 enum TitleStyle {
   style12,
   style14,
+  style14Bold,
   style16,
   style16Bold,
   style18,
@@ -38,6 +39,12 @@ class CustomTitle extends StatelessWidget {
     switch (style) {
       case TitleStyle.style14:
         textStyle = StylesManager.textStyle14.copyWith(
+          color: color,
+          fontFamily: constFontFamily,
+        );
+        break;
+      case TitleStyle.style14Bold:
+        textStyle = StylesManager.textStyle14Bold.copyWith(
           color: color,
           fontFamily: constFontFamily,
         );

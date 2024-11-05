@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/login_screen_body.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
@@ -7,16 +8,15 @@ import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/video_page.dart';
-
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_screen.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
-import 'package:shorts/core/widgets/email_verification_dialogue_widget.dart';
 import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
 import 'package:uuid/uuid.dart';
+
 import '../../Features/authentication_feature/data/user_model/login_request_model.dart';
 import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
 import '../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
@@ -165,34 +165,38 @@ class CustomElevatedButton extends StatelessWidget {
     final cubit = UpdateUserDataCubit.get(context);
     final userCubit = UserInfoCubit.get(context);
 
-    final currentEmail = userCubit.userEntity!.email;
-    final newEmail = editState.emailController.text;
-    final newName = editState.nameController.text;
-    final newPhone = editState.phoneController.text;
+    // Get the current user data
+    final currentUser = userCubit.userEntity;
 
-    if (currentEmail != newEmail) {
-      final shouldUpdateEmail = await showDialog<bool>(
-        context: context,
-        builder: (context) {
-          return const EmailVerificationDialogueWidget();
-        },
+    // // Only update fields that have changed
+    final updates = <String, dynamic>{};
+    //
+    // if (currentUser!.email != editState.emailController.text) {
+    //   updates['email'] = editState.emailController.text;
+    // }
+    // if (currentUser.name != editState.nameController.text) {
+    //   updates['name'] = editState.nameController.text;
+    // }
+    // if (currentUser.phone != editState.phoneController.text) {
+    //   updates['phone'] = editState.phoneController.text;
+    // }
+    // final newImageUrl =
+    //     editState.imageNotifierController.profilePicNotifier.value;
+    // if (currentUser.profilePic != newImageUrl) {
+    //   updates['imageUrl'] = newImageUrl;
+    // }
+
+    if (updates.isNotEmpty) {
+      cubit.updateUserData(
+        updateUserRequestModel: UpdateUserRequestModel(
+          email: updates['email'] ?? currentUser!.email,
+          name: updates['name'] ?? currentUser!.name,
+          phone: updates['phone'] ?? currentUser!.phone,
+          imageUrl: updates['imageUrl'] ?? currentUser!.profilePic,
+        ),
+        userId: currentUser!.id!,
       );
-
-      if (shouldUpdateEmail == false) {
-        return;
-      }
     }
-
-    cubit.updateUserData(
-      updateUserRequestModel: UpdateUserRequestModel(
-        name: newName,
-        email: newEmail,
-        phone: newPhone,
-        imageUrl:
-            editState.imageNotifierController.profilePicNotifier.value ?? '',
-      ),
-      userId: userCubit.userEntity!.id!,
-    );
   }
 
   static Future<void> _registerAction(

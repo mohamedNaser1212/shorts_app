@@ -6,7 +6,7 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_compo
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
 class FavouritesScreenBody extends StatelessWidget {
-  const FavouritesScreenBody({
+  FavouritesScreenBody({
     super.key,
     required this.favouriteVideos,
     required this.currentUser,
@@ -15,9 +15,14 @@ class FavouritesScreenBody extends StatelessWidget {
   final List<FavouritesEntity> favouriteVideos;
   final UserEntity currentUser;
 
+  final PageController _pageController = PageController();
+
+  final int pageSize = 0;
+
   @override
   Widget build(BuildContext context) {
     return PageView.builder(
+      controller: _pageController,
       itemCount: favouriteVideos.length,
       itemBuilder: (context, index) {
         final favouriteEntity = favouriteVideos[index];

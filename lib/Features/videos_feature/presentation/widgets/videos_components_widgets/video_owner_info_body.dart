@@ -25,27 +25,7 @@ class VideoOwnerInfoBody extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         InkWell(
-            onTap: () {
-              if (state.widget.videoEntity.sharedBy != null) {
-                NavigationManager.navigateTo(
-                  context: context,
-                  screen: UserProfileScreen(
-                    user: state.widget.videoEntity.sharedBy,
-                    isShared: true,
-                  ),
-                );
-              } else {
-                NavigationManager.navigateTo(
-                  context: context,
-                  screen: UserProfileScreen(
-                    videoEntity: state.widget.videoEntity,
-                    isShared: false,
-                  ),
-                );
-              }
-
-              print('Original user: ${state.widget.videoEntity.user.name}');
-            },
+            onTap: () => _onTap(context: context, state: state),
             child: UserProfilePicture(state: state)),
         const SizedBox(
           width: 20,
@@ -74,5 +54,28 @@ class VideoOwnerInfoBody extends StatelessWidget {
         ),
       ],
     );
+  }
+
+  void _onTap({
+    required BuildContext context,
+    required VideoContentsScreenState state,
+  }) {
+    if (state.widget.videoEntity.sharedBy != null) {
+      NavigationManager.navigateTo(
+        context: context,
+        screen: UserProfileScreen(
+          user: state.widget.videoEntity.sharedBy,
+          isShared: true,
+        ),
+      );
+    } else {
+      NavigationManager.navigateTo(
+        context: context,
+        screen: UserProfileScreen(
+          videoEntity: state.widget.videoEntity,
+          isShared: false,
+        ),
+      );
+    }
   }
 }

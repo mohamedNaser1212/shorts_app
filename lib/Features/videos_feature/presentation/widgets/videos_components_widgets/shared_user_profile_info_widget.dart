@@ -17,9 +17,11 @@ class SharedUserProfileInfoWidget extends StatelessWidget {
       height: MediaQuery.of(context).size.height * 0.12,
       child: VideoOwnerInfoBody(
         state: state,
-        userName: state.widget.videoEntity.sharedBy!.name,
-        description:
-            state.widget.videoEntity.sharedUserDescription ?? '',
+        userName: state.widget.favouriteEntity?.user.name ??
+            state.widget.videoEntity.sharedBy!.name,
+        description: state.widget.favouriteEntity?.user.name ??
+            state.widget.videoEntity.sharedUserDescription ??
+            '',
       ),
     );
   }
