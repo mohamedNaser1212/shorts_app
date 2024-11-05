@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/favourites_feature/domain/favourites_entity/favourite_entitiy.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_components_widget.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_player_widget.dart';
@@ -13,13 +12,13 @@ class VideoListBody extends StatefulWidget {
     required this.videoEntity,
     required this.videoController,
     required this.isShared,
-    this.favouriteEntity,
+//    this.favouriteEntity,
   });
 
   final VideoEntity videoEntity;
   final VideoController videoController;
   final bool isShared;
-  final FavouritesEntity? favouriteEntity;
+  //final FavouritesEntity? favouriteEntity;
 
   @override
   State<VideoListBody> createState() => _VideoListBodyState();
@@ -39,14 +38,11 @@ class _VideoListBodyState extends State<VideoListBody> {
                 videoProvider: widget.videoController,
               )
             else
-              ThumbnailNotifier(
-                  videoUrl: widget.favouriteEntity?.videoUrl ??
-                      widget.videoEntity.videoUrl),
+              ThumbnailNotifier(videoUrl: widget.videoEntity.videoUrl),
             VideoComponentsWidget(
               videoEntity: widget.videoEntity,
               videoProvider: widget.videoController,
               isShared: widget.isShared,
-              favouriteEntity: widget.favouriteEntity,
             ),
           ],
         ),

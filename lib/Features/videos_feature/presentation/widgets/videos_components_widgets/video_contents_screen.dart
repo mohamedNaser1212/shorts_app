@@ -15,12 +15,10 @@ class VideoContentsScreen extends StatefulWidget {
     super.key,
     required this.videoEntity,
     required this.isShared,
-    this.favouriteEntity,
   });
 
   final VideoEntity videoEntity;
   final bool isShared;
-  final FavouritesEntity? favouriteEntity;
 
   @override
   State<VideoContentsScreen> createState() => VideoContentsScreenState();

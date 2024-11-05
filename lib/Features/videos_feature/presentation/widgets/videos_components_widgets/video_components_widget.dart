@@ -12,13 +12,11 @@ class VideoComponentsWidget extends StatelessWidget {
     required this.videoEntity,
     required this.videoProvider,
     required this.isShared,
-    this.favouriteEntity,
   });
 
   final VideoEntity videoEntity;
   final VideoController videoProvider;
   final bool isShared;
-  final FavouritesEntity? favouriteEntity;
 
   @override
   Widget build(BuildContext context) {
@@ -29,7 +27,6 @@ class VideoComponentsWidget extends StatelessWidget {
           VideoContentsScreen(
             videoEntity: videoEntity,
             isShared: isShared,
-            favouriteEntity: favouriteEntity,
           ),
           SliderWidget(videoProvider: videoProvider),
         ],
