@@ -155,7 +155,7 @@ class CustomElevatedButton extends StatelessWidget {
     UserInfoCubit.get(context).signOut();
   }
 
-  static void _editProfileButtonOnPressed({
+  static Future<void> _editProfileButtonOnPressed({
     required BuildContext context,
     required EditProfileScreenState editState,
   }) async {
@@ -165,7 +165,7 @@ class CustomElevatedButton extends StatelessWidget {
     // Get the current user data
     final currentUser = userCubit.userEntity;
 
-    // // Only update fields that have changed
+    // Collect updates for fields that have changed
     final updates = <String, dynamic>{};
 
     if (currentUser!.email != editState.emailController.text) {
@@ -177,21 +177,23 @@ class CustomElevatedButton extends StatelessWidget {
     if (currentUser.phone != editState.phoneController.text) {
       updates['phone'] = editState.phoneController.text;
     }
-    final newImageUrl =
-        editState.imageNotifierController.profilePicNotifier.value;
-    if (currentUser.profilePic != newImageUrl) {
-      updates['imageUrl'] = newImageUrl;
+
+    if (editState.imageNotifierController.imageFileNotifier.value != null) {
+      final newImageUrl = await editState.imageNotifierController.uploadImage();
+      if (newImageUrl != null && currentUser.profilePic != newImageUrl) {
+        updates['profilePic'] = newImageUrl;
+      }
     }
 
     if (updates.isNotEmpty) {
       cubit.updateUserData(
         updateUserRequestModel: UpdateUserRequestModel(
-          email: updates['email'] ?? currentUser!.email,
-          name: updates['name'] ?? currentUser!.name,
-          phone: updates['phone'] ?? currentUser!.phone,
-          imageUrl: updates['imageUrl'] ?? currentUser!.profilePic,
+          email: updates['email'] ?? currentUser.email,
+          name: updates['name'] ?? currentUser.name,
+          phone: updates['phone'] ?? currentUser.phone,
+          imageUrl: updates['profilePic'] ?? currentUser.profilePic,
         ),
-        userId: currentUser!.id!,
+        userId: currentUser.id!,
       );
     }
   }
@@ -199,25 +201,28 @@ class CustomElevatedButton extends StatelessWidget {
   static Future<void> _registerAction(
       BuildContext context, RegisterScreenFormState state) async {
     if (state.widget.formKey.currentState!.validate()) {
-      print(
-          'image url ${state.imageNotifierController.profilePicNotifier.value}');
-      if (state.imageNotifierController.profilePicNotifier.value != null) {
-        state.imageNotifierController.uploadImage();
-        print('image is uploaded');
+      // Check if an image is selected and attempt to upload it
+      final profilePicUrl = await state.imageNotifierController.uploadImage();
+      if (profilePicUrl != null) {
+        // Set the profile picture URL in the registration model only if upload was successful
+        RegisterCubit.get(context).userRegister(
+          requestModel: RegisterRequestModel(
+            email: state.emailController.text,
+            password: state.passwordController.text,
+            name: state.nameController.text,
+            phone: state.phoneController.text,
+            bio: state.bioController.text.isNotEmpty
+                ? state.bioController.text
+                : 'Hey there I am using Shorts',
+            profilePic: profilePicUrl,
+          ),
+        );
+      } else {
+        ToastHelper.showToast(
+          message: 'Image upload failed. Please try again.',
+          color: Colors.red,
+        );
       }
-      RegisterCubit.get(context).userRegister(
-        requestModel: RegisterRequestModel(
-          email: state.emailController.text,
-          password: state.passwordController.text,
-          name: state.nameController.text,
-          phone: state.phoneController.text,
-          bio: state.bioController.text.isNotEmpty
-              ? state.bioController.text
-              : 'Hey there i am using Shorts',
-          profilePic:
-              state.imageNotifierController.profilePicNotifier.value ?? '',
-        ),
-      );
     }
   }
 
