@@ -30,7 +30,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     super.initState();
     imageNotifierController =
         ImageNotifierController(emailController: emailController);
-    UserInfoCubit.get(context).getUserData();
+    //  UserInfoCubit.get(context).getUserData();
   }
 
   @override

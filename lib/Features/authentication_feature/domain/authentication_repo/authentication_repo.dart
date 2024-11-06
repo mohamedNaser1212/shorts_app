@@ -14,4 +14,5 @@ abstract class AuthenticationRepo {
     required RegisterRequestModel requestModel,
   });
   Future<Either<Failure, void>> signOut();
+  Future<Either<Failure, UserEntity>> signInWithGoogle();
 }

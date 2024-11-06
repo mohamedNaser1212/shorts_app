@@ -49,12 +49,24 @@ class AuthRepoImpl implements AuthenticationRepo {
       },
     );
   }
-@override
+
+  @override
   Future<Either<Failure, void>> signOut() {
     return repoManager.call(
       action: () async {
-        await loginDataSource.signOut(); 
-        await userInfoLocalDataSourceImpl.clearUserData(); 
+        await loginDataSource.signOut();
+        await userInfoLocalDataSourceImpl.clearUserData();
+      },
+    );
+  }
+
+  @override
+  Future<Either<Failure, UserEntity>> signInWithGoogle() {
+    return repoManager.call(
+      action: () async {
+        final googleEntity = await loginDataSource.signInWithGoogle();
+        await userInfoLocalDataSourceImpl.saveUserData(user: googleEntity);
+        return googleEntity;
       },
     );
   }

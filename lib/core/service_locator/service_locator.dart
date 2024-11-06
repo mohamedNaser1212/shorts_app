@@ -44,9 +44,12 @@ import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/user_info/data/user_info_data_sources/user_info_local_data_source.dart';
 import 'package:shorts/core/user_info/data/user_info_data_sources/user_info_remote_data_source.dart';
 import 'package:shorts/core/user_info/domain/user_info_repo/user_info_repo.dart';
+
 import '../../Features/authentication_feature/data/authentication_data_sources/authentication_remote_data_source.dart';
 import '../../Features/authentication_feature/domain/authentication_repo/authentication_repo.dart';
+import '../../Features/authentication_feature/domain/authentication_use_case/google_sign_in_use_case.dart';
 import '../../Features/authentication_feature/domain/authentication_use_case/login_use_case.dart';
+import '../../Features/authentication_feature/presentation/cubit/google_sign_in_cubit/google_sign_in_cubit.dart';
 import '../../Features/comments_feature/data/comments_repo_impl/comments_repo_impl.dart';
 import '../../Features/comments_feature/data/data_sources/comments_remote_data_source.dart';
 import '../../Features/comments_feature/domain/ccommeints_repo/comments_repo.dart';
@@ -234,7 +237,9 @@ Future<void> setUpServiceLocator() async {
       UpdateUserDataSourceImpl(
     firebaseHelper: getIt.get<FirebaseHelper>(),
   ));
-
+  getIt.registerSingleton<GoogleSignInUseCase>(GoogleSignInUseCase(
+    repository: getIt.get<AuthenticationRepo>(),
+  ));
   getIt.registerSingleton<UpdateUserDataRepo>(UpdateUserDataRepoImpl(
     repoManager: getIt.get<RepoManager>(),
     updateUserDataSource: getIt.get<UpdateUserDataRemoteDataSource>(),
@@ -251,6 +256,9 @@ Future<void> setUpServiceLocator() async {
   getIt.registerFactory<UpdateUserDataCubit>(() => UpdateUserDataCubit(
         updateUserDataUseCase: getIt.get<UpdateUserDataUseCase>(),
       ));
+  getIt.registerFactory<GoogleSignInCubit>(() => GoogleSignInCubit(
+        googleSignInUseCase: getIt.get<GoogleSignInUseCase>(),
+      ));
 
   getIt.registerFactory<RegisterCubit>(() => RegisterCubit(
         userDataUseCase: getIt.get<GetUserInfoUseCase>(),
@@ -259,7 +267,7 @@ Future<void> setUpServiceLocator() async {
   getIt.registerFactory<CommentsCubit>(() => CommentsCubit(
         getCommentsUseCase: getIt.get<GetCommentsUseCase>(),
         getCommentsCountUseCase: getIt.get<GetCommentsCountUseCase>(),
-    //  getCollectionAfterDocUseCase: getIt.get<GetCollectionAfterDocUseCase>(),
+        //  getCollectionAfterDocUseCase: getIt.get<GetCollectionAfterDocUseCase>(),
       ));
   getIt.registerFactory<AddCommentsCubit>(() => AddCommentsCubit(
         addCommentsUseCase: getIt.get<AddCommentsUseCase>(),

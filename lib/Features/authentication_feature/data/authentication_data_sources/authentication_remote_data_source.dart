@@ -1,11 +1,13 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shorts/core/clear_token/clear_token.dart';
 import 'package:shorts/core/network/firebase_manager/collection_names.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/utils/constants/request_data_names.dart';
-import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
+
 import '../user_model/login_request_model.dart';
 import '../user_model/register_request_model.dart';
 import '../user_model/user_model.dart';
@@ -22,6 +24,8 @@ abstract class AuthenticationRemoteDataSource {
   });
 
   Future<void> signOut();
+
+  Future<UserModel> signInWithGoogle();
 }
 
 class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
@@ -144,5 +148,47 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       await FirebaseAuth.instance.signOut();
       fcmTokenAssigned = false;
     }
+  }
+
+  @override
+  Future<UserModel> signInWithGoogle() async {
+    final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
+    if (gUser == null) throw Exception("Google Sign-In aborted");
+
+    final GoogleSignInAuthentication gAuth = await gUser.authentication;
+    final credential = GoogleAuthProvider.credential(
+      accessToken: gAuth.accessToken,
+      idToken: gAuth.idToken,
+    );
+
+    final userCredential =
+        await FirebaseAuth.instance.signInWithCredential(credential);
+    final firebaseUser = userCredential.user;
+    final userId = firebaseUser!.uid;
+
+    // Check if user exists in Firestore
+    final userDoc =
+        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+
+    // Create UserModel with required fields
+    final userModel = UserModel(
+      id: userId,
+      email: firebaseUser.email ?? '',
+      name: firebaseUser.displayName ?? '',
+      phone: firebaseUser.phoneNumber ?? '',
+      profilePic: firebaseUser.photoURL ?? '',
+      fcmToken: await FirebaseMessaging.instance.getToken() ?? '',
+      bio: '', // Default bio if needed
+    );
+
+    // If user does not exist, add them to Firestore
+    if (!userDoc.exists) {
+      await FirebaseFirestore.instance
+          .collection('users')
+          .doc(userId)
+          .set(userModel.toJson());
+    }
+
+    return userModel;
   }
 }
