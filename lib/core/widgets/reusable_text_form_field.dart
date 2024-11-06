@@ -69,7 +69,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             controller: widget.controller,
             obscureText: widget.obscure,
             keyboardType: widget.keyboardType,
-            maxLength: 20,
+            maxLength: widget.isCharacterCountEnabled ? 20 : null,
             style: TextStyle(
               color: ColorController.whiteColor,
               fontSize: 16,
