@@ -5,9 +5,9 @@ class LoginState {}
 class LoginLoadingState extends LoginState {}
 
 class LoginSuccessState extends LoginState {
-  final UserEntity userModel;
+  final UserEntity userEntity;
   LoginSuccessState({
-    required this.userModel,
+    required this.userEntity,
   });
 }
 
@@ -19,4 +19,3 @@ class LoginErrorState extends LoginState {
 }
 
 class AppChangePasswordVisibilityState extends LoginState {}
-

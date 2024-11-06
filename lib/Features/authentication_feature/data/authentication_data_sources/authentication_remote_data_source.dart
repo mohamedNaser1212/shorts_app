@@ -22,6 +22,7 @@ abstract class AuthenticationRemoteDataSource {
   Future<UserModel> register({
     required RegisterRequestModel requestModel,
   });
+  Future<void> verifyUser(String userId);
 
   Future<void> signOut();
 
@@ -178,7 +179,8 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       phone: firebaseUser.phoneNumber ?? '',
       profilePic: firebaseUser.photoURL ?? '',
       fcmToken: await FirebaseMessaging.instance.getToken() ?? '',
-      bio: '', // Default bio if needed
+      bio: '',
+      isVerified: false,
     );
 
     // If user does not exist, add them to Firestore
@@ -190,5 +192,11 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     }
 
     return userModel;
+  }
+
+  @override
+  Future<void> verifyUser(String userId) {
+    // TODO: implement verifyUser
+    throw UnimplementedError();
   }
 }

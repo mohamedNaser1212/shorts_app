@@ -33,12 +33,10 @@ class LoginCubit extends Cubit<LoginState> {
             emit(LoginErrorState(error: failure.message));
           },
           (userData) {
-            emit(LoginSuccessState(userModel: userData!));
+            emit(LoginSuccessState(userEntity: userData!));
           },
         );
       },
     );
   }
-
-
 }

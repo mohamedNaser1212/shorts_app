@@ -1,4 +1,5 @@
 import 'package:shorts/core/utils/constants/request_data_names.dart';
+
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
 class UserModel extends UserEntity {
@@ -10,6 +11,7 @@ class UserModel extends UserEntity {
     required super.fcmToken,
     required super.profilePic,
     required super.bio,
+    required super.isVerified,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -21,6 +23,7 @@ class UserModel extends UserEntity {
       fcmToken: json[RequestDataNames.fcmToken],
       profilePic: json[RequestDataNames.profilePic],
       bio: json[RequestDataNames.bio],
+      isVerified: json[RequestDataNames.isVerified] ?? false,
     );
   }
   @override
@@ -33,6 +36,7 @@ class UserModel extends UserEntity {
       RequestDataNames.fcmToken: fcmToken,
       RequestDataNames.profilePic: profilePic,
       RequestDataNames.bio: bio,
+      RequestDataNames.isVerified: isVerified,
     };
   }
 }

@@ -21,8 +21,8 @@ class UserEntity {
   final String profilePic;
   @HiveField(6)
   final String bio;
-
-
+  @HiveField(7)
+  bool isVerified = false;
 
   UserEntity({
     required this.name,
@@ -32,6 +32,7 @@ class UserEntity {
     required this.fcmToken,
     required this.profilePic,
     required this.bio,
+    required this.isVerified,
   });
 
   factory UserEntity.fromJson(Map<String, dynamic> json) {
@@ -40,20 +41,22 @@ class UserEntity {
       email: json[RequestDataNames.email],
       phone: json[RequestDataNames.phone],
       id: json[RequestDataNames.id],
-      fcmToken: json[RequestDataNames.fcmToken],  
-      profilePic: json[RequestDataNames.profilePic],  
-      bio: json[RequestDataNames.bio],  
+      fcmToken: json[RequestDataNames.fcmToken],
+      profilePic: json[RequestDataNames.profilePic],
+      bio: json[RequestDataNames.bio],
+      isVerified: json[RequestDataNames.isVerified] ?? false,
     );
   }
   Map<String, dynamic> toJson() {
     return {
-     RequestDataNames.name: name,
+      RequestDataNames.name: name,
       RequestDataNames.email: email,
       RequestDataNames.phone: phone,
       RequestDataNames.id: id,
-     RequestDataNames.fcmToken: fcmToken,
+      RequestDataNames.fcmToken: fcmToken,
       RequestDataNames.profilePic: profilePic,
       RequestDataNames.bio: bio,
+      RequestDataNames.isVerified: isVerified,
     };
   }
 }
