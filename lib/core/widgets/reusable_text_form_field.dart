@@ -91,7 +91,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               suffixIconColor: ColorController.whiteColor,
               enabledBorder: OutlineInputBorder(
                 borderSide: const BorderSide(
-                    width: 2.0, color: ColorController.whiteColor),
+                    width: 2.0, color: ColorController.purpleColor),
                 borderRadius:
                     BorderRadius.all(Radius.circular(widget.borderRadius)),
               ),

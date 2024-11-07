@@ -5,7 +5,7 @@ class SearchState {}
 final class SearchLoading extends SearchState {}
 
 final class SearchLoaded extends SearchState {
-  final List<SearchModel> searchResults;
+  final List<UserEntity> searchResults;
 
   SearchLoaded({required this.searchResults});
 }

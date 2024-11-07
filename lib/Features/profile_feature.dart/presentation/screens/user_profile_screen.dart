@@ -5,7 +5,6 @@ import 'package:shorts/Features/profile_feature.dart/domain/use_case/user_profil
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_profile_cubit/user_profile_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_screen_body.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
@@ -29,18 +28,24 @@ class UserProfileScreen extends StatefulWidget {
 
 class UserProfileScreenState extends State<UserProfileScreen> {
   @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    //print('user${widget.user!.name}');
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final check = widget.comment?.user.id ??
+        (widget.isShared == false ? widget.videoEntity?.user.id : null) ??
+        widget.user?.id ??
+        widget.videoEntity?.sharedBy?.id ??
+        '';
     return BlocProvider(
       create: (context) => GetUserVideosCubit(
         getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
       )..getUserVideos(
-          userId: widget.comment != null
-              ? widget.comment!.user.id!
-              : widget.isShared == false
-                  ? widget.videoEntity?.user.id ?? ''
-                  : widget.comment?.user.id ??
-                      widget.videoEntity!.sharedBy?.id ??
-                      '',
+          userId: check,
         ),
       child: UserProfileScreenBody(
         videoEntity: widget.videoEntity,

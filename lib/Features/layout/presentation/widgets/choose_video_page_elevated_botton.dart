@@ -23,13 +23,15 @@ class _ChooseVideoPageElevatedButtonState
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => UploadVideosCubit(
-        uploadVideoUseCase: getIt.get<UploadVideoUseCase>(),
-      ),
-      child: BlocConsumer<UploadVideosCubit, UploadVideosState>(
-        listener: _listener,
-        builder: _builder,
+    return SafeArea(
+      child: BlocProvider(
+        create: (context) => UploadVideosCubit(
+          uploadVideoUseCase: getIt.get<UploadVideoUseCase>(),
+        ),
+        child: BlocConsumer<UploadVideosCubit, UploadVideosState>(
+          listener: _listener,
+          builder: _builder,
+        ),
       ),
     );
   }

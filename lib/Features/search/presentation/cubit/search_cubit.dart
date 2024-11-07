@@ -1,6 +1,7 @@
 import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../domain/model/search_model.dart';
 
 part 'search_state.dart';
@@ -10,23 +11,31 @@ class SearchCubit extends Cubit<SearchState> {
 
   SearchCubit() : super(SearchState());
 
-  Future<void> searchVideos(String query) async {
+  Future<void> searchUsers(String query) async {
     emit(SearchLoading());
     try {
       QuerySnapshot snapshot = await _firestore
-          .collection('videos')
-          .where('description', isGreaterThanOrEqualTo: query)
+          .collection('users')
+          .where('name', isGreaterThanOrEqualTo: query)
+          .where('name', isLessThanOrEqualTo: query + '\uf8ff')
           .get();
 
-      // Map the snapshot to a list of SearchModel
-      List<SearchModel> searchResults = snapshot.docs.map((doc) {
-        return SearchModel.fromJson(doc.data() as Map<String, dynamic>);
-      }).toList();
+      List<UserEntity> searchResults = snapshot.docs
+          .map((doc) {
+            final data = doc.data();
+            if (data != null) {
+              return UserEntity.fromJson(data as Map<String, dynamic>);
+            }
+            return null; // Return null if data is missing
+          })
+          .whereType<UserEntity>()
+          .toList();
 
       emit(SearchLoaded(
         searchResults: searchResults,
       ));
     } catch (e) {
+      print(e.toString());
       emit(SearchError(errorMessage: e.toString()));
     }
   }

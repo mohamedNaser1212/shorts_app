@@ -40,7 +40,7 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
 
             final user = widget.userProfileState.widget.isShared == true
                 ? widget.videoEntity?.sharedBy!
-                : widget.videoEntity?.user ?? widget.comment?.user;
+                : widget.userProfileState.widget.user ?? widget.comment?.user;
 
             return Column(
               crossAxisAlignment: CrossAxisAlignment.center,
@@ -48,15 +48,28 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
                 UserProfileImageWidget(
                   videoEntity: widget.videoEntity,
                   comment: widget.comment,
+                  user: user,
                 ),
                 const SizedBox(height: 40),
                 CustomTitle(
-                  title: widget.comment?.user.name ?? user!.name,
+                  title: widget.comment?.user.name ??
+                      (widget.userProfileState.widget.isShared == false
+                          ? widget.videoEntity?.user.name
+                          : null) ??
+                      widget.userProfileState.widget.user?.name ??
+                      widget.videoEntity?.sharedBy?.name ??
+                      '',
                   style: TitleStyle.style16,
                 ),
                 const SizedBox(height: 10),
                 CustomTitle(
-                  title: widget.comment?.user.bio ?? user!.bio,
+                  title: widget.comment?.user.bio ??
+                      (widget.userProfileState.widget.isShared == false
+                          ? widget.videoEntity?.user.bio
+                          : null) ??
+                      widget.userProfileState.widget.user?.bio ??
+                      widget.videoEntity?.sharedBy?.bio ??
+                      '',
                   style: TitleStyle.style16,
                 ),
                 const SizedBox(height: 10),
