@@ -171,7 +171,6 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     final userDoc =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
 
-    // Create UserModel with required fields
     final userModel = UserModel(
       id: userId,
       email: firebaseUser.email ?? '',
@@ -180,7 +179,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       profilePic: firebaseUser.photoURL ?? '',
       fcmToken: await FirebaseMessaging.instance.getToken() ?? '',
       bio: '',
-      isVerified: false,
+      //isVerified: false,
     );
 
     // If user does not exist, add them to Firestore

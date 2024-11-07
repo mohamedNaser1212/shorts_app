@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/favourites_feature/presentation/screens/favourites_screen.dart';
 import 'package:shorts/Features/layout/presentation/widgets/choose_video_page_elevated_botton.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
+import 'package:shorts/Features/search/presentation/screens/search_screen.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/video_screen.dart';
 
 class LayoutModel {
@@ -9,20 +9,37 @@ class LayoutModel {
 
   final List<Widget> _screens = [
     const VideosScreen(),
-    // CategoriesBody(
-    //   isHorizontal: false,
-    // ),
     const ChooseVideoPageElevatedButton(),
-    const FavouritesScreen(),
+    const SearchScreen(),
     const EditProfileScreen(),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavigationBarItems = const [
-    BottomNavigationBarItem(icon: Icon(Icons.videocam_sharp), label: 'Videos'),
     BottomNavigationBarItem(
-        icon: Icon(Icons.add_box_outlined), label: 'Add Video'),
-    BottomNavigationBarItem(icon: Icon(Icons.favorite), label: 'Favorites'),
-    BottomNavigationBarItem(icon: Icon(Icons.edit_sharp), label: 'Edit Profile'),
+        icon: Icon(
+          Icons.home,
+          size: 32,
+        ),
+        label: 'Home'),
+    BottomNavigationBarItem(
+      icon: Icon(
+        Icons.add,
+        size: 32,
+      ),
+      label: 'Add Short',
+    ),
+    BottomNavigationBarItem(
+        icon: Icon(
+          Icons.search,
+          size: 32,
+        ),
+        label: 'Search'),
+    BottomNavigationBarItem(
+        icon: Icon(
+          Icons.person,
+          size: 32,
+        ),
+        label: ' Profile'),
   ];
 
   int get currentIndex => _currentIndex;

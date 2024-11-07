@@ -11,7 +11,7 @@ class UserModel extends UserEntity {
     required super.fcmToken,
     required super.profilePic,
     required super.bio,
-    required super.isVerified,
+    // required super.isVerified,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -23,7 +23,7 @@ class UserModel extends UserEntity {
       fcmToken: json[RequestDataNames.fcmToken],
       profilePic: json[RequestDataNames.profilePic],
       bio: json[RequestDataNames.bio],
-      isVerified: json[RequestDataNames.isVerified] ?? false,
+      //   isVerified: json[RequestDataNames.isVerified] ?? false,
     );
   }
   @override
@@ -36,7 +36,7 @@ class UserModel extends UserEntity {
       RequestDataNames.fcmToken: fcmToken,
       RequestDataNames.profilePic: profilePic,
       RequestDataNames.bio: bio,
-      RequestDataNames.isVerified: isVerified,
+      //  RequestDataNames.isVerified: isVerified,
     };
   }
 }

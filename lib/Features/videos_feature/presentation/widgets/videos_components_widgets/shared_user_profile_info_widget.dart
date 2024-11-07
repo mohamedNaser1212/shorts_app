@@ -14,7 +14,6 @@ class SharedUserProfileInfoWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox(
       width: MediaQuery.of(context).size.width * 0.8,
-      height: MediaQuery.of(context).size.height * 0.12,
       child: VideoOwnerInfoBody(
         state: state,
         userName: state.widget.videoEntity.sharedBy!.name,

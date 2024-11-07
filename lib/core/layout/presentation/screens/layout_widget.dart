@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../data/layouts_model.dart';
-import '../widgets/bottom_nav_bar_widget.dart';
 
 class LayoutScreen extends StatefulWidget {
   const LayoutScreen({super.key});
@@ -25,13 +24,23 @@ class LayoutScreenState extends State<LayoutScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-    //  appBar: _buildAppBar(context),
-      body: layoutModel.currentScreen,
-      bottomNavigationBar: BottomNavBar(
-        
-        state: this,
-      ),
-    );
+        //  appBar: _buildAppBar(context),
+        body: layoutModel.currentScreen,
+        bottomNavigationBar: BottomNavigationBar(
+          type: BottomNavigationBarType
+              .fixed, // Set type to fixed for custom colors
+          backgroundColor:
+              Colors.black, // Set navigation bar background to black
+          currentIndex: layoutModel.currentIndex,
+          items: layoutModel.bottomNavigationBarItems,
+          selectedItemColor: Colors.white, // Set selected icon color to white
+          unselectedItemColor: Colors.grey, // Set unselected icon color to grey
+          onTap: (index) {
+            setState(() {
+              layoutModel.changeScreen(index);
+            });
+          },
+        ));
   }
 
   // CustomAppBar _buildAppBar(BuildContext context) {

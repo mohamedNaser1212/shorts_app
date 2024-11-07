@@ -7,7 +7,7 @@ import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
-import 'package:shorts/core/widgets/videos_screen_AppBar.dart';
+
 import '../../../favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
 
 class VideosScreen extends StatelessWidget {
@@ -18,7 +18,6 @@ class VideosScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorController.blackColor,
-      appBar: const VideosScreenAppBarWidget(),
       body: BlocConsumer<UserInfoCubit, UserInfoState>(
         listener: _userInfoListener,
         builder: (context, userInfoState) {
