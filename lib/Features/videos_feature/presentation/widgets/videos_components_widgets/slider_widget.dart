@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_xlider/flutter_xlider.dart'; // Import the package
 
 import '../../../../../core/video_controller/video_controller.dart';
 import 'duration_notifier_widget.dart';
@@ -60,13 +61,30 @@ class _SliderWidgetState extends State<SliderWidget> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
-            Slider(
-              value: _position.inMilliseconds.toDouble(),
-              min: 0.0,
+            FlutterSlider(
+              values: [_position.inMilliseconds.toDouble()],
               max: _duration.inMilliseconds.toDouble(),
-              onChanged: (value) {
+              min: 0,
+              handler: FlutterSliderHandler(
+                decoration: const BoxDecoration(
+                  color: Colors.transparent, // Make the thumb transparent
+                ),
+              ),
+              trackBar: FlutterSliderTrackBar(
+                activeTrackBar: BoxDecoration(
+                  color: Colors.blue, // Set color of active track
+                  borderRadius: BorderRadius.circular(
+                      2.0), // Add a slight rounding for style
+                ),
+                inactiveTrackBar: BoxDecoration(
+                  color: Colors.grey
+                      .withOpacity(0.5), // Set color of inactive track
+                  borderRadius: BorderRadius.circular(2.0),
+                ),
+              ),
+              onDragging: (handlerIndex, lowerValue, upperValue) {
                 widget.videoProvider
-                    .seekTo(Duration(milliseconds: value.toInt()));
+                    .seekTo(Duration(milliseconds: lowerValue.toInt()));
               },
             ),
             DurationNotifier(videoProvider: widget.videoProvider),
