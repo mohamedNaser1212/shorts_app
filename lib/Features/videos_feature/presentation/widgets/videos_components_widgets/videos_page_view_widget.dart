@@ -55,30 +55,26 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
         if (state is GetVideoSuccess) {
           final videos = state.videos;
 
-          return Column(
-            children: [
-              PageView.builder(
-                controller: _pageController,
-                itemCount: videos.length,
-                physics: const BouncingScrollPhysics(),
-                scrollDirection: Axis.vertical,
-                itemBuilder: (context, index) {
-                  final video = videos[index];
-                  final isShared = video.sharedBy != null;
+          return PageView.builder(
+            controller: _pageController,
+            itemCount: videos.length,
+            physics: const BouncingScrollPhysics(),
+            scrollDirection: Axis.vertical,
+            itemBuilder: (context, index) {
+              final video = videos[index];
+              final isShared = video.sharedBy != null;
 
-                  CommentsCubit.get(context).getCommentsCount(
-                    videoId: video.id,
-                  );
-                  // CommentsCubit.get(context)
-                  //     .getComments(videoId: video.id, page: 0);
+              CommentsCubit.get(context).getCommentsCount(
+                videoId: video.id,
+              );
+              // CommentsCubit.get(context)
+              //     .getComments(videoId: video.id, page: 0);
 
-                  return VideoListItem(
-                    videoEntity: video,
-                    isShared: isShared,
-                  );
-                },
-              ),
-            ],
+              return VideoListItem(
+                videoEntity: video,
+                isShared: isShared,
+              );
+            },
           );
         }
         return const Center(child: CircularProgressIndicator());

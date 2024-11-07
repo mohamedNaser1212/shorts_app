@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_xlider/flutter_xlider.dart'; // Import the package
+import 'package:flutter_xlider/flutter_xlider.dart'; // Import flutter_xlider package
 
 import '../../../../../core/video_controller/video_controller.dart';
 import 'duration_notifier_widget.dart';
@@ -52,9 +52,9 @@ class _SliderWidgetState extends State<SliderWidget> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 20,
-      left: 20,
-      right: 20,
+      bottom: 0, // Align the slider to the bottom of the screen
+      left: 0,
+      right: 0,
       child: AnimatedOpacity(
         opacity: widget.videoProvider.isPaused ? 1.0 : 0.0,
         duration: const Duration(milliseconds: 300),
@@ -73,8 +73,8 @@ class _SliderWidgetState extends State<SliderWidget> {
               trackBar: FlutterSliderTrackBar(
                 activeTrackBar: BoxDecoration(
                   color: Colors.blue, // Set color of active track
-                  borderRadius: BorderRadius.circular(
-                      2.0), // Add a slight rounding for style
+                  borderRadius:
+                      BorderRadius.circular(2.0), // Add slight rounding
                 ),
                 inactiveTrackBar: BoxDecoration(
                   color: Colors.grey
