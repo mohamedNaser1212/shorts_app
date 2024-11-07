@@ -26,6 +26,9 @@ import 'package:shorts/Features/profile_feature.dart/domain/use_case/update_user
 import 'package:shorts/Features/profile_feature.dart/domain/use_case/user_profile_videos_use_case.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_profile_cubit/user_profile_cubit.dart';
+import 'package:shorts/Features/search/domain/repo/search_repo.dart';
+import 'package:shorts/Features/search/domain/use_case/search_use_case.dart';
+import 'package:shorts/Features/search/presentation/cubit/search_cubit.dart';
 import 'package:shorts/Features/videos_feature/data/data_sources/video_remote_data_source/videos_rermote_data_source.dart';
 import 'package:shorts/Features/videos_feature/data/data_sources/videos_local_data_source/video_local_data_source.dart';
 import 'package:shorts/Features/videos_feature/data/videos_repo_impl/videos_repo_impl.dart';
@@ -56,6 +59,8 @@ import '../../Features/comments_feature/domain/ccommeints_repo/comments_repo.dar
 import '../../Features/comments_feature/domain/comments_use_case/add_comments_use_case.dart';
 import '../../Features/favourites_feature/data/favourites_repo_impl/favourite_repo_impl.dart';
 import '../../Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
+import '../../Features/search/data/data_sources/search_remote_data_source.dart';
+import '../../Features/search/data/repo_impl/search_repo_impl.dart';
 import '../managers/internet_manager/internet_manager.dart';
 import '../managers/internet_manager/internet_manager_impl.dart';
 import '../managers/repo_manager/repo_manager.dart';
@@ -164,6 +169,11 @@ Future<void> setUpServiceLocator() async {
       firebaseHelper: getIt.get<FirebaseHelper>(),
     ),
   );
+  getIt.registerSingleton<SearchRemoteDataSource>(
+    SearchRemoteDataSourceImpl(
+        // firebaseHelper: getIt.get<FirebaseHelper>(),
+        ),
+  );
   getIt.registerSingleton<CommentsLocalDataSourceImpl>(
     CommentsLocalDataSourceImpl(
       localStorageManager: getIt.get<LocalStorageManager>(),
@@ -182,12 +192,26 @@ Future<void> setUpServiceLocator() async {
       remoteDataSource: getIt.get<UserProfileVideosRemoteDataSource>(),
     ),
   );
+  getIt.registerSingleton<SearchRepo>(
+    SearchRepoImpl(
+      repoManager: getIt.get<RepoManager>(),
+      searchRemoteDataSource: getIt.get<SearchRemoteDataSource>(),
+    ),
+  );
   getIt.registerSingleton<UserProfileVideosUseCase>(UserProfileVideosUseCase(
     repository: getIt.get<UserProfileVideosRepo>(),
+  ));
+  getIt.registerSingleton<SearchUseCase>(SearchUseCase(
+    searchRepo: getIt.get<SearchRepo>(),
   ));
   getIt.registerFactory<GetUserVideosCubit>(
     () => GetUserVideosCubit(
       getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
+    ),
+  );
+  getIt.registerFactory<SearchCubit>(
+    () => SearchCubit(
+      searchUseCase: getIt.get<SearchUseCase>(),
     ),
   );
   getIt.registerSingleton<CommentsRepo>(CommentsRepoImpl(

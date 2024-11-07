@@ -66,7 +66,7 @@ class MyApp extends StatelessWidget {
           create: (context) => getIt.get<GoogleSignInCubit>(),
         ),
         BlocProvider(
-          create: (context) => SearchCubit(),
+          create: (context) => getIt.get<SearchCubit>(),
         ),
       ],
       child: MaterialApp(
