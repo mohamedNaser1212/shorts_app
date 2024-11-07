@@ -16,11 +16,12 @@ class LayoutModel {
 
   final List<BottomNavigationBarItem> _bottomNavigationBarItems = const [
     BottomNavigationBarItem(
-        icon: Icon(
-          Icons.home,
-          size: 32,
-        ),
-        label: 'Home'),
+      icon: Icon(
+        Icons.home,
+        size: 32,
+      ),
+      label: 'Home',
+    ),
     BottomNavigationBarItem(
       icon: Icon(
         Icons.add,
@@ -29,17 +30,19 @@ class LayoutModel {
       label: 'Add Short',
     ),
     BottomNavigationBarItem(
-        icon: Icon(
-          Icons.search,
-          size: 32,
-        ),
-        label: 'Search'),
+      icon: Icon(
+        Icons.search,
+        size: 32,
+      ),
+      label: 'Search',
+    ),
     BottomNavigationBarItem(
-        icon: Icon(
-          Icons.person,
-          size: 32,
-        ),
-        label: ' Profile'),
+      icon: Icon(
+        Icons.person,
+        size: 32,
+      ),
+      label: ' Profile',
+    ),
   ];
 
   int get currentIndex => _currentIndex;

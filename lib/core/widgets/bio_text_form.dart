@@ -10,12 +10,12 @@ class BioField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return CustomTextFormField(
-      label: 'bio (Optional)',
-      hintText: 'hey there i am a developer',
+      label: 'bio ',
+      //   hintText: 'hey there i am a developer',
       controller: controller,
       keyboardType: TextInputType.text,
       activeColor: defaultLightColor,
-      prefix: const Icon(Icons.book_sharp),
+      // prefix: const Icon(Icons.book_sharp),
     );
   }
 }

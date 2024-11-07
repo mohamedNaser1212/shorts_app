@@ -61,6 +61,8 @@ class _SliderWidgetState extends State<SliderWidget> {
             values: [_position.inMilliseconds.toDouble()],
             max: _duration.inMilliseconds.toDouble(),
             min: 0,
+            minimumDistance: 0,
+            maximumDistance: _duration.inMilliseconds.toDouble(),
             handler: FlutterSliderHandler(
               decoration: const BoxDecoration(
                 color: Colors.transparent, // Make the thumb transparent

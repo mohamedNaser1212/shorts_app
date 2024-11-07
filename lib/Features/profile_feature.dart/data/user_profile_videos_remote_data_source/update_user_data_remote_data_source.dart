@@ -3,8 +3,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 import 'package:shorts/core/network/firebase_manager/collection_names.dart';
-import 'package:shorts/core/update_user_data/update_user_data.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
+import 'package:shorts/core/update_user_data/update_user_data.dart';
 
 abstract class UpdateUserDataRemoteDataSource {
   const UpdateUserDataRemoteDataSource._();
@@ -29,14 +29,14 @@ class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
   }) async {
     User? currentUser = auth.currentUser;
 
-    if (currentUser != null) {
-      if (updateUserRequestModel.email != currentUser.email) {
-        await _updateUserEmailInAuth(
-          currentUser: currentUser,
-          newEmail: updateUserRequestModel.email,
-        );
-      }
-    }
+    // if (currentUser != null) {
+    //   if (updateUserRequestModel.email != currentUser.email) {
+    //     await _updateUserEmailInAuth(
+    //       currentUser: currentUser,
+    //       newEmail: updateUserRequestModel.email,
+    //     );
+    //   }
+    // }
 
     await UpdateUserData.updateUserData(
       updateUserRequestModel: updateUserRequestModel,

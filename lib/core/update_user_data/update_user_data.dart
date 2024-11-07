@@ -111,7 +111,7 @@ abstract class UpdateUserData {
         data: {
           'user.name': updateUserRequestModel.name,
           'user.profilePic': updateUserRequestModel.imageUrl,
-          'user.email': updateUserRequestModel.email,
+          // 'user.email': updateUserRequestModel.email,
           'user.phone': updateUserRequestModel.phone,
         },
       );
@@ -184,7 +184,7 @@ abstract class UpdateUserData {
         data: {
           'user.name': updateUserRequestModel.name,
           'user.profilePic': updateUserRequestModel.imageUrl,
-          'user.email': updateUserRequestModel.email,
+          // 'user.email': updateUserRequestModel.email,
           'user.phone': updateUserRequestModel.phone,
         },
       );
@@ -210,7 +210,7 @@ abstract class UpdateUserData {
         data: {
           'user.name': updateUserRequestModel.name,
           'user.profilePic': updateUserRequestModel.imageUrl,
-          'user.email': updateUserRequestModel.email,
+          // 'user.email': updateUserRequestModel.email,
           'user.phone': updateUserRequestModel.phone,
         },
       );
@@ -223,7 +223,7 @@ abstract class UpdateUserData {
     return videoDoc.reference.update({
       'user.name': updateUserRequestModel.name,
       'user.profilePic': updateUserRequestModel.imageUrl,
-      'user.email': updateUserRequestModel.email,
+      //'user.email': updateUserRequestModel.email,
       'user.phone': updateUserRequestModel.phone,
     });
   }

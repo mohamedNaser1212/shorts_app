@@ -25,7 +25,7 @@ import '../managers/styles_manager/color_manager.dart';
 
 // ignore: must_be_immutable
 class CustomElevatedButton extends StatelessWidget {
-  CustomElevatedButton._({
+  CustomElevatedButton({
     required this.onPressed,
     required this.label,
   });
@@ -38,7 +38,7 @@ class CustomElevatedButton extends StatelessWidget {
     required LoginScreenBodyState state,
     required BuildContext context,
   }) {
-    return CustomElevatedButton._(
+    return CustomElevatedButton(
       onPressed: () => _loginAction(state, context),
       label: 'Login',
     );
@@ -48,7 +48,7 @@ class CustomElevatedButton extends StatelessWidget {
     required BuildContext context,
     required RegisterScreenFormState state,
   }) {
-    return CustomElevatedButton._(
+    return CustomElevatedButton(
       onPressed: () => _registerAction(context, state),
       label: 'Register',
     );
@@ -57,7 +57,7 @@ class CustomElevatedButton extends StatelessWidget {
     required BuildContext context,
     required EditProfileScreenState state,
   }) {
-    return CustomElevatedButton._(
+    return CustomElevatedButton(
       onPressed: () => _editProfileButtonOnPressed(
         context: context,
         editState: state,
@@ -68,7 +68,7 @@ class CustomElevatedButton extends StatelessWidget {
   factory CustomElevatedButton.signOutElevatedButton({
     required BuildContext context,
   }) {
-    return CustomElevatedButton._(
+    return CustomElevatedButton(
       onPressed: () => _signOutOnPressed(context: context),
       label: 'Sign Out',
     );
@@ -77,7 +77,7 @@ class CustomElevatedButton extends StatelessWidget {
   factory CustomElevatedButton.favouritesPageButton({
     required BuildContext context,
   }) {
-    return CustomElevatedButton._(
+    return CustomElevatedButton(
       onPressed: () => _navigateToFavouritesPage(
         context: context,
       ),
@@ -87,7 +87,7 @@ class CustomElevatedButton extends StatelessWidget {
   factory CustomElevatedButton.editProfilePage({
     required BuildContext context,
   }) {
-    return CustomElevatedButton._(
+    return CustomElevatedButton(
       onPressed: () => _navigateToEditProfilePage(
         context: context,
       ),
@@ -98,9 +98,9 @@ class CustomElevatedButton extends StatelessWidget {
     required BuildContext context,
     required EditProfileScreenState editState,
   }) {
-    return CustomElevatedButton._(
+    return CustomElevatedButton(
       label: 'Change Profile Picture',
-      onPressed: editState.imageNotifierController.pickImage,
+      onPressed: () {},
     );
   }
 
@@ -109,7 +109,7 @@ class CustomElevatedButton extends StatelessWidget {
     required PreviewScreenState previewState,
     required File? thumbnailFile,
   }) {
-    return CustomElevatedButton._(
+    return CustomElevatedButton(
       onPressed: () => _uploadVideoOnPressed(
         context: context,
         previewState: previewState,
@@ -122,7 +122,7 @@ class CustomElevatedButton extends StatelessWidget {
   factory CustomElevatedButton.videoPageButton({
     required BuildContext context,
   }) {
-    return CustomElevatedButton._(
+    return CustomElevatedButton(
       onPressed: () => _navigateToVideoPage(context),
       label: 'Videos',
     );
@@ -131,7 +131,7 @@ class CustomElevatedButton extends StatelessWidget {
   factory CustomElevatedButton.chooseVideoPageButton({
     required BuildContext context,
   }) {
-    return CustomElevatedButton._(
+    return CustomElevatedButton(
       // onPressed: onPressed,
       onPressed: () => _navigateToChooseVideoPage(context),
       label: 'Upload Video',
@@ -168,14 +168,17 @@ class CustomElevatedButton extends StatelessWidget {
     // Collect updates for fields that have changed
     final updates = <String, dynamic>{};
 
-    if (currentUser!.email != editState.emailController.text) {
-      updates['email'] = editState.emailController.text;
-    }
-    if (currentUser.name != editState.nameController.text) {
+    // if (currentUser!.email != editState.emailController.text) {
+    //   updates['email'] = editState.emailController.text;
+    // }
+    if (currentUser!.name != editState.nameController.text) {
       updates['name'] = editState.nameController.text;
     }
     if (currentUser.phone != editState.phoneController.text) {
       updates['phone'] = editState.phoneController.text;
+    }
+    if (currentUser.bio != editState.bioController.text) {
+      updates['bio'] = editState.bioController.text;
     }
 
     if (editState.imageNotifierController.imageFileNotifier.value != null) {
@@ -188,10 +191,11 @@ class CustomElevatedButton extends StatelessWidget {
     if (updates.isNotEmpty) {
       cubit.updateUserData(
         updateUserRequestModel: UpdateUserRequestModel(
-          email: updates['email'] ?? currentUser.email,
+          // email: updates['email'] ?? currentUser.email,
           name: updates['name'] ?? currentUser.name,
           phone: updates['phone'] ?? currentUser.phone,
           imageUrl: updates['profilePic'] ?? currentUser.profilePic,
+          bio: updates['bio'] ?? currentUser.bio,
         ),
         userId: currentUser.id!,
       );

@@ -18,12 +18,12 @@ class SignOutElevatedButton extends StatelessWidget {
       listener: (context, state) {
         if (state is SignOutSuccessState) {
           NavigationManager.navigateAndFinish(
-              context: context, screen:const LoginScreen());
+              context: context, screen: const LoginScreen());
         } else if (state is SignOutErrorState) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-                content:
-                    Text(state.error),),
+              content: Text(state.error),
+            ),
           );
         }
       },

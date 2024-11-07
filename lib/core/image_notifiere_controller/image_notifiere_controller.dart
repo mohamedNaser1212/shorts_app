@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/managers/image_picker_manager/image_picker_manager.dart';
 
@@ -12,11 +13,23 @@ class ImageNotifierController extends ChangeNotifier {
 
   ImageNotifierController({required this.emailController});
 
-  Future<void> pickImage() async {
-    final pickedFile = await ImagePickerHelper.pickImageFromGallery();
+  // Pick image from either gallery or camera
+  Future<void> pickImage({required bool fromCamera}) async {
+    final ImagePicker picker = ImagePicker();
+    final XFile? pickedFile;
+
+    if (fromCamera) {
+      pickedFile = await picker.pickImage(source: ImageSource.camera);
+    } else {
+      pickedFile = await picker.pickImage(source: ImageSource.gallery);
+    }
+
     if (pickedFile != null) {
-      imageFileNotifier.value = pickedFile;
-      notifyListeners(); // Notify listeners that an image has been picked
+      imageFileNotifier.value = File(pickedFile.path);
+      notifyListeners(); // Notify listeners about the new image
+    } else {
+      // Handle when no image is selected
+      ToastHelper.showToast(message: 'No image selected', color: Colors.red);
     }
   }
 
@@ -26,12 +39,10 @@ class ImageNotifierController extends ChangeNotifier {
     String fileName = 'profile_images/${emailController.text}.jpg';
     try {
       final uploadedProfilePic = await ImagePickerHelper.uploadImage(
-          imageFileNotifier.value!, fileName);
+        imageFileNotifier.value!,
+        fileName,
+      );
       profilePicNotifier.value = uploadedProfilePic;
-      // ToastHelper.showToast(
-      //   message: 'Image uploaded successfully',
-      //   color: Colors.green,
-      // );
       return uploadedProfilePic;
     } catch (e) {
       ToastHelper.showToast(
