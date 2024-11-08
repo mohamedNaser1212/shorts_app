@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../utils/constants/consts.dart';
+import '../managers/styles_manager/color_manager.dart';
 import 'reusable_text_form_field.dart';
 
 class BioField extends StatelessWidget {
@@ -14,7 +14,7 @@ class BioField extends StatelessWidget {
       //   hintText: 'hey there i am a developer',
       controller: controller,
       keyboardType: TextInputType.text,
-      activeColor: defaultLightColor,
+      activeColor: ColorController.purpleColor,
       // prefix: const Icon(Icons.book_sharp),
     );
   }

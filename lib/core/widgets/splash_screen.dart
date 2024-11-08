@@ -3,11 +3,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:lottie/lottie.dart';
-import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/utils/bloc_observer.dart';
-import 'package:shorts/core/widgets/initial_screen.dart';
 
+import '../functions/navigations_functions.dart';
+import '../managers/styles_manager/color_manager.dart';
 import '../service_locator/service_locator.dart';
+import 'initial_screen.dart';
 
 Future<void> _firebaseMessagingBackgroundHandler(RemoteMessage message) async {
   await Firebase.initializeApp();
@@ -35,9 +36,11 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Lottie.asset(
-        'assets/lottie_files/videoAnimationLottie.json',
-        width: MediaQuery.of(context).size.width * 0.5,
+      backgroundColor: ColorController.blackColor,
+      body: Center(
+        child: Lottie.asset(
+          'assets/lottie_files/splash.json',
+        ),
       ),
 
       // Image.asset(

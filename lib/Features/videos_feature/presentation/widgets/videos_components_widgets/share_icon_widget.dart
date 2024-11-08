@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/share_modal_bottom_sheet.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/widgets/custom_icon_widget.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
@@ -14,7 +14,7 @@ class ShareIconWidget extends StatelessWidget {
     return Column(
       children: [
         IconButton(
-          onPressed: () => _showShareModal(context),
+          onPressed: () => _shareVideo(context),
           icon: const CustomIconWidget(
             icon: Icons.share,
             color: ColorController.whiteColor,
@@ -31,36 +31,16 @@ class ShareIconWidget extends StatelessWidget {
     );
   }
 
-  void _showShareModal(BuildContext context) {
-    showModalBottomSheet(
-      context: context,
-      isScrollControlled: true,
-      shape: const RoundedRectangleBorder(
-        borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
-      ),
-      builder: (BuildContext context) {
-        return ShareVideoModalBottomSheet(videoEntity: videoEntity);
-      },
-    );
+  void _shareVideo(BuildContext context) async {
+    try {
+      await Share.share(
+        videoEntity.videoUrl,
+        subject: 'Check out this video!',
+      );
+    } catch (error) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Error sharing the video')),
+      );
+    }
   }
 }
-
-// NavigationManager.navigateTo(
-//   context: context,
-//   screen: PreviewScreen(
-//     outputPath: videoEntity.videoUrl,
-//   ),
-// );
-
-// void _shareOnPressed({required BuildContext context}) async {
-//   try {
-//     await Share.share(
-//       videoEntity.videoUrl,
-//       subject: videoEntity.description,
-//     );
-//   } catch (error) {
-//     ScaffoldMessenger.of(context).showSnackBar(
-//       const SnackBar(content: Text('Error sharing the video')),
-//     );
-//   }
-// }
