@@ -28,7 +28,7 @@ class CommentItemWidget extends StatelessWidget {
             child: UserProfilePicture(comment: comment),
           ),
           const SizedBox(width: 15),
-          CustomContainerWidget(
+          CustomAddMoreContainerWidget(
             comment: comment,
             //    commentsState: state,
           ),

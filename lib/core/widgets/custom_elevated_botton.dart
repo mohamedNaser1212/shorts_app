@@ -28,6 +28,7 @@ class CustomElevatedButton extends StatelessWidget {
   CustomElevatedButton({
     required this.onPressed,
     required this.label,
+    this.backColor,
   });
 
   final VoidCallback onPressed;
@@ -294,7 +295,7 @@ class CustomElevatedButton extends StatelessWidget {
   Widget build(BuildContext context) {
     return ReusableElevatedButton(
       label: label,
-      backColor: backColor ?? ColorController.blueAccent,
+      backColor: ColorController.purpleColor,
       onPressed: onPressed,
     );
   }

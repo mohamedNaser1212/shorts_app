@@ -8,17 +8,15 @@ import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/widgets/custom_elevated_botton.dart';
 
-class ChooseVideoPageElevatedButton extends StatefulWidget {
-  const ChooseVideoPageElevatedButton({
+class ChooseVideoPage extends StatefulWidget {
+  const ChooseVideoPage({
     super.key,
   });
   @override
-  State<ChooseVideoPageElevatedButton> createState() =>
-      _ChooseVideoPageElevatedButtonState();
+  State<ChooseVideoPage> createState() => _ChooseVideoPageState();
 }
 
-class _ChooseVideoPageElevatedButtonState
-    extends State<ChooseVideoPageElevatedButton> {
+class _ChooseVideoPageState extends State<ChooseVideoPage> {
   bool _isLoading = false;
 
   @override

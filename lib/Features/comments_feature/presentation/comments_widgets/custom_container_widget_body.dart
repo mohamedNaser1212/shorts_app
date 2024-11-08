@@ -4,8 +4,8 @@ import 'package:shorts/Features/comments_feature/presentation/comments_widgets/u
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/widgets/custom_read_more_widget.dart';
 
-class CustomContainerWidgetbody extends StatelessWidget {
-  const CustomContainerWidgetbody({
+class CustomAddMoreContainerWidgetbody extends StatelessWidget {
+  const CustomAddMoreContainerWidgetbody({
     super.key,
     required this.comment,
   });

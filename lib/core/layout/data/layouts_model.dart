@@ -9,7 +9,7 @@ class LayoutModel {
 
   final List<Widget> _screens = [
     const VideosScreen(),
-    const ChooseVideoPageElevatedButton(),
+    const ChooseVideoPage(),
     const SearchScreen(),
     const EditProfileScreen(),
   ];

@@ -3,8 +3,8 @@ import 'package:shorts/Features/comments_feature/domain/comments_entity/comments
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/custom_container_widget_body.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 
-class CustomContainerWidget extends StatelessWidget {
-  const CustomContainerWidget({
+class CustomAddMoreContainerWidget extends StatelessWidget {
+  const CustomAddMoreContainerWidget({
     super.key,
     required this.comment,
     //this.commentsState,
@@ -23,7 +23,7 @@ class CustomContainerWidget extends StatelessWidget {
         decoration: const BoxDecoration(
           color: ColorController.transparentColor,
         ),
-        child: CustomContainerWidgetbody(
+        child: CustomAddMoreContainerWidgetbody(
           //     videoState: videoState,
           comment: comment,
         ),

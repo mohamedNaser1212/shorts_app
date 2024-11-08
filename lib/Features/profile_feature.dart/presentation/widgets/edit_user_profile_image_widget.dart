@@ -4,6 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
 
+import '../../../../core/widgets/custom_container_widget.dart';
+
 class EditUserProfileImageWidget extends StatefulWidget {
   const EditUserProfileImageWidget({
     super.key,
@@ -86,18 +88,19 @@ class EditUserProfileImageWidgetState
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              ListTile(
-                leading: const Icon(Icons.camera_alt),
-                title: const Text("Take a photo"),
+              CustomContainerWidget(
+                title: "Take a photo",
+                icon: Icons.camera_alt,
                 onTap: () {
                   Navigator.pop(context);
                   widget.editState?.imageNotifierController
                       .pickImage(fromCamera: true);
                 },
               ),
-              ListTile(
-                leading: const Icon(Icons.image),
-                title: const Text("Pick from gallery"),
+              const SizedBox(height: 10),
+              CustomContainerWidget(
+                title: "Pick from gallery",
+                icon: Icons.image,
                 onTap: () {
                   Navigator.pop(context);
                   widget.editState?.imageNotifierController
