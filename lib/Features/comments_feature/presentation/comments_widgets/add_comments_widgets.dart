@@ -35,7 +35,7 @@ class AddCommentsWidgets extends StatelessWidget {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 10),
           width: double.infinity,
-          height: MediaQuery.of(context).size.height * 0.08,
+          height: MediaQuery.of(context).size.height * 0.1,
           decoration: BoxDecoration(
             color: Colors.white,
             boxShadow: const [

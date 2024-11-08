@@ -8,16 +8,16 @@ class CustomIconWidget extends StatelessWidget {
 
   const CustomIconWidget({
     super.key,
-    required this.icon, 
+    required this.icon,
     this.color = ColorController.greyColor,
-    this.size = 80.0, 
+    this.size = 40.0,
   });
 
   @override
   Widget build(BuildContext context) {
     return Icon(
-      icon, 
-      color: color, 
+      icon,
+      color: color,
       size: size,
     );
   }

@@ -20,7 +20,7 @@ class VideoIcons extends StatelessWidget {
         const SizedBox(height: 10),
         CommentsIconWidget(videoEntity: videoEntity),
         const SizedBox(height: 10),
-         ShareIconWidget(
+        ShareIconWidget(
           videoEntity: videoEntity,
         ),
       ],

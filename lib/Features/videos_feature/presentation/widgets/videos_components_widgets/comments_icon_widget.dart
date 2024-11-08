@@ -20,7 +20,7 @@ class CommentsIconWidget extends StatelessWidget {
           icon: const CustomIconWidget(
             icon: Icons.comment,
             color: ColorController.whiteColor,
-            size: 35,
+            //    size: 35,
           ),
         ),
         const SizedBox(height: 10),

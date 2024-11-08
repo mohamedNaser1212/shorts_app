@@ -3,7 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/toggle_favourites_cubit/toggle_favourites_cubit_cubit.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/notification_service/notification_helper.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
@@ -12,6 +11,7 @@ import 'package:shorts/core/widgets/custom_icon_widget.dart';
 class FavouriteIconWidget extends StatelessWidget {
   const FavouriteIconWidget({super.key, required this.videoEntity});
   final VideoEntity videoEntity;
+
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<ToggleFavouritesCubit, ToggleFavouritesState>(
@@ -20,17 +20,12 @@ class FavouriteIconWidget extends StatelessWidget {
         final notificationHelper = getIt.get<NotificationHelper>();
         final isFavorite =
             FavouritesCubit.get(context).favorites[videoEntity.id] ?? false;
+
         return IconButton(
           onPressed: () => _toggleFavourite(context, notificationHelper),
-          icon: CircleAvatar(
-            backgroundColor: isFavorite
-                ? ColorController.redColor
-                : ColorController.greyColor,
-            child: CustomIconWidget(
-              icon: isFavorite ? Icons.favorite : Icons.favorite_border,
-              size: 15,
-              color: ColorController.whiteColor,
-            ),
+          icon: CustomIconWidget(
+            icon: isFavorite ? Icons.favorite : Icons.favorite_border,
+            color: isFavorite ? Colors.red : Colors.white,
           ),
         );
       },
@@ -51,7 +46,9 @@ class FavouriteIconWidget extends StatelessWidget {
     final favouritesCubit = FavouritesCubit.get(context);
     final userEntity = UserInfoCubit.get(context).userEntity!;
     final isFavorite = favouritesCubit.favorites[videoEntity.id] ?? false;
+
     favouritesCubit.favorites[videoEntity.id] = !isFavorite;
+
     ToggleFavouritesCubit.get(context).toggleFavourite(
       video: videoEntity,
       userModel: userEntity,
