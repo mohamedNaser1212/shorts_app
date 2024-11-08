@@ -1,8 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/layout/presentation/widgets/choose_video_page_elevated_botton.dart';
-import 'package:shorts/Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
 import 'package:shorts/Features/search/presentation/screens/search_screen.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/video_screen.dart';
+
+import '../../../Features/profile_feature.dart/presentation/screens/user_profile_screen.dart';
 
 class LayoutModel {
   int _currentIndex = 0;
@@ -11,7 +12,10 @@ class LayoutModel {
     const VideosScreen(),
     const ChooseVideoPage(),
     const SearchScreen(),
-    const EditProfileScreen(),
+    UserProfileScreen(
+      isShared: false,
+      //user: UserInfoCubit.get(context).userEntity,
+    ),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavigationBarItems = const [
