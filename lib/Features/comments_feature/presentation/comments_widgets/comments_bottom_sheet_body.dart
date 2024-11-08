@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
+import 'package:shorts/Features/comments_feature/presentation/comments_widgets/add_comments_widget.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
-import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_form_field.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_list_view.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
@@ -41,10 +41,7 @@ class CommentsBottomSheetBody extends StatelessWidget {
               ),
               child: Column(
                 children: [
-                  CommentsFormFieldWidget(state: state),
-                  // const SizedBox(height: 16),
-                  // AddCommentElevatedButton(state: state),
-                  // AddCommentElevatedButton(state: state),
+                  AddCommentsWidgets(state: state),
                 ],
               ),
             ),

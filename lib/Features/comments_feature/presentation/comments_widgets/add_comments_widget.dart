@@ -7,8 +7,8 @@ import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments
 import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/widgets/reusable_text_form_field.dart';
 
-class CommentsFormFieldWidget extends StatelessWidget {
-  const CommentsFormFieldWidget({
+class AddCommentsWidgets extends StatelessWidget {
+  const AddCommentsWidgets({
     super.key,
     required this.state,
   });
