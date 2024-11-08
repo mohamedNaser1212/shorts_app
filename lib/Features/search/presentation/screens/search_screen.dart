@@ -18,7 +18,7 @@ class SearchScreen extends StatelessWidget {
       child: const SafeArea(
         child: Scaffold(
             backgroundColor: ColorController.blackColor,
-            body: SearchScreenBody()),
+            body: SearchScreenBody(),),
       ),
     );
   }
