@@ -136,6 +136,7 @@ flutter:
   # example:
   assets:
     - assets/images/
+    - assets/lottie_files/
   fonts:
     - family: Inter
       fonts:

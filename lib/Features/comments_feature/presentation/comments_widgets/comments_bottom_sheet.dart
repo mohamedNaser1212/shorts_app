@@ -58,18 +58,14 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
     return BlocConsumer<CommentsCubit, CommentsState>(
       listener: (context, state) {
         if (state is GetCommentsSuccessState) {
-          // Update the current page for next request
           currentPage++;
 
-          // Check if all comments are loaded (for disabling further pagination)
           if (state.comments!.isEmpty) {
             allCommentsLoaded = true;
           } else {
-            // Accumulate comments only in success state
             commentsList.addAll(state.comments!);
           }
         } else if (state is GetCommentsErrorState) {
-          // Handle any error cases (show a message, etc.)
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(state.message),
           ));

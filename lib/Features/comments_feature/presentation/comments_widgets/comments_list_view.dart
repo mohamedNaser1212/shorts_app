@@ -3,6 +3,8 @@ import 'package:shorts/Features/comments_feature/presentation/comments_widgets/c
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
 
+import 'empty_comments_widget.dart';
+
 class CommentsListView extends StatelessWidget {
   const CommentsListView({
     super.key,
@@ -18,29 +20,9 @@ class CommentsListView extends StatelessWidget {
     final comments =
         CommentsCubit.get(context).videoComments[state.widget.videoEntity.id] ??
             [];
-
-    // Check if there are comments
     if (comments.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Image.asset(
-              'assets/empty_comments.png', // Replace with your image asset path
-              width: 100,
-              height: 100,
-            ),
-            const SizedBox(height: 10),
-            const Text(
-              'No comments yet',
-              style: TextStyle(fontSize: 16, color: Colors.grey),
-            ),
-          ],
-        ),
-      );
+      return const EmptyCommentsWidget();
     }
-
-    // Display the list of comments if available
     return ListView.separated(
       controller: scrollController,
       padding: EdgeInsets.zero,

@@ -4,7 +4,7 @@ import 'package:shorts/core/utils/constants/consts.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
 class CustomTextFormField extends StatefulWidget {
-  final String label;
+  final String? label;
   final String? hintText;
   final double borderRadius;
   final Color activeColor;
@@ -15,11 +15,16 @@ class CustomTextFormField extends StatefulWidget {
   final Icon? prefix;
   final IconButton? suffix;
   final bool obscure;
-  final bool isCharacterCountEnabled; // Optional character count feature
+  final bool isCharacterCountEnabled;
+  final TextStyle? labelStyle;
+  final TextStyle? hintStyle;
+  final bool useWhiteBorder;
+  final bool controllerBlackColor;
+  final bool showBorder; // New boolean to control border visibility
 
   const CustomTextFormField({
     super.key,
-    required this.label,
+    this.label,
     this.borderRadius = 25,
     this.activeColor = ColorController.purpleColor,
     this.validator,
@@ -30,7 +35,12 @@ class CustomTextFormField extends StatefulWidget {
     this.suffix,
     this.obscure = false,
     this.hintText,
-    this.isCharacterCountEnabled = false, // Default is false
+    this.isCharacterCountEnabled = false,
+    this.labelStyle,
+    this.hintStyle,
+    this.useWhiteBorder = false,
+    this.controllerBlackColor = false,
+    this.showBorder = true, // Default to showing borders
   });
 
   @override
@@ -60,6 +70,18 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
 
   @override
   Widget build(BuildContext context) {
+    Color borderColor =
+        widget.useWhiteBorder ? ColorController.whiteColor : widget.activeColor;
+    Color textColor =
+        widget.controllerBlackColor ? Colors.black : ColorController.whiteColor;
+
+    OutlineInputBorder border = OutlineInputBorder(
+      borderSide: widget.showBorder
+          ? BorderSide(width: 2.0, color: borderColor)
+          : BorderSide.none,
+      borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
+    );
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 5, 8, 5),
       child: Column(
@@ -71,41 +93,34 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             keyboardType: widget.keyboardType,
             maxLength: widget.isCharacterCountEnabled ? 20 : null,
             style: TextStyle(
-              color: ColorController.whiteColor,
+              color: textColor,
               fontSize: 16,
               fontFamily: constFontFamily,
             ),
             validator: widget.validator,
             onFieldSubmitted: widget.onSubmit,
             decoration: InputDecoration(
-              counterText: '', // Hides default max length indicator
+              counterText: '',
               suffixIcon: widget.suffix,
               prefixIcon: widget.prefix,
               hintText: widget.hintText,
-              hintStyle: TextStyle(
-                color: ColorController.whiteColor,
-                fontSize: 16,
-                fontFamily: constFontFamily,
-              ),
+              hintStyle: widget.hintStyle ??
+                  TextStyle(
+                    color: ColorController.whiteColor,
+                    fontSize: 16,
+                    fontFamily: constFontFamily,
+                  ),
               prefixIconColor: ColorController.whiteColor,
               suffixIconColor: ColorController.whiteColor,
-              enabledBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                    width: 2.0, color: ColorController.purpleColor),
-                borderRadius:
-                    BorderRadius.all(Radius.circular(widget.borderRadius)),
-              ),
+              enabledBorder: border,
+              focusedBorder: border,
               labelText: widget.label,
-              labelStyle: TextStyle(
-                color: ColorController.whiteColor,
-                fontSize: 16,
-                fontFamily: constFontFamily,
-              ),
-              focusedBorder: OutlineInputBorder(
-                borderSide: const BorderSide(
-                    color: ColorController.purpleColor, width: 2.0),
-                borderRadius: BorderRadius.circular(widget.borderRadius),
-              ),
+              labelStyle: widget.labelStyle ??
+                  TextStyle(
+                    color: ColorController.whiteColor,
+                    fontSize: 16,
+                    fontFamily: constFontFamily,
+                  ),
             ),
           ),
           if (widget.isCharacterCountEnabled)
