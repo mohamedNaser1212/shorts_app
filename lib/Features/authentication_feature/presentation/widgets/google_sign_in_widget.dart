@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:shorts/Features/layout/presentation/screens/home_screen.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
+import 'package:shorts/core/layout/presentation/screens/layout_widget.dart';
 
 import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/widgets/custom_title.dart';
@@ -54,9 +54,7 @@ class GoogleSignInWidget extends StatelessWidget {
     if (state is GoogleSignInSuccessState) {
       NavigationManager.navigateAndFinish(
         context: context,
-        screen: HomeScreen(
-          currentUser: state.userEntity,
-        ),
+        screen: const LayoutScreen(),
       );
     }
   }
