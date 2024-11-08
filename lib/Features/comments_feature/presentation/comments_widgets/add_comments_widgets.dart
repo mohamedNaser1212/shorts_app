@@ -5,7 +5,8 @@ import 'package:shorts/Features/comments_feature/presentation/comments_widgets/s
 import 'package:shorts/Features/comments_feature/presentation/cubit/add_comments_cubit/add_comments_cubit.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
 import 'package:shorts/core/functions/toast_function.dart';
-import 'package:shorts/core/widgets/reusable_text_form_field.dart';
+
+import 'comments_form_field.dart';
 
 class AddCommentsWidgets extends StatelessWidget {
   const AddCommentsWidgets({
@@ -48,22 +49,7 @@ class AddCommentsWidgets extends StatelessWidget {
           ),
           child: Row(
             children: [
-              Expanded(
-                child: CustomTextFormField(
-                  controller: state.commentController,
-                  keyboardType: TextInputType.text,
-                  controllerBlackColor: true,
-                  hintText: 'Enter your comment...',
-                  showBorder: false,
-                  validator: (value) {
-                    if (value!.isEmpty) {
-                      return 'Please enter a comment';
-                    }
-                    return null;
-                  },
-                ),
-              ),
-              // Send Icon Button with BLoC functionality
+              CommentsFormField(state: state),
               SendIconWidget(state: state),
             ],
           ),
