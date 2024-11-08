@@ -1,20 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/custom_container_widget.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/user_profile_screen.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/videos_profile_picture.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
+
 import '../../domain/comments_entity/comments_entity.dart';
 
 class CommentItemWidget extends StatelessWidget {
   const CommentItemWidget({
     super.key,
     required this.comment,
-    required this.state,
+    // required this.state,
   });
 
   final CommentEntity comment;
-  final CommentsBottomSheetState state;
+  // final CommentsBottomSheetState state;
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,10 @@ class CommentItemWidget extends StatelessWidget {
             child: UserProfilePicture(comment: comment),
           ),
           const SizedBox(width: 15),
-          CustomContainerWidget(comment: comment, commentsState: state),
+          CustomContainerWidget(
+            comment: comment,
+            //    commentsState: state,
+          ),
         ],
       ),
     );

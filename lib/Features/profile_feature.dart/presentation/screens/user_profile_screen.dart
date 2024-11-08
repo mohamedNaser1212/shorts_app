@@ -37,15 +37,13 @@ class UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     final check = widget.comment?.user.id ??
-        (widget.isShared == false ? widget.videoEntity?.user.id : null) ??
-        widget.user?.id ??
-        widget.videoEntity?.sharedBy?.id ??
-        '';
+        widget.videoEntity?.user.id ??
+        widget.user?.id;
     return BlocProvider(
       create: (context) => GetUserVideosCubit(
         getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
       )..getUserVideos(
-          userId: check,
+          userId: check!,
         ),
       child: UserProfileScreenBody(
         videoEntity: widget.videoEntity,

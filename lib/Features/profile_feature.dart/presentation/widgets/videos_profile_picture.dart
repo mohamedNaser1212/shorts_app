@@ -10,16 +10,23 @@ class UserProfilePicture extends StatelessWidget {
   });
 
   final VideoContentsScreenState? state;
-
   final CommentEntity? comment;
+
   @override
   Widget build(BuildContext context) {
     return CircleAvatar(
       backgroundColor: Colors.grey,
-      radius: 20,
-      child: Image.network(  state?.widget.videoEntity.user.profilePic ??
-          comment?.user.profilePic ??
-          ''),
+      radius: 25,
+      child: ClipOval(
+        child: Image.network(
+          state?.widget.videoEntity.user.profilePic ??
+              comment?.user.profilePic ??
+              '',
+          fit: BoxFit.cover,
+          width: 64,
+          height: 64,
+        ),
+      ),
     );
   }
 }

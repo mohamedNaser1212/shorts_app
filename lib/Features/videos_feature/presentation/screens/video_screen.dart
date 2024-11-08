@@ -17,6 +17,10 @@ class VideosScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: AppBar(
+        // title: const Text('Videos'),
+        backgroundColor: ColorController.transparentColor,
+      ),
       backgroundColor: ColorController.blackColor,
       body: BlocConsumer<UserInfoCubit, UserInfoState>(
         listener: _userInfoListener,

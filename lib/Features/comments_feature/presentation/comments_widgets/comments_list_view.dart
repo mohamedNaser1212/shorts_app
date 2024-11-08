@@ -33,7 +33,7 @@ class CommentsListView extends StatelessWidget {
 
         return CommentItemWidget(
           comment: comment,
-          state: state,
+          // state: state,
         );
       },
     );

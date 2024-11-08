@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/user_profile_screen.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/follow_text_widget.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_contents_screen.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
@@ -28,8 +27,8 @@ class VideoOwnerNameAndFollow extends StatelessWidget {
             color: ColorController.whiteColor,
           ),
         ),
-        const SizedBox(width: 10),
-        const FollowTextWidget(),
+        // const SizedBox(width: 10),
+        // const FollowTextWidget(),
       ],
     );
   }
