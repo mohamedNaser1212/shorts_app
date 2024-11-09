@@ -28,14 +28,13 @@ class FavouritesRepoImpl implements FavouritesRepo {
       action: () async {
         // final cachedFavourites =
         //     await favouritesLocalDataSource.getFavouriteVideos();
-        
-          final favourites = await remoteDataSource.getFavouriteVideos(
-            user: user,
-          );
 
-          await favouritesLocalDataSource.saveFavouriteVideos(favourites);
-          return favourites;
-      
+        final favourites = await remoteDataSource.getFavouriteVideos(
+          user: user,
+        );
+
+        await favouritesLocalDataSource.saveFavouriteVideos(favourites);
+        return favourites;
       },
     );
     // try {
@@ -67,7 +66,7 @@ class FavouritesRepoImpl implements FavouritesRepo {
           await favouritesLocalDataSource
               .saveFavouriteVideos(updatedFavourites);
         }
-        return result ;
+        return result;
       },
     );
 
@@ -80,5 +79,18 @@ class FavouritesRepoImpl implements FavouritesRepo {
     //   print('Error toggling favourite video: $e');
     //   return false;
     //ذ
+  }
+
+  @override
+  Future<Either<Failure, num>> getFavouritesCount({
+    required String videoId,
+  }) {
+    return repoManager.call(
+      action: () async {
+        final favouritesCount =
+            await remoteDataSource.getFavouritesCount(videoId: videoId);
+        return favouritesCount;
+      },
+    );
   }
 }

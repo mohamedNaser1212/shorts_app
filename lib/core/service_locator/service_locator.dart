@@ -58,6 +58,7 @@ import '../../Features/comments_feature/data/data_sources/comments_remote_data_s
 import '../../Features/comments_feature/domain/ccommeints_repo/comments_repo.dart';
 import '../../Features/comments_feature/domain/comments_use_case/add_comments_use_case.dart';
 import '../../Features/favourites_feature/data/favourites_repo_impl/favourite_repo_impl.dart';
+import '../../Features/favourites_feature/domain/favourites_use_case/get_favourites_count_use_case.dart';
 import '../../Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
 import '../../Features/search/data/data_sources/search_remote_data_source.dart';
 import '../../Features/search/data/repo_impl/search_repo_impl.dart';
@@ -113,11 +114,15 @@ Future<void> setUpServiceLocator() async {
   getIt.registerFactory<GetFavouritesUseCase>(() => GetFavouritesUseCase(
         favouritesRepo: getIt.get<FavouritesRepo>(),
       ));
+  getIt.registerSingleton<GetFavouritesCountUseCase>(GetFavouritesCountUseCase(
+    favouritesRepo: getIt.get<FavouritesRepo>(),
+  ));
   getIt.registerFactory<ToggleFavouritesUseCase>(() => ToggleFavouritesUseCase(
         favouritesRepo: getIt.get<FavouritesRepo>(),
       ));
   getIt.registerFactory<FavouritesCubit>(() => FavouritesCubit(
         favouritesUseCase: getIt.get<GetFavouritesUseCase>(),
+        getFavouritesCountUseCase: getIt.get<GetFavouritesCountUseCase>(),
       ));
   getIt.registerFactory<ToggleFavouritesCubit>(() => ToggleFavouritesCubit(
         favouritesUseCase: getIt.get<ToggleFavouritesUseCase>(),

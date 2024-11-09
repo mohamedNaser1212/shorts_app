@@ -13,4 +13,7 @@ abstract class FavouritesRepo {
     required VideoEntity videoEntity,
     required UserEntity userModel,
   });
+  Future<Either<Failure, num>> getFavouritesCount({
+    required String videoId,
+  });
 }

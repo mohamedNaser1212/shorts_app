@@ -26,6 +26,7 @@ class AddCommentsWidgets extends StatelessWidget {
           CommentsCubit.get(context).videoComments[videoId] = [];
           CommentsCubit.get(context).hasMoreCommentsForVideo[videoId] = true;
           CommentsCubit.get(context).getComments(videoId: videoId, page: 0);
+
           await CommentsCubit.get(context).getCommentsCount(videoId: videoId);
         } else if (addCommentState is AddCommentsErrorState) {
           ToastHelper.showToast(message: addCommentState.message);
