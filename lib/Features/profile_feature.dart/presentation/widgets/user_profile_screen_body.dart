@@ -10,6 +10,7 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
+import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../screens/user_profile_screen.dart';
 import 'custom_user_profile_information_widget.dart';
 
@@ -35,6 +36,7 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: ColorController.blackColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
         child: MultiBlocListener(
@@ -49,8 +51,12 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
             ),
           ],
           child: Column(
-            crossAxisAlignment: CrossAxisAlignment.center,
+            // crossAxisAlignment: CrossAxisAlignment.center,
+            // mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              SizedBox(
+                height: MediaQuery.sizeOf(context).height * 0.05,
+              ),
               UserProfileImageWidget(
                 videoEntity: widget.videoEntity,
                 comment: widget.comment,
@@ -59,7 +65,7 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
                     widget.videoEntity?.user ??
                     widget.userEntity,
               ),
-              const SizedBox(height: 40),
+              const SizedBox(height: 10),
               CustomTitle(
                 title: widget.comment?.user.name ??
                     widget.videoEntity?.user.name ??
@@ -68,7 +74,7 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
                     widget.userEntity!.name,
                 style: TitleStyle.style16,
               ),
-              const SizedBox(height: 10),
+              const SizedBox(height: 20),
               const Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
@@ -86,6 +92,7 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
                   ),
                 ],
               ),
+              const SizedBox(height: 10),
               const ProfileActions(),
               const SizedBox(height: 10),
               const CustomTitle(
@@ -93,22 +100,23 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
                 style: TitleStyle.style16,
               ),
               const SizedBox(height: 10),
-              // Only wrap the UserProfileVideosGridView with the BlocBuilder
-              BlocBuilder<GetUserVideosCubit, UserProfileState>(
-                builder: (context, state) {
-                  if (state is GetUserVideosLoading) {
-                    return const Center(child: CircularProgressIndicator());
-                  }
-
-                  if (state is GetUserVideosSuccessState) {
-                    return UserProfileVideosGridView(
-                      state: this,
-                    );
-                  } else {
-                    return const SizedBox.shrink();
-                  }
-                },
+              UserProfileVideosGridView(
+                state: this,
               ),
+              // Only wrap the UserProfileVideosGridView with the BlocBuilder
+              // BlocBuilder<GetUserVideosCubit, UserProfileState>(
+              //   builder: (context, state) {
+              //     if (state is GetUserVideosLoading) {
+              //       return const Center(child: CircularProgressIndicator());
+              //     }
+              //
+              //     if (state is GetUserVideosSuccessState) {
+              //       return
+              //     } else {
+              //       return const SizedBox.shrink();
+              //     }
+              //   },
+              // ),
             ],
           ),
         ),

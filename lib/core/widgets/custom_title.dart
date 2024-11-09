@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:shorts/core/managers/styles_manager/text_styles_manager.dart';
 import 'package:shorts/core/utils/constants/consts.dart';
 
+import '../managers/styles_manager/color_manager.dart';
+
 enum TitleStyle {
   style12,
   style14,
@@ -28,7 +30,7 @@ class CustomTitle extends StatelessWidget {
   const CustomTitle({
     required this.title,
     required this.style,
-    this.color,
+    this.color = ColorController.whiteColor,
     this.maxLines,
     this.overflow = TextOverflow.ellipsis,
     super.key,

@@ -13,34 +13,42 @@ class UserProfileImageWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    const double containerHeight = 150;
+    // const double containerHeight = 150;
     final String profilePicUrl = videoEntity?.user.profilePic ??
         comment?.user.profilePic ??
         user?.profilePic ??
         '';
 
-    return Stack(
-      clipBehavior: Clip.none,
-      alignment: Alignment.bottomCenter,
-      children: [
-        Container(
-          width: MediaQuery.of(context).size.width,
-          height: containerHeight,
-          color: Colors.grey[200],
-        ),
-        Positioned(
-          bottom: -30,
-          child: CircleAvatar(
-            backgroundColor: Colors.grey,
-            radius: 60,
-            backgroundImage:
-                profilePicUrl.isNotEmpty ? NetworkImage(profilePicUrl) : null,
-            child: profilePicUrl.isEmpty
-                ? const Icon(Icons.person, size: 40)
-                : null,
-          ),
-        ),
-      ],
+    return CircleAvatar(
+      backgroundColor: Colors.grey,
+      radius: 80,
+      backgroundImage:
+          profilePicUrl.isNotEmpty ? NetworkImage(profilePicUrl) : null,
+      child: profilePicUrl.isEmpty ? const Icon(Icons.person, size: 40) : null,
     );
+
+    //   Stack(
+    //   clipBehavior: Clip.none,
+    //   alignment: Alignment.bottomCenter,
+    //   children: [
+    //     Container(
+    //       width: MediaQuery.of(context).size.width,
+    //       height: containerHeight,
+    //       color: Colors.grey[200],
+    //     ),
+    //     Positioned(
+    //       bottom: -30,
+    //       child: CircleAvatar(
+    //         backgroundColor: Colors.grey,
+    //         radius: 60,
+    //         backgroundImage:
+    //             profilePicUrl.isNotEmpty ? NetworkImage(profilePicUrl) : null,
+    //         child: profilePicUrl.isEmpty
+    //             ? const Icon(Icons.person, size: 40)
+    //             : null,
+    //       ),
+    //     ),
+    //   ],
+    // );
   }
 }

@@ -5,6 +5,10 @@ import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_pro
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_screen_body.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_video_grid_view_body.dart';
 import 'package:shorts/core/functions/toast_function.dart';
+import 'package:shorts/core/widgets/custom_title.dart';
+
+import '../../../../core/managers/styles_manager/color_manager.dart';
+import 'custom_shimmer_grid_view_Widget.dart';
 
 class UserProfileVideosGridView extends StatefulWidget {
   const UserProfileVideosGridView({
@@ -29,22 +33,32 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
       },
       builder: (context, state) {
         if (state is GetUserVideosLoading) {
-          return const Center(child: CircularProgressIndicator());
+          return const CustomShimmerGridViewWidget();
         } else if (state is GetUserVideosSuccessState) {
-          //) {
           if (state.videos.isNotEmpty) {
             return Expanded(
-              child: GridView.builder(
-                gridDelegate: _gridDelegate(),
-                itemCount: state.videos.length,
-                itemBuilder: (context, index) {
-                  print('index: $index');
-                  return _builder(
-                    index: index,
-                    successState: state,
-                    state: state,
-                  );
-                },
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: GridView.builder(
+                  gridDelegate: _gridDelegate(),
+                  itemCount: state.videos.length,
+                  itemBuilder: (context, index) {
+                    print('index: $index');
+                    return _builder(
+                      index: index,
+                      successState: state,
+                      state: state,
+                    );
+                  },
+                ),
+              ),
+            );
+          } else {
+            return const Center(
+              child: CustomTitle(
+                title: 'There are no videos yet',
+                style: TitleStyle.styleBold18,
+                color: ColorController.whiteColor,
               ),
             );
           }
@@ -74,7 +88,7 @@ SliverGridDelegateWithFixedCrossAxisCount _gridDelegate() {
   return const SliverGridDelegateWithFixedCrossAxisCount(
     crossAxisCount: 2,
     childAspectRatio: 0.75,
-    crossAxisSpacing: 10.0,
-    mainAxisSpacing: 10.0,
+    crossAxisSpacing: 2.0,
+    mainAxisSpacing: 5.0,
   );
 }
