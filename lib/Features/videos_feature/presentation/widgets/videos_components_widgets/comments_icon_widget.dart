@@ -7,9 +7,21 @@ import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/widgets/custom_icon_widget.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
-class CommentsIconWidget extends StatelessWidget {
+class CommentsIconWidget extends StatefulWidget {
   const CommentsIconWidget({super.key, required this.videoEntity});
   final VideoEntity videoEntity;
+
+  @override
+  State<CommentsIconWidget> createState() => _CommentsIconWidgetState();
+}
+
+class _CommentsIconWidgetState extends State<CommentsIconWidget> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    CommentsCubit.get(context).getCommentsCount(videoId: widget.videoEntity.id);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +37,9 @@ class CommentsIconWidget extends StatelessWidget {
         const SizedBox(height: 10),
         BlocBuilder<CommentsCubit, CommentsState>(
           builder: (context, state) {
-            final count =
-                CommentsCubit.get(context).commentsCount[videoEntity.id] ?? 0;
+            final count = CommentsCubit.get(context)
+                    .commentsCount[widget.videoEntity.id] ??
+                0;
 
             return CustomTitle(
               title: count.toString(),
@@ -45,7 +58,8 @@ class CommentsIconWidget extends StatelessWidget {
     showModalBottomSheet(
       context: context,
       isScrollControlled: true,
-      builder: (context) => CommentsBottomSheet(videoEntity: videoEntity),
+      builder: (context) =>
+          CommentsBottomSheet(videoEntity: widget.videoEntity),
     );
   }
 }

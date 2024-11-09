@@ -34,12 +34,13 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
   Widget build(BuildContext context) {
     String name = widget.comment?.user.name ??
         widget.videoEntity?.user.name ??
-        //widget.userProfileState.widget.user?.name ??
+        widget.userProfileState.widget.user?.name ??
         widget.videoEntity?.sharedBy?.name ??
         widget.userEntity!.name;
-    UserEntity user =
-        //widget.userProfileState.widget.user ??
-        widget.comment?.user ?? widget.videoEntity?.user ?? widget.userEntity!;
+    UserEntity user = widget.userProfileState.widget.user ??
+        widget.comment?.user ??
+        widget.videoEntity?.user ??
+        widget.userEntity!;
     return Scaffold(
       backgroundColor: ColorController.blackColor,
       body: Padding(

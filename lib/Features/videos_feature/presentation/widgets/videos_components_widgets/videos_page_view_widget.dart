@@ -76,7 +76,7 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
 
               return VideoListItem(
                 videoEntity: video,
-                isShared: isShared,
+                // isShared: isShared,
               );
             },
           );

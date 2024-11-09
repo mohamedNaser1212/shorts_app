@@ -9,13 +9,13 @@ import '../../../domain/video_entity/video_entity.dart';
 class VideoListItem extends StatelessWidget {
   final VideoEntity videoEntity;
   final FavouritesEntity? favouriteEntity;
-  final bool isShared;
+  final bool? fromProfile;
 
   const VideoListItem({
     super.key,
     required this.videoEntity,
     this.favouriteEntity,
-    required this.isShared,
+    this.fromProfile,
   });
 
   @override
@@ -34,7 +34,7 @@ class VideoListItem extends StatelessWidget {
 
     return VideoListBody(
       videoEntity: videoEntity,
-      isShared: isShared,
+      fromProfile: fromProfile,
       videoController: videoProvider,
       // favouriteEntity: favouriteEntity,
     );

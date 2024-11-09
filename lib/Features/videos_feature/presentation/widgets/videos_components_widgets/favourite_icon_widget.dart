@@ -9,9 +9,23 @@ import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/widgets/custom_icon_widget.dart';
 
-class FavouriteIconWidget extends StatelessWidget {
+class FavouriteIconWidget extends StatefulWidget {
   const FavouriteIconWidget({super.key, required this.videoEntity});
   final VideoEntity videoEntity;
+
+  @override
+  State<FavouriteIconWidget> createState() => _FavouriteIconWidgetState();
+}
+
+class _FavouriteIconWidgetState extends State<FavouriteIconWidget> {
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    FavouritesCubit.get(context).getFavouritesCount(
+      videoId: widget.videoEntity.id,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -21,7 +35,8 @@ class FavouriteIconWidget extends StatelessWidget {
       listener: _toggleFavouriteListener,
       builder: (context, state) {
         final notificationHelper = getIt.get<NotificationHelper>();
-        final isFavorite = favouritesCubit.favorites[videoEntity.id] ?? false;
+        final isFavorite =
+            favouritesCubit.favorites[widget.videoEntity.id] ?? false;
 
         return Column(
           mainAxisSize: MainAxisSize.min,
@@ -37,7 +52,7 @@ class FavouriteIconWidget extends StatelessWidget {
             BlocBuilder<FavouritesCubit, FavouritesState>(
               builder: (context, state) {
                 final count =
-                    favouritesCubit.favouritesCount[videoEntity.id] ?? 0;
+                    favouritesCubit.favouritesCount[widget.videoEntity.id] ?? 0;
                 return Text(
                   count.toString(),
                   style: const TextStyle(color: Colors.white),
@@ -62,13 +77,14 @@ class FavouriteIconWidget extends StatelessWidget {
       ToastHelper.showToast(message: state.message);
       final favouritesCubit = FavouritesCubit.get(context);
 
-      var isFavorite = favouritesCubit.favorites[videoEntity.id] ?? false;
+      var isFavorite =
+          favouritesCubit.favorites[widget.videoEntity.id] ?? false;
       final previousCount =
-          favouritesCubit.favouritesCount[videoEntity.id] ?? 0;
+          favouritesCubit.favouritesCount[widget.videoEntity.id] ?? 0;
 
-      favouritesCubit.favorites[videoEntity.id] = !isFavorite;
+      favouritesCubit.favorites[widget.videoEntity.id] = !isFavorite;
       final newCount = isFavorite ? previousCount - 1 : previousCount + 1;
-      favouritesCubit.favouritesCount[videoEntity.id] = newCount;
+      favouritesCubit.favouritesCount[widget.videoEntity.id] = newCount;
     }
   }
 
@@ -78,19 +94,21 @@ class FavouriteIconWidget extends StatelessWidget {
   ) {
     final favouritesCubit = FavouritesCubit.get(context);
     final userEntity = UserInfoCubit.get(context).userEntity!;
-    final isFavorite = favouritesCubit.favorites[videoEntity.id] ?? false;
-    final previousCount = favouritesCubit.favouritesCount[videoEntity.id] ?? 0;
+    final isFavorite =
+        favouritesCubit.favorites[widget.videoEntity.id] ?? false;
+    final previousCount =
+        favouritesCubit.favouritesCount[widget.videoEntity.id] ?? 0;
 
-    favouritesCubit.favorites[videoEntity.id] = !isFavorite;
+    favouritesCubit.favorites[widget.videoEntity.id] = !isFavorite;
 
     final newCount = isFavorite
         ? (previousCount - 1).clamp(0, double.infinity).toInt()
         : previousCount + 1;
 
-    favouritesCubit.favouritesCount[videoEntity.id] = newCount;
+    favouritesCubit.favouritesCount[widget.videoEntity.id] = newCount;
 
     ToggleFavouritesCubit.get(context).toggleFavourite(
-      video: videoEntity,
+      video: widget.videoEntity,
       userModel: userEntity,
     );
   }

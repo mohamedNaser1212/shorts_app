@@ -58,7 +58,7 @@ class FavouritesCubit extends Cubit<FavouritesState> {
       (failure) => emit(GetFavoritesCountErrorState(message: failure.message)),
       (count) {
         favouritesCount[videoId] = count;
-        // Add updated favorites count to the stream
+
         emit(GetFavoritesCountSuccessState(favCount: count));
       },
     );

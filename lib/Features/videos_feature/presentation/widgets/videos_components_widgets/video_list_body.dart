@@ -5,19 +5,20 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_compo
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/thumbnail_notifier.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/video_controller/video_controller.dart';
+import 'package:shorts/core/widgets/custom_app_bar.dart';
 
 class VideoListBody extends StatefulWidget {
   const VideoListBody({
     super.key,
     required this.videoEntity,
     required this.videoController,
-    required this.isShared,
+    this.fromProfile,
 //    this.favouriteEntity,
   });
 
   final VideoEntity videoEntity;
   final VideoController videoController;
-  final bool isShared;
+  final bool? fromProfile;
   //final FavouritesEntity? favouriteEntity;
 
   @override
@@ -29,6 +30,13 @@ class _VideoListBodyState extends State<VideoListBody> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: ColorController.blackColor,
+      appBar: widget.fromProfile == true
+          ? const CustomAppBar(
+              title: '',
+              backColor: ColorController.transparentColor,
+              showLeadingIcon: true,
+            )
+          : null,
       body: GestureDetector(
         onTap: () => widget.videoController.togglePlayPause(),
         child: Stack(
@@ -42,7 +50,7 @@ class _VideoListBodyState extends State<VideoListBody> {
             VideoComponentsWidget(
               videoEntity: widget.videoEntity,
               videoProvider: widget.videoController,
-              isShared: widget.isShared,
+              // isShared: widget.isShared,
             ),
           ],
         ),

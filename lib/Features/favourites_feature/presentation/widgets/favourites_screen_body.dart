@@ -55,7 +55,7 @@ class FavouritesScreenBody extends StatelessWidget {
               return VideoListItem(
                 favouriteEntity: favouriteEntity,
                 videoEntity: videoEntity,
-                isShared: isShared,
+                //isShared: isShared,
               );
             },
           );
