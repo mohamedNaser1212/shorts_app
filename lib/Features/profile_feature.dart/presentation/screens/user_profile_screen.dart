@@ -4,10 +4,8 @@ import 'package:shorts/Features/comments_feature/domain/comments_entity/comments
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
-import 'package:shorts/core/user_info/domain/use_cases/get_user_info_use_case.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
-import '../../../authentication_feature/domain/authentication_use_case/sign_out_use_case.dart';
 import '../../domain/use_case/user_profile_videos_use_case.dart';
 import '../cubit/user_profile_cubit/user_profile_cubit.dart';
 import '../widgets/user_profile_screen_body.dart';
@@ -46,12 +44,14 @@ class UserProfileScreenState extends State<UserProfileScreen> {
 
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => UserInfoCubit(
-            getUserUseCase: getIt.get<GetUserInfoUseCase>(),
-            signOutUseCase: getIt.get<SignOutUseCase>(),
-          )..getUserData(),
-        ),
+        // // Bloc for fetching user data
+        // BlocProvider(
+        //   create: (context) => UserInfoCubit(
+        //     getUserUseCase: getIt.get<GetUserInfoUseCase>(),
+        //     signOutUseCase: getIt.get<SignOutUseCase>(),
+        //   )..getUserData(),
+        // ),
+        // // Bloc for fetching user videos separately
         BlocProvider(
           create: (context) => GetUserVideosCubit(
             getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
@@ -75,13 +75,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
       );
     }
 
-    return Scaffold(
-      body: Center(
-        child: state is GetUserInfoLoadingState
-            ? const CircularProgressIndicator()
-            : const Text('Error loading user data'),
-      ),
-    );
+    return const SizedBox.shrink();
   }
 
   void _listener(BuildContext context, UserInfoState state) {
