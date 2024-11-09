@@ -28,7 +28,6 @@ class SearchScreenBody extends StatelessWidget {
               padding: const EdgeInsets.all(15.0),
               child: Row(
                 children: [
-                  // Use the CustomBackIcon widget with a size of 32
                   CustomBackIconWidget(
                     size: 32,
                     onPressed: () {
