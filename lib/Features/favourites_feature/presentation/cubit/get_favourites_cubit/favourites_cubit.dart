@@ -24,20 +24,6 @@ class FavouritesCubit extends Cubit<FavouritesState> {
   List<FavouritesEntity> getFavouritesModel = [];
   final Map<String, num> favouritesCount = {};
 
-  // StreamController to broadcast favorites count updates
-  final _favouritesCountController =
-      StreamController<Map<String, num>>.broadcast();
-
-  // Expose the stream to listen for favorites count updates
-  Stream<Map<String, num>> get favouritesCountStream =>
-      _favouritesCountController.stream;
-
-  @override
-  Future<void> close() {
-    _favouritesCountController.close();
-    return super.close();
-  }
-
   // Method to get favorites for a user
   Future<void> getFavourites({
     required UserEntity user,
@@ -57,19 +43,12 @@ class FavouritesCubit extends Cubit<FavouritesState> {
         favorites.addAll({for (var p in favourites) p.id!: true});
 
         // Emit the updated favorites count to the stream
-        _favouritesCountController.add(favouritesCount);
 
         emit(GetFavoritesSuccessState(getFavouritesModel: getFavouritesModel));
       },
     );
   }
 
-  // Method to update the favorites count in the stream after toggling
-  void updateFavouriteCount() {
-    _favouritesCountController.add(favouritesCount);
-  }
-
-  // Method to get the favourites count for a video
   Future<num> getFavouritesCount({required String videoId}) async {
     emit(GetFavoritesCountLoadingState());
 
@@ -80,7 +59,6 @@ class FavouritesCubit extends Cubit<FavouritesState> {
       (count) {
         favouritesCount[videoId] = count;
         // Add updated favorites count to the stream
-        _favouritesCountController.add(favouritesCount);
         emit(GetFavoritesCountSuccessState(favCount: count));
       },
     );

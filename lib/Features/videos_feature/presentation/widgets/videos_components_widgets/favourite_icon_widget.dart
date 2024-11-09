@@ -16,6 +16,7 @@ class FavouriteIconWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final favouritesCubit = FavouritesCubit.get(context);
+
     return BlocConsumer<ToggleFavouritesCubit, ToggleFavouritesState>(
       listener: _toggleFavouriteListener,
       builder: (context, state) {
@@ -32,10 +33,11 @@ class FavouriteIconWidget extends StatelessWidget {
                 color: isFavorite ? Colors.red : Colors.white,
               ),
             ),
-            StreamBuilder<Map<String, num>>(
-              stream: favouritesCubit.favouritesCountStream,
-              builder: (context, snapshot) {
-                final count = snapshot.data?[videoEntity.id] ?? 0;
+            // Replaced StreamBuilder with BlocBuilder
+            BlocBuilder<FavouritesCubit, FavouritesState>(
+              builder: (context, state) {
+                final count =
+                    favouritesCubit.favouritesCount[videoEntity.id] ?? 0;
                 return Text(
                   count.toString(),
                   style: const TextStyle(color: Colors.white),
@@ -65,7 +67,6 @@ class FavouriteIconWidget extends StatelessWidget {
           favouritesCubit.favouritesCount[videoEntity.id] ?? 0;
 
       favouritesCubit.favorites[videoEntity.id] = !isFavorite;
-
       final newCount = isFavorite ? previousCount - 1 : previousCount + 1;
       favouritesCubit.favouritesCount[videoEntity.id] = newCount;
     }
@@ -79,22 +80,18 @@ class FavouriteIconWidget extends StatelessWidget {
     final userEntity = UserInfoCubit.get(context).userEntity!;
     final isFavorite = favouritesCubit.favorites[videoEntity.id] ?? false;
     final previousCount = favouritesCubit.favouritesCount[videoEntity.id] ?? 0;
+
     favouritesCubit.favorites[videoEntity.id] = !isFavorite;
-    final newCount = isFavorite ? previousCount - 1 : previousCount + 1;
+
+    final newCount = isFavorite
+        ? (previousCount - 1).clamp(0, double.infinity).toInt()
+        : previousCount + 1;
+
     favouritesCubit.favouritesCount[videoEntity.id] = newCount;
-    favouritesCubit.updateFavouriteCount();
+
     ToggleFavouritesCubit.get(context).toggleFavourite(
       video: videoEntity,
       userModel: userEntity,
     );
-
-    // Optionally, send a notification
-    // notificationHelper.sendNotificationToSpecificUser(
-    //   fcmToken: videoEntity.user.fcmToken,
-    //   userId: videoEntity.user.id!,
-    //   title: 'Like',
-    //   body: 'Your video has been liked by ${userEntity.name}',
-    //   context: context,
-    // );
   }
 }
