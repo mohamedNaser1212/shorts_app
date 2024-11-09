@@ -1,5 +1,5 @@
-import 'package:bloc/bloc.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/search/domain/use_case/search_use_case.dart';
 
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
@@ -12,10 +12,12 @@ class SearchCubit extends Cubit<SearchState> {
   SearchCubit({
     required this.searchUseCase,
   }) : super(SearchState());
-
+  static SearchCubit get(context) => BlocProvider.of<SearchCubit>(context);
   final SearchUseCase searchUseCase;
 
-  Future<void> searchUsers(String query) async {
+  Future<void> searchUsers({
+    required String query,
+  }) async {
     emit(SearchLoading());
 
     final searchResults = await searchUseCase.call(search: query);
