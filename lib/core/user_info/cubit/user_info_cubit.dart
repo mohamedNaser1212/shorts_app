@@ -29,18 +29,36 @@ class UserInfoCubit extends Cubit<UserInfoState> {
         emit(GetUserInfoErrorState(message: failure.message));
       },
       (user) {
-   
-   
         print(userModel?.name);
         userEntity = user;
-       
-       
+
         emit(GetUserInfoSuccessState(userEntity: userEntity));
       },
     );
   }
-    Future<void> signOut() async {
-   emit(SignOutLoadingState());
+
+  UserModel? selectedUser;
+  Future<void> getUserById({
+    required String uId,
+  }) async {
+    emit(GetUserInfoLoadingState());
+    final result = await getUserUseCase.getUserById(uId: uId);
+    result.fold(
+      (failure) {
+        print(failure.message);
+        emit(GetUserInfoErrorState(message: failure.message));
+      },
+      (user) {
+        print(userModel?.name);
+        selectedUser = user;
+
+        emit(GetUserInfoSuccessState(userEntity: selectedUser));
+      },
+    );
+  }
+
+  Future<void> signOut() async {
+    emit(SignOutLoadingState());
     final result = await signOutUseCase.call();
     result.fold(
       (failure) {

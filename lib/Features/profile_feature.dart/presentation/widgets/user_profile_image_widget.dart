@@ -1,23 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
-import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
+
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
 class UserProfileImageWidget extends StatelessWidget {
-  const UserProfileImageWidget(
-      {super.key, this.videoEntity, this.comment, this.user});
-
-  final VideoEntity? videoEntity;
-  final CommentEntity? comment;
+  const UserProfileImageWidget({
+    super.key,
+    // this.videoEntity,
+    // this.comment,
+    this.user,
+  });
+  // String? userId;
+  // final VideoEntity? videoEntity;
+  // final CommentEntity? comment;
   final UserEntity? user;
 
   @override
   Widget build(BuildContext context) {
     // const double containerHeight = 150;
-    final String profilePicUrl = videoEntity?.user.profilePic ??
-        comment?.user.profilePic ??
-        user?.profilePic ??
-        '';
+    final String profilePicUrl = user?.profilePic ?? '';
 
     return CircleAvatar(
       backgroundColor: Colors.grey,

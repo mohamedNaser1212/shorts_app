@@ -43,8 +43,9 @@ class CommentItemWidget extends StatelessWidget {
     NavigationManager.navigateTo(
       context: context,
       screen: UserProfileScreen(
-        isShared: false,
-        comment: comment,
+        user: comment.user,
+        // isShared: false,
+        // comment: comment,
       ),
     );
   }

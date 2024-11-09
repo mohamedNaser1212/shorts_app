@@ -13,9 +13,9 @@ class LayoutModel {
     const ChooseVideoPage(),
     const SearchScreen(),
     UserProfileScreen(
-      isShared: false,
-      //user: UserInfoCubit.get(context).userEntity,
-    ),
+        //isShared: false,
+        //user: UserInfoCubit.get(context).userEntity,
+        ),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavigationBarItems = const [

@@ -1,29 +1,27 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/profile_actions.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_image_widget.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_video_grid_view.dart';
-import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
 import '../../../../core/managers/styles_manager/color_manager.dart';
-import '../screens/user_profile_screen.dart';
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import 'custom_user_profile_information_widget.dart';
 
 class UserProfileScreenBody extends StatefulWidget {
   const UserProfileScreenBody({
     super.key,
-    this.videoEntity,
-    required this.userProfileState,
-    this.comment,
+    // this.videoEntity,
+    // required this.userProfileState,
+    // this.comment,
     this.userEntity,
+    // this.userId,
   });
-
-  final VideoEntity? videoEntity;
+//  final String? userId;
+  // final VideoEntity? videoEntity;
   final UserEntity? userEntity;
-  final UserProfileScreenState userProfileState;
-  final CommentEntity? comment;
+  // final UserProfileScreenState userProfileState;
+  // final CommentEntity? comment;
 
   @override
   State<UserProfileScreenBody> createState() => UserProfileScreenBodyState();
@@ -32,15 +30,7 @@ class UserProfileScreenBody extends StatefulWidget {
 class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
   @override
   Widget build(BuildContext context) {
-    String name = widget.comment?.user.name ??
-        widget.videoEntity?.user.name ??
-        widget.userProfileState.widget.user?.name ??
-        widget.videoEntity?.sharedBy?.name ??
-        widget.userEntity!.name;
-    UserEntity user = widget.userProfileState.widget.user ??
-        widget.comment?.user ??
-        widget.videoEntity?.user ??
-        widget.userEntity!;
+    String name = widget.userEntity!.name ?? '';
     return Scaffold(
       backgroundColor: ColorController.blackColor,
       body: Padding(
@@ -51,9 +41,9 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
               height: MediaQuery.sizeOf(context).height * 0.05,
             ),
             UserProfileImageWidget(
-              videoEntity: widget.videoEntity,
-              comment: widget.comment,
-              user: user,
+              // videoEntity: widget.videoEntity,
+              // comment: widget.comment,
+              user: widget.userEntity!,
             ),
             const SizedBox(height: 10),
             CustomTitle(
@@ -80,12 +70,12 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
             ),
             const SizedBox(height: 10),
 
-            if (widget.videoEntity == null && widget.comment == null ||
-                widget.videoEntity != null &&
-                    widget.videoEntity!.user.id == widget.userEntity!.id ||
-                widget.comment != null &&
-                    widget.comment!.user.id == widget.userEntity!.id)
-              const ProfileActions(),
+            // if (widget.videoEntity == null && widget.comment == null ||
+            //     widget.videoEntity != null &&
+            //         widget.videoEntity!.user.id == widget.userEntity!.id ||
+            //     widget.comment != null &&
+            //         widget.comment!.user.id == widget.userEntity!.id)
+            const ProfileActions(),
             const SizedBox(height: 10),
 
             const SizedBox(height: 10),

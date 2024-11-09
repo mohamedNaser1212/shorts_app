@@ -83,8 +83,9 @@ class SearchScreenBody extends StatelessWidget {
                               NavigationManager.navigateTo(
                                 context: context,
                                 screen: UserProfileScreen(
-                                  isShared: false,
                                   user: user,
+                                  // isShared: false,
+                                  // user: user,
                                 ),
                               );
                             },

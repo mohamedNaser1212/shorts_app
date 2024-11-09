@@ -71,8 +71,9 @@ class VideoOwnerInfoBody extends StatelessWidget {
       NavigationManager.navigateTo(
         context: context,
         screen: UserProfileScreen(
-          videoEntity: state.widget.videoEntity,
-          isShared: false,
+          user: state.widget.videoEntity.user,
+          // videoEntity: state.widget.videoEntity,
+          // isShared: false,
         ),
       );
     }
