@@ -9,20 +9,27 @@ class CustomContainerWidget extends StatelessWidget {
     required this.title,
     this.icon,
     required this.onTap,
+    this.titleStyle,
+    this.textColor,
+    this.containerColor,
   });
   final String title;
   final IconData? icon;
   final Function() onTap;
+  final TitleStyle? titleStyle;
+  final Color? textColor;
+  final Color? containerColor;
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(10),
+        padding: const EdgeInsets.all(15),
+        height: MediaQuery.of(context).size.height * 0.06,
         decoration: BoxDecoration(
-          color: ColorController.purpleColor,
-          borderRadius: BorderRadius.circular(5),
+          color: containerColor ?? ColorController.purpleColor,
+          borderRadius: BorderRadius.circular(10),
         ),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -36,8 +43,8 @@ class CustomContainerWidget extends StatelessWidget {
             ],
             CustomTitle(
               title: title,
-              style: TitleStyle.style16,
-              color: ColorController.whiteColor,
+              style: titleStyle ?? TitleStyle.style16,
+              color: textColor ?? ColorController.whiteColor,
             ),
           ],
         ),

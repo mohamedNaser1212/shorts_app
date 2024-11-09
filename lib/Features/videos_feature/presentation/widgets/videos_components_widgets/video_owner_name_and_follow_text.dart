@@ -38,13 +38,14 @@ class VideoOwnerNameAndFollow extends StatelessWidget {
     required VideoContentsScreenState state,
   }) {
     if (state.widget.videoEntity.sharedBy != null) {
-      NavigationManager.navigateTo(
-        context: context,
-        screen: UserProfileScreen(
-          user: state.widget.videoEntity.sharedBy,
-          isShared: true,
-        ),
-      );
+      // NavigationManager.navigateTo(
+      //   context: context,
+      //   screen: UserProfileScreen(
+      //
+      //     //user: state.widget.videoEntity.sharedBy,
+      //   //  isShared: true,
+      //   ),
+      // );
     } else {
       NavigationManager.navigateTo(
         context: context,

@@ -9,6 +9,10 @@ import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/widgets/custom_progress_indicator.dart';
 
+import '../../../../core/widgets/custom_app_bar.dart';
+import '../../../../core/widgets/custom_title.dart';
+import '../widgets/update_profile_elevated_button.dart';
+
 class EditProfileScreen extends StatefulWidget {
   const EditProfileScreen({super.key});
 
@@ -72,10 +76,24 @@ class EditProfileScreenState extends State<EditProfileScreen> {
 
     return Scaffold(
       backgroundColor: ColorController.blackColor,
-      // appBar: const CustomAppBar(title: 'Edit Profile'),
+      appBar: const CustomAppBar(
+        title: 'Edit Profile',
+        backColor: ColorController.transparentColor,
+        titleStyle: TitleStyle.styleBold24,
+        centerTitle: true,
+        showLeadingIcon: true,
+
+        //leading: CustomBackIconWidget(),
+      ),
       body: CustomProgressIndicator(
         isLoading: userState is GetUserInfoLoadingState,
         child: EditProfileScreenBody(state: this),
+      ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 20),
+        child: UpdateProfileElevatedButton(
+          editState: this,
+        ),
       ),
     );
   }

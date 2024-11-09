@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
-import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_profile_cubit/get_user_videos_state.dart';
-import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_profile_cubit/user_profile_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/profile_actions.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_image_widget.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_video_grid_view.dart';
@@ -35,90 +32,80 @@ class UserProfileScreenBody extends StatefulWidget {
 class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
   @override
   Widget build(BuildContext context) {
+    String name = widget.comment?.user.name ??
+        widget.videoEntity?.user.name ??
+        //widget.userProfileState.widget.user?.name ??
+        widget.videoEntity?.sharedBy?.name ??
+        widget.userEntity!.name;
+    UserEntity user =
+        //widget.userProfileState.widget.user ??
+        widget.comment?.user ?? widget.videoEntity?.user ?? widget.userEntity!;
     return Scaffold(
       backgroundColor: ColorController.blackColor,
       body: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20.0),
-        child: MultiBlocListener(
-          listeners: [
-            BlocListener<GetUserVideosCubit, UserProfileState>(
-              listener: (context, state) {
-                if (state is GetUserVideosError) {
-                  // Handle error fetching videos
-                  print("Error loading user videos: ${state.message}");
-                }
-              },
+        child: Column(
+          children: [
+            SizedBox(
+              height: MediaQuery.sizeOf(context).height * 0.05,
             ),
-          ],
-          child: Column(
-            // crossAxisAlignment: CrossAxisAlignment.center,
-            // mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              SizedBox(
-                height: MediaQuery.sizeOf(context).height * 0.05,
-              ),
-              UserProfileImageWidget(
-                videoEntity: widget.videoEntity,
-                comment: widget.comment,
-                user: widget.userProfileState.widget.user ??
-                    widget.comment?.user ??
-                    widget.videoEntity?.user ??
-                    widget.userEntity,
-              ),
-              const SizedBox(height: 10),
-              CustomTitle(
-                title: widget.comment?.user.name ??
-                    widget.videoEntity?.user.name ??
-                    widget.userProfileState.widget.user?.name ??
-                    widget.videoEntity?.sharedBy?.name ??
-                    widget.userEntity!.name,
-                style: TitleStyle.style16,
-              ),
-              const SizedBox(height: 20),
-              const Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  CustomUserProfileInformations(
-                    number: '0',
-                    title: 'Followings',
-                  ),
-                  CustomUserProfileInformations(
-                    number: '0',
-                    title: 'Followers',
-                  ),
-                  CustomUserProfileInformations(
-                    number: '0',
-                    title: 'Likes',
-                  ),
-                ],
-              ),
-              const SizedBox(height: 10),
+            UserProfileImageWidget(
+              videoEntity: widget.videoEntity,
+              comment: widget.comment,
+              user: user,
+            ),
+            const SizedBox(height: 10),
+            CustomTitle(
+              title: name,
+              style: TitleStyle.styleBold24,
+            ),
+            const SizedBox(height: 20),
+            const Row(
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                CustomUserProfileInformations(
+                  number: '0',
+                  title: 'Followings',
+                ),
+                CustomUserProfileInformations(
+                  number: '0',
+                  title: 'Followers',
+                ),
+                CustomUserProfileInformations(
+                  number: '0',
+                  title: 'Likes',
+                ),
+              ],
+            ),
+            const SizedBox(height: 10),
+
+            if (widget.videoEntity == null && widget.comment == null ||
+                widget.videoEntity != null &&
+                    widget.videoEntity!.user.id == widget.userEntity!.id ||
+                widget.comment != null &&
+                    widget.comment!.user.id == widget.userEntity!.id)
               const ProfileActions(),
-              const SizedBox(height: 10),
-              const CustomTitle(
-                title: 'Videos',
-                style: TitleStyle.style16,
-              ),
-              const SizedBox(height: 10),
-              UserProfileVideosGridView(
-                state: this,
-              ),
-              // Only wrap the UserProfileVideosGridView with the BlocBuilder
-              // BlocBuilder<GetUserVideosCubit, UserProfileState>(
-              //   builder: (context, state) {
-              //     if (state is GetUserVideosLoading) {
-              //       return const Center(child: CircularProgressIndicator());
-              //     }
-              //
-              //     if (state is GetUserVideosSuccessState) {
-              //       return
-              //     } else {
-              //       return const SizedBox.shrink();
-              //     }
-              //   },
-              // ),
-            ],
-          ),
+            const SizedBox(height: 10),
+
+            const SizedBox(height: 10),
+            UserProfileVideosGridView(
+              state: this,
+            ),
+            // Only wrap the UserProfileVideosGridView with the BlocBuilder
+            // BlocBuilder<GetUserVideosCubit, UserProfileState>(
+            //   builder: (context, state) {
+            //     if (state is GetUserVideosLoading) {
+            //       return const Center(child: CircularProgressIndicator());
+            //     }
+            //
+            //     if (state is GetUserVideosSuccessState) {
+            //       return
+            //     } else {
+            //       return const SizedBox.shrink();
+            //     }
+            //   },
+            // ),
+          ],
         ),
       ),
     );

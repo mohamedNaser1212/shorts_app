@@ -4,7 +4,6 @@ import 'package:shorts/Features/comments_feature/domain/comments_entity/comments
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
-import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
 import '../../domain/use_case/user_profile_videos_use_case.dart';
 import '../cubit/user_profile_cubit/user_profile_cubit.dart';
@@ -15,12 +14,12 @@ class UserProfileScreen extends StatefulWidget {
     super.key,
     required this.isShared,
     this.videoEntity,
-    this.user,
+    //  this.user,
     this.comment,
   });
 
   final VideoEntity? videoEntity;
-  final UserEntity? user;
+//  final UserEntity? user;
   final bool isShared;
   final CommentEntity? comment;
 
@@ -39,7 +38,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
     final user = UserInfoCubit.get(context).userEntity;
     final check = widget.comment?.user.id ??
         widget.videoEntity?.user.id ??
-        widget.user?.id ??
+        // widget.user?.id ??
         user?.id;
 
     return MultiBlocProvider(

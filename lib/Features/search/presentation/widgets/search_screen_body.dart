@@ -82,9 +82,9 @@ class SearchScreenBody extends StatelessWidget {
                             onTap: () {
                               NavigationManager.navigateTo(
                                 context: context,
-                                screen: UserProfileScreen(
+                                screen: const UserProfileScreen(
                                   isShared: false,
-                                  user: user,
+                                  // user: user,
                                 ),
                               );
                             },

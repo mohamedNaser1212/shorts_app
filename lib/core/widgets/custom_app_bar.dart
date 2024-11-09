@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
@@ -12,6 +11,8 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final bool centerTitle;
   final List<Widget>? actions;
   final Widget? leading;
+  final TitleStyle? titleStyle;
+  final double? leadingSize;
 
   const CustomAppBar({
     super.key,
@@ -22,23 +23,28 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
     this.actions,
     this.centerTitle = false,
     this.leading,
+    this.titleStyle,
+    this.leadingSize = 32,
   });
 
   @override
   Widget build(BuildContext context) {
     return AppBar(
       backgroundColor: backColor,
-    leading: leading ??
+      leading: leading ??
           (showLeadingIcon
               ? IconButton(
-                  icon: const Icon(Icons.arrow_back,
-                      color: ColorController.whiteColor),
+                  icon: Icon(
+                    Icons.arrow_back,
+                    color: ColorController.whiteColor,
+                    size: leadingSize,
+                  ),
                   onPressed: () => _onPressed(context: context),
                 )
               : null),
       title: CustomTitle(
         title: title,
-        style: TitleStyle.styleBold20,
+        style: titleStyle ?? TitleStyle.styleBold20,
         color: textColor,
       ),
       centerTitle: centerTitle,
