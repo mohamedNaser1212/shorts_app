@@ -18,37 +18,47 @@ class SearchCubit extends Cubit<SearchState> {
   Future<void> searchUsers({
     required String query,
   }) async {
-    emit(SearchLoading());
+    emit(GetSearchResultsLoadingState());
 
     final searchResults = await searchUseCase.call(search: query);
     searchResults.fold(
-      (failure) => emit(SearchError(errorMessage: failure.message)),
-      (searchResults) => emit(SearchLoaded(searchResults: searchResults)),
+      (failure) =>
+          emit(GetSearchResultsErrorState(errorMessage: failure.message)),
+      (searchResults) =>
+          emit(GetSearchResultsSuccessState(searchResults: searchResults)),
     );
-    // try {
-    //   QuerySnapshot snapshot = await _firestore
-    //       .collection('users')
-    //       .where('name', isGreaterThanOrEqualTo: query)
-    //       .where('name', isLessThanOrEqualTo: query + '\uf8ff')
-    //       .get();
-    //
-    //   List<UserEntity> searchResults = snapshot.docs
-    //       .map((doc) {
-    //         final data = doc.data();
-    //         if (data != null) {
-    //           return UserEntity.fromJson(data as Map<String, dynamic>);
-    //         }
-    //         return null; // Return null if data is missing
-    //       })
-    //       .whereType<UserEntity>()
-    //       .toList();
-    //
-    //   emit(SearchLoaded(
-    //     searchResults: searchResults,
-    //   ));
-    // } catch (e) {
-    //   print(e.toString());
-    //   emit(SearchError(errorMessage: e.toString()));
-    // }
   }
+
+  void clearSearch() {
+    emit(
+      GetSearchResultsSuccessState(
+        searchResults: [],
+      ),
+    );
+  }
+  // try {
+  //   QuerySnapshot snapshot = await _firestore
+  //       .collection('users')
+  //       .where('name', isGreaterThanOrEqualTo: query)
+  //       .where('name', isLessThanOrEqualTo: query + '\uf8ff')
+  //       .get();
+  //
+  //   List<UserEntity> searchResults = snapshot.docs
+  //       .map((doc) {
+  //         final data = doc.data();
+  //         if (data != null) {
+  //           return UserEntity.fromJson(data as Map<String, dynamic>);
+  //         }
+  //         return null; // Return null if data is missing
+  //       })
+  //       .whereType<UserEntity>()
+  //       .toList();
+  //
+  //   emit(SearchLoaded(
+  //     searchResults: searchResults,
+  //   ));
+  // } catch (e) {
+  //   print(e.toString());
+  //   emit(SearchError(errorMessage: e.toString()));
+  // }
 }

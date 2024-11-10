@@ -4,6 +4,10 @@ import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
+import '../../domain/use_case/follow_use_case.dart';
+import '../../domain/use_case/get_followers_count_use_case.dart';
+import '../../domain/use_case/get_followings_count_use_case.dart';
+import '../../domain/use_case/unfollow_use_case.dart';
 import '../../domain/use_case/user_profile_videos_use_case.dart';
 import '../cubit/user_profile_cubit/user_profile_cubit.dart';
 import '../widgets/user_profile_screen_body.dart';
@@ -51,11 +55,14 @@ class UserProfileScreenState extends State<UserProfileScreen> {
         //     signOutUseCase: getIt.get<SignOutUseCase>(),
         //   )..getUserData(),
         // ),
-        // // Bloc for fetching user videos separately
         BlocProvider(
           create: (context) => GetUserVideosCubit(
             getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
-          )..getUserVideos(userId: check!),
+            followUserUseCase: getIt.get<FollowUserUseCase>(),
+            unfollowUserUseCase: getIt.get<UnfollowUserUseCase>(),
+            getFollowersCountUseCase: getIt.get<GetFollowersCountUseCase>(),
+            getFollowingCountUseCase: getIt.get<GetFollowingCountUseCase>(),
+          )..getUserVideos(userId: check),
         ),
       ],
       child: BlocConsumer<UserInfoCubit, UserInfoState>(

@@ -5,22 +5,64 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 import 'package:shorts/core/managers/error_manager/failure.dart';
 import 'package:shorts/core/managers/repo_manager/repo_manager.dart';
 
-class UserProfileVideosRepoImpl implements UserProfileVideosRepo {
-  final UserProfileVideosRemoteDataSource remoteDataSource;
+class UserProfileRepoImpl implements UserProfileRepo {
+  final UserProfilesRemoteDataSource remoteDataSource;
   final RepoManager repoManager;
 
-  UserProfileVideosRepoImpl({
+  UserProfileRepoImpl({
     required this.remoteDataSource,
     required this.repoManager,
   });
 
   @override
-  Future<Either<Failure,List<VideoEntity>>> getUserVideos({
-    required String userId
+  Future<Either<Failure, List<VideoEntity>>> getUserVideos(
+      {required String userId}) async {
+    return repoManager.call(action: () async {
+      final videos = await remoteDataSource.getUserVideos(userId: userId);
+      return videos;
+    });
+  }
+
+  @override
+  Future<Either<Failure, void>> followUser({
+    required String currentUserId,
+    required String targetUserId,
   }) async {
     return repoManager.call(action: () async {
-      final videos= await remoteDataSource.getUserVideos(userId: userId);
-      return videos;
+      await remoteDataSource.followUser(
+          currentUserId: currentUserId, targetUserId: targetUserId);
+      return null;
+    });
+  }
+
+  @override
+  Future<Either<Failure, void>> unfollowUser({
+    required String currentUserId,
+    required String targetUserId,
+  }) async {
+    return repoManager.call(action: () async {
+      await remoteDataSource.unfollowUser(
+          currentUserId: currentUserId, targetUserId: targetUserId);
+    });
+  }
+
+  @override
+  Future<Either<Failure, int>> getFollowersCount({
+    required String userId,
+  }) async {
+    return repoManager.call(action: () async {
+      final count = await remoteDataSource.getFollowersCount(userId: userId);
+      return count;
+    });
+  }
+
+  @override
+  Future<Either<Failure, int>> getFollowingCount({
+    required String userId,
+  }) async {
+    return repoManager.call(action: () async {
+      final count = await remoteDataSource.getFollowingCount(userId: userId);
+      return count;
     });
   }
 }

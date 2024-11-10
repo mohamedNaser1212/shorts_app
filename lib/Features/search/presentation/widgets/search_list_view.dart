@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -16,42 +17,45 @@ class SearchListView extends StatelessWidget {
     return Expanded(
       child: BlocBuilder<SearchCubit, SearchState>(
         builder: (context, state) {
-          if (state is SearchLoading) {
+          if (state is GetSearchResultsLoadingState) {
             return const Center(child: CircularProgressIndicator());
-          } else if (state is SearchLoaded) {
-            return Padding(
-              padding: const EdgeInsets.all(12.0),
-              child: ListView.builder(
-                itemCount: state.searchResults.length,
-                itemBuilder: (context, index) {
-                  UserEntity user = state.searchResults[index];
-                  return InkWell(
-                    onTap: () {
-                      NavigationManager.navigateTo(
-                        context: context,
-                        screen: UserProfileScreen(
-                          user: user,
-                          // isShared: false,
-                          // user: user,
-                        ),
-                      );
-                    },
-                    child: ListTile(
-                      contentPadding: const EdgeInsets.all(8.0),
-                      leading: CircleAvatar(
-                        backgroundImage: NetworkImage(user.profilePic),
+          } else if (state is GetSearchResultsSuccessState) {
+            return ListView.separated(
+              separatorBuilder: (context, index) => const SizedBox(height: 10),
+              itemCount: state.searchResults.length,
+              itemBuilder: (context, index) {
+                UserEntity user = state.searchResults[index];
+                return InkWell(
+                  onTap: () {
+                    NavigationManager.navigateTo(
+                      context: context,
+                      screen: UserProfileScreen(
+                        user: user,
+                        // isShared: false,
+                        // user: user,
                       ),
-                      title: CustomTitle(
-                        style: TitleStyle.style16Bold,
-                        title: user.name,
-                        color: ColorController.whiteColor,
+                    );
+                  },
+                  child: ListTile(
+                    contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
+                    leading: CircleAvatar(
+                      radius: 50,
+                      backgroundImage: CachedNetworkImageProvider(
+                        user.profilePic,
                       ),
                     ),
-                  );
-                },
-              ),
+                    title: CustomTitle(
+                      style: TitleStyle.styleBold20,
+                      title: user.name,
+                      overflow: TextOverflow.ellipsis,
+                      maxLines: 1,
+                      color: ColorController.whiteColor,
+                    ),
+                  ),
+                );
+              },
             );
-          } else if (state is SearchError) {
+          } else if (state is GetSearchResultsErrorState) {
             return Center(child: Text(state.errorMessage));
           }
           return const Center(child: Text('No search results.'));

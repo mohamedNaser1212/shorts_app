@@ -4,15 +4,12 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 import 'package:shorts/core/managers/error_manager/failure.dart';
 
 class UserProfileVideosUseCase {
-  final UserProfileVideosRepo repository;
+  final UserProfileRepo repository;
 
-  UserProfileVideosUseCase({
-   required this.repository
-  });
+  UserProfileVideosUseCase({required this.repository});
 
-  Future<Either<Failure, List<VideoEntity>>> call({
-    required String userId
-  }) async {
+  Future<Either<Failure, List<VideoEntity>>> call(
+      {required String userId}) async {
     return await repository.getUserVideos(userId: userId);
   }
 }

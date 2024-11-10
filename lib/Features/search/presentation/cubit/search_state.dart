@@ -2,16 +2,16 @@ part of 'search_cubit.dart';
 
 class SearchState {}
 
-final class SearchLoading extends SearchState {}
+final class GetSearchResultsLoadingState extends SearchState {}
 
-final class SearchLoaded extends SearchState {
+final class GetSearchResultsSuccessState extends SearchState {
   final List<UserEntity> searchResults;
 
-  SearchLoaded({required this.searchResults});
+  GetSearchResultsSuccessState({required this.searchResults});
 }
 
-final class SearchError extends SearchState {
+final class GetSearchResultsErrorState extends SearchState {
   final String errorMessage;
 
-  SearchError({required this.errorMessage});
+  GetSearchResultsErrorState({required this.errorMessage});
 }

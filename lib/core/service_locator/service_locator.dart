@@ -60,6 +60,10 @@ import '../../Features/comments_feature/domain/comments_use_case/add_comments_us
 import '../../Features/favourites_feature/data/favourites_repo_impl/favourite_repo_impl.dart';
 import '../../Features/favourites_feature/domain/favourites_use_case/get_favourites_count_use_case.dart';
 import '../../Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
+import '../../Features/profile_feature.dart/domain/use_case/follow_use_case.dart';
+import '../../Features/profile_feature.dart/domain/use_case/get_followers_count_use_case.dart';
+import '../../Features/profile_feature.dart/domain/use_case/get_followings_count_use_case.dart';
+import '../../Features/profile_feature.dart/domain/use_case/unfollow_use_case.dart';
 import '../../Features/search/data/data_sources/search_remote_data_source.dart';
 import '../../Features/search/data/repo_impl/search_repo_impl.dart';
 import '../managers/internet_manager/internet_manager.dart';
@@ -188,13 +192,13 @@ Future<void> setUpServiceLocator() async {
       .registerSingleton<UserInfoRemoteDataSource>(UserInfoRemoteDataSourceImpl(
     firebaseHelper: getIt.get<FirebaseHelper>(),
   ));
-  getIt.registerSingleton<UserProfileVideosRemoteDataSource>(
+  getIt.registerSingleton<UserProfilesRemoteDataSource>(
       UserProfileVideosRemoteDataSourceImpl(
           firebaseHelper: getIt.get<FirebaseHelper>()));
-  getIt.registerSingleton<UserProfileVideosRepo>(
-    UserProfileVideosRepoImpl(
+  getIt.registerSingleton<UserProfileRepo>(
+    UserProfileRepoImpl(
       repoManager: getIt.get<RepoManager>(),
-      remoteDataSource: getIt.get<UserProfileVideosRemoteDataSource>(),
+      remoteDataSource: getIt.get<UserProfilesRemoteDataSource>(),
     ),
   );
   getIt.registerSingleton<SearchRepo>(
@@ -204,14 +208,31 @@ Future<void> setUpServiceLocator() async {
     ),
   );
   getIt.registerSingleton<UserProfileVideosUseCase>(UserProfileVideosUseCase(
-    repository: getIt.get<UserProfileVideosRepo>(),
+    repository: getIt.get<UserProfileRepo>(),
   ));
   getIt.registerSingleton<SearchUseCase>(SearchUseCase(
     searchRepo: getIt.get<SearchRepo>(),
   ));
+  getIt.registerSingleton<FollowUserUseCase>(FollowUserUseCase(
+    repository: getIt.get<UserProfileRepo>(),
+  ));
+  getIt.registerSingleton<UnfollowUserUseCase>(UnfollowUserUseCase(
+    repository: getIt.get<UserProfileRepo>(),
+  ));
+  getIt.registerSingleton<GetFollowersCountUseCase>(GetFollowersCountUseCase(
+    repository: getIt.get<UserProfileRepo>(),
+  ));
+  getIt.registerSingleton<GetFollowingCountUseCase>(GetFollowingCountUseCase(
+    repository: getIt.get<UserProfileRepo>(),
+  ));
+
   getIt.registerFactory<GetUserVideosCubit>(
     () => GetUserVideosCubit(
       getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
+      followUserUseCase: getIt.get<FollowUserUseCase>(),
+      unfollowUserUseCase: getIt.get<UnfollowUserUseCase>(),
+      getFollowersCountUseCase: getIt.get<GetFollowersCountUseCase>(),
+      getFollowingCountUseCase: getIt.get<GetFollowingCountUseCase>(),
     ),
   );
   getIt.registerFactory<SearchCubit>(

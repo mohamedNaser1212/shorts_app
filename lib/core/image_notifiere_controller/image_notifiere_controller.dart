@@ -13,7 +13,6 @@ class ImageNotifierController extends ChangeNotifier {
 
   ImageNotifierController({required this.emailController});
 
-  // Pick image from either gallery or camera
   Future<void> pickImage({required bool fromCamera}) async {
     final ImagePicker picker = ImagePicker();
     final XFile? pickedFile;

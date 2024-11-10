@@ -8,6 +8,7 @@ import 'package:shorts/core/widgets/custom_title.dart';
 import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import 'custom_user_profile_information_widget.dart';
+import 'follow_elevated_button_widget.dart';
 
 class UserProfileScreenBody extends StatefulWidget {
   const UserProfileScreenBody({
@@ -78,8 +79,9 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
             //         widget.comment!.user.id == widget.userEntity!.id)
             if (widget.userEntity!.id ==
                 UserInfoCubit.get(context).userEntity!.id)
-              const ProfileActions(),
-            const SizedBox(height: 10),
+              const ProfileActions()
+            else
+              const FollowElevatedButtonWidget(),
 
             const SizedBox(height: 10),
             UserProfileVideosGridView(

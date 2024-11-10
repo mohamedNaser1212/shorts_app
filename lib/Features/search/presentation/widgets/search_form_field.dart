@@ -7,11 +7,11 @@ class SearchFormField extends StatelessWidget {
   const SearchFormField({
     super.key,
     required this.query,
-    required GlobalKey<FormState> formKey,
-  }) : _formKey = formKey;
+    required this.formKey,
+  });
 
   final TextEditingController query;
-  final GlobalKey<FormState> _formKey;
+  final GlobalKey<FormState> formKey;
 
   @override
   Widget build(BuildContext context) {
@@ -27,7 +27,7 @@ class SearchFormField extends StatelessWidget {
         ),
         label: 'Search for users...',
         onSubmit: (query) {
-          if (_formKey.currentState!.validate()) {
+          if (formKey.currentState!.validate()) {
             SearchCubit.get(context).searchUsers(query: query!);
 
             // context.read<SearchCubit>().searchUsers(query!);
