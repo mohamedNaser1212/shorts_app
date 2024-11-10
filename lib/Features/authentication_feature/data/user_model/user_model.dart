@@ -11,7 +11,9 @@ class UserModel extends UserEntity {
     required super.fcmToken,
     required super.profilePic,
     required super.bio,
-    // required super.isVerified,
+    super.followersCount = 0, // Set default value to 0
+    super.followingCount = 0, // Set default value to 0
+    super.likesCount = 0, // Set default value to 0
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
@@ -23,9 +25,15 @@ class UserModel extends UserEntity {
       fcmToken: json[RequestDataNames.fcmToken],
       profilePic: json[RequestDataNames.profilePic],
       bio: json[RequestDataNames.bio],
-      //   isVerified: json[RequestDataNames.isVerified] ?? false,
+      followersCount: json[RequestDataNames.followersCount] ??
+          0, // Default to 0 if not present
+      followingCount: json[RequestDataNames.followingCount] ??
+          0, // Default to 0 if not present
+      likesCount:
+          json[RequestDataNames.likesCount] ?? 0, // Default to 0 if not present
     );
   }
+
   @override
   Map<String, dynamic> toJson() {
     return {
@@ -36,7 +44,9 @@ class UserModel extends UserEntity {
       RequestDataNames.fcmToken: fcmToken,
       RequestDataNames.profilePic: profilePic,
       RequestDataNames.bio: bio,
-      //  RequestDataNames.isVerified: isVerified,
+      RequestDataNames.followersCount: followersCount,
+      RequestDataNames.followingCount: followingCount,
+      RequestDataNames.likesCount: likesCount,
     };
   }
 }

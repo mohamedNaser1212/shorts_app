@@ -45,4 +45,7 @@ abstract class RequestDataNames {
   static const String isShared = 'isShared';
   static const String sharedUserDescription = 'shareVideoText';
   static const String timeStamp = 'timeStamp';
+  static const String followersCount = 'followersCount';
+  static const String followingCount = 'followingCount';
+  static const String likesCount = 'likesCount';
 }

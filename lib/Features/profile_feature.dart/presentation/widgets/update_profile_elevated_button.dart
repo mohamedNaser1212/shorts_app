@@ -8,7 +8,7 @@ import 'package:shorts/core/widgets/loading_indicator.dart';
 import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/user_info/cubit/user_info_cubit.dart';
 import '../../../../core/widgets/reusable_elevated_botton.dart';
-import '../../domain/update_model/update_request_model.dart';
+import '../../domain/models/update_request_model.dart';
 
 class UpdateProfileElevatedButton extends StatelessWidget {
   const UpdateProfileElevatedButton({super.key, required this.editState});

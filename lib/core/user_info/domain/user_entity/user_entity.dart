@@ -1,8 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:shorts/core/utils/constants/request_data_names.dart';
 
-// import '../../../utils/constants/consts.dart';
-
 part 'user_entity.g.dart';
 
 @HiveType(typeId: 5)
@@ -21,8 +19,14 @@ class UserEntity {
   final String profilePic;
   @HiveField(6)
   final String bio;
-  // @HiveField(7)
-  // bool isVerified = false;
+
+  // New fields for follower, following, and likes count
+  @HiveField(7)
+  int followersCount;
+  @HiveField(8)
+  int followingCount;
+  @HiveField(9)
+  int likesCount;
 
   UserEntity({
     required this.name,
@@ -32,7 +36,9 @@ class UserEntity {
     required this.fcmToken,
     required this.profilePic,
     required this.bio,
-    //  required this.isVerified,
+    this.followersCount = 0, // Default value set to 0
+    this.followingCount = 0, // Default value set to 0
+    this.likesCount = 0, // Default value set to 0
   });
 
   factory UserEntity.fromJson(Map<String, dynamic> json) {
@@ -44,9 +50,15 @@ class UserEntity {
       fcmToken: json[RequestDataNames.fcmToken],
       profilePic: json[RequestDataNames.profilePic],
       bio: json[RequestDataNames.bio],
-      // isVerified: json[RequestDataNames.isVerified] ?? false,
+      followersCount: json[RequestDataNames.followersCount] ??
+          0, // Set default if not present
+      followingCount: json[RequestDataNames.followingCount] ??
+          0, // Set default if not present
+      likesCount:
+          json[RequestDataNames.likesCount] ?? 0, // Set default if not present
     );
   }
+
   Map<String, dynamic> toJson() {
     return {
       RequestDataNames.name: name,
@@ -56,7 +68,9 @@ class UserEntity {
       RequestDataNames.fcmToken: fcmToken,
       RequestDataNames.profilePic: profilePic,
       RequestDataNames.bio: bio,
-      //  RequestDataNames.isVerified: isVerified,
+      RequestDataNames.followersCount: followersCount,
+      RequestDataNames.followingCount: followingCount,
+      RequestDataNames.likesCount: likesCount,
     };
   }
 }

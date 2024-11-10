@@ -94,7 +94,9 @@ class EditUserProfileImageWidgetState
                 onTap: () {
                   Navigator.pop(context);
                   widget.editState?.imageNotifierController
-                      .pickImage(fromCamera: true);
+                      .pickImage(fromCamera: true)??
+                      widget.registerFormState!.imageNotifierController
+                          .pickImage(fromCamera: true);
                 },
               ),
               const SizedBox(height: 10),
@@ -104,7 +106,9 @@ class EditUserProfileImageWidgetState
                 onTap: () {
                   Navigator.pop(context);
                   widget.editState?.imageNotifierController
-                      .pickImage(fromCamera: false);
+                          .pickImage(fromCamera: false) ??
+                      widget.registerFormState!.imageNotifierController
+                          .pickImage(fromCamera: false);
                 },
               ),
             ],

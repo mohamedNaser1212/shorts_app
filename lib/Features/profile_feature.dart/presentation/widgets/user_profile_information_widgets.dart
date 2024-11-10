@@ -8,7 +8,7 @@ class UserProfileInformationsWidgets extends StatelessWidget {
     required this.number,
     required this.title,
   });
-  final String number;
+  final int number;
   final String title;
 
   @override

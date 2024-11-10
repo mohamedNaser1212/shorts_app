@@ -42,28 +42,26 @@ class RegisterButton extends StatelessWidget {
     required RegisterScreenFormState state,
   }) async {
     if (state.widget.formKey.currentState!.validate()) {
-      // Check if an image is selected and attempt to upload it
       final profilePicUrl = await state.imageNotifierController.uploadImage();
-      if (profilePicUrl != null) {
-        // Set the profile picture URL in the registration model only if upload was successful
-        RegisterCubit.get(context).userRegister(
-          requestModel: RegisterRequestModel(
-            email: state.emailController.text,
-            password: state.passwordController.text,
-            name: state.nameController.text,
-            phone: state.phoneController.text,
-            bio: state.bioController.text.isNotEmpty
-                ? state.bioController.text
-                : 'Hey there I am using Shorts',
-            profilePic: profilePicUrl,
-          ),
-        );
-      } else {
-        ToastHelper.showToast(
-          message: 'Image upload failed. Please try again.',
-          color: Colors.red,
-        );
-      }
+
+      RegisterCubit.get(context).userRegister(
+        requestModel: RegisterRequestModel(
+          email: state.emailController.text,
+          password: state.passwordController.text,
+          name: state.nameController.text,
+          phone: state.phoneController.text,
+          bio: state.bioController.text.isNotEmpty
+              ? state.bioController.text
+              : 'Hey there I am using Shorts',
+          profilePic: profilePicUrl ?? "",
+        ),
+      );
+    } else {
+      ToastHelper.showToast(
+        message: 'Image upload failed. Please try again.',
+        color: Colors.red,
+      );
     }
   }
+  //}
 }

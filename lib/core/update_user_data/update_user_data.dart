@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 import 'package:shorts/core/network/firebase_manager/collection_names.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
+
+import '../../Features/profile_feature.dart/domain/models/update_request_model.dart';
 
 abstract class UpdateUserData {
   const UpdateUserData._();

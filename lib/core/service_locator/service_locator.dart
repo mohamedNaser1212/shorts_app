@@ -24,6 +24,7 @@ import 'package:shorts/Features/profile_feature.dart/domain/repo/update_user_dat
 import 'package:shorts/Features/profile_feature.dart/domain/repo/user_profile_videos_repo.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/use_case/update_user_data_use_case.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/use_case/user_profile_videos_use_case.dart';
+import 'package:shorts/Features/profile_feature.dart/presentation/cubit/follow_cubit/follow_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_profile_cubit/user_profile_cubit.dart';
 import 'package:shorts/Features/search/domain/repo/search_repo.dart';
@@ -60,10 +61,10 @@ import '../../Features/comments_feature/domain/comments_use_case/add_comments_us
 import '../../Features/favourites_feature/data/favourites_repo_impl/favourite_repo_impl.dart';
 import '../../Features/favourites_feature/domain/favourites_use_case/get_favourites_count_use_case.dart';
 import '../../Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
+import '../../Features/profile_feature.dart/domain/use_case/check_user_follow.dart';
 import '../../Features/profile_feature.dart/domain/use_case/follow_use_case.dart';
 import '../../Features/profile_feature.dart/domain/use_case/get_followers_count_use_case.dart';
 import '../../Features/profile_feature.dart/domain/use_case/get_followings_count_use_case.dart';
-import '../../Features/profile_feature.dart/domain/use_case/unfollow_use_case.dart';
 import '../../Features/search/data/data_sources/search_remote_data_source.dart';
 import '../../Features/search/data/repo_impl/search_repo_impl.dart';
 import '../managers/internet_manager/internet_manager.dart';
@@ -194,7 +195,8 @@ Future<void> setUpServiceLocator() async {
   ));
   getIt.registerSingleton<UserProfilesRemoteDataSource>(
       UserProfileVideosRemoteDataSourceImpl(
-          firebaseHelper: getIt.get<FirebaseHelper>()));
+          // firebaseHelper: getIt.get<FirebaseHelper>()
+          ));
   getIt.registerSingleton<UserProfileRepo>(
     UserProfileRepoImpl(
       repoManager: getIt.get<RepoManager>(),
@@ -213,26 +215,34 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<SearchUseCase>(SearchUseCase(
     searchRepo: getIt.get<SearchRepo>(),
   ));
-  getIt.registerSingleton<FollowUserUseCase>(FollowUserUseCase(
+  getIt.registerSingleton<ToggleFollowUserUseCase>(ToggleFollowUserUseCase(
     repository: getIt.get<UserProfileRepo>(),
   ));
-  getIt.registerSingleton<UnfollowUserUseCase>(UnfollowUserUseCase(
-    repository: getIt.get<UserProfileRepo>(),
-  ));
+  // getIt.registerSingleton<UnfollowUserUseCase>(UnfollowUserUseCase(
+  //   repository: getIt.get<UserProfileRepo>(),
+  // ));
   getIt.registerSingleton<GetFollowersCountUseCase>(GetFollowersCountUseCase(
     repository: getIt.get<UserProfileRepo>(),
   ));
   getIt.registerSingleton<GetFollowingCountUseCase>(GetFollowingCountUseCase(
     repository: getIt.get<UserProfileRepo>(),
   ));
+  getIt.registerSingleton<IsUserFollowedUseCase>(IsUserFollowedUseCase(
+    repository: getIt.get<UserProfileRepo>(),
+  ));
 
   getIt.registerFactory<GetUserVideosCubit>(
     () => GetUserVideosCubit(
       getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
-      followUserUseCase: getIt.get<FollowUserUseCase>(),
-      unfollowUserUseCase: getIt.get<UnfollowUserUseCase>(),
+    ),
+  );
+  getIt.registerFactory<FollowCubit>(
+    () => FollowCubit(
+      followUserUseCase: getIt.get<ToggleFollowUserUseCase>(),
+      //  unfollowUserUseCase: getIt.get<UnfollowUserUseCase>(),
       getFollowersCountUseCase: getIt.get<GetFollowersCountUseCase>(),
       getFollowingCountUseCase: getIt.get<GetFollowingCountUseCase>(),
+      isUserFollowedUseCase: getIt.get<IsUserFollowedUseCase>(),
     ),
   );
   getIt.registerFactory<SearchCubit>(

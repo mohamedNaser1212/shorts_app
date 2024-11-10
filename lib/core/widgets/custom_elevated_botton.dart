@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/login_screen_body.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
 import 'package:shorts/Features/favourites_feature/presentation/screens/favourites_screen.dart';
-import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/video_screen.dart';
@@ -20,6 +19,7 @@ import '../../Features/authentication_feature/data/user_model/login_request_mode
 import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
 import '../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
 import '../../Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
+import '../../Features/profile_feature.dart/domain/models/update_request_model.dart';
 import '../../Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
 import '../managers/styles_manager/color_manager.dart';
 

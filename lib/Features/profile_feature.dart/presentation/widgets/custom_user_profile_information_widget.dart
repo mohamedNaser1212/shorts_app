@@ -9,7 +9,7 @@ class CustomUserProfileInformations extends StatelessWidget {
     required this.title,
   });
 
-  final String number;
+  final int number;
   final String title;
 
   @override
@@ -17,7 +17,7 @@ class CustomUserProfileInformations extends StatelessWidget {
     return Column(
       children: [
         CustomTitle(
-          title: number,
+          title: number.toString(),
           style: TitleStyle.style14Bold,
         ),
         CustomTitle(

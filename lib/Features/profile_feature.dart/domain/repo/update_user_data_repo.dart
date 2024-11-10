@@ -1,7 +1,8 @@
 import 'package:dartz/dartz.dart';
-import 'package:shorts/Features/profile_feature.dart/domain/update_model/update_request_model.dart';
 import 'package:shorts/core/managers/error_manager/failure.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
+
+import '../models/update_request_model.dart';
 
 abstract class UpdateUserDataRepo {
   const UpdateUserDataRepo();

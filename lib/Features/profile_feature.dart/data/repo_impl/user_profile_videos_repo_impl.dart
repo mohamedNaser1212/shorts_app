@@ -1,9 +1,11 @@
 import 'package:dartz/dartz.dart';
-import 'package:shorts/Features/profile_feature.dart/data/user_profile_videos_remote_data_source/user_profile_videos_remote_data_source.dart';
-import 'package:shorts/Features/profile_feature.dart/domain/repo/user_profile_videos_repo.dart';
-import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
-import 'package:shorts/core/managers/error_manager/failure.dart';
-import 'package:shorts/core/managers/repo_manager/repo_manager.dart';
+
+import '../../../../core/managers/error_manager/failure.dart';
+import '../../../../core/managers/repo_manager/repo_manager.dart';
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
+import '../../../videos_feature/domain/video_entity/video_entity.dart';
+import '../../domain/repo/user_profile_videos_repo.dart';
+import '../user_profile_videos_remote_data_source/user_profile_videos_remote_data_source.dart';
 
 class UserProfileRepoImpl implements UserProfileRepo {
   final UserProfilesRemoteDataSource remoteDataSource;
@@ -24,25 +26,18 @@ class UserProfileRepoImpl implements UserProfileRepo {
   }
 
   @override
-  Future<Either<Failure, void>> followUser({
+  Future<Either<Failure, UserEntity>> toggleFollow({
     required String currentUserId,
     required String targetUserId,
+    required String targetUserName,
   }) async {
     return repoManager.call(action: () async {
-      await remoteDataSource.followUser(
-          currentUserId: currentUserId, targetUserId: targetUserId);
-      return null;
-    });
-  }
-
-  @override
-  Future<Either<Failure, void>> unfollowUser({
-    required String currentUserId,
-    required String targetUserId,
-  }) async {
-    return repoManager.call(action: () async {
-      await remoteDataSource.unfollowUser(
-          currentUserId: currentUserId, targetUserId: targetUserId);
+      final userEntity = await remoteDataSource.toggleFollow(
+        currentUserId: currentUserId,
+        targetUserId: targetUserId,
+        targetUserName: targetUserName,
+      );
+      return userEntity;
     });
   }
 
@@ -62,6 +57,18 @@ class UserProfileRepoImpl implements UserProfileRepo {
   }) async {
     return repoManager.call(action: () async {
       final count = await remoteDataSource.getFollowingCount(userId: userId);
+      return count;
+    });
+  }
+
+  @override
+  Future<Either<Failure, bool>> isUserFollowed({
+    required String currentUserId,
+    required String targetUserId,
+  }) async {
+    return repoManager.call(action: () async {
+      final count = await remoteDataSource.isUserFollowed(
+          currentUserId: currentUserId, targetUserId: targetUserId);
       return count;
     });
   }
