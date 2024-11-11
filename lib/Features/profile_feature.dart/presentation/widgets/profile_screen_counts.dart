@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../../../core/user_info/cubit/user_info_cubit.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../cubit/follow_cubit/follow_cubit.dart';
 import 'custom_user_profile_information_widget.dart';
@@ -21,56 +20,39 @@ class FollowingFollowersCountWidget extends StatefulWidget {
 
 class _FollowingFollowersCountWidgetState
     extends State<FollowingFollowersCountWidget> {
-  int followersCount = 0;
-  int followingCount = 0;
-
-  // @override
-  // void initState() {
-  //   super.initState();
-  //   FollowCubit.of(context).getFollowersCount(userId: widget.userEntity.id!);
-  //   FollowCubit.of(context).getFollowingsCount(userId: widget.userEntity.id!);
-  // }
+  @override
+  void initState() {
+    super.initState();
+    final followCubit = BlocProvider.of<FollowCubit>(context);
+    followCubit.getFollowersCount(userId: widget.userEntity.id!);
+    followCubit.getFollowingsCount(userId: widget.userEntity.id!);
+  }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FollowCubit, FollowState>(builder: (context, state) {
-      if (state is FollowersCountSuccessState) {
-        followersCount = state.count;
-        print(widget.userEntity.toJson());
-      }
-
-      if (state is FollowingCountSuccessState) {
-        followingCount = state.count;
-      }
-
-      return BlocBuilder<UserInfoCubit, UserInfoState>(
+    return BlocListener<FollowCubit, FollowState>(
+      listener: (context, state) {
+        if (state is FollowersCountSuccessState) {
+          widget.userEntity.followersCount = state.count;
+        }
+        if (state is FollowingCountSuccessState) {
+          widget.userEntity.followingCount = state.count;
+        }
+      },
+      child: BlocBuilder<FollowCubit, FollowState>(
         builder: (context, state) {
           return Row(
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
-              if (state is GetUserInfoSuccessState &&
-                  state.userEntity!.id == widget.userEntity.id)
-                CustomUserProfileInformations(
-                  number: state.userEntity!.followersCount,
-                  title: 'Followers',
-                )
-              else
-                CustomUserProfileInformations(
-                  number: followersCount,
-                  title: 'Followers',
-                ),
+              CustomUserProfileInformations(
+                number: widget.userEntity.followersCount,
+                title: 'Followers',
+              ),
               const SizedBox(width: 50),
-              if (state is GetUserInfoSuccessState &&
-                  state.userEntity!.id == widget.userEntity.id)
-                CustomUserProfileInformations(
-                  number: state.userEntity!.followingCount,
-                  title: 'Following',
-                )
-              else
-                CustomUserProfileInformations(
-                  number: followingCount,
-                  title: 'Following',
-                ),
+              CustomUserProfileInformations(
+                number: widget.userEntity.followingCount,
+                title: 'Following',
+              ),
               const SizedBox(width: 50),
               CustomUserProfileInformations(
                 number: widget.userEntity.likesCount,
@@ -79,7 +61,7 @@ class _FollowingFollowersCountWidgetState
             ],
           );
         },
-      );
-    });
+      ),
+    );
   }
 }

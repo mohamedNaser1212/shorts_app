@@ -23,9 +23,7 @@ class FollowCubit extends Cubit<FollowState> {
   final IsUserFollowedUseCase isUserFollowedUseCase;
   // Store follow status for each user in a map
   final Map<String, FollowModel> _followStatus = {};
-  static FollowCubit of(context) {
-    return BlocProvider.of<FollowCubit>(context);
-  }
+  static FollowCubit get(context) => BlocProvider.of(context);
 
   // Getter to access follow status map
   Map<String, FollowModel> get followStatus => _followStatus;
@@ -42,6 +40,8 @@ class FollowCubit extends Cubit<FollowState> {
     result.fold((failure) {
       emit(ToggleFollowErrorState(message: failure.message));
     }, (followModel) {
+      getFollowersCount(userId: targetUserId);
+
       emit(ToggleFollowSuccessState());
     });
   }
@@ -77,6 +77,11 @@ class FollowCubit extends Cubit<FollowState> {
     });
   }
 
+  void updateFollowersCount({required bool isFollowing}) {
+    followerCounts = isFollowing ? followerCounts + 1 : followerCounts - 1;
+    emit(FollowersCountSuccessState(count: followerCounts));
+  }
+
   // Future<void> unfollowUser({
   //   required String currentUserId,
   //   required String targetUserId,
@@ -91,15 +96,16 @@ class FollowCubit extends Cubit<FollowState> {
   //     emit(UserUnfollowedSuccessState(followModel: followModel));
   //   });
   // }
-  void updateFollowersCount(
-      {required String userId, required bool isFollowing}) {
-    if (isFollowing) {
-      followerCounts++;
-    } else {
-      followerCounts--;
-    }
-    emit(FollowersCountSuccessState(count: followerCounts));
-  }
+
+  // void updateFollowersCount(
+  //     {required String userId, required bool isFollowing}) {
+  //   if (isFollowing) {
+  //     followerCounts++;
+  //   } else {
+  //     followerCounts--;
+  //   }
+  //   emit(FollowersCountSuccessState(count: followerCounts));
+  // }
 
   Future<bool> isUserFollowed({
     required String currentUserId,

@@ -48,7 +48,6 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
               ],
             ),
             const SizedBox(height: 10),
-            // Display follow button if the user is not viewing their own profile
             if (widget.userEntity!.id ==
                 UserInfoCubit.get(context).userEntity!.id)
               const ProfileActions()

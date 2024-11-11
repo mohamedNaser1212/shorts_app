@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/follow_cubit/follow_cubit.dart';
+import 'package:shorts/core/functions/toast_function.dart';
 
 import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/widgets/reusable_elevated_botton.dart';
@@ -9,7 +10,6 @@ import '../../../videos_feature/presentation/widgets/videos_components_widgets/v
 class FollowElevatedButtonWidget extends StatefulWidget {
   final String currentUserId;
   final String targetUserId;
-
   final VideoContentsScreenState? state;
 
   const FollowElevatedButtonWidget({
@@ -28,12 +28,13 @@ class _FollowElevatedButtonWidgetState
     extends State<FollowElevatedButtonWidget> {
   bool isFollowing = false;
   bool isLoading = true;
+  int previousFollowersCount = 0;
 
   @override
   void initState() {
     super.initState();
     _checkFollowStatus();
-    FollowCubit.of(context).getFollowersCount(userId: widget.targetUserId);
+    FollowCubit.get(context).getFollowersCount(userId: widget.targetUserId);
   }
 
   void _checkFollowStatus() async {
@@ -42,46 +43,46 @@ class _FollowElevatedButtonWidgetState
           targetUserId: widget.targetUserId,
         );
     setState(() {
-      isLoading = false; // Set loading to false once status is determined
+      isLoading = false;
     });
   }
 
   void toggleFollow() {
+    // Save the previous follower count before updating
+    previousFollowersCount = FollowCubit.get(context).followerCounts;
+
     setState(() {
       isFollowing = !isFollowing;
     });
 
-    // Update followers count based on the follow/unfollow action
-    context
-        .read<FollowCubit>()
-        .followUser(
-          currentUserId: widget.currentUserId,
-          targetUserId: widget.targetUserId,
-        )
-        .then((_) {
-      context.read<FollowCubit>().updateFollowersCount(
-            userId: widget.targetUserId,
-            isFollowing: isFollowing,
-          );
-    });
+    // Instant update of followers count
+    FollowCubit.get(context).updateFollowersCount(isFollowing: isFollowing);
+
+    // Follow/unfollow action
+
+    FollowCubit.get(context).followUser(
+      currentUserId: widget.currentUserId,
+      targetUserId: widget.targetUserId,
+    );
   }
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FollowCubit, FollowState>(
-      builder: (context, state) {
-        if (state is UserActionSuccessState) {
-          isFollowing = state.isFollowing;
-        }
+    return BlocBuilder<FollowCubit, FollowState>(builder: (context, state) {
+      if (state is UserActionSuccessState) {
+        isFollowing = state.isFollowing;
+      } else if (state is ToggleFollowErrorState) {
+        FollowCubit.get(context)
+            .updateFollowersCount(isFollowing: !isFollowing);
+        isFollowing = !isFollowing;
+        ToastHelper.showToast(message: state.message);
+      }
 
-        return isLoading
-            ? const SizedBox.shrink()
-            : ReusableElevatedButton(
-                onPressed: toggleFollow,
-                backColor: ColorController.purpleColor,
-                label: isFollowing ? 'Unfollow' : 'Follow',
-              );
-      },
-    );
+      return ReusableElevatedButton(
+        onPressed: toggleFollow,
+        backColor: ColorController.purpleColor,
+        label: isFollowing ? 'Unfollow' : 'Follow',
+      );
+    });
   }
 }
