@@ -19,7 +19,7 @@ class VideosPageViewWidget extends StatefulWidget {
 
 class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
   late PageController _pageController;
-  final int pageSize = 0;
+  final num pageSize = 0;
 
   @override
   void initState() {

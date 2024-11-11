@@ -36,6 +36,7 @@ class _FollowingFollowersCountWidgetState
     return BlocBuilder<FollowCubit, FollowState>(builder: (context, state) {
       if (state is FollowersCountSuccessState) {
         followersCount = state.count;
+        print(widget.userEntity.toJson());
       }
 
       if (state is FollowingCountSuccessState) {
@@ -55,7 +56,7 @@ class _FollowingFollowersCountWidgetState
                 )
               else
                 CustomUserProfileInformations(
-                  number: followersCount,
+                  number: widget.userEntity.followersCount,
                   title: 'Followers',
                 ),
               const SizedBox(width: 50),
@@ -67,11 +68,14 @@ class _FollowingFollowersCountWidgetState
                 )
               else
                 CustomUserProfileInformations(
-                  number: followingCount,
+                  number: widget.userEntity.followingCount,
                   title: 'Following',
                 ),
               const SizedBox(width: 50),
-              const CustomUserProfileInformations(number: 0, title: 'Likes'),
+              CustomUserProfileInformations(
+                number: widget.userEntity.likesCount,
+                title: 'Likes',
+              ),
             ],
           );
         },

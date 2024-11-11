@@ -9,8 +9,8 @@ abstract class VideosRepo {
   const VideosRepo();
 
   Future<Either<Failure, List<VideoEntity>>> getVideos({
-    required int page,
-    required int pageSize,
+    required num page,
+    required num pageSize,
   });
 
   Future<Either<Failure, VideoEntity>> uploadVideo({

@@ -22,8 +22,8 @@ class VideosRepoImpl extends VideosRepo {
 
   @override
   Future<Either<Failure, List<VideoEntity>>> getVideos({
-    required int page,
-    required int pageSize,
+    required num page,
+    required num pageSize,
   }) async {
     return repoManager.call(action: () async {
       final videos = await videosRemoteDataSource.getVideos(

@@ -8,16 +8,16 @@ part 'video_state.dart';
 class VideoCubit extends Cubit<VideoState> {
   final GetVideosUseCase getVideosUseCase;
   List<VideoEntity> videos = [];
-  int _currentPage = 0; // Start with the first page
+  num _currentPage = 0; // Start with the first page
 
   bool _isLoadingMore = false;
-  static const int pageSize = 2; // Load 2 videos at a time
+  static const num pageSize = 2; // Load 2 videos at a time
 
   VideoCubit({required this.getVideosUseCase}) : super(VideoInitial());
 
   static VideoCubit get(context) => BlocProvider.of(context);
 
-  Future<void> getVideos({required int page}) async {
+  Future<void> getVideos({required num page}) async {
     if (_isLoadingMore) return; // Prevent multiple simultaneous loads
     _isLoadingMore = true;
 

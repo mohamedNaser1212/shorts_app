@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shorts/Features/favourites_feature/data/favourites_model/favourites_model.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
@@ -29,12 +30,25 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
     final querySnapshot = await firebaseHelperManager.getCollectionDocuments(
       collectionPath: CollectionNames.users,
       docId: user.id,
-      subCollectionPath: CollectionNames.favourites,
+      subCollectionPath: CollectionNames.likes,
     );
 
-    return querySnapshot
-        .map((data) => FavouritesVideoModel.fromJson(data))
-        .toList();
+    List<FavouritesVideoModel> favouriteVideos = [];
+
+    for (var data in querySnapshot) {
+      final videoId = data['videoId'];
+
+      final videoSnapshot = await firebaseHelperManager.getDocument(
+        collectionPath: CollectionNames.videos,
+        docId: videoId,
+      );
+
+      if (videoSnapshot != null) {
+        favouriteVideos.add(FavouritesVideoModel.fromJson(videoSnapshot));
+      }
+    }
+
+    return favouriteVideos;
   }
 
   @override
@@ -42,56 +56,80 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
     required VideoEntity videoEntity,
     required UserEntity userModel,
   }) async {
-    final userFavoritesPath =
-        '${CollectionNames.users}/${userModel.id}/${CollectionNames.favourites}';
-    final favouriteVideoDoc = await firebaseHelperManager.getDocument(
-      collectionPath: userFavoritesPath,
-      docId: videoEntity.id,
+    final userLikesPath =
+        '${CollectionNames.users}/${userModel.id}/${CollectionNames.likes}';
+    final videoLikesPath =
+        '${CollectionNames.videos}/${videoEntity.id}/${CollectionNames.likes}';
+
+    final currentUserLikeDoc = await firebaseHelperManager.getDocument(
+      collectionPath: userLikesPath,
+      docId: videoEntity.id!,
     );
 
-    if (favouriteVideoDoc != null) {
+    if (currentUserLikeDoc != null) {
       await firebaseHelperManager.deleteDocument(
-        collectionPath: CollectionNames.users,
-        docId: userModel.id!,
-        subCollectionPath: CollectionNames.favourites,
-        subDocId: videoEntity.id,
+        collectionPath: userLikesPath,
+        docId: videoEntity.id!,
       );
 
       await firebaseHelperManager.deleteDocument(
-        collectionPath:
-            '${CollectionNames.videos}/${videoEntity.id}/${CollectionNames.favourites}',
+        collectionPath: videoLikesPath,
         docId: userModel.id!,
+      );
+
+      await firebaseHelperManager.updateDocument(
+        collectionPath: CollectionNames.videos,
+        docId: videoEntity.id,
+        data: {
+          'user.likesCount': FieldValue.increment(-1),
+        },
+      );
+
+      await firebaseHelperManager.updateDocument(
+        collectionPath: CollectionNames.users,
+        docId: videoEntity.user.id!,
+        data: {
+          'likesCount': FieldValue.increment(-1),
+        },
       );
 
       return false;
     } else {
-      final globalVideoDoc = await firebaseHelperManager.getDocument(
-        collectionPath: CollectionNames.videos,
-        docId: videoEntity.id,
+      await firebaseHelperManager.addDocument(
+        collectionPath: userLikesPath,
+        docId: videoEntity.id!,
+        data: {
+          'videoId': videoEntity.id,
+          'timeStamp': DateTime.now(),
+        },
       );
 
-      if (globalVideoDoc != null) {
-        await firebaseHelperManager.addDocument(
-          collectionPath: userFavoritesPath,
-          data: globalVideoDoc,
-          docId: videoEntity.id,
-        );
+      await firebaseHelperManager.addDocument(
+        collectionPath: videoLikesPath,
+        docId: userModel.id!,
+        data: {
+          'userId': userModel.id,
+          'timeStamp': DateTime.now(),
+        },
+      );
 
-        await firebaseHelperManager.addDocument(
-          collectionPath:
-              '${CollectionNames.videos}/${videoEntity.id}/${CollectionNames.favourites}',
-          data: {
-            'userId': userModel.id,
-            'timeStamp': DateTime.now(),
-          },
-          docId: userModel.id!,
-        );
+      await firebaseHelperManager.updateDocument(
+        collectionPath: CollectionNames.videos,
+        docId: videoEntity.id,
+        data: {
+          'user.likesCount': FieldValue.increment(1),
+        },
+      );
 
-        return true;
-      } else {
-        print('Error: Video not found in global videos collection.');
-        return false;
-      }
+      await firebaseHelperManager.updateDocument(
+        collectionPath: CollectionNames.users,
+        docId: videoEntity.user.id!,
+        data: {
+          'likesCount': FieldValue.increment(1),
+        },
+      );
+
+      return true;
     }
   }
 
@@ -101,7 +139,7 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
   }) async {
     final querySnapshot = await firebaseHelperManager.getCollectionDocuments(
       collectionPath:
-          '${CollectionNames.videos}/$videoId/${CollectionNames.favourites}',
+          '${CollectionNames.videos}/$videoId/${CollectionNames.likes}',
     );
     return querySnapshot.length;
   }

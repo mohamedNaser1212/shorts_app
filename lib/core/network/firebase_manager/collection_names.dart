@@ -4,4 +4,5 @@ abstract class CollectionNames {
   static const String users = 'users';
   static const String favourites = 'favourites';
   static const String comments = 'comments';
+  static const String likes = 'likes';
 }

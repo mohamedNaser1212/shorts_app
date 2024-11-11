@@ -13,7 +13,7 @@ abstract class VideosRemoteDataSource {
   const VideosRemoteDataSource._();
 
   Future<List<VideoModel>> getVideos({
-    required int page,
+    required num page,
   });
 
   Future<VideoModel> uploadVideo({
@@ -33,13 +33,13 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
   final FirebaseHelper firebaseHelperManager;
   DocumentSnapshot? _lastDocument;
   static const int _defaultPageSize = 2;
-  Map<int, DocumentSnapshot?> lastVideos = {};
+  Map<num, DocumentSnapshot?> lastVideos = {};
   bool hasMoreVideos = true;
   final int limit = _defaultPageSize;
   VideosRemoteDataSourceImpl({required this.firebaseHelperManager});
   @override
   Future<List<VideoModel>> getVideos({
-    required int page,
+    required num page,
   }) async {
     // Check if more videos are available
     if (!hasMoreVideos) return [];
