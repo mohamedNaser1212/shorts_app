@@ -11,12 +11,10 @@ class ToggleFollowUserUseCase {
   Future<Either<Failure, UserEntity>> call({
     required String currentUserId,
     required String targetUserId,
-    required String targetUserName,
   }) async {
     return await repository.toggleFollow(
       currentUserId: currentUserId,
       targetUserId: targetUserId,
-      targetUserName: targetUserName,
     );
   }
 }

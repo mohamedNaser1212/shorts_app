@@ -29,13 +29,11 @@ class UserProfileRepoImpl implements UserProfileRepo {
   Future<Either<Failure, UserEntity>> toggleFollow({
     required String currentUserId,
     required String targetUserId,
-    required String targetUserName,
   }) async {
     return repoManager.call(action: () async {
       final userEntity = await remoteDataSource.toggleFollow(
         currentUserId: currentUserId,
         targetUserId: targetUserId,
-        targetUserName: targetUserName,
       );
       return userEntity;
     });

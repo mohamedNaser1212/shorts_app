@@ -51,24 +51,24 @@ class _FollowingFollowersCountWidgetState
               if (state is GetUserInfoSuccessState &&
                   state.userEntity!.id == widget.userEntity.id)
                 CustomUserProfileInformations(
-                  number: state.userEntity?.followersCount ?? followersCount,
+                  number: state.userEntity!.followersCount,
                   title: 'Followers',
                 )
               else
                 CustomUserProfileInformations(
-                  number: widget.userEntity.followersCount,
+                  number: followersCount,
                   title: 'Followers',
                 ),
               const SizedBox(width: 50),
               if (state is GetUserInfoSuccessState &&
                   state.userEntity!.id == widget.userEntity.id)
                 CustomUserProfileInformations(
-                  number: state.userEntity?.followingCount ?? followingCount,
+                  number: state.userEntity!.followingCount,
                   title: 'Following',
                 )
               else
                 CustomUserProfileInformations(
-                  number: widget.userEntity.followingCount,
+                  number: followingCount,
                   title: 'Following',
                 ),
               const SizedBox(width: 50),

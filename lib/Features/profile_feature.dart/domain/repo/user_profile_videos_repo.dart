@@ -9,7 +9,6 @@ abstract class UserProfileRepo {
   Future<Either<Failure, UserEntity>> toggleFollow({
     required String currentUserId,
     required String targetUserId,
-    required String targetUserName,
   });
 
   Future<Either<Failure, int>> getFollowersCount({

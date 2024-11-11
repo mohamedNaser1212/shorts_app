@@ -10,7 +10,6 @@ abstract class UserProfilesRemoteDataSource {
   Future<UserModel> toggleFollow({
     required String currentUserId,
     required String targetUserId,
-    required String targetUserName,
   });
   Future<int> getFollowersCount({
     required String userId,
@@ -41,7 +40,6 @@ class UserProfileVideosRemoteDataSourceImpl
   Future<UserModel> toggleFollow({
     required String currentUserId,
     required String targetUserId,
-    required String targetUserName,
   }) async {
     final currentUserDoc = firestore.collection('users').doc(currentUserId);
     final targetUserDoc = firestore.collection('users').doc(targetUserId);
@@ -66,11 +64,9 @@ class UserProfileVideosRemoteDataSourceImpl
       // Follow: Add to both following and followers collections
       await currentUserDoc.collection('following').doc(targetUserId).set({
         'targetUserId': targetUserId,
-        'targetUserName': targetUserName,
       });
       await targetUserDoc.collection('followers').doc(currentUserId).set({
         'targetUserId': currentUserId,
-        'targetUserName': targetUserName,
       });
 
       // Increase the following and followers count

@@ -33,13 +33,11 @@ class FollowCubit extends Cubit<FollowState> {
   Future<void> followUser({
     required String currentUserId,
     required String targetUserId,
-    required String targetUserName,
   }) async {
     emit(ToggleFollowLoadingState());
     final result = await followUserUseCase.call(
       currentUserId: currentUserId,
       targetUserId: targetUserId,
-      targetUserName: targetUserName,
     );
     result.fold((failure) {
       emit(ToggleFollowErrorState(message: failure.message));
@@ -93,6 +91,15 @@ class FollowCubit extends Cubit<FollowState> {
   //     emit(UserUnfollowedSuccessState(followModel: followModel));
   //   });
   // }
+  void updateFollowersCount(
+      {required String userId, required bool isFollowing}) {
+    if (isFollowing) {
+      followerCounts++;
+    } else {
+      followerCounts--;
+    }
+    emit(FollowersCountSuccessState(count: followerCounts));
+  }
 
   Future<bool> isUserFollowed({
     required String currentUserId,
