@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
-import 'package:shorts/core/layout/presentation/screens/layout_widget.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
+import 'package:shorts/core/widgets/initial_screen.dart';
 
 import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/widgets/custom_title.dart';
@@ -56,7 +56,7 @@ class GoogleSignInWidget extends StatelessWidget {
       UserInfoCubit.get(context).userEntity = state.userEntity;
       NavigationManager.navigateAndFinish(
         context: context,
-        screen: const LayoutScreen(),
+        screen: const InitialScreen(),
       );
     }
   }

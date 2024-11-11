@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/Features/authentication_feature/presentation/screens/login_screen.dart';
+import 'package:shorts/core/functions/toast_function.dart';
 
 import '../../../../core/functions/navigations_functions.dart';
 import '../../../../core/managers/styles_manager/color_manager.dart';
@@ -29,16 +32,30 @@ class ProfileActions extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          Expanded(
-            child: CustomContainerWidget(
-              titleStyle: TitleStyle.styleBold18,
-              title: 'Log Out',
-              // icon: Icons.exit_to_app,
-              containerColor: ColorController.redColor,
-              onTap: () {
-                UserInfoCubit.get(context).signOut();
-              },
-            ),
+          BlocConsumer<UserInfoCubit, UserInfoState>(
+            listener: (context, state) {
+              if (state is SignOutSuccessState) {
+                NavigationManager.navigateTo(
+                  context: context,
+                  screen: const LoginScreen(),
+                );
+              } else if (state is SignOutErrorState) {
+                ToastHelper.showToast(message: state.error);
+              }
+            },
+            builder: (context, state) {
+              return Expanded(
+                child: CustomContainerWidget(
+                  titleStyle: TitleStyle.styleBold18,
+                  title: 'Log Out',
+                  // icon: Icons.exit_to_app,
+                  containerColor: ColorController.redColor,
+                  onTap: () {
+                    UserInfoCubit.get(context).signOut();
+                  },
+                ),
+              );
+            },
           ),
         ],
       ),
