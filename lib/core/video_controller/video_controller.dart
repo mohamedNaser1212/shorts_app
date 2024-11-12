@@ -88,7 +88,6 @@ class VideoController extends ChangeNotifier {
 
     await _cameraController?.initialize();
 
-    // Restart recording after switching camera if needed
     if (_isRecording) {
       await startRecording();
     }

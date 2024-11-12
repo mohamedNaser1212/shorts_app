@@ -40,7 +40,7 @@ class VideoRecordingIconWidget extends StatelessWidget {
             duration: const Duration(milliseconds: 300),
             tween: Tween<double>(
               begin: notifier.isRecording ? 55 : 65,
-              end: notifier.isRecording ? 45 : 55,
+              end: notifier.isRecording ? 35 : 55,
             ),
             builder: (context, size, child) {
               return Container(
