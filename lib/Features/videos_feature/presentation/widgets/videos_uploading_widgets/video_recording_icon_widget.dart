@@ -18,7 +18,7 @@ class VideoRecordingIconWidget extends StatelessWidget {
         // Outer border circle
         Container(
           width: 72,
-          height: 72,
+          height: 100,
           decoration: BoxDecoration(
             shape: BoxShape.circle,
             border: Border.all(

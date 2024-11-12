@@ -16,7 +16,6 @@ class GallaryIconWidget extends StatelessWidget {
         icon: const CustomIconWidget(
           icon: Icons.video_library,
           color: Colors.white,
-          size: 30,
         ),
         onPressed: () {
           UploadVideosCubit.get(context).pickVideo();
