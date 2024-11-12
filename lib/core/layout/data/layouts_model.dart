@@ -10,9 +10,9 @@ class LayoutModel {
 
   final List<Widget> _screens = [
     const VideosScreen(),
-    const ChooseVideoPage(),
+    ChooseVideoPage(),
     const SearchScreen(),
-    UserProfileScreen(
+    const UserProfileScreen(
         //isShared: false,
         //user: UserInfoCubit.get(context).userEntity,
         ),
