@@ -51,11 +51,12 @@ class AuthRepoImpl implements AuthenticationRepo {
   }
 
   @override
-  Future<Either<Failure, void>> signOut() {
+  Future<Either<Failure, bool>> signOut() {
     return repoManager.call(
       action: () async {
-        await loginDataSource.signOut();
-        await userInfoLocalDataSourceImpl.clearUserData();
+        final result = await loginDataSource.signOut();
+        //  await userInfoLocalDataSourceImpl.clearUserData();
+        return result;
       },
     );
   }

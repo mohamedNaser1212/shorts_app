@@ -24,7 +24,7 @@ abstract class AuthenticationRemoteDataSource {
   });
   Future<void> verifyUser(String userId);
 
-  Future<void> signOut();
+  Future<bool> signOut();
 
   Future<UserModel> signInWithGoogle();
 }
@@ -125,7 +125,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
   }
 
   @override
-  Future<void> signOut() async {
+  Future<bool> signOut() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user != null) {
       if (fcmTokenAssigned) {
@@ -149,6 +149,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       await FirebaseAuth.instance.signOut();
       fcmTokenAssigned = false;
     }
+    return true;
   }
 
   @override

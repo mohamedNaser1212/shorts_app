@@ -66,10 +66,11 @@ dependencies:
   google_api_availability: ^5.0.0
   googleapis_auth: ^1.6.0
   firebase_messaging: ^15.1.1
+  flutter_camera: ^1.0.0
   permission_handler: ^11.0.1
   uuid: ^4.5.0
   http: ^1.2.2
-
+  camera: ^0.10.5+3
   url_launcher: ^6.2.1
   fluttertoast: ^8.2.5
   loading_animation_widget: ^1.2.1

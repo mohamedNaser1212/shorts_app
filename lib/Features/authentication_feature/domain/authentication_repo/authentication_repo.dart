@@ -13,6 +13,6 @@ abstract class AuthenticationRepo {
   Future<Either<Failure, UserEntity>> register({
     required RegisterRequestModel requestModel,
   });
-  Future<Either<Failure, void>> signOut();
+  Future<Either<Failure, bool>> signOut();
   Future<Either<Failure, UserEntity>> signInWithGoogle();
 }
