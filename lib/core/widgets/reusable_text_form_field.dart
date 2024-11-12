@@ -20,8 +20,8 @@ class CustomTextFormField extends StatefulWidget {
   final TextStyle? hintStyle;
   final bool useWhiteBorder;
   final bool controllerBlackColor;
-  final bool showBorder; // New boolean to control border visibility
-
+  final bool showBorder;
+  final int? maxLength;
   const CustomTextFormField({
     super.key,
     this.label,
@@ -40,7 +40,8 @@ class CustomTextFormField extends StatefulWidget {
     this.hintStyle,
     this.useWhiteBorder = false,
     this.controllerBlackColor = false,
-    this.showBorder = true, // Default to showing borders
+    this.showBorder = true,
+    this.maxLength,
   });
 
   @override
@@ -92,7 +93,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             controller: widget.controller,
             obscureText: widget.obscure,
             keyboardType: widget.keyboardType,
-            maxLength: widget.isCharacterCountEnabled ? 20 : null,
+            maxLength: widget.maxLength,
             style: TextStyle(
               color: textColor,
               fontSize: 16,
@@ -124,7 +125,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                   ),
             ),
           ),
-          if (widget.isCharacterCountEnabled)
+          if (widget.isCharacterCountEnabled && widget.maxLength != null)
             ValueListenableBuilder<int>(
               valueListenable: _characterCountNotifier,
               builder: (context, count, child) {
@@ -134,7 +135,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 20.0),
                       child: CustomTitle(
-                        title: '$count/20 ',
+                        title: '$count/${widget.maxLength ?? 0}',
                         style: TitleStyle.style14,
                         color: ColorController.whiteColor,
                       ),

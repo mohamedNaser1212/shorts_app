@@ -15,6 +15,7 @@ class NameField extends StatelessWidget {
       validator: FieldsValidator.isValidUsername,
       controller: controller,
       keyboardType: TextInputType.text,
+      maxLength: 20,
       activeColor: ColorController.purpleColor,
       prefix: const Icon(Icons.person),
       isCharacterCountEnabled: true,

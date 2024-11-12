@@ -4,7 +4,6 @@ import 'package:provider/provider.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 
 import '../../../../core/video_controller/video_controller.dart';
-import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/confirm_recording_widget.dart';
 import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/gallary_icon_widget.dart';
 import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/switch_camera_icon_widget.dart';
 import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/video_recording_icon_widget.dart';
@@ -34,13 +33,15 @@ class VideoSelectionScreen extends StatelessWidget {
                     : const Center(child: CircularProgressIndicator()),
                 if (notifier.isRecording)
                   VideoTimerWidget(recordingSeconds: notifier.recordingSeconds),
-                if (notifier.videoFile != null && !notifier.isRecording)
-                  ConfirmRecordingWidget(
-                    videoFile: notifier.videoFile,
-                    videoController: notifier.videoControllerInstance,
-                  ),
+                // if (notifier.videoFile != null && !notifier.isRecording)
+                //   ConfirmRecordingWidget(
+                //     videoFile: notifier.videoFile,
+                //     videoController: notifier.videoControllerInstance,
+                //   ),
                 VideoRecordingIconWidget(notifier: notifier),
-                const GallaryIconWidget(),
+                GallaryIconWidget(
+                  notifier: notifier,
+                ),
                 SwitchCameraIconWidget(
                   notifier: notifier,
                 ),

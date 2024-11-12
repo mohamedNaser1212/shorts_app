@@ -1,37 +1,29 @@
 import 'package:flutter/material.dart';
-
-import '../../../../../core/video_controller/video_controller.dart';
+import 'package:shorts/core/video_controller/video_controller.dart';
+import 'package:shorts/core/widgets/custom_icon_widget.dart';
 
 class SwitchCameraIconWidget extends StatelessWidget {
-  const SwitchCameraIconWidget({
-    super.key,
-    required this.notifier,
-  });
-
+  const SwitchCameraIconWidget({super.key, required this.notifier});
   final VideoController notifier;
 
   @override
   Widget build(BuildContext context) {
-    if (!notifier.isRecording) {
-      return Positioned(
-        bottom: 20,
-        left: 20,
-        child: IconButton(
-          icon: const Icon(
-            Icons.cameraswitch,
-            color: Colors.white,
-            size: 30,
-          ),
-          onPressed: () {
-            if (notifier.cameraController != null &&
-                notifier.cameraController!.value.isInitialized) {
-              notifier.switchCamera();
-            }
-          },
-        ),
-      );
-    } else {
-      return const SizedBox();
-    }
+    return Positioned(
+      bottom: 20.0,
+      left: 16.0,
+      child: notifier.isRecording
+          ? const SizedBox()
+          : notifier.videoFile != null
+              ? const SizedBox()
+              : IconButton(
+                  icon: const CustomIconWidget(
+                    icon: Icons.switch_camera_rounded,
+                    color: Colors.white,
+                  ),
+                  onPressed: () {
+                    notifier.switchCamera();
+                  },
+                ),
+    );
   }
 }

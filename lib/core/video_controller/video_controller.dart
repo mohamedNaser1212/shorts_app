@@ -5,8 +5,7 @@ import 'package:cached_video_player/cached_video_player.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
 import 'package:path_provider/path_provider.dart';
-import 'package:video_thumbnail/video_thumbnail.dart'
-    as video_thumbnail; // Alias the import
+import 'package:video_thumbnail/video_thumbnail.dart' as video_thumbnail;
 
 class VideoController extends ChangeNotifier {
   VideoController({String? videoUrl, bool isInitiallyPaused = false}) {
@@ -45,7 +44,6 @@ class VideoController extends ChangeNotifier {
   }) async {
     videoController = CachedVideoPlayerController.network(videoUrl)
       ..setLooping(true);
-
     await videoController!.initialize();
 
     if (isInitiallyPaused) {
@@ -57,7 +55,6 @@ class VideoController extends ChangeNotifier {
     }
 
     _durationNotifier.value = videoController!.value.duration;
-
     videoController!.addListener(() {
       _positionNotifier.value = videoController!.value.position;
       _isPaused = !videoController!.value.isPlaying;
