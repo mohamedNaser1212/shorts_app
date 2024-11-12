@@ -18,7 +18,7 @@ class HomeScreenBody extends StatelessWidget {
         mainAxisAlignment: MainAxisAlignment.center,
         crossAxisAlignment: CrossAxisAlignment.center,
         children: [
-          ChooseVideoPage(),
+          VideoSelectionScreen(),
           SizedBox(height: 20),
           VideoPageElevatedButton(),
           SizedBox(height: 20),

@@ -10,7 +10,7 @@ class LayoutModel {
 
   final List<Widget> _screens = [
     const VideosScreen(),
-    ChooseVideoPage(),
+    VideoSelectionScreen(),
     const SearchScreen(),
     const UserProfileScreen(
         //isShared: false,

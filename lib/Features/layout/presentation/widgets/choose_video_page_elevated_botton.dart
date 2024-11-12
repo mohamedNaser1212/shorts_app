@@ -10,16 +10,18 @@ import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 
 import '../../../../core/video_controller/video_controller.dart';
+import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/confirm_recording_widget.dart';
 import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/preview_screen.dart';
+import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/video_timer_widget.dart';
 
-class ChooseVideoPage extends StatefulWidget {
-  const ChooseVideoPage({Key? key}) : super(key: key);
+class VideoSelectionScreen extends StatefulWidget {
+  const VideoSelectionScreen({super.key});
 
   @override
-  State<ChooseVideoPage> createState() => _ChooseVideoPageState();
+  State<VideoSelectionScreen> createState() => _VideoSelectionScreenState();
 }
 
-class _ChooseVideoPageState extends State<ChooseVideoPage> {
+class _VideoSelectionScreenState extends State<VideoSelectionScreen> {
   CameraController? _cameraController;
   List<CameraDescription>? _cameras;
   bool _isRecording = false;
@@ -90,20 +92,6 @@ class _ChooseVideoPageState extends State<ChooseVideoPage> {
       });
   }
 
-  void _confirmRecording() {
-    if (_videoFile != null) {
-      Navigator.push(
-        context,
-        MaterialPageRoute(
-          builder: (context) => PreviewScreen(
-            outputPath: _videoFile!.path,
-            thumbnailFile: _videoController?.thumbnailFile,
-          ),
-        ),
-      );
-    }
-  }
-
   @override
   void dispose() {
     _cameraController?.dispose();
@@ -130,49 +118,15 @@ class _ChooseVideoPageState extends State<ChooseVideoPage> {
                   ? CameraPreview(_cameraController!)
                   : const Center(child: CircularProgressIndicator()),
 
-              // Display Thumbnail when available
-              if (_videoController?.thumbnailFile != null && !_isRecording)
-                Positioned(
-                  top: 20,
-                  right: 20,
-                  child: Image.file(
-                    _videoController!.thumbnailFile!,
-                    width: 100,
-                    height: 100,
-                  ),
-                ),
-
-              // Timer display
               if (_isRecording)
-                Positioned(
-                  top: 20,
-                  left: 20,
-                  child: Container(
-                    padding: const EdgeInsets.all(8.0),
-                    decoration: BoxDecoration(
-                      color: Colors.black54,
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                    child: Text(
-                      "${_recordingSeconds ~/ 60}:${(_recordingSeconds % 60).toString().padLeft(2, '0')}",
-                      style: const TextStyle(color: Colors.white, fontSize: 16),
-                    ),
-                  ),
-                ),
+                VideoTimerWidget(recordingSeconds: _recordingSeconds),
 
-              // Confirmation Icon (visible after recording stops)
               if (_videoFile != null && !_isRecording)
-                Positioned(
-                  top: 20,
-                  right: 20,
-                  child: IconButton(
-                    icon: const Icon(Icons.check_circle,
-                        color: Colors.green, size: 36),
-                    onPressed: _confirmRecording,
-                  ),
+                ConfirmRecordingWidget(
+                  videoFile: _videoFile,
+                  videoController: _videoController,
                 ),
 
-              // Bottom controls (Gallery & Record Button)
               Positioned(
                 bottom: 16.0,
                 left: 16.0,
