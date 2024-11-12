@@ -11,7 +11,7 @@ class VideoTimerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 20,
+      top: 100,
       left: 20,
       child: Container(
         padding: const EdgeInsets.all(8.0),

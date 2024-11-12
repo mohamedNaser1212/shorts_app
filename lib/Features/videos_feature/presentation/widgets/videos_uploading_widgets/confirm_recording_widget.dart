@@ -16,7 +16,7 @@ class ConfirmRecordingWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      top: 20,
+      top: 100,
       right: 20,
       child: IconButton(
         icon: const Icon(Icons.check_circle, color: Colors.green, size: 36),

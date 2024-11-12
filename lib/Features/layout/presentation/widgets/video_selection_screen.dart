@@ -13,6 +13,7 @@ import 'package:shorts/core/service_locator/service_locator.dart';
 import '../../../../core/video_controller/video_controller.dart';
 import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/confirm_recording_widget.dart';
 import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/gallary_icon_widget.dart';
+import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/video_recording_icon_widget.dart';
 import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/video_timer_widget.dart';
 
 class VideoSelectionScreen extends StatelessWidget {
@@ -36,23 +37,24 @@ class VideoSelectionScreen extends StatelessWidget {
                   child: Stack(
                     alignment: Alignment.bottomCenter,
                     children: [
-                      // Camera Preview
+                      SizedBox(
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                      ),
                       notifier.cameraController != null &&
                               notifier.cameraController!.value.isInitialized
                           ? CameraPreview(notifier.cameraController!)
                           : const Center(child: CircularProgressIndicator()),
-
                       if (notifier.isRecording)
                         VideoTimerWidget(
                             recordingSeconds: notifier.recordingSeconds),
-
                       if (notifier.videoFile != null && !notifier.isRecording)
                         ConfirmRecordingWidget(
                           videoFile: notifier.videoFile,
                           videoController: notifier.videoControllerInstance,
                         ),
-
-                      GallaryIconWidget(notifier: notifier),
+                      VideoRecordingIconWidget(notifier: notifier),
+                      const GallaryIconWidget(),
                     ],
                   ),
                 ),
