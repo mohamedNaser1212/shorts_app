@@ -68,6 +68,34 @@ class VideoController extends ChangeNotifier {
     // await _loadThumbnail(videoUrl);
   }
 
+  int _selectedCameraIndex = 0;
+
+  Future<void> switchCamera() async {
+    if (_cameras == null || _cameras!.isEmpty) return;
+
+    // Check if we are recording
+    if (_isRecording) {
+      // Stop recording before switching cameras
+      await stopRecording();
+    }
+
+    // Switch to the next camera
+    _selectedCameraIndex = (_selectedCameraIndex + 1) % _cameras!.length;
+    _cameraController = CameraController(
+      _cameras![_selectedCameraIndex],
+      ResolutionPreset.high,
+    );
+
+    await _cameraController?.initialize();
+
+    // Restart recording after switching camera if needed
+    if (_isRecording) {
+      await startRecording();
+    }
+
+    notifyListeners();
+  }
+
   Future<void> loadVideo({
     required File videoFile,
   }) async {
