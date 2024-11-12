@@ -14,7 +14,7 @@ class GallaryIconWidget extends StatelessWidget {
       right: 16.0,
       child: IconButton(
         icon: const CustomIconWidget(
-          icon: Icons.video_library,
+          icon: Icons.image,
           color: Colors.white,
         ),
         onPressed: () {
