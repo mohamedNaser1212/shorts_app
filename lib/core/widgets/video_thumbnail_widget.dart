@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/core/functions/navigations_functions.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/thumbnail_page.dart';
 import 'package:provider/provider.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/thumbnail_page.dart';
+import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/video_controller/video_controller.dart';
 
 class VideoThumbnailWidget extends StatelessWidget {
@@ -15,7 +15,7 @@ class VideoThumbnailWidget extends StatelessWidget {
     }
 
     return ChangeNotifierProvider(
-      create: (_) => VideoController(videoPath!),
+      create: (_) => VideoController(videoUrl: videoPath!),
       child: Consumer<VideoController>(
         builder: (context, videoController, child) {
           final thumbnail = videoController.thumbnail;

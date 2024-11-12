@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/layout/presentation/widgets/choose_video_page_elevated_botton.dart';
+import 'package:shorts/Features/layout/presentation/widgets/video_selection_screen.dart';
 import 'package:shorts/Features/search/presentation/screens/search_screen.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/video_screen.dart';
 

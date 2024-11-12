@@ -1,4 +1,5 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/play_icon_widget.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/progress_visibility_widget.dart';
@@ -6,6 +7,7 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploa
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_view_thumbnail_image_widget.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_viewer_widget.dart';
 import 'package:video_trimmer/video_trimmer.dart';
+
 import '../../../../../core/video_controller/video_controller.dart';
 
 class TrimmerViewBody extends StatefulWidget {
@@ -31,7 +33,8 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
   void initState() {
     super.initState();
     _loadVideo();
-    videoController = VideoController(widget.file.path, isInitiallyPaused: true);
+    videoController =
+        VideoController(videoUrl: widget.file.path, isInitiallyPaused: true);
   }
 
   @override
@@ -42,11 +45,14 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
 
   void _loadVideo() async {
     await trimmer.loadVideo(videoFile: widget.file);
-    final videoDuration = trimmer.videoPlayerController!.value.duration.inSeconds;
+    final videoDuration =
+        trimmer.videoPlayerController!.value.duration.inSeconds;
 
     setState(() {
       startValue = 0.0; // Initialize start value
-      endValue = videoDuration < 60 ? videoDuration.toDouble() : 60.0; // Set end value based on video duration
+      endValue = videoDuration < 60
+          ? videoDuration.toDouble()
+          : 60.0; // Set end value based on video duration
       videoController.startValue = startValue;
       videoController.endValue = endValue;
     });
@@ -63,11 +69,13 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
           children: [
             ProgressVisibilityWidget(progressVisibility: progressVisibility),
             const SizedBox(height: 20),
-            SaveElevatedButton(state: this, thumbnailFile: videoController.thumbnailFile),
+            SaveElevatedButton(
+                state: this, thumbnailFile: videoController.thumbnailFile),
             TrimViewerWidget(state: this),
             PlayIcon(state: this),
             if (videoController.thumbnailFile != null)
-              TrimmerViewImageWidget(thumbnailFile: videoController.thumbnailFile),
+              TrimmerViewImageWidget(
+                  thumbnailFile: videoController.thumbnailFile),
           ],
         ),
       ),

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_preview_icon_widget.dart';
 import 'package:provider/provider.dart';
+import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_preview_icon_widget.dart';
 import 'package:shorts/core/video_controller/video_controller.dart';
 import 'package:shorts/core/widgets/custom_app_bar.dart';
 
@@ -12,7 +12,7 @@ class ThumbnailPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ChangeNotifierProvider(
-      create: (_) => VideoController(videoPath),
+      create: (_) => VideoController(videoUrl: videoPath),
       child: Consumer<VideoController>(
         builder: (context, videoController, child) {
           final controller = videoController.controller;

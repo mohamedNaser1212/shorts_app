@@ -1,13 +1,19 @@
+import 'dart:async';
 import 'dart:io';
-import 'package:path_provider/path_provider.dart';
-import 'package:flutter/foundation.dart';
+
 import 'package:cached_video_player/cached_video_player.dart';
-import 'package:video_thumbnail/video_thumbnail.dart';
+import 'package:camera/camera.dart';
+import 'package:flutter/foundation.dart';
+import 'package:path_provider/path_provider.dart';
+import 'package:video_thumbnail/video_thumbnail.dart'
+    as video_thumbnail; // Alias the import
 
 class VideoController extends ChangeNotifier {
-  VideoController(String videoUrl, {bool isInitiallyPaused = false}) {
-    initializeController(
-        videoUrl: videoUrl, isInitiallyPaused: isInitiallyPaused);
+  VideoController({String? videoUrl, bool isInitiallyPaused = false}) {
+    if (videoUrl != null) {
+      initializeController(
+          videoUrl: videoUrl, isInitiallyPaused: isInitiallyPaused);
+    }
   }
 
   File? thumbnailFile;
@@ -72,9 +78,10 @@ class VideoController extends ChangeNotifier {
   }
 
   Future<void> _loadThumbnail(String videoUrl) async {
-    final thumbnailData = await VideoThumbnail.thumbnailData(
+    final thumbnailData = await video_thumbnail.VideoThumbnail.thumbnailData(
       video: videoUrl,
-      imageFormat: ImageFormat.JPEG,
+      imageFormat:
+          video_thumbnail.ImageFormat.JPEG, // Use the aliased version here
       maxWidth: 128,
       quality: 75,
     );
@@ -87,10 +94,10 @@ class VideoController extends ChangeNotifier {
     required String videoPath,
     required double seconds,
   }) async {
-    final thumbnailPath = await VideoThumbnail.thumbnailFile(
+    final thumbnailPath = await video_thumbnail.VideoThumbnail.thumbnailFile(
       video: videoPath,
       thumbnailPath: (await getTemporaryDirectory()).path,
-      imageFormat: ImageFormat.PNG,
+      imageFormat: video_thumbnail.ImageFormat.PNG,
       maxWidth: 200,
       quality: 75,
       timeMs: (seconds * 1000).toInt(),
@@ -98,7 +105,10 @@ class VideoController extends ChangeNotifier {
 
     if (thumbnailPath != null) {
       thumbnailFile = File(thumbnailPath);
+      _thumbnail = await thumbnailFile!.readAsBytes();
       notifyListeners();
+    } else {
+      print("Thumbnail generation failed.");
     }
   }
 
@@ -132,12 +142,85 @@ class VideoController extends ChangeNotifier {
     }
   }
 
+  CameraController? _cameraController;
+  List<CameraDescription>? _cameras;
+  bool _isRecording = false;
+  bool _isLoading = false;
+  Timer? _recordingTimer;
+  int _recordingSeconds = 0;
+  static const int maxRecordingDuration = 60; // 60 seconds
+  XFile? _videoFile;
+  VideoController? _videoController;
+
+  CameraController? get cameraController => _cameraController;
+  bool get isRecording => _isRecording;
+  bool get isLoading => _isLoading;
+  int get recordingSeconds => _recordingSeconds;
+  XFile? get videoFile => _videoFile;
+  VideoController? get videoControllerInstance => _videoController;
+
+  Future<void> initializeCamera() async {
+    _cameras = await availableCameras();
+    if (_cameras != null && _cameras!.isNotEmpty) {
+      _cameraController = CameraController(
+        _cameras![0],
+        ResolutionPreset.high,
+      );
+      await _cameraController?.initialize();
+      notifyListeners();
+    }
+  }
+
+  Future<void> startRecording() async {
+    if (_cameraController != null &&
+        _cameraController!.value.isInitialized &&
+        !_isRecording) {
+      await _cameraController?.startVideoRecording();
+      _isRecording = true;
+      _recordingSeconds = 0;
+      notifyListeners();
+      Timer.periodic(const Duration(seconds: 1), (timer) {
+        if (_recordingSeconds >= 60) {
+          stopRecording();
+        } else {
+          _recordingSeconds++;
+          notifyListeners();
+        }
+      });
+    }
+  }
+
+  Future<void> stopRecording() async {
+    if (_cameraController != null &&
+        _cameraController!.value.isRecordingVideo) {
+      final videoFile = await _cameraController?.stopVideoRecording();
+      _isRecording = false;
+      _videoFile = videoFile;
+      notifyListeners();
+
+      if (_videoFile != null) {
+        initializeVideoController(_videoFile!.path);
+        await generateThumbnail(videoPath: _videoFile!.path, seconds: 0.1);
+      }
+    }
+  }
+
+  void initializeVideoController(String videoPath) {
+    _videoController = VideoController(videoUrl: videoPath)
+      ..generateThumbnail(videoPath: videoPath, seconds: 1.0).then((_) {
+        notifyListeners();
+      });
+  }
+
   @override
   void dispose() {
     _positionNotifier.dispose();
     _durationNotifier.dispose();
     _isLikedNotifier.dispose();
     videoController?.dispose();
+    _cameraController?.dispose();
+    _recordingTimer?.cancel();
+    _videoController?.dispose();
     super.dispose();
   }
 }
