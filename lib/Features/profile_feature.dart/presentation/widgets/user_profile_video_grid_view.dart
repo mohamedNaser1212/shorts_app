@@ -5,9 +5,7 @@ import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_pro
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_screen_body.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_video_grid_view_body.dart';
 import 'package:shorts/core/functions/toast_function.dart';
-import 'package:shorts/core/widgets/custom_title.dart';
 
-import '../../../../core/managers/styles_manager/color_manager.dart';
 import 'custom_shimmer_grid_view_Widget.dart';
 
 class UserProfileVideosGridView extends StatefulWidget {
@@ -21,23 +19,30 @@ class UserProfileVideosGridView extends StatefulWidget {
 }
 
 class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
-  ScrollController _scrollController = ScrollController();
-  int _page = 0;
+  final ScrollController _scrollController = ScrollController();
+  final int _page = 0;
+  bool allVideosLoaded = false;
 
   @override
-  void initState() {
-    super.initState();
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+
+    if (_page == 0) {
+      GetUserVideosCubit.get(context).reset();
+      GetUserVideosCubit.get(context).getUserVideos(
+        userId: widget.state.widget.userEntity!.id!,
+        page: _page + 1,
+      );
+    }
+
     _scrollController.addListener(_onScroll);
-    context.read<GetUserVideosCubit>().getUserVideos(
-          userId: widget.state.widget.userEntity!.id!,
-          page: _page + 1,
-        );
   }
 
   void _onScroll() {
-    if (_scrollController.position.pixels ==
-        _scrollController.position.maxScrollExtent) {
-      final cubit = context.read<GetUserVideosCubit>();
+    if (!allVideosLoaded &&
+        _scrollController.position.pixels >=
+            _scrollController.position.maxScrollExtent * 0.7) {
+      final cubit = GetUserVideosCubit.get(context);
       if (!cubit.isLoadingMore && cubit.hasMoreVideos) {
         cubit.loadMoreVideos(userId: widget.state.widget.userEntity!.id!);
       }
@@ -73,17 +78,12 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
                     if (index == state.videos.length && state.hasMoreVideos) {
                       return const Center(child: CircularProgressIndicator());
                     }
+                    if (index >= state.videos.length) {
+                      return const SizedBox();
+                    }
                     return _builder(index: index, successState: state);
                   },
                 ),
-              ),
-            );
-          } else {
-            return const Center(
-              child: CustomTitle(
-                title: 'There are no videos yet',
-                style: TitleStyle.styleBold18,
-                color: ColorController.whiteColor,
               ),
             );
           }

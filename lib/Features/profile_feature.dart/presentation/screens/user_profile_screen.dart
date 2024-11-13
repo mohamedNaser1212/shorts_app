@@ -35,7 +35,6 @@ class UserProfileScreenState extends State<UserProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // BlocProvider.of<UserInfoCubit>(context).getUserById(uId: widget.userId!);
   }
 
   @override

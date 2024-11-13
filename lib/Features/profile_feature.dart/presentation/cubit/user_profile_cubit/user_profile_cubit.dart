@@ -53,8 +53,8 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
 
   void reset() {
     videos.clear();
-    _currentPage = 0; // Reset to the first page
+    _currentPage = 0;
     isLoadingMore = false;
-    hasMoreVideos = true; // Reset the flag for more videos
+    hasMoreVideos = true;
   }
 }

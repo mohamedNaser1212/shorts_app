@@ -33,12 +33,22 @@ class UserProfileVideosRemoteDataSourceImpl
   bool hasMoreVideos = true;
   final int limit = _defaultPageSize;
 
+  // This method will reset the pagination state
+  void resetPagination() {
+    _lastDocument = null;
+    hasMoreVideos = true;
+  }
+
   @override
   Future<List<VideoModel>> getUserVideos({
     required String userId,
     int pageSize = 9,
   }) async {
-    if (!hasMoreVideos) return [];
+    // If pagination has been reset, we will fetch the videos from the beginning
+    if (!hasMoreVideos) {
+      resetPagination();
+    }
+
     Query query = firestore
         .collection('users/$userId/videos')
         .orderBy('timeStamp', descending: true)
