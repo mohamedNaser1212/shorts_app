@@ -41,5 +41,5 @@ abstract class ColorController {
   // Additional Colors for special use
   static const Color blueAccent = blueAccentColor;
   static const Color redAccent = redColor;
-  static const Color greenAccent = Colors.green;
+  static const Color greenColor = Colors.green;
 }

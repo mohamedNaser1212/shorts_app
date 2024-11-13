@@ -73,7 +73,7 @@ class _SettingsFormBodyState extends State<SettingsFormBody> {
       UserInfoCubit.get(context).getUserData();
       ToastHelper.showToast(
         message: 'Data updated successfully',
-        color: ColorController.greenAccent,
+        color: ColorController.greenColor,
       );
     }
   }

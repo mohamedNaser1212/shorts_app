@@ -33,11 +33,6 @@ class VideoSelectionScreen extends StatelessWidget {
                     : const Center(child: CircularProgressIndicator()),
                 if (notifier.isRecording)
                   VideoTimerWidget(recordingSeconds: notifier.recordingSeconds),
-                // if (notifier.videoFile != null && !notifier.isRecording)
-                //   ConfirmRecordingWidget(
-                //     videoFile: notifier.videoFile,
-                //     videoController: notifier.videoControllerInstance,
-                //   ),
                 VideoRecordingIconWidget(notifier: notifier),
                 GallaryIconWidget(
                   notifier: notifier,

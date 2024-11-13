@@ -5,6 +5,7 @@ import 'package:shorts/Features/favourites_feature/presentation/cubit/get_favour
 import '../../Features/authentication_feature/presentation/screens/login_screen.dart';
 import '../functions/navigations_functions.dart';
 import '../layout/presentation/screens/layout_widget.dart';
+import '../managers/styles_manager/color_manager.dart';
 import '../user_info/cubit/user_info_cubit.dart';
 import 'custom_title.dart';
 
@@ -32,12 +33,16 @@ class _InitialScreenState extends State<InitialScreen> {
   Widget _userInfoBuilder(context, state) {
     if (state is GetUserInfoLoadingState) {
       return const Scaffold(
+        backgroundColor: ColorController.blackColor,
         body: Center(
-          child: CircularProgressIndicator(),
+          child: CircularProgressIndicator(
+            color: ColorController.whiteColor,
+          ),
         ),
       );
     } else if (state is GetUserInfoErrorState) {
       return Scaffold(
+        backgroundColor: ColorController.blackColor,
         body: Center(
           child: CustomTitle(title: state.message, style: TitleStyle.style16),
         ),

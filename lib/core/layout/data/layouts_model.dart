@@ -8,7 +8,7 @@ import '../../../Features/profile_feature.dart/presentation/screens/user_profile
 class LayoutModel {
   int _currentIndex = 0;
 
-  final List<Widget> _screens = [
+  final List<Widget> screens = [
     const VideosScreen(),
     VideoSelectionScreen(),
     const SearchScreen(),
@@ -51,7 +51,8 @@ class LayoutModel {
 
   int get currentIndex => _currentIndex;
 
-  Widget get currentScreen => _screens[_currentIndex];
+  Widget get currentScreen =>
+      screens[_currentIndex];
 
   List<BottomNavigationBarItem> get bottomNavigationBarItems =>
       _bottomNavigationBarItems;

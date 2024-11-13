@@ -44,7 +44,7 @@ class RegisterScreen extends StatelessWidget {
 void _listener(BuildContext context, RegisterState state) {
   if (state is RegisterSuccessState) {
     ToastHelper.showToast(
-      color: ColorController.greenAccent,
+      color: ColorController.greenColor,
       message: 'Register Success',
     );
 

@@ -1,12 +1,13 @@
 part of 'upload_videos_cubit.dart';
 
- class UploadVideosState {}
+class UploadVideosState {}
+
 class VideoUploadLoadingState extends UploadVideosState {}
 
 class VideoUploadedSuccessState extends UploadVideosState {
-  final String videoUrl;
+  final VideoEntity videoEntity;
 
-  VideoUploadedSuccessState({required this.videoUrl});
+  VideoUploadedSuccessState({required this.videoEntity});
 }
 
 class VideoUploadErrorState extends UploadVideosState {
@@ -18,7 +19,7 @@ class VideoUploadErrorState extends UploadVideosState {
 class VideoPickedLoading extends UploadVideosState {}
 
 class VideoPickedSuccess extends UploadVideosState {
-  final File file ;
+  final File file;
 
   VideoPickedSuccess({required this.file});
 }

@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 
+import '../../../../Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
+import '../../../../Features/videos_feature/presentation/widgets/videos_components_widgets/videos_list.dart';
+import '../../../functions/navigations_functions.dart';
+import '../../../widgets/custom_snack_bar.dart';
 import '../../data/layouts_model.dart';
 
 class LayoutScreen extends StatefulWidget {
@@ -23,24 +28,70 @@ class LayoutScreenState extends State<LayoutScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-        //  appBar: _buildAppBar(context),
-        body: layoutModel.currentScreen,
-        bottomNavigationBar: BottomNavigationBar(
-          type: BottomNavigationBarType
-              .fixed, // Set type to fixed for custom colors
-          backgroundColor:
-              Colors.black, // Set navigation bar background to black
-          currentIndex: layoutModel.currentIndex,
-          items: layoutModel.bottomNavigationBarItems,
-          selectedItemColor: Colors.white, // Set selected icon color to white
-          unselectedItemColor: Colors.grey, // Set unselected icon color to grey
-          onTap: (index) {
-            setState(() {
-              layoutModel.changeScreen(index);
-            });
-          },
-        ));
+    return BlocListener<UploadVideosCubit, UploadVideosState>(
+      listener: (context, state) {
+        // if (state is VideoUploadLoadingState) {
+        //   rootScaffoldMessengerKey.currentState!.showSnackBar(
+        //     const SnackBar(
+        //       content: Text(
+        //         'Video is now uploading, we will notify you when upload is complete',
+        //         style: TextStyle(color: Colors.white),
+        //       ),
+        //       backgroundColor: ColorController.greenAccent,
+        //     ),
+        //   );
+        // } else
+
+        if (state is VideoUploadedSuccessState) {
+          showSnackBar(
+            message: "Successs At Upload",
+            context: context,
+            onActionPressed: () => NavigationManager.navigateTo(
+                context: context,
+                screen: VideoListItem(videoEntity: state.videoEntity)),
+            actionLabel: "Show",
+          );
+          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          //   showCloseIcon: true,
+          //   action: SnackBarAction(
+          //     textColor: ColorController.whiteColor,
+          //     label: "Show",
+          //     onPressed: () => NavigationManager.navigateTo(
+          //         context: context,
+          //         screen: VideoListItem(videoEntity: state.videoEntity)),
+          //   ),
+          //   backgroundColor: ColorController.greenAccent,
+          //   dismissDirection: DismissDirection.up,
+          //   behavior: SnackBarBehavior.floating,
+          //   margin: const EdgeInsets.all(20),
+          //   padding: const EdgeInsets.all(10),
+          //   content: const DefaultTextStyle(
+          //     style: TextStyle(color: ColorController.whiteColor, fontSize: 16),
+          //     child: Text("Successs At Upload"),
+          //   ),
+          // ));
+        }
+      },
+      child: Scaffold(
+          //  appBar: _buildAppBar(context),
+          body: layoutModel.currentScreen,
+          bottomNavigationBar: BottomNavigationBar(
+            type: BottomNavigationBarType
+                .fixed, // Set type to fixed for custom colors
+            backgroundColor:
+                Colors.black, // Set navigation bar background to black
+            currentIndex: layoutModel.currentIndex,
+            items: layoutModel.bottomNavigationBarItems,
+            selectedItemColor: Colors.white, // Set selected icon color to white
+            unselectedItemColor:
+                Colors.grey, // Set unselected icon color to grey
+            onTap: (index) {
+              setState(() {
+                layoutModel.changeScreen(index);
+              });
+            },
+          )),
+    );
   }
 
   // CustomAppBar _buildAppBar(BuildContext context) {
