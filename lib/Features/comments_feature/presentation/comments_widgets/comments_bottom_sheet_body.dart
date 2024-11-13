@@ -5,6 +5,8 @@ import 'package:shorts/Features/comments_feature/presentation/comments_widgets/c
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_list_view.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
+import '../../../../core/managers/styles_manager/color_manager.dart';
+
 class CommentsBottomSheetBody extends StatelessWidget {
   const CommentsBottomSheetBody({
     super.key,
@@ -27,13 +29,15 @@ class CommentsBottomSheetBody extends StatelessWidget {
             const CustomTitle(
               title: 'Comments',
               style: TitleStyle.styleBold18,
+              color: ColorController.blackColor,
             ),
             const SizedBox(height: 8),
             Expanded(
-                child: CommentsListView(
-              state: state,
-              scrollController: state.scrollController,
-            )),
+              child: CommentsListView(
+                state: state,
+                scrollController: state.scrollController,
+              ),
+            ),
             const SizedBox(height: 8),
             Padding(
               padding: EdgeInsets.only(

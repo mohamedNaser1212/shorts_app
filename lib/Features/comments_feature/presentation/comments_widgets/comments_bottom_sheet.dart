@@ -59,10 +59,11 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
       listener: (context, state) {
         if (state is GetCommentsSuccessState) {
           currentPage++;
-
-          if (state.comments!.isEmpty) {
-            allCommentsLoaded = true;
-          } else {
+          allCommentsLoaded = !(context
+                  .read<CommentsCubit>()
+                  .hasMoreCommentsForVideo[widget.videoEntity.id] ??
+              true);
+          if (state.comments!.isNotEmpty) {
             commentsList.addAll(state.comments!);
           }
         } else if (state is GetCommentsErrorState) {
