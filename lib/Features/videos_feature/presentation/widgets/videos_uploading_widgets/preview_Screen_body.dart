@@ -11,6 +11,7 @@ import 'package:uuid/uuid.dart';
 import '../../../../../core/functions/toast_function.dart';
 import '../../../../../core/user_info/cubit/user_info_cubit.dart';
 import '../../../../../core/widgets/reusable_elevated_botton.dart';
+import '../../../../authentication_feature/data/user_model/user_model.dart';
 import '../../../data/model/video_model.dart';
 import '../../video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
 
@@ -64,7 +65,22 @@ class _PreviewScreeBodyState extends State<PreviewScreeBody> {
                     id: uuid.v1(),
                     description: widget.previewState.descriptionController.text,
                     videoUrl: widget.previewState.widget.outputPath,
-                    user: UserInfoCubit.get(context).userEntity!,
+                    user: UserModel(
+                      id: UserInfoCubit.get(context).userEntity!.id,
+                      name: UserInfoCubit.get(context).userEntity!.name,
+                      email: UserInfoCubit.get(context).userEntity!.email,
+                      phone: UserInfoCubit.get(context).userEntity!.phone,
+                      bio: UserInfoCubit.get(context).userEntity!.bio,
+                      profilePic:
+                          UserInfoCubit.get(context).userEntity!.profilePic,
+                      fcmToken: UserInfoCubit.get(context).userEntity!.fcmToken,
+                      likesCount:
+                          UserInfoCubit.get(context).userEntity!.likesCount,
+                      followingCount:
+                          UserInfoCubit.get(context).userEntity!.followingCount,
+                      followersCount:
+                          UserInfoCubit.get(context).userEntity!.followersCount,
+                    ),
                     thumbnail: widget.thumbnailFile?.path ?? '',
                   );
 

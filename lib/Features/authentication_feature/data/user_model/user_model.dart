@@ -11,30 +11,26 @@ class UserModel extends UserEntity {
     required super.fcmToken,
     required super.profilePic,
     required super.bio,
-    super.followersCount = 0, // Set default value to 0
-    super.followingCount = 0, // Set default value to 0
-    super.likesCount = 0, // Set default value to 0
+    super.followersCount = 0,
+    super.followingCount = 0,
+    super.likesCount = 0,
   });
 
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
-      name: json[RequestDataNames.name],
-      email: json[RequestDataNames.email],
-      phone: json[RequestDataNames.phone],
-      id: json[RequestDataNames.id],
-      fcmToken: json[RequestDataNames.fcmToken],
-      profilePic: json[RequestDataNames.profilePic],
-      bio: json[RequestDataNames.bio],
-      followersCount: json[RequestDataNames.followersCount] ??
-          0, // Default to 0 if not present
-      followingCount: json[RequestDataNames.followingCount] ??
-          0, // Default to 0 if not present
-      likesCount:
-          json[RequestDataNames.likesCount] ?? 0, // Default to 0 if not present
+      name: json[RequestDataNames.name] ?? '',
+      email: json[RequestDataNames.email] ?? '',
+      phone: json[RequestDataNames.phone] ?? '',
+      id: json[RequestDataNames.id] ?? '',
+      fcmToken: json[RequestDataNames.fcmToken] ?? '',
+      profilePic: json[RequestDataNames.profilePic] ?? '',
+      bio: json[RequestDataNames.bio] ?? '',
+      followersCount: json[RequestDataNames.followersCount] ?? 0,
+      followingCount: json[RequestDataNames.followingCount] ?? 0,
+      likesCount: json[RequestDataNames.likesCount] ?? 0,
     );
   }
 
-  @override
   Map<String, dynamic> toJson() {
     return {
       RequestDataNames.name: name,

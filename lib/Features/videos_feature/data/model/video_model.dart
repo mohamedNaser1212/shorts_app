@@ -1,6 +1,7 @@
 import 'package:intl/intl.dart';
-import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/utils/constants/request_data_names.dart';
+
+import '../../../authentication_feature/data/user_model/user_model.dart';
 import '../../domain/video_entity/video_entity.dart';
 
 class VideoModel extends VideoEntity {
@@ -14,8 +15,6 @@ class VideoModel extends VideoEntity {
     required super.user,
     required super.description,
     this.sharedUserDescription,
-    super.sharedBy,
-    super.isShared = false,
     super.timeStamp,
   }) {
     if (timeStamp != null) {
@@ -29,12 +28,7 @@ class VideoModel extends VideoEntity {
       thumbnail: json[RequestDataNames.thumbnail] ?? '',
       videoUrl: json[RequestDataNames.videoUrl] ?? '',
       description: json[RequestDataNames.description],
-      sharedUserDescription: json[RequestDataNames.sharedUserDescription] ?? '',
-      user: UserEntity.fromJson(json[RequestDataNames.user]),
-      sharedBy: json[RequestDataNames.sharedBy] != null
-          ? UserEntity.fromJson(json[RequestDataNames.sharedBy])
-          : null,
-      isShared: json[RequestDataNames.isShared] ?? false,
+      user: UserModel.fromJson(json[RequestDataNames.user]),
       timeStamp: json[RequestDataNames.timeStamp] != null
           ? DateTime.parse(json[RequestDataNames.timeStamp])
           : null, // Parse timestamp
@@ -49,8 +43,6 @@ class VideoModel extends VideoEntity {
       RequestDataNames.description: description,
       RequestDataNames.sharedUserDescription: sharedUserDescription,
       RequestDataNames.user: user.toJson(),
-      if (sharedBy != null) RequestDataNames.sharedBy: sharedBy!.toJson(),
-      RequestDataNames.isShared: isShared,
       if (timeStampDateTime != null)
         RequestDataNames.timeStamp: timeStampDateTime!.toIso8601String(),
     };

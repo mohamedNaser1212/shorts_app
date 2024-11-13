@@ -1,9 +1,10 @@
 import 'package:hive/hive.dart';
-import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
+
+import '../../../authentication_feature/data/user_model/user_model.dart';
 
 part 'video_entity.g.dart';
 
-@HiveType(typeId: 0)  // Make sure the typeId is unique across all entities.
+@HiveType(typeId: 0)
 class VideoEntity extends HiveObject {
   @HiveField(0)
   final String id;
@@ -18,29 +19,17 @@ class VideoEntity extends HiveObject {
   final String description;
 
   @HiveField(4)
-  final UserEntity user;
+  final UserModel user;
 
   @HiveField(5)
-  final UserEntity? sharedBy;
+  final DateTime? timeStamp;
 
-  @HiveField(6)
-  final bool isShared;
-
-  @HiveField(7)
-  final String? sharedUserDescription;
-
-@HiveField(8)
-final DateTime? timeStamp;
-
-VideoEntity({
-  required this.id,
-  required this.thumbnail,
-  required this.videoUrl,
-  required this.description,
-  required this.user,
-  this.sharedBy,
-  this.isShared = false,
-  this.sharedUserDescription,
-  this.timeStamp,
-});
+  VideoEntity({
+    required this.id,
+    required this.thumbnail,
+    required this.videoUrl,
+    required this.description,
+    required this.user,
+    this.timeStamp,
+  });
 }

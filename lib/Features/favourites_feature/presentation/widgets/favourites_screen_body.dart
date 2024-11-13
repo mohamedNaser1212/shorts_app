@@ -43,7 +43,6 @@ class FavouritesScreenBody extends StatelessWidget {
             itemBuilder: (context, index) {
               final favouriteEntity = favouriteVideos[index];
               final videoEntity = state.videos[index];
-              final isShared = videoEntity.sharedBy != null;
 
               CommentsCubit.get(context).getCommentsCount(
                 videoId: videoEntity.id,

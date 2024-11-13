@@ -243,7 +243,7 @@ class CustomElevatedButton extends StatelessWidget {
         id: uuid.v1(),
         description: previewState.descriptionController.text,
         videoUrl: previewState.widget.outputPath,
-        user: UserInfoCubit.get(context).userEntity!,
+        user: UserInfoCubit.get(context).userModel!,
         thumbnail: thumbnailFile?.path ?? '',
       );
 

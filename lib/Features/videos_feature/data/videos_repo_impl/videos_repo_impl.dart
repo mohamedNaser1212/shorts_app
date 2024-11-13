@@ -41,7 +41,8 @@ class VideosRepoImpl extends VideosRepo {
   }) {
     return repoManager.call(action: () async {
       final video = await videosRemoteDataSource.uploadVideo(
-          videoModel: videoModel, sharedBy: sharedBy);
+        videoModel: videoModel,
+      );
       return video;
     });
   }

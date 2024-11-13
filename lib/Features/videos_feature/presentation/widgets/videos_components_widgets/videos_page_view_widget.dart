@@ -63,7 +63,6 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
               final video = videos[index];
-              final isShared = video.sharedBy != null;
 
               CommentsCubit.get(context).getCommentsCount(
                 videoId: video.id,

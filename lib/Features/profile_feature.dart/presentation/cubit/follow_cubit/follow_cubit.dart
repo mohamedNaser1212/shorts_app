@@ -21,11 +21,9 @@ class FollowCubit extends Cubit<FollowState> {
   final GetFollowersCountUseCase getFollowersCountUseCase;
   final GetFollowingCountUseCase getFollowingCountUseCase;
   final IsUserFollowedUseCase isUserFollowedUseCase;
-  // Store follow status for each user in a map
   final Map<String, FollowModel> _followStatus = {};
   static FollowCubit get(context) => BlocProvider.of(context);
 
-  // Getter to access follow status map
   Map<String, FollowModel> get followStatus => _followStatus;
 
   Future<void> followUser({

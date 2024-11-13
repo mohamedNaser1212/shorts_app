@@ -5,7 +5,6 @@ import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shorts/core/clear_token/clear_token.dart';
 import 'package:shorts/core/network/firebase_manager/collection_names.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
-import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 import 'package:shorts/core/utils/constants/request_data_names.dart';
 
 import '../user_model/login_request_model.dart';
@@ -117,7 +116,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     return UserModel.fromJson(userData);
   }
 
-  Future<void> createUserData({required UserEntity user}) async {
+  Future<void> createUserData({required UserModel user}) async {
     await FirebaseFirestore.instance
         .collection(CollectionNames.users)
         .doc(user.id)

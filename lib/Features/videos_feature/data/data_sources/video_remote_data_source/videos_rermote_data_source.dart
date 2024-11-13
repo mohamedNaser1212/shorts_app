@@ -18,7 +18,6 @@ abstract class VideosRemoteDataSource {
 
   Future<VideoModel> uploadVideo({
     required VideoModel videoModel,
-    UserEntity? sharedBy,
   });
 
   Future<void> shareVideo({
@@ -105,8 +104,6 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
       user: videoModel.user,
       description: videoModel.description,
       sharedUserDescription: videoModel.sharedUserDescription,
-      sharedBy: sharedBy ?? videoModel.sharedBy,
-      isShared: videoModel.isShared,
       timeStamp: DateTime.now(),
     );
 
@@ -176,8 +173,6 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
 
     final sharedVideoModel = VideoModel(
       id: newVideoId,
-      sharedBy: user,
-      isShared: true,
       thumbnail: model.thumbnail,
       videoUrl: model.videoUrl,
       user: model.user,

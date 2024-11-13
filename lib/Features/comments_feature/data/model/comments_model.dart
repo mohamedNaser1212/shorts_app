@@ -25,7 +25,7 @@ class CommentModel extends CommentEntity {
     return {
       RequestDataNames.id: id,
       RequestDataNames.content: content,
-      RequestDataNames.user: user.toJson(),
+      RequestDataNames.user: (user as UserModel).toJson(),
       RequestDataNames.timestamp: timestamp.toIso8601String(),
     };
   }

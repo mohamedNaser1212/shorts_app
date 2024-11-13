@@ -8,10 +8,13 @@ part 'comments_entity.g.dart';
 class CommentEntity {
   @HiveField(0)
   String id;
+
   @HiveField(1)
   final String content;
+
   @HiveField(2)
   final UserEntity user;
+
   @HiveField(3)
   final DateTime timestamp;
 
@@ -21,22 +24,4 @@ class CommentEntity {
     required this.user,
     required this.timestamp,
   });
-
-  // Map<String, dynamic> toJson() {
-  //   return {
-  //     RequestDataNames.id: id,
-  //     RequestDataNames.content: content,
-  //     RequestDataNames.user: user.toJson(),
-  //     RequestDataNames.timestamp: timestamp.toIso8601String(),
-  //   };
-  // }
-  //
-  // factory CommentEntity.fromJson(Map<String, dynamic> json) {
-  //   return CommentEntity(
-  //     id: json[RequestDataNames.id] ?? '',
-  //     content: json[RequestDataNames.content] ?? '',
-  //     user: UserModel.fromJson(json[RequestDataNames.user]),
-  //     timestamp: DateTime.parse(json[RequestDataNames.timestamp]),
-  //   );
-  // }
 }
