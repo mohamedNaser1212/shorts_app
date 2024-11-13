@@ -1,5 +1,4 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 
 import '../../../videos_feature/domain/video_entity/video_entity.dart';
@@ -15,8 +14,8 @@ abstract class CommentsRemoteDataSource {
     required String videoId,
   });
 
-  Future<List<CommentEntity>> addCommentToVideo({
-    required CommentEntity comment,
+  Future<List<CommentModel>> addCommentToVideo({
+    required CommentModel comment,
     required VideoEntity video,
   });
 
@@ -96,8 +95,8 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
   }
 
   @override
-  Future<List<CommentEntity>> addCommentToVideo({
-    required CommentEntity comment,
+  Future<List<CommentModel>> addCommentToVideo({
+    required CommentModel comment,
     required VideoEntity video,
   }) async {
     await firebaseHelper.addDocumentWithAutoId(

@@ -8,6 +8,7 @@ import 'package:shorts/Features/comments_feature/domain/comments_entity/comments
 import '../../../../core/managers/error_manager/failure.dart';
 import '../../../../core/managers/repo_manager/repo_manager.dart';
 import '../../../videos_feature/domain/video_entity/video_entity.dart';
+import '../model/comments_model.dart';
 
 class CommentsRepoImpl implements CommentsRepo {
   final RepoManager repoManager;
@@ -22,7 +23,7 @@ class CommentsRepoImpl implements CommentsRepo {
 
   @override
   Future<Either<Failure, List<CommentEntity>>> addCommentToVideo({
-    required CommentEntity comment,
+    required CommentModel comment,
     required VideoEntity video,
   }) async {
     return repoManager.call(
