@@ -11,10 +11,8 @@ import '../../../../core/managers/styles_manager/color_manager.dart';
 import 'custom_shimmer_grid_view_Widget.dart';
 
 class UserProfileVideosGridView extends StatefulWidget {
-  const UserProfileVideosGridView({
-    super.key,
-    required this.state,
-  });
+  const UserProfileVideosGridView({super.key, required this.state});
+
   final UserProfileScreenBodyState state;
 
   @override
@@ -23,32 +21,59 @@ class UserProfileVideosGridView extends StatefulWidget {
 }
 
 class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
+  ScrollController _scrollController = ScrollController();
+  int _page = 0;
+
+  @override
+  void initState() {
+    super.initState();
+    _scrollController.addListener(_onScroll);
+    context.read<GetUserVideosCubit>().getUserVideos(
+          userId: widget.state.widget.userEntity!.id!,
+          page: _page + 1,
+        );
+  }
+
+  void _onScroll() {
+    if (_scrollController.position.pixels ==
+        _scrollController.position.maxScrollExtent) {
+      final cubit = context.read<GetUserVideosCubit>();
+      if (!cubit.isLoadingMore && cubit.hasMoreVideos) {
+        cubit.loadMoreVideos(userId: widget.state.widget.userEntity!.id!);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _scrollController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<GetUserVideosCubit, UserProfileState>(
-      listener: (context, state) {
-        if (state is GetUserVideosError) {
-          ToastHelper.showToast(message: state.message);
-        }
-      },
+    return BlocBuilder<GetUserVideosCubit, UserProfileState>(
       builder: (context, state) {
         if (state is GetUserVideosLoading) {
           return const CustomShimmerGridViewWidget();
+        } else if (state is GetUserVideosError) {
+          ToastHelper.showToast(message: state.message);
+          return const Center(child: Text('Error loading videos'));
         } else if (state is GetUserVideosSuccessState) {
           if (state.videos.isNotEmpty) {
             return Expanded(
               child: Padding(
-                padding: const EdgeInsets.all(8.0),
+                padding: const EdgeInsets.all(12.0),
                 child: GridView.builder(
+                  controller: _scrollController,
                   gridDelegate: _gridDelegate(),
-                  itemCount: state.videos.length,
+                  itemCount:
+                      state.videos.length + (state.hasMoreVideos ? 1 : 0),
                   itemBuilder: (context, index) {
-                    print('index: $index');
-                    return _builder(
-                      index: index,
-                      successState: state,
-                      state: state,
-                    );
+                    if (index == state.videos.length && state.hasMoreVideos) {
+                      return const Center(child: CircularProgressIndicator());
+                    }
+                    return _builder(index: index, successState: state);
                   },
                 ),
               ),
@@ -67,28 +92,23 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
       },
     );
   }
-}
 
-Widget _builder({
-  required UserProfileState state,
-  required int index,
-  required GetUserVideosSuccessState successState,
-}) {
-  final video = successState.videos[index];
-  print('VIDEOEntity: ${video.thumbnail}');
+  Widget _builder(
+      {required int index, required GetUserVideosSuccessState successState}) {
+    final video = successState.videos[index];
+    return UserProfileVideosGridViewBody(
+      video: video,
+      videos: [successState.videos[index]],
+      index: index,
+    );
+  }
 
-  return UserProfileVideosGridViewBody(
-    video: video,
-    videos: [successState.videos[index]],
-    index: index,
-  );
-}
-
-SliverGridDelegateWithFixedCrossAxisCount _gridDelegate() {
-  return const SliverGridDelegateWithFixedCrossAxisCount(
-    crossAxisCount: 2,
-    childAspectRatio: 0.75,
-    crossAxisSpacing: 2.0,
-    mainAxisSpacing: 5.0,
-  );
+  SliverGridDelegateWithFixedCrossAxisCount _gridDelegate() {
+    return const SliverGridDelegateWithFixedCrossAxisCount(
+      crossAxisCount: 3,
+      childAspectRatio: 0.5,
+      crossAxisSpacing: 8.0,
+      mainAxisSpacing: 8.0,
+    );
+  }
 }

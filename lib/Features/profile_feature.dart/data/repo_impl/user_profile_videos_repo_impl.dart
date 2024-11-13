@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/managers/error_manager/failure.dart';
@@ -17,10 +18,16 @@ class UserProfileRepoImpl implements UserProfileRepo {
   });
 
   @override
-  Future<Either<Failure, List<VideoEntity>>> getUserVideos(
-      {required String userId}) async {
+  Future<Either<Failure, List<VideoEntity>>> getUserVideos({
+    required String userId,
+    DocumentSnapshot? lastVisible,
+    int pageSize = 6,
+  }) async {
     return repoManager.call(action: () async {
-      final videos = await remoteDataSource.getUserVideos(userId: userId);
+      final videos = await remoteDataSource.getUserVideos(
+        userId: userId,
+        pageSize: pageSize,
+      );
       return videos;
     });
   }

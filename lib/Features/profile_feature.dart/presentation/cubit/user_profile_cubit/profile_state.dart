@@ -6,9 +6,11 @@ class GetUserVideosLoading extends UserProfileState {}
 
 class GetUserVideosSuccessState extends UserProfileState {
   final List<VideoEntity> videos;
+  final bool hasMoreVideos;
 
   GetUserVideosSuccessState({
     required this.videos,
+    required this.hasMoreVideos,
   });
 }
 

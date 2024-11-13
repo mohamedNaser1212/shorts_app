@@ -59,7 +59,7 @@ class UserProfileScreenState extends State<UserProfileScreen> {
         BlocProvider(
           create: (context) => GetUserVideosCubit(
             getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
-          )..getUserVideos(userId: check),
+          )..getUserVideos(userId: check, page: 1),
         ),
         BlocProvider(
           create: (context) => FollowCubit(

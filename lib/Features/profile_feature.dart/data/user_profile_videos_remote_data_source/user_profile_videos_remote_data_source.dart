@@ -6,6 +6,7 @@ import '../../../videos_feature/data/model/video_model.dart';
 abstract class UserProfilesRemoteDataSource {
   Future<List<VideoModel>> getUserVideos({
     required String userId,
+    int pageSize = 6,
   });
   Future<UserModel> toggleFollow({
     required String currentUserId,
@@ -26,14 +27,42 @@ abstract class UserProfilesRemoteDataSource {
 class UserProfileVideosRemoteDataSourceImpl
     extends UserProfilesRemoteDataSource {
   final FirebaseFirestore firestore = FirebaseFirestore.instance;
+  DocumentSnapshot? _lastDocument;
+  static const int _defaultPageSize = 6;
+  Map<num, DocumentSnapshot?> lastVideos = {};
+  bool hasMoreVideos = true;
+  final int limit = _defaultPageSize;
 
   @override
-  Future<List<VideoModel>> getUserVideos({required String userId}) async {
-    final querySnapshot =
-        await firestore.collection('users/$userId/videos').get();
-    return querySnapshot.docs
-        .map((doc) => VideoModel.fromJson(doc.data()))
+  Future<List<VideoModel>> getUserVideos({
+    required String userId,
+    int pageSize = 9,
+  }) async {
+    if (!hasMoreVideos) return [];
+    Query query = firestore
+        .collection('users/$userId/videos')
+        .orderBy('timeStamp', descending: true)
+        .limit(limit);
+
+    if (_lastDocument != null) {
+      query = query.startAfterDocument(_lastDocument!);
+    }
+
+    final querySnapshot = await query.get();
+    if (querySnapshot.docs.isEmpty) {
+      hasMoreVideos = false;
+      return [];
+    }
+    List<VideoModel> videos = querySnapshot.docs
+        .map((doc) => VideoModel.fromJson(doc.data() as Map<String, dynamic>))
         .toList();
+    _lastDocument = querySnapshot.docs.last;
+
+    if (videos.length < limit) {
+      hasMoreVideos = false;
+    }
+
+    return videos;
   }
 
   @override
@@ -44,7 +73,6 @@ class UserProfileVideosRemoteDataSourceImpl
     final currentUserDoc = firestore.collection('users').doc(currentUserId);
     final targetUserDoc = firestore.collection('users').doc(targetUserId);
 
-    // Check if the current user is already following the target user
     final docSnapshot =
         await currentUserDoc.collection('following').doc(targetUserId).get();
     bool isFollowing = docSnapshot.exists;
