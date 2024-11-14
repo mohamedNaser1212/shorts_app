@@ -58,13 +58,17 @@ class _InitialScreenState extends State<InitialScreen> {
           context: context,
           screen: const LoginScreen(),
         );
+      } else if (!state.userEntity!.isVerified) {
+        NavigationManager.navigateAndFinish(
+          context: context,
+          screen: const LoginScreen(),
+        );
       } else {
         UserInfoCubit.get(context).userEntity = state.userEntity;
         FavouritesCubit.get(context).getFavourites(user: state.userEntity!);
         NavigationManager.navigateAndFinish(
           context: context,
           screen: const LayoutScreen(),
-          // HomeScreen(currentUser: state.userEntity!),
         );
       }
     }

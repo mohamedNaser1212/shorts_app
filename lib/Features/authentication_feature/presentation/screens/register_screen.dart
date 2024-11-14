@@ -9,6 +9,7 @@ import '../../../../core/user_info/cubit/user_info_cubit.dart';
 import '../../../../core/user_info/domain/use_cases/get_user_info_use_case.dart';
 import '../../../../core/widgets/custom_progress_indicator.dart';
 import '../../../../core/widgets/initial_screen.dart';
+import '../../../../core/widgets/verification_screen.dart';
 import '../../domain/authentication_use_case/register_use_case.dart';
 import '../cubit/register_cubit/register_cubit.dart';
 import '../widgets/register_screen_body.dart';
@@ -53,6 +54,11 @@ void _listener(BuildContext context, RegisterState state) {
     NavigationManager.navigateAndFinish(
       context: context,
       screen: const InitialScreen(),
+    );
+  } else if (state is RegisterVerificationRequiredState) {
+    NavigationManager.navigateTo(
+      context: context,
+      screen: const VerificationScreen(),
     );
   } else if (state is RegisterErrorState) {
     ToastHelper.showToast(

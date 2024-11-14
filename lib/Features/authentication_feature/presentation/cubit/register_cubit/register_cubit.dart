@@ -24,7 +24,6 @@ class RegisterCubit extends Cubit<RegisterState> {
   IconData suffixPasswordIcon = Icons.visibility_rounded;
   LocalStorageManager? hiveService;
 
-  //UserEntity? userModel;
   Future<void> userRegister({
     required RegisterRequestModel requestModel,
   }) async {
@@ -39,7 +38,11 @@ class RegisterCubit extends Cubit<RegisterState> {
         emit(RegisterErrorState(message: failure.message));
       },
       (userModel) async {
-        emit(RegisterSuccessState(userModel: userModel));
+        if (userModel.isVerified) {
+          emit(RegisterSuccessState(userModel: userModel));
+        } else {
+          emit(RegisterVerificationRequiredState(userModel: userModel));
+        }
       },
     );
   }

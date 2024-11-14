@@ -26,6 +26,8 @@ class UserEntity {
   int followingCount;
   @HiveField(9)
   int likesCount;
+  @HiveField(10)
+  final bool isVerified;
 
   UserEntity({
     required this.name,
@@ -35,9 +37,10 @@ class UserEntity {
     required this.fcmToken,
     required this.profilePic,
     required this.bio,
-    this.followersCount = 0, // Default value set to 0
-    this.followingCount = 0, // Default value set to 0
+    this.followersCount = 0,
+    this.followingCount = 0,
     this.likesCount = 0,
+    this.isVerified = false,
   });
 
   // factory UserEntity.fromJson(Map<String, dynamic> json) {

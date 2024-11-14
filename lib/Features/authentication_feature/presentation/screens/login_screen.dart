@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/core/widgets/verification_screen.dart';
 
 import '../../../../core/functions/navigations_functions.dart';
 import '../../../../core/functions/toast_function.dart';
@@ -9,6 +10,7 @@ import '../../../../core/user_info/domain/use_cases/get_user_info_use_case.dart'
 import '../../../../core/widgets/custom_progress_indicator.dart';
 import '../../../../core/widgets/initial_screen.dart';
 import '../../domain/authentication_use_case/login_use_case.dart';
+import '../cubit/google_sign_in_cubit/google_sign_in_cubit.dart';
 import '../cubit/login_cubit/login_cubit.dart';
 import '../cubit/login_cubit/login_state.dart';
 import '../widgets/login_screen_body.dart';
@@ -32,7 +34,8 @@ class LoginScreen extends StatelessWidget {
 
   Widget _builder(BuildContext context, LoginState state) {
     return CustomProgressIndicator(
-      isLoading: state is LoginLoadingState,
+      isLoading:
+          state is LoginLoadingState || state is GoogleSignInLoadingState,
       child: const Scaffold(
         backgroundColor: ColorController.blackColor,
         //appBar: CustomAppBar(title: 'Login', showLeadingIcon: false),
@@ -44,7 +47,14 @@ class LoginScreen extends StatelessWidget {
   void _loginListener(BuildContext context, LoginState state) {
     if (state is LoginSuccessState) {
       NavigationManager.navigateAndFinish(
-          context: context, screen: const InitialScreen());
+        context: context,
+        screen: const InitialScreen(),
+      );
+    } else if (state is LoginVerificationRequiredState) {
+      NavigationManager.navigateTo(
+        context: context,
+        screen: const VerificationScreen(),
+      );
     } else if (state is LoginErrorState) {
       ToastHelper.showToast(
         message: state.error,

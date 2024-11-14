@@ -47,6 +47,15 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
         await _accessUsersCollection(userCredential);
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
 
+    bool isVerified = userCredential.user!.emailVerified;
+    if (userData[RequestDataNames.isVerified] != isVerified) {
+      await FirebaseFirestore.instance
+          .collection(CollectionNames.users)
+          .doc(userCredential.user!.uid)
+          .update({RequestDataNames.isVerified: isVerified});
+      userData[RequestDataNames.isVerified] = isVerified;
+    }
+
     if (userData[RequestDataNames.fcmToken] == null ||
         userData[RequestDataNames.fcmToken].isEmpty) {
       String? newFcmToken = await FirebaseMessaging.instance.getToken();
@@ -100,11 +109,15 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       password: requestModel.password,
     );
 
+    // Send a verification email
+    await userCredential.user!.sendEmailVerification();
+
     String? fcmToken = await FirebaseMessaging.instance.getToken();
 
     Map<String, dynamic> userMap = requestModel.toMap();
     userMap[RequestDataNames.id] = userCredential.user!.uid;
     userMap[RequestDataNames.fcmToken] = fcmToken ?? '';
+    userMap[RequestDataNames.isVerified] = false;
 
     UserModel user = UserModel.fromJson(userMap);
     await createUserData(user: user);
@@ -167,9 +180,9 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     final firebaseUser = userCredential.user;
     final userId = firebaseUser!.uid;
 
-    // Check if user exists in Firestore
     final userDoc =
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final bool isVerified = firebaseUser.emailVerified;
 
     final userModel = UserModel(
       id: userId,
@@ -179,10 +192,9 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       profilePic: firebaseUser.photoURL ?? '',
       fcmToken: await FirebaseMessaging.instance.getToken() ?? '',
       bio: '',
-      //isVerified: false,
+      isVerified: isVerified,
     );
 
-    // If user does not exist, add them to Firestore
     if (!userDoc.exists) {
       await FirebaseFirestore.instance
           .collection('users')
@@ -193,9 +205,38 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     return userModel;
   }
 
+  Future<void> checkVerificationStatus() async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      await user.reload();
+      user = FirebaseAuth.instance.currentUser;
+
+      if (user!.emailVerified) {
+        await FirebaseFirestore.instance
+            .collection(CollectionNames.users)
+            .doc(user.uid)
+            .update({RequestDataNames.isVerified: true});
+      }
+    }
+  }
+
   @override
-  Future<void> verifyUser(String userId) {
-    // TODO: implement verifyUser
-    throw UnimplementedError();
+  Future<void> verifyUser(String userId) async {
+    User? user = FirebaseAuth.instance.currentUser;
+
+    if (user != null) {
+      // Refresh the user to get the latest verification status
+      await user.reload();
+      user = FirebaseAuth.instance.currentUser;
+
+      if (user!.emailVerified) {
+        // Update Firestore if email is verified
+        await FirebaseFirestore.instance
+            .collection(CollectionNames.users)
+            .doc(userId)
+            .update({RequestDataNames.isVerified: true});
+      }
+    }
   }
 }

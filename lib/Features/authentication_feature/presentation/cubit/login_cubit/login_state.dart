@@ -18,4 +18,6 @@ class LoginErrorState extends LoginState {
   });
 }
 
+class LoginVerificationRequiredState extends LoginState {}
+
 class AppChangePasswordVisibilityState extends LoginState {}
