@@ -103,7 +103,6 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
       videoUrl: videoUrl,
       user: videoModel.user,
       description: videoModel.description,
-      sharedUserDescription: videoModel.sharedUserDescription,
       timeStamp: DateTime.now(),
     );
 
@@ -177,7 +176,6 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
       videoUrl: model.videoUrl,
       user: model.user,
       description: model.description,
-      sharedUserDescription: text,
       timeStamp: DateTime.now(),
     );
 
