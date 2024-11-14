@@ -7,6 +7,7 @@ import 'package:shorts/core/widgets/loading_indicator.dart';
 
 import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/user_info/cubit/user_info_cubit.dart';
+import '../../../../core/utils/constants/request_data_names.dart';
 import '../../../../core/widgets/reusable_elevated_botton.dart';
 import '../../domain/models/update_request_model.dart';
 
@@ -47,29 +48,30 @@ class UpdateProfileElevatedButton extends StatelessWidget {
     //   updates['email'] = editState.emailController.text;
     // }
     if (currentUser!.name != editState.nameController.text) {
-      updates['name'] = editState.nameController.text;
+      updates[RequestDataNames.name] = editState.nameController.text;
     }
     if (currentUser.phone != editState.phoneController.text) {
-      updates['phone'] = editState.phoneController.text;
+      updates[RequestDataNames.phone] = editState.phoneController.text;
     }
     if (currentUser.bio != editState.bioController.text) {
-      updates['bio'] = editState.bioController.text;
+      updates[RequestDataNames.bio] = editState.bioController.text;
     }
 
     if (editState.imageNotifierController.imageFileNotifier.value != null) {
       final newImageUrl = await editState.imageNotifierController.uploadImage();
       if (newImageUrl != null && currentUser.profilePic != newImageUrl) {
-        updates['profilePic'] = newImageUrl;
+        updates[RequestDataNames.profilePic] = newImageUrl;
       }
     }
 
     if (updates.isNotEmpty) {
       cubit.updateUserData(
         updateUserRequestModel: UpdateUserRequestModel(
-          name: updates['name'] ?? currentUser.name,
-          phone: updates['phone'] ?? currentUser.phone,
-          bio: updates['bio'] ?? currentUser.bio,
-          imageUrl: updates['profilePic'] ?? currentUser.profilePic,
+          name: updates[RequestDataNames.name] ?? currentUser.name,
+          phone: updates[RequestDataNames.phone] ?? currentUser.phone,
+          bio: updates[RequestDataNames.bio] ?? currentUser.bio,
+          imageUrl:
+              updates[RequestDataNames.profilePic] ?? currentUser.profilePic,
         ),
         userId: currentUser.id!,
       );

@@ -28,8 +28,6 @@ class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
     required UpdateUserRequestModel updateUserRequestModel,
     required String userId,
   }) async {
-    User? currentUser = auth.currentUser;
-
     // if (currentUser != null) {
     //   if (updateUserRequestModel.email != currentUser.email) {
     //     await _updateUserEmailInAuth(
@@ -52,13 +50,5 @@ class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
     final userData = userDoc.data() as Map<String, dynamic>;
 
     return UserModel.fromJson(userData);
-  }
-
-  Future<void> _updateUserEmailInAuth({
-    required User currentUser,
-    required String newEmail,
-  }) async {
-    await currentUser.verifyBeforeUpdateEmail(newEmail);
-    await currentUser.reload();
   }
 }

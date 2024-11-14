@@ -48,4 +48,6 @@ abstract class RequestDataNames {
   static const String followersCount = 'followersCount';
   static const String followingCount = 'followingCount';
   static const String likesCount = 'likesCount';
+  static const String profileImage = 'profile_images';
+  static const String targetUserId = 'targetUserId';
 }

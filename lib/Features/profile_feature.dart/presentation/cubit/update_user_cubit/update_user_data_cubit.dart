@@ -32,7 +32,7 @@ class UpdateUserDataCubit extends Cubit<UpdateUserDataState> {
     required String userId,
   }) async {
     emit(UpdateUserDataLoadingState());
-    final result = await updateUserDataUseCase(
+    final result = await updateUserDataUseCase.call(
       updateUserRequestModel: updateUserRequestModel,
       userId: userId,
     );

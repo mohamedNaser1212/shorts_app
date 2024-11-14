@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 
+import '../../../../core/network/firebase_manager/collection_names.dart';
+import '../../../../core/utils/constants/request_data_names.dart';
 import '../../../videos_feature/data/model/video_model.dart';
 
 abstract class UserProfilesRemoteDataSource {
@@ -33,7 +35,6 @@ class UserProfileVideosRemoteDataSourceImpl
   bool hasMoreVideos = true;
   final int limit = _defaultPageSize;
 
-  // This method will reset the pagination state
   void resetPagination() {
     _lastDocument = null;
     hasMoreVideos = true;
@@ -44,14 +45,14 @@ class UserProfileVideosRemoteDataSourceImpl
     required String userId,
     int pageSize = 9,
   }) async {
-    // If pagination has been reset, we will fetch the videos from the beginning
     if (!hasMoreVideos) {
       resetPagination();
     }
 
     Query query = firestore
-        .collection('users/$userId/videos')
-        .orderBy('timeStamp', descending: true)
+        .collection(
+            '${CollectionNames.users}/$userId/${CollectionNames.videos}')
+        .orderBy(RequestDataNames.timeStamp, descending: true)
         .limit(limit);
 
     if (_lastDocument != null) {
@@ -80,39 +81,52 @@ class UserProfileVideosRemoteDataSourceImpl
     required String currentUserId,
     required String targetUserId,
   }) async {
-    final currentUserDoc = firestore.collection('users').doc(currentUserId);
-    final targetUserDoc = firestore.collection('users').doc(targetUserId);
+    final currentUserDoc =
+        firestore.collection(CollectionNames.users).doc(currentUserId);
+    final targetUserDoc =
+        firestore.collection(CollectionNames.users).doc(targetUserId);
 
-    final docSnapshot =
-        await currentUserDoc.collection('following').doc(targetUserId).get();
+    final docSnapshot = await currentUserDoc
+        .collection(CollectionNames.following)
+        .doc(targetUserId)
+        .get();
     bool isFollowing = docSnapshot.exists;
 
     if (isFollowing) {
-      await currentUserDoc.collection('following').doc(targetUserId).delete();
-      await targetUserDoc.collection('followers').doc(currentUserId).delete();
+      await currentUserDoc
+          .collection(CollectionNames.following)
+          .doc(targetUserId)
+          .delete();
+      await targetUserDoc
+          .collection(CollectionNames.followers)
+          .doc(currentUserId)
+          .delete();
 
-      // Decrease the following and followers count
       await currentUserDoc.update({
-        'followingCount': FieldValue.increment(-1),
+        RequestDataNames.followingCount: FieldValue.increment(-1),
       });
       await targetUserDoc.update({
-        'followersCount': FieldValue.increment(-1),
+        RequestDataNames.followersCount: FieldValue.increment(-1),
       });
     } else {
-      // Follow: Add to both following and followers collections
-      await currentUserDoc.collection('following').doc(targetUserId).set({
-        'targetUserId': targetUserId,
+      await currentUserDoc
+          .collection(CollectionNames.following)
+          .doc(targetUserId)
+          .set({
+        RequestDataNames.targetUserId: targetUserId,
       });
-      await targetUserDoc.collection('followers').doc(currentUserId).set({
-        'targetUserId': currentUserId,
+      await targetUserDoc
+          .collection(CollectionNames.followers)
+          .doc(currentUserId)
+          .set({
+        RequestDataNames.targetUserId: currentUserId,
       });
 
-      // Increase the following and followers count
       await currentUserDoc.update({
-        'followingCount': FieldValue.increment(1),
+        RequestDataNames.followingCount: FieldValue.increment(1),
       });
       await targetUserDoc.update({
-        'followersCount': FieldValue.increment(1),
+        RequestDataNames.followersCount: FieldValue.increment(1),
       });
     }
 
@@ -127,8 +141,10 @@ class UserProfileVideosRemoteDataSourceImpl
   Future<int> getFollowersCount({
     required String userId,
   }) async {
-    final followersSnapshot =
-        await firestore.collection('users/$userId/followers').get();
+    final followersSnapshot = await firestore
+        .collection(
+            '${CollectionNames.users}/$userId/${CollectionNames.followers}')
+        .get();
     return followersSnapshot.size;
   }
 
@@ -136,8 +152,10 @@ class UserProfileVideosRemoteDataSourceImpl
   Future<int> getFollowingCount({
     required String userId,
   }) async {
-    final followingSnapshot =
-        await firestore.collection('users/$userId/following').get();
+    final followingSnapshot = await firestore
+        .collection(
+            '${CollectionNames.users}/$userId/${CollectionNames.following}')
+        .get();
     return followingSnapshot.size;
   }
 
@@ -147,9 +165,9 @@ class UserProfileVideosRemoteDataSourceImpl
     required String targetUserId,
   }) async {
     final docSnapshot = await firestore
-        .collection('users')
+        .collection(CollectionNames.users)
         .doc(currentUserId)
-        .collection('following')
+        .collection(CollectionNames.following)
         .doc(targetUserId)
         .get();
 

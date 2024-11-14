@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:shorts/core/functions/toast_function.dart';
 import 'package:shorts/core/managers/image_picker_manager/image_picker_manager.dart';
+import 'package:shorts/core/utils/constants/request_data_names.dart';
 
 class ImageNotifierController extends ChangeNotifier {
   final TextEditingController emailController;
@@ -35,7 +36,8 @@ class ImageNotifierController extends ChangeNotifier {
   Future<String?> uploadImage() async {
     if (imageFileNotifier.value == null) return null;
 
-    String fileName = 'profile_images/${emailController.text}.jpg';
+    String fileName =
+        '${RequestDataNames.profileImage}/${emailController.text}.jpg';
     try {
       final uploadedProfilePic = await ImagePickerHelper.uploadImage(
         imageFileNotifier.value!,
@@ -45,8 +47,7 @@ class ImageNotifierController extends ChangeNotifier {
       return uploadedProfilePic;
     } catch (e) {
       ToastHelper.showToast(
-        message: 'Image upload failed',
-        color: Colors.red,
+        message: 'Image Editing failed',
       );
       return null;
     }
