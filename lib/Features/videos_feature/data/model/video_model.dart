@@ -5,7 +5,6 @@ import '../../../authentication_feature/data/user_model/user_model.dart';
 import '../../domain/video_entity/video_entity.dart';
 
 class VideoModel extends VideoEntity {
-  final String? sharedUserDescription;
   DateTime? timeStampDateTime;
 
   VideoModel({
@@ -14,7 +13,6 @@ class VideoModel extends VideoEntity {
     required super.videoUrl,
     required super.user,
     required super.description,
-    this.sharedUserDescription,
     super.timeStamp,
   }) {
     if (timeStamp != null) {
@@ -31,7 +29,7 @@ class VideoModel extends VideoEntity {
       user: UserModel.fromJson(json[RequestDataNames.user]),
       timeStamp: json[RequestDataNames.timeStamp] != null
           ? DateTime.parse(json[RequestDataNames.timeStamp])
-          : null, // Parse timestamp
+          : null,
     );
   }
 
@@ -41,7 +39,6 @@ class VideoModel extends VideoEntity {
       RequestDataNames.thumbnail: thumbnail,
       RequestDataNames.videoUrl: videoUrl,
       RequestDataNames.description: description,
-      RequestDataNames.sharedUserDescription: sharedUserDescription,
       RequestDataNames.user: user.toJson(),
       if (timeStampDateTime != null)
         RequestDataNames.timeStamp: timeStampDateTime!.toIso8601String(),
