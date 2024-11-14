@@ -205,22 +205,6 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     return userModel;
   }
 
-  Future<void> checkVerificationStatus() async {
-    User? user = FirebaseAuth.instance.currentUser;
-
-    if (user != null) {
-      await user.reload();
-      user = FirebaseAuth.instance.currentUser;
-
-      if (user!.emailVerified) {
-        await FirebaseFirestore.instance
-            .collection(CollectionNames.users)
-            .doc(user.uid)
-            .update({RequestDataNames.isVerified: true});
-      }
-    }
-  }
-
   @override
   Future<void> verifyUser(String userId) async {
     User? user = FirebaseAuth.instance.currentUser;
