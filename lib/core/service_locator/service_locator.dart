@@ -18,8 +18,6 @@ import 'package:shorts/Features/favourites_feature/domain/favourites_use_case/to
 import 'package:shorts/Features/favourites_feature/presentation/cubit/toggle_favourites_cubit/toggle_favourites_cubit_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/data/repo_impl/update_user_data_repo_impl.dart';
 import 'package:shorts/Features/profile_feature.dart/data/repo_impl/user_profile_videos_repo_impl.dart';
-import 'package:shorts/Features/profile_feature.dart/data/user_profile_videos_remote_data_source/update_user_data_remote_data_source.dart';
-import 'package:shorts/Features/profile_feature.dart/data/user_profile_videos_remote_data_source/user_profile_remote_data_source.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/repo/update_user_data_repo.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/repo/user_profile_videos_repo.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/use_case/update_user_data_use_case.dart';
@@ -61,6 +59,8 @@ import '../../Features/comments_feature/domain/comments_use_case/add_comments_us
 import '../../Features/favourites_feature/data/favourites_repo_impl/favourite_repo_impl.dart';
 import '../../Features/favourites_feature/domain/favourites_use_case/get_favourites_count_use_case.dart';
 import '../../Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
+import '../../Features/profile_feature.dart/data/user_profile_remote_data_source/update_user_data_remote_data_source.dart';
+import '../../Features/profile_feature.dart/data/user_profile_remote_data_source/user_profile_remote_data_source.dart';
 import '../../Features/profile_feature.dart/domain/use_case/check_user_follow.dart';
 import '../../Features/profile_feature.dart/domain/use_case/follow_use_case.dart';
 import '../../Features/profile_feature.dart/domain/use_case/get_followers_count_use_case.dart';

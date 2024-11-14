@@ -6,7 +6,7 @@ import '../../../../core/managers/repo_manager/repo_manager.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../../videos_feature/domain/video_entity/video_entity.dart';
 import '../../domain/repo/user_profile_videos_repo.dart';
-import '../user_profile_videos_remote_data_source/user_profile_remote_data_source.dart';
+import '../user_profile_remote_data_source/user_profile_remote_data_source.dart';
 
 class UserProfileRepoImpl implements UserProfileRepo {
   final UserProfilesRemoteDataSource remoteDataSource;
