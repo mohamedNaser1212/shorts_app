@@ -3,8 +3,8 @@ part of 'register_cubit.dart';
 class RegisterState {}
 
 class RegisterSuccessState extends RegisterState {
-  final UserEntity userModel;
-  RegisterSuccessState({required this.userModel});
+  final UserEntity userEntity;
+  RegisterSuccessState({required this.userEntity});
 }
 
 class RegisterLoadingState extends RegisterState {}
@@ -15,8 +15,8 @@ class RegisterErrorState extends RegisterState {
 }
 
 class RegisterVerificationRequiredState extends RegisterState {
-  final UserEntity userModel;
-  RegisterVerificationRequiredState({required this.userModel});
+  final UserEntity userEntity;
+  RegisterVerificationRequiredState({required this.userEntity});
 }
 
 class RegisterChangePasswordVisibility extends RegisterState {}

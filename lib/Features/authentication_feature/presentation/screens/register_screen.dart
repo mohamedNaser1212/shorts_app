@@ -49,17 +49,18 @@ void _listener(BuildContext context, RegisterState state) {
       message: 'Register Success',
     );
 
-    UserInfoCubit.get(context).userEntity = state.userModel;
-
-    NavigationManager.navigateAndFinish(
-      context: context,
-      screen: const InitialScreen(),
-    );
-  } else if (state is RegisterVerificationRequiredState) {
-    NavigationManager.navigateTo(
-      context: context,
-      screen: const VerificationScreen(),
-    );
+    UserInfoCubit.get(context).userEntity = state.userEntity;
+    if (state.userEntity.isVerified) {
+      NavigationManager.navigateAndFinish(
+        context: context,
+        screen: const InitialScreen(),
+      );
+    } else {
+      NavigationManager.navigateTo(
+        context: context,
+        screen: const VerificationScreen(),
+      );
+    }
   } else if (state is RegisterErrorState) {
     ToastHelper.showToast(
       message: state.message,

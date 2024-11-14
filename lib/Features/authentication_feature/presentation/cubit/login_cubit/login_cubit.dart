@@ -33,11 +33,7 @@ class LoginCubit extends Cubit<LoginState> {
             emit(LoginErrorState(error: failure.message));
           },
           (userData) {
-            if (userData!.isVerified) {
-              emit(LoginSuccessState(userEntity: userData!));
-            } else {
-              emit(LoginVerificationRequiredState());
-            }
+            emit(LoginSuccessState(userEntity: userData!));
           },
         );
       },

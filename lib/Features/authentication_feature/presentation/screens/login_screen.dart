@@ -46,15 +46,17 @@ class LoginScreen extends StatelessWidget {
 
   void _loginListener(BuildContext context, LoginState state) {
     if (state is LoginSuccessState) {
-      NavigationManager.navigateAndFinish(
-        context: context,
-        screen: const InitialScreen(),
-      );
-    } else if (state is LoginVerificationRequiredState) {
-      NavigationManager.navigateTo(
-        context: context,
-        screen: const VerificationScreen(),
-      );
+      if (state.userEntity.isVerified) {
+        NavigationManager.navigateAndFinish(
+          context: context,
+          screen: const InitialScreen(),
+        );
+      } else {
+        NavigationManager.navigateTo(
+          context: context,
+          screen: const VerificationScreen(),
+        );
+      }
     } else if (state is LoginErrorState) {
       ToastHelper.showToast(
         message: state.error,
