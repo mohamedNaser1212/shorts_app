@@ -194,9 +194,10 @@ Future<void> setUpServiceLocator() async {
     firebaseHelper: getIt.get<FirebaseHelper>(),
   ));
   getIt.registerSingleton<UserProfilesRemoteDataSource>(
-      UserProfileVideosRemoteDataSourceImpl(
-          // firebaseHelper: getIt.get<FirebaseHelper>()
-          ));
+    UserProfileVideosRemoteDataSourceImpl(
+      firebaseHelper: getIt.get<FirebaseHelper>(),
+    ),
+  );
   getIt.registerSingleton<UserProfileRepo>(
     UserProfileRepoImpl(
       repoManager: getIt.get<RepoManager>(),

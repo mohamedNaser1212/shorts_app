@@ -5,7 +5,7 @@ import '../../../authentication_feature/data/user_model/user_model.dart';
 part 'video_entity.g.dart';
 
 @HiveType(typeId: 0)
-class VideoEntity extends HiveObject {
+class VideoEntity {
   @HiveField(0)
   final String id;
 

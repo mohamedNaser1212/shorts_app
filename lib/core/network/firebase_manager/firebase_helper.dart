@@ -47,7 +47,6 @@ abstract class FirebaseHelper {
 
   Future<String> generateDocumentId({required String collectionPath});
 
-
   Future<void> addDocumentWithAutoId({
     required String collectionPath,
     required Map<String, dynamic> data,
@@ -62,6 +61,7 @@ abstract class FirebaseHelper {
     dynamic whereValue,
     int? limit,
     String? orderBy,
+    DocumentSnapshot? startAfter,
     bool descending = false,
   });
 }

@@ -35,7 +35,8 @@ class FirebaseHelperImpl extends FirebaseHelper {
     }
 
     if (startAfter != null) {
-      query = query.startAfterDocument(startAfter); // Handle pagination
+      query = query.startAfterDocument(
+          startAfter); // Use startAfterDocument for pagination
     }
 
     final querySnapshot = await query.get();
@@ -105,28 +106,29 @@ class FirebaseHelperImpl extends FirebaseHelper {
     await document.delete();
   }
 
-@override
-Future<Map<String, dynamic>?> getDocument({
-  required String collectionPath,
-  required String docId,
-  String? subCollectionPath,
-  String? subDocId,
-}) async {
-  DocumentReference document = firestore.collection(collectionPath).doc(docId);
+  @override
+  Future<Map<String, dynamic>?> getDocument({
+    required String collectionPath,
+    required String docId,
+    String? subCollectionPath,
+    String? subDocId,
+  }) async {
+    DocumentReference document =
+        firestore.collection(collectionPath).doc(docId);
 
-  if (subCollectionPath != null && subDocId != null) {
-    document = document.collection(subCollectionPath).doc(subDocId);
+    if (subCollectionPath != null && subDocId != null) {
+      document = document.collection(subCollectionPath).doc(subDocId);
+    }
+
+    final documentSnapshot = await document.get();
+
+    return documentSnapshot.exists
+        ? documentSnapshot.data() as Map<String, dynamic>?
+        : null;
   }
-
-  final documentSnapshot = await document.get();
-
-  return documentSnapshot.exists ? documentSnapshot.data() as Map<String, dynamic>? : null;
-}
-
 
   @override
   Future<String> generateDocumentId({required String collectionPath}) async {
-
     return firestore.collection(collectionPath).doc().id;
   }
 
@@ -143,9 +145,9 @@ Future<Map<String, dynamic>?> getDocument({
       collection = collection.doc(docId).collection(subCollectionPath);
     }
 
-
     await collection.add(data);
   }
+
   @override
   Future<QuerySnapshot<Map<String, dynamic>>> getCollectionQuerySnapshot({
     required String collectionPath,
@@ -156,6 +158,7 @@ Future<Map<String, dynamic>?> getDocument({
     int? limit,
     String? orderBy,
     bool descending = false,
+    DocumentSnapshot? startAfter,
   }) async {
     CollectionReference<Map<String, dynamic>> collection =
         firestore.collection(collectionPath);
@@ -177,6 +180,10 @@ Future<Map<String, dynamic>?> getDocument({
 
     if (limit != null) {
       query = query.limit(limit);
+    }
+
+    if (startAfter != null) {
+      query = query.startAfterDocument(startAfter); // Handle pagination
     }
 
     return await query.get();

@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
+import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
+import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 
 import '../../../../core/network/firebase_manager/collection_names.dart';
 import '../../../../core/utils/constants/request_data_names.dart';
-import '../../../videos_feature/data/model/video_model.dart';
 
 abstract class UserProfilesRemoteDataSource {
   Future<List<VideoModel>> getUserVideos({
@@ -26,14 +27,14 @@ abstract class UserProfilesRemoteDataSource {
   });
 }
 
-class UserProfileVideosRemoteDataSourceImpl
-    extends UserProfilesRemoteDataSource {
-  final FirebaseFirestore firestore = FirebaseFirestore.instance;
+class UserProfileVideosRemoteDataSourceImpl extends UserProfilesRemoteDataSource {
+  final FirebaseHelper firebaseHelper;
   DocumentSnapshot? _lastDocument;
   static const int _defaultPageSize = 6;
-  Map<num, DocumentSnapshot?> lastVideos = {};
   bool hasMoreVideos = true;
   final int limit = _defaultPageSize;
+
+  UserProfileVideosRemoteDataSourceImpl({required this.firebaseHelper});
 
   void resetPagination() {
     _lastDocument = null;
@@ -43,28 +44,26 @@ class UserProfileVideosRemoteDataSourceImpl
   @override
   Future<List<VideoModel>> getUserVideos({
     required String userId,
-    int pageSize = 9,
+    int pageSize = _defaultPageSize,
   }) async {
     if (!hasMoreVideos) {
       resetPagination();
     }
 
-    Query query = firestore
-        .collection(
-            '${CollectionNames.users}/$userId/${CollectionNames.videos}')
-        .orderBy(RequestDataNames.timeStamp, descending: true)
-        .limit(limit);
+    final querySnapshot = await firebaseHelper.getCollectionQuerySnapshot(
+      collectionPath: '${CollectionNames.users}/$userId/${CollectionNames.videos}',
+      orderBy: RequestDataNames.timeStamp,
+      descending: true,
+      limit: limit,
+      startAfter: _lastDocument,
+    );
 
-    if (_lastDocument != null) {
-      query = query.startAfterDocument(_lastDocument!);
-    }
-
-    final querySnapshot = await query.get();
     if (querySnapshot.docs.isEmpty) {
       hasMoreVideos = false;
       return [];
     }
-    List<VideoModel> videos = querySnapshot.docs
+
+    final videos = querySnapshot.docs
         .map((doc) => VideoModel.fromJson(doc.data() as Map<String, dynamic>))
         .toList();
     _lastDocument = querySnapshot.docs.last;
@@ -81,70 +80,73 @@ class UserProfileVideosRemoteDataSourceImpl
     required String currentUserId,
     required String targetUserId,
   }) async {
-    final currentUserDoc =
-        firestore.collection(CollectionNames.users).doc(currentUserId);
-    final targetUserDoc =
-        firestore.collection(CollectionNames.users).doc(targetUserId);
+    final currentUserDocPath = '${CollectionNames.users}/$currentUserId';
+    final targetUserDocPath = '${CollectionNames.users}/$targetUserId';
 
-    final docSnapshot = await currentUserDoc
-        .collection(CollectionNames.following)
-        .doc(targetUserId)
-        .get();
-    bool isFollowing = docSnapshot.exists;
+    final isFollowing = await firebaseHelper.getDocument(
+      collectionPath: '$currentUserDocPath/${CollectionNames.following}',
+      docId: targetUserId,
+    ) != null;
 
     if (isFollowing) {
-      await currentUserDoc
-          .collection(CollectionNames.following)
-          .doc(targetUserId)
-          .delete();
-      await targetUserDoc
-          .collection(CollectionNames.followers)
-          .doc(currentUserId)
-          .delete();
+      await firebaseHelper.deleteDocument(
+        collectionPath: '$currentUserDocPath/${CollectionNames.following}',
+        docId: targetUserId,
+      );
+      await firebaseHelper.deleteDocument(
+        collectionPath: '$targetUserDocPath/${CollectionNames.followers}',
+        docId: currentUserId,
+      );
 
-      await currentUserDoc.update({
-        RequestDataNames.followingCount: FieldValue.increment(-1),
-      });
-      await targetUserDoc.update({
-        RequestDataNames.followersCount: FieldValue.increment(-1),
-      });
+      await firebaseHelper.updateDocument(
+        collectionPath: currentUserDocPath,
+        docId: currentUserId,
+        data: {RequestDataNames.followingCount: FieldValue.increment(-1)},
+      );
+      await firebaseHelper.updateDocument(
+        collectionPath: targetUserDocPath,
+        docId: targetUserId,
+        data: {RequestDataNames.followersCount: FieldValue.increment(-1)},
+      );
     } else {
-      await currentUserDoc
-          .collection(CollectionNames.following)
-          .doc(targetUserId)
-          .set({
-        RequestDataNames.targetUserId: targetUserId,
-      });
-      await targetUserDoc
-          .collection(CollectionNames.followers)
-          .doc(currentUserId)
-          .set({
-        RequestDataNames.targetUserId: currentUserId,
-      });
+      await firebaseHelper.addDocument(
+        collectionPath: '$currentUserDocPath/${CollectionNames.following}',
+        docId: targetUserId,
+        data: {RequestDataNames.targetUserId: targetUserId},
+      );
+      await firebaseHelper.addDocument(
+        collectionPath: '$targetUserDocPath/${CollectionNames.followers}',
+        docId: currentUserId,
+        data: {RequestDataNames.targetUserId: currentUserId},
+      );
 
-      await currentUserDoc.update({
-        RequestDataNames.followingCount: FieldValue.increment(1),
-      });
-      await targetUserDoc.update({
-        RequestDataNames.followersCount: FieldValue.increment(1),
-      });
+      await firebaseHelper.updateDocument(
+        collectionPath: currentUserDocPath,
+        docId: currentUserId,
+        data: {RequestDataNames.followingCount: FieldValue.increment(1)},
+      );
+      await firebaseHelper.updateDocument(
+        collectionPath: targetUserDocPath,
+        docId: targetUserId,
+        data: {RequestDataNames.followersCount: FieldValue.increment(1)},
+      );
     }
 
-    // Fetch updated user data
-    final targetUserSnapshot = await targetUserDoc.get();
-    final targetUser = UserModel.fromJson(targetUserSnapshot.data()!);
+    final targetUserData = await firebaseHelper.getDocument(
+      collectionPath: CollectionNames.users,
+      docId: targetUserId,
+    );
 
-    return targetUser;
+    return UserModel.fromJson(targetUserData!);
   }
 
   @override
   Future<int> getFollowersCount({
     required String userId,
   }) async {
-    final followersSnapshot = await firestore
-        .collection(
-            '${CollectionNames.users}/$userId/${CollectionNames.followers}')
-        .get();
+    final followersSnapshot = await firebaseHelper.getCollectionQuerySnapshot(
+      collectionPath: '${CollectionNames.users}/$userId/${CollectionNames.followers}',
+    );
     return followersSnapshot.size;
   }
 
@@ -152,10 +154,9 @@ class UserProfileVideosRemoteDataSourceImpl
   Future<int> getFollowingCount({
     required String userId,
   }) async {
-    final followingSnapshot = await firestore
-        .collection(
-            '${CollectionNames.users}/$userId/${CollectionNames.following}')
-        .get();
+    final followingSnapshot = await firebaseHelper.getCollectionQuerySnapshot(
+      collectionPath: '${CollectionNames.users}/$userId/${CollectionNames.following}',
+    );
     return followingSnapshot.size;
   }
 
@@ -164,13 +165,11 @@ class UserProfileVideosRemoteDataSourceImpl
     required String currentUserId,
     required String targetUserId,
   }) async {
-    final docSnapshot = await firestore
-        .collection(CollectionNames.users)
-        .doc(currentUserId)
-        .collection(CollectionNames.following)
-        .doc(targetUserId)
-        .get();
+    final docSnapshot = await firebaseHelper.getDocument(
+      collectionPath: '${CollectionNames.users}/$currentUserId/${CollectionNames.following}',
+      docId: targetUserId,
+    );
 
-    return docSnapshot.exists;
+    return docSnapshot != null;
   }
 }
