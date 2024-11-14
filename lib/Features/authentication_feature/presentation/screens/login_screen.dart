@@ -38,7 +38,6 @@ class LoginScreen extends StatelessWidget {
           state is LoginLoadingState || state is GoogleSignInLoadingState,
       child: const Scaffold(
         backgroundColor: ColorController.blackColor,
-        //appBar: CustomAppBar(title: 'Login', showLeadingIcon: false),
         body: LoginScreenBody(),
       ),
     );
@@ -52,7 +51,7 @@ class LoginScreen extends StatelessWidget {
           screen: const InitialScreen(),
         );
       } else {
-        NavigationManager.navigateTo(
+        NavigationManager.navigateAndFinishWithTransition(
           context: context,
           screen: const VerificationScreen(),
         );

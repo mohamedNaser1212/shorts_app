@@ -74,7 +74,7 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
             const SizedBox(height: 20),
             AuthStatusTextWidget(
               onTap: () {
-                NavigationManager.navigateAndFinish(
+                NavigationManager.navigateAndFinishWithTransition(
                     context: context, screen: const LoginScreen());
               },
               title: 'Already have an account? ',

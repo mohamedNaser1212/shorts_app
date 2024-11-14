@@ -56,7 +56,7 @@ void _listener(BuildContext context, RegisterState state) {
         screen: const InitialScreen(),
       );
     } else {
-      NavigationManager.navigateTo(
+      NavigationManager.navigateAndFinishWithTransition(
         context: context,
         screen: const VerificationScreen(),
       );
