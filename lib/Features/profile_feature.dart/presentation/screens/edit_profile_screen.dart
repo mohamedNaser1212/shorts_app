@@ -40,11 +40,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     nameController.dispose();
     phoneController.dispose();
     bioController.dispose();
-    // Only dispose of controllers or resources that are not reliant on the widget's context.
-    if (mounted) {
-      // Ensure the widget is still mounted before disposing resources.
-      imageNotifierController.dispose();
-    }
+    imageNotifierController.dispose();
     super.dispose();
   }
 
@@ -76,12 +72,21 @@ class EditProfileScreenState extends State<EditProfileScreen> {
 
   Widget _buildScreen(BuildContext context, UserInfoState userState,
       UpdateUserDataState updateState) {
-    if (userState is GetUserInfoSuccessState) {
-      nameController.text = userState.userEntity!.name;
-      bioController.text = userState.userEntity!.bio;
-      phoneController.text = userState.userEntity!.phone;
-      imageNotifierController.profilePicNotifier.value =
-          userState.userEntity!.profilePic;
+    if (userState is GetUserInfoSuccessState ||
+        updateState is UpdateUserDataSuccessState) {
+      if (userState is GetUserInfoSuccessState) {
+        nameController.text = userState.userEntity!.name ?? '';
+        bioController.text = userState.userEntity!.bio ?? '';
+        phoneController.text = userState.userEntity!.phone ?? '';
+        imageNotifierController.profilePicNotifier.value =
+            userState.userEntity!.profilePic;
+      } else if (updateState is UpdateUserDataSuccessState) {
+        nameController.text = updateState.userEntity!.name ?? '';
+        bioController.text = updateState.userEntity!.bio ?? '';
+        phoneController.text = updateState.userEntity!.phone ?? '';
+        imageNotifierController.profilePicNotifier.value =
+            updateState.userEntity!.profilePic;
+      }
     }
 
     final isLoading = userState is GetUserInfoLoadingState ||
@@ -101,19 +106,23 @@ class EditProfileScreenState extends State<EditProfileScreen> {
         child: CustomScrollView(
           scrollBehavior: const MaterialScrollBehavior(),
           slivers: [
-            SliverFillRemaining(
-              hasScrollBody: true,
-              child: Form(
-                key: formKey,
-                child: Column(
-                  children: [
-                    Expanded(
-                      child: EditProfileScreenBody(state: this),
-                    ),
-                    UpdateProfileElevatedButton(editState: this),
-                    const SizedBox(height: 30.0),
-                  ],
+            SliverToBoxAdapter(
+              child: Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: Form(
+                  key: formKey,
+                  child: EditProfileScreenBody(state: this),
                 ),
+              ),
+            ),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  UpdateProfileElevatedButton(editState: this),
+                  const SizedBox(height: 30.0),
+                ],
               ),
             ),
           ],

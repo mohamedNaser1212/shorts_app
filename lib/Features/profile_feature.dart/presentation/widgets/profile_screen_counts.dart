@@ -32,12 +32,12 @@ class _FollowingFollowersCountWidgetState
   Widget build(BuildContext context) {
     return BlocListener<FollowCubit, FollowState>(
       listener: (context, state) {
-        if (state is FollowersCountSuccessState) {
-          widget.userEntity.followersCount = state.count;
-        }
-        if (state is FollowingCountSuccessState) {
-          widget.userEntity.followingCount = state.count;
-        }
+        // if (state is FollowersCountSuccessState) {
+        //   widget.userEntity.followersCount = state.count;
+        // }
+        // if (state is FollowingCountSuccessState) {
+        //   widget.userEntity.followingCount = state.count;
+        // }
       },
       child: BlocBuilder<FollowCubit, FollowState>(
         builder: (context, state) {

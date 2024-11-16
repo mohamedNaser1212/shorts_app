@@ -25,7 +25,6 @@ class CustomContainerWidget extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        padding: const EdgeInsets.all(15),
         height: MediaQuery.of(context).size.height * 0.06,
         decoration: BoxDecoration(
           color: containerColor ?? ColorController.purpleColor,
@@ -41,10 +40,12 @@ class CustomContainerWidget extends StatelessWidget {
               ),
               const SizedBox(width: 10),
             ],
-            CustomTitle(
-              title: title,
-              style: titleStyle ?? TitleStyle.style16,
-              color: textColor ?? ColorController.whiteColor,
+            Center(
+              child: CustomTitle(
+                title: title,
+                style: titleStyle ?? TitleStyle.style16,
+                color: textColor ?? ColorController.whiteColor,
+              ),
             ),
           ],
         ),

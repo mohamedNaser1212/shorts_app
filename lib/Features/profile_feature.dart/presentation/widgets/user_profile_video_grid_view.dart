@@ -28,6 +28,7 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
     super.didChangeDependencies();
 
     if (_page == 0) {
+      GetUserVideosCubit.get(context).videos = [];
       GetUserVideosCubit.get(context).getUserVideos(
         userId: widget.state.widget.userEntity!.id!,
         page: _page + 1,

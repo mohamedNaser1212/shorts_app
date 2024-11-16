@@ -35,7 +35,7 @@ class ProfileActions extends StatelessWidget {
           BlocConsumer<UserInfoCubit, UserInfoState>(
             listener: (context, state) {
               if (state is SignOutSuccessState) {
-                NavigationManager.navigateTo(
+                NavigationManager.navigateAndFinish(
                   context: context,
                   screen: const LoginScreen(),
                 );
