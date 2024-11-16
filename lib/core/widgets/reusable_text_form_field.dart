@@ -10,6 +10,7 @@ class CustomTextFormField extends StatefulWidget {
   final Color activeColor;
   final String? Function(String?)? validator;
   final String? Function(String?)? onSubmit;
+  final String? Function(String?)? onChanged;
   final TextEditingController controller;
   final TextInputType keyboardType;
   final Icon? prefix;
@@ -25,6 +26,7 @@ class CustomTextFormField extends StatefulWidget {
   const CustomTextFormField({
     super.key,
     this.label,
+    this.onChanged,
     this.borderRadius = 25,
     this.activeColor = ColorController.purpleColor,
     this.validator,
@@ -94,6 +96,7 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
             obscureText: widget.obscure,
             keyboardType: widget.keyboardType,
             maxLength: widget.maxLength,
+            onChanged: widget.onChanged,
             style: TextStyle(
               color: textColor,
               fontSize: 16,

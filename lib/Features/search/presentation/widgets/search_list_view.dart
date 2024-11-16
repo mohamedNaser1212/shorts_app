@@ -31,8 +31,6 @@ class SearchListView extends StatelessWidget {
                       context: context,
                       screen: UserProfileScreen(
                         user: user,
-                        // isShared: false,
-                        // user: user,
                       ),
                     );
                   },
