@@ -34,8 +34,9 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
       },
       (fetchedVideos) {
         if (page == 0) videos.clear();
-
+        print(videos.length);
         videos.addAll(fetchedVideos);
+        print(videos.length);
         hasMoreVideos = fetchedVideos.length == pageSize;
 
         emit(GetUserVideosSuccessState(

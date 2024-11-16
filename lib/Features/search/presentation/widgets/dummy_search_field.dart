@@ -24,6 +24,7 @@ class DummySearchField extends StatelessWidget {
                 child: child,
               );
             },
+            transitionDuration: const Duration(milliseconds: 500),
           ),
         );
       },
