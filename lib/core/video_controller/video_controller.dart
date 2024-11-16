@@ -224,7 +224,7 @@ class VideoController extends ChangeNotifier {
       _isPermissionPermanentlyDenied = true;
     }
 
-    _isLoading = false; // Stop loading
+    _isLoading = false;
     notifyListeners();
   }
 
