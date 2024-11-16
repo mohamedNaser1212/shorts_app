@@ -43,7 +43,7 @@ class LayoutScreenState extends State<LayoutScreen> {
         // } else
 
         if (state is VideoUploadedSuccessState) {
-          showSnackBar(
+          showMySnackBar(
             message: "Successs At Upload",
             context: context,
             onActionPressed: () => NavigationManager.navigateTo(
@@ -51,25 +51,6 @@ class LayoutScreenState extends State<LayoutScreen> {
                 screen: VideoListItem(videoEntity: state.videoEntity)),
             actionLabel: "Show",
           );
-          // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-          //   showCloseIcon: true,
-          //   action: SnackBarAction(
-          //     textColor: ColorController.whiteColor,
-          //     label: "Show",
-          //     onPressed: () => NavigationManager.navigateTo(
-          //         context: context,
-          //         screen: VideoListItem(videoEntity: state.videoEntity)),
-          //   ),
-          //   backgroundColor: ColorController.greenAccent,
-          //   dismissDirection: DismissDirection.up,
-          //   behavior: SnackBarBehavior.floating,
-          //   margin: const EdgeInsets.all(20),
-          //   padding: const EdgeInsets.all(10),
-          //   content: const DefaultTextStyle(
-          //     style: TextStyle(color: ColorController.whiteColor, fontSize: 16),
-          //     child: Text("Successs At Upload"),
-          //   ),
-          // ));
         }
       },
       child: Scaffold(

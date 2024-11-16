@@ -14,6 +14,9 @@ import 'package:shorts/Features/videos_feature/presentation/video_cubit/upload_v
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 
+import 'Features/profile_feature.dart/domain/use_case/user_profile_videos_use_case.dart';
+import 'Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
+import 'Features/profile_feature.dart/presentation/cubit/user_profile_cubit/user_profile_cubit.dart';
 import 'core/utils/constants/consts.dart';
 import 'core/widgets/splash_screen.dart';
 
@@ -46,10 +49,17 @@ class MyApp extends StatelessWidget {
           create: (context) => getIt<UserInfoCubit>()..getUserData(),
         ),
         BlocProvider(
+            create: (context) => GetUserVideosCubit(
+                  getUserInfoUseCase: getIt.get<UserProfileVideosUseCase>(),
+                )),
+        BlocProvider(
           create: (context) => getIt<FavouritesCubit>(),
         ),
         BlocProvider(
           create: (context) => getIt<CommentsCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<UpdateUserDataCubit>(),
         ),
         BlocProvider(
           create: (context) => getIt<UploadVideosCubit>(),

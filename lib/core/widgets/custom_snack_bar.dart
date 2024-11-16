@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 
 import '../managers/styles_manager/color_manager.dart';
 
-void showSnackBar({
+void showMySnackBar({
   required BuildContext context,
   required String message,
   String? actionLabel,

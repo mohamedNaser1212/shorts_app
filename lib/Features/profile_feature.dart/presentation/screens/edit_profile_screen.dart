@@ -22,28 +22,29 @@ class EditProfileScreen extends StatefulWidget {
 
 class EditProfileScreenState extends State<EditProfileScreen> {
   final nameController = TextEditingController();
-  //final emailController = TextEditingController();
   final phoneController = TextEditingController();
   final bioController = TextEditingController();
-
   final formKey = GlobalKey<FormState>();
-
   late final ImageNotifierController imageNotifierController;
 
   @override
   void initState() {
     super.initState();
-    imageNotifierController =
-        ImageNotifierController(emailController: nameController);
-    //  UserInfoCubit.get(context).getUserData();
+    imageNotifierController = ImageNotifierController(
+      emailController: nameController,
+    );
   }
 
   @override
   void dispose() {
     nameController.dispose();
-    bioController.dispose();
     phoneController.dispose();
-    imageNotifierController.dispose();
+    bioController.dispose();
+    // Only dispose of controllers or resources that are not reliant on the widget's context.
+    if (mounted) {
+      // Ensure the widget is still mounted before disposing resources.
+      imageNotifierController.dispose();
+    }
     super.dispose();
   }
 
@@ -58,14 +59,23 @@ class EditProfileScreenState extends State<EditProfileScreen> {
             ),
           ),
         ],
-        child: BlocBuilder<UserInfoCubit, UserInfoState>(
-          builder: _builder,
+        child: BlocConsumer<UserInfoCubit, UserInfoState>(
+          listener: (context, userState) {},
+          builder: (context, userState) {
+            return BlocConsumer<UpdateUserDataCubit, UpdateUserDataState>(
+              listener: (context, updateState) {},
+              builder: (context, updateState) {
+                return _buildScreen(context, userState, updateState);
+              },
+            );
+          },
         ),
       ),
     );
   }
 
-  Widget _builder(BuildContext context, UserInfoState userState) {
+  Widget _buildScreen(BuildContext context, UserInfoState userState,
+      UpdateUserDataState updateState) {
     if (userState is GetUserInfoSuccessState) {
       nameController.text = userState.userEntity!.name;
       bioController.text = userState.userEntity!.bio;
@@ -73,6 +83,9 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       imageNotifierController.profilePicNotifier.value =
           userState.userEntity!.profilePic;
     }
+
+    final isLoading = userState is GetUserInfoLoadingState ||
+        updateState is UpdateUserDataLoadingState;
 
     return Scaffold(
       backgroundColor: ColorController.blackColor,
@@ -82,17 +95,28 @@ class EditProfileScreenState extends State<EditProfileScreen> {
         titleStyle: TitleStyle.styleBold24,
         centerTitle: true,
         showLeadingIcon: true,
-
-        //leading: CustomBackIconWidget(),
       ),
       body: CustomProgressIndicator(
-        isLoading: userState is GetUserInfoLoadingState,
-        child: EditProfileScreenBody(state: this),
-      ),
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 100, horizontal: 20),
-        child: UpdateProfileElevatedButton(
-          editState: this,
+        isLoading: isLoading,
+        child: CustomScrollView(
+          scrollBehavior: const MaterialScrollBehavior(),
+          slivers: [
+            SliverFillRemaining(
+              hasScrollBody: true,
+              child: Form(
+                key: formKey,
+                child: Column(
+                  children: [
+                    Expanded(
+                      child: EditProfileScreenBody(state: this),
+                    ),
+                    UpdateProfileElevatedButton(editState: this),
+                    const SizedBox(height: 30.0),
+                  ],
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

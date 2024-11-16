@@ -29,36 +29,33 @@ class _SettingsFormBodyState extends State<SettingsFormBody> {
 
   Widget _builder(BuildContext context, UpdateUserDataState state) {
     return SingleChildScrollView(
-      padding: const EdgeInsets.all(20.0),
-      child: Form(
-        key: widget.editState.formKey,
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          //crossAxisAlignment: CrossAxisAlignment.center,
-          children: [
-            const SizedBox(
-              height: 30.0,
-            ),
-            EditUserProfileImageWidget(editState: widget.editState),
-            const SizedBox(
-              height: 50.0,
-            ),
-            NameField(controller: widget.editState.nameController),
-            const SizedBox(height: 20.0),
-            BioField(controller: widget.editState.bioController),
-            const SizedBox(height: 20.0),
-            // const SizedBox(height: 20.0),
-            // ChangeProfilePictureElevatedBotton(editState: widget.editState),
+      child: Column(
+        mainAxisAlignment: MainAxisAlignment.center,
+        //crossAxisAlignment: CrossAxisAlignment.center,
+        children: [
+          const SizedBox(
+            height: 30.0,
+          ),
+          EditUserProfileImageWidget(editState: widget.editState),
+          const SizedBox(
+            height: 50.0,
+          ),
+          NameField(controller: widget.editState.nameController),
+          const SizedBox(height: 20.0),
+          BioField(controller: widget.editState.bioController),
+          const SizedBox(height: 20.0),
 
-            //  EmailField(controller: widget.editState.emailController),
-            // const SizedBox(height: 20.0),
-            // PhoneField(controller: widget.editState.phoneController),
-            // const SizedBox(height: 20.0),
+          // const SizedBox(height: 20.0),
+          // ChangeProfilePictureElevatedBotton(editState: widget.editState),
 
-            // const SizedBox(height: 20.0),
-            // SignOutElevatedButton(editState: widget.editState),
-          ],
-        ),
+          //  EmailField(controller: widget.editState.emailController),
+          // const SizedBox(height: 20.0),
+          // PhoneField(controller: widget.editState.phoneController),
+          // const SizedBox(height: 20.0),
+
+          // const SizedBox(height: 20.0),
+          // SignOutElevatedButton(editState: widget.editState),
+        ],
       ),
     );
   }
@@ -69,7 +66,15 @@ class _SettingsFormBodyState extends State<SettingsFormBody> {
         message: state.message,
         color: ColorController.redAccent,
       );
-    } else if (state is UpdateUserDataSuccessState) {
+    }
+    // else if (state is UpdateUserDataLoadingState) {
+    //   showMySnackBar(
+    //     message: "Updating user data...",
+    //     context: context,
+    //   );
+    // } else
+
+    if (state is UpdateUserDataSuccessState) {
       UserInfoCubit.get(context).getUserData();
       ToastHelper.showToast(
         message: 'Data updated successfully',

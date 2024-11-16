@@ -1,9 +1,6 @@
-import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
-import 'package:shorts/core/widgets/loading_indicator.dart';
 
 import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/user_info/cubit/user_info_cubit.dart';
@@ -17,20 +14,10 @@ class UpdateProfileElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UpdateUserDataCubit, UpdateUserDataState>(
-      builder: (context, state) {
-        bool isLoading = state is UpdateUserDataLoadingState;
-
-        return ConditionalBuilder(
-          condition: !isLoading,
-          builder: (context) => ReusableElevatedButton(
-            onPressed: () => _onPressed(context: context),
-            backColor: ColorController.purpleColor,
-            label: 'Edit',
-          ),
-          fallback: (context) => const LoadingIndicatorWidget(),
-        );
-      },
+    return ReusableElevatedButton(
+      onPressed: () => _onPressed(context: context),
+      backColor: ColorController.purpleColor,
+      label: 'Edit',
     );
   }
 
