@@ -4,7 +4,9 @@ import 'dart:io';
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:camera/camera.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
+import 'package:permission_handler/permission_handler.dart';
 import 'package:video_thumbnail/video_thumbnail.dart' as video_thumbnail;
 
 class VideoController extends ChangeNotifier {
@@ -193,6 +195,54 @@ class VideoController extends ChangeNotifier {
       await _cameraController?.initialize();
       notifyListeners();
     }
+  }
+
+  bool _isPermissionGranted = false;
+  bool _isPermissionPermanentlyDenied = false;
+
+  bool get isPermissionGranted => _isPermissionGranted;
+  bool get isPermissionPermanentlyDenied => _isPermissionPermanentlyDenied;
+
+  Future<void> requestCameraPermission(BuildContext context) async {
+    _isLoading = true; // Start loading
+    notifyListeners();
+
+    PermissionStatus status = await Permission.camera.status;
+
+    if (status.isGranted) {
+      _isPermissionGranted = true;
+      await _initializeCamera(); // Initialize camera once permission is granted
+    } else if (status.isDenied) {
+      final result = await Permission.camera.request();
+      if (result.isGranted) {
+        _isPermissionGranted = true;
+        await _initializeCamera();
+      } else if (result.isPermanentlyDenied) {
+        _isPermissionPermanentlyDenied = true;
+      }
+    } else if (status.isPermanentlyDenied) {
+      _isPermissionPermanentlyDenied = true;
+    }
+
+    _isLoading = false; // Stop loading
+    notifyListeners();
+  }
+
+  Future<void> _initializeCamera() async {
+    try {
+      final cameras = await availableCameras();
+      final camera = cameras.first;
+
+      _cameraController = CameraController(camera, ResolutionPreset.high);
+      await _cameraController!.initialize();
+      notifyListeners();
+    } catch (e) {
+      print("Error initializing camera: $e");
+    }
+  }
+
+  void openAppSettings() {
+    openAppSettings();
   }
 
   Future<void> startRecording() async {
