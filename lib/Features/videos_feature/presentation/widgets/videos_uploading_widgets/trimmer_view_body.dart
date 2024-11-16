@@ -25,9 +25,8 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
   bool progressVisibility = false;
   late VideoController videoController;
 
-  // Variables to store start and end values
   double startValue = 0.0;
-  double endValue = 60.0; // Default end value
+  double endValue = 60.0;
 
   @override
   void initState() {
@@ -50,9 +49,7 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
 
     setState(() {
       startValue = 0.0; // Initialize start value
-      endValue = videoDuration < 60
-          ? videoDuration.toDouble()
-          : 60.0; // Set end value based on video duration
+      endValue = videoDuration < 60 ? videoDuration.toDouble() : 60.0;
       videoController.startValue = startValue;
       videoController.endValue = endValue;
     });

@@ -15,7 +15,7 @@ class GallaryIconWidget extends StatelessWidget {
       bottom: 16.0,
       right: 16.0,
       child: notifier.isRecording
-          ? const SizedBox() // Don't show anything when recording
+          ? const SizedBox()
           : notifier.videoFile != null
               ? ConfirmRecordingWidget(
                   videoFile: notifier.videoFile,

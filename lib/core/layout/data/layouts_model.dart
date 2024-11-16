@@ -10,7 +10,7 @@ class LayoutModel {
 
   final List<Widget> screens = [
     const VideosScreen(),
-    VideoSelectionScreen(),
+    const VideoSelectionScreen(),
     const SearchScreen(),
     const UserProfileScreen(
         //isShared: false,
@@ -51,8 +51,7 @@ class LayoutModel {
 
   int get currentIndex => _currentIndex;
 
-  Widget get currentScreen =>
-      screens[_currentIndex];
+  Widget get currentScreen => screens[_currentIndex];
 
   List<BottomNavigationBarItem> get bottomNavigationBarItems =>
       _bottomNavigationBarItems;
