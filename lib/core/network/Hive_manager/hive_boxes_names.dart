@@ -5,4 +5,5 @@ abstract class HiveBoxesNames {
   static const String kSaveTokenBox = 'userBox';
   static const String kFavouritesBox = 'favourites';
   static const String kCommentsBox = 'comments';
+  static const String kUserVideosBox = 'kUserVideosBox';
 }

@@ -59,8 +59,9 @@ import '../../Features/comments_feature/domain/comments_use_case/add_comments_us
 import '../../Features/favourites_feature/data/favourites_repo_impl/favourite_repo_impl.dart';
 import '../../Features/favourites_feature/domain/favourites_use_case/get_favourites_count_use_case.dart';
 import '../../Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
-import '../../Features/profile_feature.dart/data/user_profile_remote_data_source/update_user_data_remote_data_source.dart';
-import '../../Features/profile_feature.dart/data/user_profile_remote_data_source/user_profile_remote_data_source.dart';
+import '../../Features/profile_feature.dart/data/data_sources/user_profile_remote_data_source/update_user_data_remote_data_source.dart';
+import '../../Features/profile_feature.dart/data/data_sources/user_profile_remote_data_source/user_profile_remote_data_source.dart';
+import '../../Features/profile_feature.dart/data/data_sources/user_profile_videos_local_data_source/user_profile_videos_local_data_source.dart';
 import '../../Features/profile_feature.dart/domain/use_case/check_user_follow.dart';
 import '../../Features/profile_feature.dart/domain/use_case/follow_use_case.dart';
 import '../../Features/profile_feature.dart/domain/use_case/get_followers_count_use_case.dart';
@@ -198,10 +199,16 @@ Future<void> setUpServiceLocator() async {
       firebaseHelper: getIt.get<FirebaseHelper>(),
     ),
   );
+  getIt.registerSingleton<UserVideosLocalDataSource>(
+    UserVideosLocalDataSourceImpl(
+      hiveHelper: getIt.get<LocalStorageManager>(),
+    ),
+  );
   getIt.registerSingleton<UserProfileRepo>(
     UserProfileRepoImpl(
       repoManager: getIt.get<RepoManager>(),
       remoteDataSource: getIt.get<UserProfilesRemoteDataSource>(),
+      localDataSource: getIt.get<UserVideosLocalDataSource>(),
     ),
   );
   getIt.registerSingleton<SearchRepo>(

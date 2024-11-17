@@ -139,6 +139,8 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
   @override
   Future<bool> signOut() async {
     final user = FirebaseAuth.instance.currentUser;
+    final googleSignIn = GoogleSignIn();
+
     if (user != null) {
       if (fcmTokenAssigned) {
         await firebaseHelper.updateDocument(
@@ -152,6 +154,11 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
         //     .doc(user.uid)
         //     .update({RequestDataNames.fcmToken: ''});
 
+        if (user.providerData
+            .any((provider) => provider.providerId == 'google.com')) {
+          await googleSignIn.signOut();
+          googleSignIn.disconnect();
+        }
         await ClearToken.clearToken(
           userId: user.uid,
           fcmToken: '',

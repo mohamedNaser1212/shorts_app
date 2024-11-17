@@ -33,7 +33,7 @@ class LoginScreen extends StatelessWidget {
   }
 
   Widget _builder(BuildContext context, LoginState state) {
-    return CustomProgressIndicator(
+    return BlockInternactionLoadingWidget(
       isLoading:
           state is LoginLoadingState || state is GoogleSignInLoadingState,
       child: const Scaffold(

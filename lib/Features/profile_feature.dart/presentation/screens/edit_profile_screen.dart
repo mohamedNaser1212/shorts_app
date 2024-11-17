@@ -101,7 +101,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
         centerTitle: true,
         showLeadingIcon: true,
       ),
-      body: CustomProgressIndicator(
+      body: BlockInternactionLoadingWidget(
         isLoading: isLoading,
         child: CustomScrollView(
           scrollBehavior: const MaterialScrollBehavior(),

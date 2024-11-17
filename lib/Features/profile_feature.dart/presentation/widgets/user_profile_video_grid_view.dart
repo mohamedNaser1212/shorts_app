@@ -30,10 +30,10 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
     if (_page == 0) {
       GetUserVideosCubit.get(context).videos = [];
       print('get user videos');
-      // GetUserVideosCubit.get(context).getUserVideos(
-      //   userId: widget.state.widget.userEntity!.id!,
-      //   page: _page + 1,
-      // );
+      GetUserVideosCubit.get(context).getUserVideos(
+        userId: widget.state.widget.userEntity!.id!,
+        page: _page + 1,
+      );
     }
 
     _scrollController.addListener(_onScroll);

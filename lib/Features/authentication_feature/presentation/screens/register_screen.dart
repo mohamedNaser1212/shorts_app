@@ -32,7 +32,7 @@ class RegisterScreen extends StatelessWidget {
   }
 
   Widget _builder(BuildContext context, RegisterState state) {
-    return CustomProgressIndicator(
+    return BlockInternactionLoadingWidget(
       isLoading: state is RegisterLoadingState,
       child: const Scaffold(
         backgroundColor: ColorController.blackColor,

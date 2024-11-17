@@ -6,7 +6,7 @@ import 'package:shorts/core/user_info/data/user_info_data_sources/user_info_loca
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
 import '../../domain/models/update_request_model.dart';
-import '../user_profile_remote_data_source/update_user_data_remote_data_source.dart';
+import '../data_sources/user_profile_remote_data_source/update_user_data_remote_data_source.dart';
 
 class UpdateUserDataRepoImpl extends UpdateUserDataRepo {
   final RepoManager repoManager;

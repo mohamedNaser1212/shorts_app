@@ -27,6 +27,7 @@ class HiveManager implements LocalStorageManager {
       _openBox<String>(HiveBoxesNames.kSaveTokenBox),
       _openBox<FavouritesEntity>(HiveBoxesNames.kFavouritesBox),
       _openBox<CommentEntity>(HiveBoxesNames.kCommentsBox),
+      _openBox<List<VideoEntity>>(HiveBoxesNames.kUserVideosBox),
     ]);
   }
 

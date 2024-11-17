@@ -3,8 +3,8 @@ import 'package:shorts/Features/authentication_feature/data/user_model/user_mode
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 
-import '../../../../core/network/firebase_manager/collection_names.dart';
-import '../../../../core/utils/constants/request_data_names.dart';
+import '../../../../../core/network/firebase_manager/collection_names.dart';
+import '../../../../../core/utils/constants/request_data_names.dart';
 
 abstract class UserProfilesRemoteDataSource {
   Future<List<VideoModel>> getUserVideos({
@@ -59,6 +59,7 @@ class UserProfileVideosRemoteDataSourceImpl
       limit: limit,
       startAfter: _lastDocument,
     );
+    print('users videos requested');
 
     if (querySnapshot.docs.isEmpty) {
       hasMoreVideos = false;

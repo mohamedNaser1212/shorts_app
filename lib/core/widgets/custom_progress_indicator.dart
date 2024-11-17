@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../managers/styles_manager/color_manager.dart';
 
-class CustomProgressIndicator extends StatelessWidget {
-  const CustomProgressIndicator({
+class BlockInternactionLoadingWidget extends StatelessWidget {
+  const BlockInternactionLoadingWidget({
     super.key,
     required this.isLoading,
     required this.child,

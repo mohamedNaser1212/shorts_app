@@ -3,6 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/follow_cubit/follow_cubit.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
+import 'package:shorts/core/widgets/custom_progress_indicator.dart';
 
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../domain/use_case/check_user_follow.dart';
@@ -65,12 +66,15 @@ class UserProfileScreenState extends State<UserProfileScreen> {
     final user = UserInfoCubit.get(context).userEntity;
 
     // if (state is GetUserInfoSuccessState) {
-    return UserProfileScreenBody(
-      // videoEntity: widget.videoEntity,
-      // comment: widget.comment,.
-      userEntity: widget.user ?? user,
+    return BlockInternactionLoadingWidget(
+      isLoading: state is SignOutLoadingState,
+      child: UserProfileScreenBody(
+        // videoEntity: widget.videoEntity,
+        // comment: widget.comment,.
+        userEntity: widget.user ?? user,
 
-      // userEntity: state.userEntity,
+        // userEntity: state.userEntity,
+      ),
     );
     // }
 

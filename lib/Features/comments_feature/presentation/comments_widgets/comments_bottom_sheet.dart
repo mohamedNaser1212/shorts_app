@@ -75,7 +75,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
       builder: (context, state) {
         return BlocBuilder<AddCommentsCubit, AddCommentsState>(
           builder: (context, addState) {
-            return CustomProgressIndicator(
+            return BlockInternactionLoadingWidget(
               isLoading: addState is AddCommentsLoadingState,
               child: CommentsBottomSheetBody(
                 comments: commentsList,
