@@ -14,7 +14,7 @@ class VideoPlayerWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return SizedBox.expand(
       child: FittedBox(
-        fit: BoxFit.contain,
+        fit: BoxFit.fill,
         child: SizedBox(
           width: videoProvider.controller!.value.size.width,
           height: videoProvider.controller!.value.size.height * 2.9,
