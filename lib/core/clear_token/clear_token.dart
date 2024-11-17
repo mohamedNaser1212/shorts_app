@@ -12,11 +12,11 @@ abstract class ClearToken {
   }) async {
     await _videosComments(userId, fcmToken);
 
-    await _usersFavourites(
-      userId: userId,
-      fcmToken: fcmToken,
-      firebaseHelper: firebaseHelper,
-    );
+    // await _usersFavourites(
+    //   userId: userId,
+    //   fcmToken: fcmToken,
+    //   firebaseHelper: firebaseHelper,
+    // );
 
     await _usersVideos(
       userId: userId,
@@ -60,7 +60,6 @@ abstract class ClearToken {
     required String fcmToken,
     required FirebaseHelper firebaseHelper,
   }) async {
-    // Fetch videos where 'user.id' is equal to the provided userId
     List<Map<String, dynamic>> videoDocs =
         await firebaseHelper.getCollectionDocuments(
       collectionPath: CollectionNames.videos,
