@@ -279,6 +279,11 @@ class VideoController extends ChangeNotifier {
     }
   }
 
+  void resetVideoFile() {
+    _videoFile = null;
+    notifyListeners();
+  }
+
   void initializeVideoController(String videoPath) {
     _videoController = VideoController(videoUrl: videoPath)
       ..generateThumbnail(videoPath: videoPath, seconds: 1.0).then((_) {

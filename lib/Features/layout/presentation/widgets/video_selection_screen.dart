@@ -50,7 +50,6 @@ class _VideoSelectionScreenState extends State<VideoSelectionScreen> {
                       height: MediaQuery.of(context).size.height,
                       width: MediaQuery.of(context).size.width,
                     ),
-                    // Show camera preview if permission is granted and camera is initialized
                     if (notifier.isPermissionGranted &&
                         notifier.cameraController != null &&
                         notifier.cameraController!.value.isInitialized)
@@ -74,7 +73,6 @@ class _VideoSelectionScreenState extends State<VideoSelectionScreen> {
                         ],
                       )
                     else if (notifier.isLoading)
-                      // Show loading indicator if permission is still being checked
                       const Center(child: CircularProgressIndicator())
                     else
                       // Show message that camera permission is needed
@@ -85,16 +83,13 @@ class _VideoSelectionScreenState extends State<VideoSelectionScreen> {
                           color: ColorController.whiteColor,
                         ),
                       ),
-
                     if (notifier.isRecording)
                       VideoTimerWidget(
                           recordingSeconds: notifier.recordingSeconds),
-
                     VideoRecordingIconWidget(notifier: notifier),
                     GallaryIconWidget(
                       notifier: notifier,
                     ),
-
                     SwitchCameraIconWidget(
                       notifier: notifier,
                     ),
