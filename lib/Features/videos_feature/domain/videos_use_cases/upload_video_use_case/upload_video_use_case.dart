@@ -13,8 +13,8 @@ class UploadVideoUseCase {
 
   Future<Either<Failure, VideoEntity>> call({
     required VideoModel videoModel,
-    UserEntity? sharedBy,
+
   }) async {
-    return await videoRepository.uploadVideo(videoModel: videoModel,sharedBy: sharedBy);
+    return await videoRepository.uploadVideo(videoModel: videoModel,);
   }
 }

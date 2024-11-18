@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_Screen_body.dart';
@@ -33,7 +35,8 @@ class ThumbnailPreviewWidget extends StatelessWidget {
           alignment: Alignment.center,
           children: [
             Image.file(
-              widget.thumbnailFile!,
+              widget.thumbnailFile ??
+                  File(widget.previewState.widget.outputPath),
               fit: BoxFit.cover,
               height: 320,
               width: 320,
@@ -44,7 +47,6 @@ class ThumbnailPreviewWidget extends StatelessWidget {
                 size: 60,
                 color: Colors.white,
               ),
-         
           ],
         ),
       ),

@@ -248,7 +248,7 @@ class CustomElevatedButton extends StatelessWidget {
       );
 
       UploadVideosCubit.get(context)
-          .uploadVideo(videoModel: video, sharedBy: null);
+          .uploadVideo(videoModel: video, );
     } else {
       ToastHelper.showToast(message: 'Please add a description');
     }

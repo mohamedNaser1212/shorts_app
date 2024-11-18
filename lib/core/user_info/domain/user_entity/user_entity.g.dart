@@ -6,7 +6,6 @@ part of 'user_entity.dart';
 // TypeAdapterGenerator
 // **************************************************************************
 
-// Updated UserEntityAdapter class
 class UserEntityAdapter extends TypeAdapter<UserEntity> {
   @override
   final int typeId = 5;
@@ -28,13 +27,14 @@ class UserEntityAdapter extends TypeAdapter<UserEntity> {
       followersCount: fields[7] as int,
       followingCount: fields[8] as int,
       likesCount: fields[9] as int,
+      isVerified: fields[10] as bool,
     );
   }
 
   @override
   void write(BinaryWriter writer, UserEntity obj) {
     writer
-      ..writeByte(10) // Updated field count to 10
+      ..writeByte(11)
       ..writeByte(0)
       ..write(obj.name)
       ..writeByte(1)
@@ -54,7 +54,9 @@ class UserEntityAdapter extends TypeAdapter<UserEntity> {
       ..writeByte(8)
       ..write(obj.followingCount)
       ..writeByte(9)
-      ..write(obj.likesCount);
+      ..write(obj.likesCount)
+      ..writeByte(10)
+      ..write(obj.isVerified);
   }
 
   @override

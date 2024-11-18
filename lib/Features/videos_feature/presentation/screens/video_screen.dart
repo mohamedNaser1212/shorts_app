@@ -8,33 +8,41 @@ import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
+import '../../../../core/service_locator/service_locator.dart';
 import '../../../favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
 
 class VideosScreen extends StatelessWidget {
   const VideosScreen({super.key, this.userProfileVideosGridViewBody});
+
   final UserProfileVideosGridViewBodyState? userProfileVideosGridViewBody;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        // title: const Text('Videos'),
-        backgroundColor: ColorController.transparentColor,
-      ),
-      backgroundColor: ColorController.blackColor,
-      body: BlocConsumer<UserInfoCubit, UserInfoState>(
-        listener: _userInfoListener,
-        builder: (context, userInfoState) {
-          return BlocConsumer<FavouritesCubit, FavouritesState>(
-            listener: _favouritesListener,
-            builder: (context, favouritesState) {
-              return BlocBuilder<VideoCubit, VideoState>(
-                //  listener: _videosListener,
-                builder: _videosBuilder,
-              );
-            },
-          );
-        },
+    return BlocProvider(
+      create: (context) => getIt<VideoCubit>()
+        ..getVideos(
+          page: 0,
+        ),
+      child: Scaffold(
+        appBar: AppBar(
+          // title: const Text('Videos'),
+          backgroundColor: ColorController.transparentColor,
+        ),
+        backgroundColor: ColorController.blackColor,
+        body: BlocConsumer<UserInfoCubit, UserInfoState>(
+          listener: _userInfoListener,
+          builder: (context, userInfoState) {
+            return BlocConsumer<FavouritesCubit, FavouritesState>(
+              listener: _favouritesListener,
+              builder: (context, favouritesState) {
+                return BlocBuilder<VideoCubit, VideoState>(
+                  //  listener: _videosListener,
+                  builder: _videosBuilder,
+                );
+              },
+            );
+          },
+        ),
       ),
     );
   }

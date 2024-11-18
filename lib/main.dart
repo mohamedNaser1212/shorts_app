@@ -8,7 +8,6 @@ import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments
 import 'package:shorts/Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/toggle_favourites_cubit/toggle_favourites_cubit_cubit.dart';
 import 'package:shorts/Features/search/presentation/cubit/search_cubit.dart';
-import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/share_video_cubit/share_videos_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
@@ -39,12 +38,6 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MultiBlocProvider(
       providers: [
-        BlocProvider(
-          create: (context) => getIt<VideoCubit>()
-            ..getVideos(
-              page: 0,
-            ),
-        ),
         BlocProvider(
           create: (context) => getIt<UserInfoCubit>()..getUserData(),
         ),

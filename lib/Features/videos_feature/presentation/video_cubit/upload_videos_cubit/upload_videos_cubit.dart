@@ -20,12 +20,11 @@ class UploadVideosCubit extends Cubit<UploadVideosState> {
 
   Future<void> uploadVideo({
     required VideoModel videoModel,
-    UserEntity? sharedBy,
   }) async {
     emit(VideoUploadLoadingState());
 
     final result = await uploadVideoUseCase.call(
-        videoModel: videoModel, sharedBy: sharedBy);
+        videoModel: videoModel, );
 
     result.fold(
       (failure) {

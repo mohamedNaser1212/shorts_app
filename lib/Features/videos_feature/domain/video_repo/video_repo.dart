@@ -15,7 +15,6 @@ abstract class VideosRepo {
 
   Future<Either<Failure, VideoEntity>> uploadVideo({
     required VideoModel videoModel,
-    UserEntity? sharedBy,
   });
 
   Future<Either<Failure, void>> shareVideo({

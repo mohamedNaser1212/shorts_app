@@ -211,7 +211,7 @@ class VideoController extends ChangeNotifier {
 
     if (status.isGranted) {
       _isPermissionGranted = true;
-      await _initializeCamera(); // Initialize camera once permission is granted
+      await _initializeCamera();
     } else if (status.isDenied) {
       final result = await Permission.camera.request();
       if (result.isGranted) {
@@ -270,10 +270,19 @@ class VideoController extends ChangeNotifier {
       final videoFile = await _cameraController?.stopVideoRecording();
       _isRecording = false;
       _videoFile = videoFile;
+      _recordingTimer?.cancel();
+      _recordingSeconds = 0;
+
+      // Dispose of any existing playback controller to avoid sound playback
+      if (_videoController?.videoController != null) {
+        _videoController?.videoController?.dispose();
+        _videoController = null;
+      }
+
       notifyListeners();
 
       if (_videoFile != null) {
-        initializeVideoController(_videoFile!.path);
+        // Generate thumbnail but do not initialize playback
         await generateThumbnail(videoPath: _videoFile!.path, seconds: 0.1);
       }
     }

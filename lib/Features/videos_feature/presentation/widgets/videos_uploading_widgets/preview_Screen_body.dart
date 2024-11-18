@@ -21,6 +21,7 @@ class PreviewScreeBody extends StatefulWidget {
     required this.previewState,
     this.thumbnailFile,
   });
+
   final PreviewScreenState previewState;
   final File? thumbnailFile;
 
@@ -41,62 +42,87 @@ class _PreviewScreeBodyState extends State<PreviewScreeBody> {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: SingleChildScrollView(
-        child: Column(
-          children: [
-            ThumbnailPreviewWidget(controller: controller, widget: widget),
-            const SizedBox(height: 10),
-            CustomTextFormField(
-              label: 'Video Description',
-              controller: widget.previewState.descriptionController,
-              keyboardType: TextInputType.text,
-              maxLength: 160,
-              isCharacterCountEnabled: true,
+    return SafeArea(
+      child: Scaffold(
+        backgroundColor: ColorController.blackColor,
+        body: CustomScrollView(
+          slivers: [
+            SliverToBoxAdapter(
+              child: ThumbnailPreviewWidget(
+                  controller: controller, widget: widget),
             ),
-            const SizedBox(height: 40),
-            ReusableElevatedButton(
-              backColor: ColorController.purpleColor,
-              onPressed: () {
-                const Uuid uuid = Uuid();
+            SliverToBoxAdapter(
+              child: CustomTextFormField(
+                label: 'Video Description',
+                controller: widget.previewState.descriptionController,
+                keyboardType: TextInputType.text,
+                maxLength: 160,
+                isCharacterCountEnabled: true,
+              ),
+            ),
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Padding(
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 16.0,
+                  vertical: 16.0,
+                ),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [
+                    ReusableElevatedButton(
+                      backColor: ColorController.purpleColor,
+                      onPressed: () {
+                        const Uuid uuid = Uuid();
 
-                if (widget.previewState.descriptionController.text.isNotEmpty) {
-                  final video = VideoModel(
-                    id: uuid.v1(),
-                    description: widget.previewState.descriptionController.text,
-                    videoUrl: widget.previewState.widget.outputPath,
-                    user: UserModel(
-                      id: UserInfoCubit.get(context).userEntity!.id,
-                      name: UserInfoCubit.get(context).userEntity!.name,
-                      email: UserInfoCubit.get(context).userEntity!.email,
-                      phone: UserInfoCubit.get(context).userEntity!.phone,
-                      bio: UserInfoCubit.get(context).userEntity!.bio,
-                      profilePic:
-                          UserInfoCubit.get(context).userEntity!.profilePic,
-                      fcmToken: UserInfoCubit.get(context).userEntity!.fcmToken,
-                      likesCount:
-                          UserInfoCubit.get(context).userEntity!.likesCount,
-                      followingCount:
-                          UserInfoCubit.get(context).userEntity!.followingCount,
-                      followersCount:
-                          UserInfoCubit.get(context).userEntity!.followersCount,
+                        if (widget.previewState.descriptionController.text
+                            .isNotEmpty) {
+                          final video = VideoModel(
+                            id: uuid.v1(),
+                            description:
+                                widget.previewState.descriptionController.text,
+                            videoUrl: widget.previewState.widget.outputPath,
+                            user: UserModel(
+                              id: UserInfoCubit.get(context).userEntity!.id,
+                              name: UserInfoCubit.get(context).userEntity!.name,
+                              email:
+                                  UserInfoCubit.get(context).userEntity!.email,
+                              phone:
+                                  UserInfoCubit.get(context).userEntity!.phone,
+                              bio: UserInfoCubit.get(context).userEntity!.bio,
+                              profilePic: UserInfoCubit.get(context)
+                                  .userEntity!
+                                  .profilePic,
+                              fcmToken: UserInfoCubit.get(context)
+                                  .userEntity!
+                                  .fcmToken,
+                              likesCount: UserInfoCubit.get(context)
+                                  .userEntity!
+                                  .likesCount,
+                              followingCount: UserInfoCubit.get(context)
+                                  .userEntity!
+                                  .followingCount,
+                              followersCount: UserInfoCubit.get(context)
+                                  .userEntity!
+                                  .followersCount,
+                            ),
+                            thumbnail: widget.thumbnailFile?.path ?? '',
+                          );
+
+                          UploadVideosCubit.get(context).uploadVideo(
+                            videoModel: video,
+                          );
+                        } else {
+                          ToastHelper.showToast(
+                              message: 'Please add a description');
+                        }
+                      },
+                      label: 'Upload Video',
                     ),
-                    thumbnail: widget.thumbnailFile?.path ?? '',
-                  );
-
-                  UploadVideosCubit.get(context)
-                      .uploadVideo(videoModel: video, sharedBy: null);
-                } else {
-                  ToastHelper.showToast(message: 'Please add a description');
-                }
-              },
-              label: 'Upload Video',
+                  ],
+                ),
+              ),
             ),
-            // CustomElevatedButton.uploadVideo(
-            //   context: context,
-            //   previewState: widget.previewState,
-            //   thumbnailFile: widget.thumbnailFile,
-            // ),
           ],
         ),
       ),

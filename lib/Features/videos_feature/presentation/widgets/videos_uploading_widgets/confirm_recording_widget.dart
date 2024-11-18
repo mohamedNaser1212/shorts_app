@@ -46,8 +46,9 @@ class _ConfirmRecordingWidgetState extends State<ConfirmRecordingWidget> {
           ),
         ),
       ).then((_) {
-        // Reset the video file after confirmation
         widget.videoController?.resetVideoFile();
+        //stop playing the video
+        widget.videoController?.videoController?.setLooping(false);
       });
     }
   }

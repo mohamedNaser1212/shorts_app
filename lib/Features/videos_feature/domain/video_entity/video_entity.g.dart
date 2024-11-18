@@ -22,14 +22,14 @@ class VideoEntityAdapter extends TypeAdapter<VideoEntity> {
       videoUrl: fields[2] as String,
       description: fields[3] as String,
       user: fields[4] as UserModel,
-      timeStamp: fields[5] != null ? DateTime.parse(fields[8]) : null,
+      timeStamp: fields[5] as DateTime?,
     );
   }
 
   @override
   void write(BinaryWriter writer, VideoEntity obj) {
     writer
-      ..writeByte(9)
+      ..writeByte(6)
       ..writeByte(0)
       ..write(obj.id)
       ..writeByte(1)
@@ -41,7 +41,7 @@ class VideoEntityAdapter extends TypeAdapter<VideoEntity> {
       ..writeByte(4)
       ..write(obj.user)
       ..writeByte(5)
-      ..write(obj.timeStamp?.toIso8601String());
+      ..write(obj.timeStamp);
   }
 
   @override

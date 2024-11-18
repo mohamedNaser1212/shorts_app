@@ -95,11 +95,10 @@ abstract class UpdateUserData {
     required UpdateUserRequestModel updateUserRequestModel,
     required FirebaseHelper firebaseHelper,
   }) async {
-    // Fetch the user's favorite documents where the user's ID matches
     List<Map<String, dynamic>> favourites =
         await firebaseHelper.getCollectionDocuments(
       collectionPath:
-          '${CollectionNames.users}/$userId/${CollectionNames.favourites}',
+          '${CollectionNames.users}/$userId/${CollectionNames.likes}',
       whereField: 'user.id',
       whereValue: userId,
     );
@@ -107,7 +106,7 @@ abstract class UpdateUserData {
     for (var favourite in favourites) {
       await firebaseHelper.updateDocument(
         collectionPath:
-            '${CollectionNames.users}/$userId/${CollectionNames.favourites}',
+            '${CollectionNames.users}/$userId/${CollectionNames.likes}',
         docId: favourite['id'],
         data: {
           'user.name': updateUserRequestModel.name,
