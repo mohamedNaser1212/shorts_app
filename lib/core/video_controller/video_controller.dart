@@ -273,7 +273,6 @@ class VideoController extends ChangeNotifier {
       _recordingTimer?.cancel();
       _recordingSeconds = 0;
 
-      // Dispose of any existing playback controller to avoid sound playback
       if (_videoController?.videoController != null) {
         _videoController?.videoController?.dispose();
         _videoController = null;
@@ -282,7 +281,6 @@ class VideoController extends ChangeNotifier {
       notifyListeners();
 
       if (_videoFile != null) {
-        // Generate thumbnail but do not initialize playback
         await generateThumbnail(videoPath: _videoFile!.path, seconds: 0.1);
       }
     }

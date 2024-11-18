@@ -4,7 +4,6 @@ import 'package:cached_video_player/cached_video_player.dart';
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_screen.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/thumbnail_preview_widget.dart';
-import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/widgets/reusable_text_form_field.dart';
 import 'package:uuid/uuid.dart';
 
@@ -43,88 +42,92 @@ class _PreviewScreeBodyState extends State<PreviewScreeBody> {
   @override
   Widget build(BuildContext context) {
     return SafeArea(
-      child: Scaffold(
-        backgroundColor: ColorController.blackColor,
-        body: CustomScrollView(
-          slivers: [
-            SliverToBoxAdapter(
-              child: ThumbnailPreviewWidget(
-                  controller: controller, widget: widget),
-            ),
-            SliverToBoxAdapter(
-              child: CustomTextFormField(
-                label: 'Video Description',
-                controller: widget.previewState.descriptionController,
-                keyboardType: TextInputType.text,
-                maxLength: 160,
-                isCharacterCountEnabled: true,
+      child: CustomScrollView(
+        slivers: [
+          // Adding space from the top
+          SliverToBoxAdapter(
+            child: Padding(
+              padding:
+                  const EdgeInsets.only(top: 50.0), // Add space from the top
+              child: Center(
+                child: ThumbnailPreviewWidget(
+                    controller: controller, widget: widget),
               ),
             ),
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Padding(
-                padding: const EdgeInsets.symmetric(
-                  horizontal: 16.0,
-                  vertical: 16.0,
-                ),
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [
-                    ReusableElevatedButton(
-                      backColor: ColorController.purpleColor,
-                      onPressed: () {
-                        const Uuid uuid = Uuid();
-
-                        if (widget.previewState.descriptionController.text
-                            .isNotEmpty) {
-                          final video = VideoModel(
-                            id: uuid.v1(),
-                            description:
-                                widget.previewState.descriptionController.text,
-                            videoUrl: widget.previewState.widget.outputPath,
-                            user: UserModel(
-                              id: UserInfoCubit.get(context).userEntity!.id,
-                              name: UserInfoCubit.get(context).userEntity!.name,
-                              email:
-                                  UserInfoCubit.get(context).userEntity!.email,
-                              phone:
-                                  UserInfoCubit.get(context).userEntity!.phone,
-                              bio: UserInfoCubit.get(context).userEntity!.bio,
-                              profilePic: UserInfoCubit.get(context)
-                                  .userEntity!
-                                  .profilePic,
-                              fcmToken: UserInfoCubit.get(context)
-                                  .userEntity!
-                                  .fcmToken,
-                              likesCount: UserInfoCubit.get(context)
-                                  .userEntity!
-                                  .likesCount,
-                              followingCount: UserInfoCubit.get(context)
-                                  .userEntity!
-                                  .followingCount,
-                              followersCount: UserInfoCubit.get(context)
-                                  .userEntity!
-                                  .followersCount,
-                            ),
-                            thumbnail: widget.thumbnailFile?.path ?? '',
-                          );
-
-                          UploadVideosCubit.get(context).uploadVideo(
-                            videoModel: video,
-                          );
-                        } else {
-                          ToastHelper.showToast(
-                              message: 'Please add a description');
-                        }
-                      },
-                      label: 'Upload Video',
-                    ),
-                  ],
+          ),
+          // Form Field for description
+          SliverToBoxAdapter(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(
+                  vertical: 16.0), // Adding vertical space
+              child: Center(
+                child: CustomTextFormField(
+                  label: 'Video Description',
+                  controller: widget.previewState.descriptionController,
+                  keyboardType: TextInputType.text,
+                  maxLength: 160,
+                  isCharacterCountEnabled: true,
                 ),
               ),
             ),
-          ],
-        ),
+          ),
+          SliverFillRemaining(
+            hasScrollBody: false,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 16.0),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  ReusableElevatedButton(
+                    onPressed: () {
+                      const Uuid uuid = Uuid();
+
+                      if (widget
+                          .previewState.descriptionController.text.isNotEmpty) {
+                        final video = VideoModel(
+                          id: uuid.v1(),
+                          description:
+                              widget.previewState.descriptionController.text,
+                          videoUrl: widget.previewState.widget.outputPath,
+                          user: UserModel(
+                            id: UserInfoCubit.get(context).userEntity!.id,
+                            name: UserInfoCubit.get(context).userEntity!.name,
+                            email: UserInfoCubit.get(context).userEntity!.email,
+                            phone: UserInfoCubit.get(context).userEntity!.phone,
+                            bio: UserInfoCubit.get(context).userEntity!.bio,
+                            profilePic: UserInfoCubit.get(context)
+                                .userEntity!
+                                .profilePic,
+                            fcmToken:
+                                UserInfoCubit.get(context).userEntity!.fcmToken,
+                            likesCount: UserInfoCubit.get(context)
+                                .userEntity!
+                                .likesCount,
+                            followingCount: UserInfoCubit.get(context)
+                                .userEntity!
+                                .followingCount,
+                            followersCount: UserInfoCubit.get(context)
+                                .userEntity!
+                                .followersCount,
+                          ),
+                          thumbnail: widget.thumbnailFile?.path ?? '',
+                        );
+
+                        UploadVideosCubit.get(context).uploadVideo(
+                          videoModel: video,
+                        );
+                      } else {
+                        ToastHelper.showToast(
+                            message: 'Please add a description');
+                      }
+                    },
+                    label: 'Upload Video',
+                  ),
+                ],
+              ),
+            ),
+          ),
+        ],
       ),
     );
   }

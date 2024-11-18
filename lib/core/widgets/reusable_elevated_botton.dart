@@ -16,7 +16,7 @@ class ReusableElevatedButton extends StatelessWidget {
     this.width = double.infinity,
     this.height = 50,
     this.radius = 10,
-    this.backColor = ColorController.blueAccent,
+    this.backColor = ColorController.purpleColor,
     this.textColor = ColorController.whiteColor,
     required this.label,
     required this.onPressed,
@@ -29,7 +29,7 @@ class ReusableElevatedButton extends StatelessWidget {
       height: height,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
-          backgroundColor: backColor, 
+          backgroundColor: backColor,
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(radius),
           ),

@@ -1,7 +1,6 @@
 import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:permission_handler/permission_handler.dart';
 import 'package:provider/provider.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_view.dart';
@@ -9,7 +8,7 @@ import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 
 import '../../../../core/video_controller/video_controller.dart';
-import '../../../../core/widgets/custom_title.dart';
+import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/camera_permission_warning_widgets.dart';
 import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/gallary_icon_widget.dart';
 import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/switch_camera_icon_widget.dart';
 import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/video_recording_icon_widget.dart';
@@ -42,59 +41,41 @@ class _VideoSelectionScreenState extends State<VideoSelectionScreen> {
           child: Consumer<VideoController>(builder: (context, notifier, _) {
             return Scaffold(
               backgroundColor: ColorController.blackColor,
-              body: Center(
-                child: Stack(
-                  alignment: Alignment.bottomCenter,
-                  children: [
-                    SizedBox(
-                      height: MediaQuery.of(context).size.height,
-                      width: MediaQuery.of(context).size.width,
-                    ),
-                    if (notifier.isPermissionGranted &&
-                        notifier.cameraController != null &&
-                        notifier.cameraController!.value.isInitialized)
-                      CameraPreview(notifier.cameraController!)
-                    else if (notifier.isPermissionPermanentlyDenied)
-                      // Show message for permanently denied permission
-                      Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          const Text(
-                            "Camera Permission Denied Permanently",
-                            style: TextStyle(color: Colors.red),
-                          ),
-                          const SizedBox(height: 20),
-                          ElevatedButton(
-                            onPressed: () {
-                              openAppSettings();
-                            },
-                            child: const Text("Go to Settings"),
-                          ),
-                        ],
-                      )
-                    else if (notifier.isLoading)
-                      const Center(child: CircularProgressIndicator())
-                    else
-                      // Show message that camera permission is needed
-                      const Center(
-                        child: CustomTitle(
-                          title: "Camera Needs Permission",
-                          style: TitleStyle.styleBold18,
-                          color: ColorController.whiteColor,
-                        ),
+              body: Stack(
+                alignment: Alignment.bottomCenter,
+                children: [
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height,
+                    width: MediaQuery.of(context).size.width,
+                  ),
+                  if (notifier.isPermissionGranted &&
+                      notifier.cameraController != null &&
+                      notifier.cameraController!.value.isInitialized)
+                    CameraPreview(notifier.cameraController!)
+                  else if (notifier.isPermissionPermanentlyDenied)
+                    // Show message for permanently denied permission
+                    const CameraPermissionWarningWidgets(
+                      title: " Camera Permission Denied Permanently",
+                    )
+                  else if (notifier.isLoading)
+                    const Center(child: CircularProgressIndicator())
+                  else
+                    const Center(
+                      child: CameraPermissionWarningWidgets(
+                        title: " Camera Needs Permission to Work",
                       ),
-                    if (notifier.isRecording)
-                      VideoTimerWidget(
-                          recordingSeconds: notifier.recordingSeconds),
-                    VideoRecordingIconWidget(notifier: notifier),
-                    GallaryIconWidget(
-                      notifier: notifier,
                     ),
-                    SwitchCameraIconWidget(
-                      notifier: notifier,
-                    ),
-                  ],
-                ),
+                  if (notifier.isRecording)
+                    VideoTimerWidget(
+                        recordingSeconds: notifier.recordingSeconds),
+                  VideoRecordingIconWidget(notifier: notifier),
+                  GallaryIconWidget(
+                    notifier: notifier,
+                  ),
+                  SwitchCameraIconWidget(
+                    notifier: notifier,
+                  ),
+                ],
               ),
             );
           }),
