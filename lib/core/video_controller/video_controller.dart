@@ -62,36 +62,6 @@ class VideoController extends ChangeNotifier {
       _isPaused = !videoController!.value.isPlaying;
       notifyListeners();
     });
-
-    // Optionally load thumbnail
-    // await _loadThumbnail(videoUrl);
-  }
-
-  int _selectedCameraIndex = 0;
-
-  Future<void> switchCamera() async {
-    if (_cameras == null || _cameras!.isEmpty) return;
-
-    // Check if we are recording
-    if (_isRecording) {
-      // Stop recording before switching cameras
-      await stopRecording();
-    }
-
-    // Switch to the next camera
-    _selectedCameraIndex = (_selectedCameraIndex + 1) % _cameras!.length;
-    _cameraController = CameraController(
-      _cameras![_selectedCameraIndex],
-      ResolutionPreset.high,
-    );
-
-    await _cameraController?.initialize();
-
-    if (_isRecording) {
-      await startRecording();
-    }
-
-    notifyListeners();
   }
 
   Future<void> loadVideo({
@@ -106,8 +76,7 @@ class VideoController extends ChangeNotifier {
   Future<void> _loadThumbnail(String videoUrl) async {
     final thumbnailData = await video_thumbnail.VideoThumbnail.thumbnailData(
       video: videoUrl,
-      imageFormat:
-          video_thumbnail.ImageFormat.JPEG, // Use the aliased version here
+      imageFormat: video_thumbnail.ImageFormat.JPEG,
       maxWidth: 128,
       quality: 75,
     );
@@ -174,7 +143,7 @@ class VideoController extends ChangeNotifier {
   bool _isLoading = false;
   Timer? _recordingTimer;
   int _recordingSeconds = 0;
-  static const int maxRecordingDuration = 60; // 60 seconds
+  static const int maxRecordingDuration = 60;
   XFile? _videoFile;
   VideoController? _videoController;
 
@@ -204,7 +173,7 @@ class VideoController extends ChangeNotifier {
   bool get isPermissionPermanentlyDenied => _isPermissionPermanentlyDenied;
 
   Future<void> requestCameraPermission(BuildContext context) async {
-    _isLoading = true; // Start loading
+    _isLoading = true;
     notifyListeners();
 
     PermissionStatus status = await Permission.camera.status;
@@ -231,18 +200,46 @@ class VideoController extends ChangeNotifier {
   Future<void> _initializeCamera() async {
     try {
       final cameras = await availableCameras();
-      final camera = cameras.first;
-
-      _cameraController = CameraController(camera, ResolutionPreset.high);
-      await _cameraController!.initialize();
-      notifyListeners();
+      if (cameras.isNotEmpty) {
+        final camera = cameras.first;
+        _cameraController = CameraController(camera, ResolutionPreset.high);
+        await _cameraController!.initialize();
+        notifyListeners();
+      } else {
+        print("No cameras available");
+      }
     } catch (e) {
       print("Error initializing camera: $e");
     }
   }
 
-  void openAppSettings() {
-    openAppSettings();
+  int _selectedCameraIndex = 0;
+
+  Future<void> switchCamera() async {
+    final cameras = await availableCameras();
+    if (cameras.isNotEmpty) {
+      _selectedCameraIndex = (_selectedCameraIndex + 1) % cameras.length;
+
+      _cameraController = CameraController(
+        cameras[_selectedCameraIndex],
+        ResolutionPreset.high,
+      );
+
+      try {
+        await _cameraController!.initialize();
+        notifyListeners();
+      } catch (e) {
+        print("Error initializing camera: $e");
+      }
+
+      if (_isRecording) {
+        await startRecording();
+      }
+    } else {
+      print("No cameras available");
+    }
+
+    notifyListeners();
   }
 
   Future<void> startRecording() async {
@@ -273,11 +270,6 @@ class VideoController extends ChangeNotifier {
       _recordingTimer?.cancel();
       _recordingSeconds = 0;
 
-      if (_videoController?.videoController != null) {
-        _videoController?.videoController?.dispose();
-        _videoController = null;
-      }
-
       notifyListeners();
 
       if (_videoFile != null) {
@@ -291,13 +283,6 @@ class VideoController extends ChangeNotifier {
     notifyListeners();
   }
 
-  void initializeVideoController(String videoPath) {
-    _videoController = VideoController(videoUrl: videoPath)
-      ..generateThumbnail(videoPath: videoPath, seconds: 1.0).then((_) {
-        notifyListeners();
-      });
-  }
-
   @override
   void dispose() {
     _positionNotifier.dispose();
@@ -306,7 +291,6 @@ class VideoController extends ChangeNotifier {
     videoController?.dispose();
     _cameraController?.dispose();
     _recordingTimer?.cancel();
-    _videoController?.dispose();
     super.dispose();
   }
 }

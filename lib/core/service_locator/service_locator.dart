@@ -172,7 +172,7 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<AuthenticationRepo>(AuthRepoImpl(
     repoManager: getIt.get<RepoManager>(),
     loginDataSource: getIt.get<AuthenticationRemoteDataSource>(),
-    userInfoLocalDataSourceImpl: getIt.get<UserLocalDataSourceImpl>(),
+    userInfoLocalDataSource: getIt.get<UserLocalDataSourceImpl>(),
   ));
 
   getIt.registerSingleton<CommentsRemoteDataSource>(

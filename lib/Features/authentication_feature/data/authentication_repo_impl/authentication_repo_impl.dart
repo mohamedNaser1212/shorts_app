@@ -11,12 +11,12 @@ import '../user_model/register_request_model.dart';
 
 class AuthRepoImpl implements AuthenticationRepo {
   final AuthenticationRemoteDataSource loginDataSource;
-  final UserInfoLocalDataSource userInfoLocalDataSourceImpl;
+  final UserInfoLocalDataSource userInfoLocalDataSource;
   final RepoManager repoManager;
 
   const AuthRepoImpl({
     required this.loginDataSource,
-    required this.userInfoLocalDataSourceImpl,
+    required this.userInfoLocalDataSource,
     required this.repoManager,
   });
 
@@ -29,7 +29,7 @@ class AuthRepoImpl implements AuthenticationRepo {
         final loginEntity = await loginDataSource.login(
           requestModel: requestModel,
         );
-        await userInfoLocalDataSourceImpl.saveUserData(user: loginEntity);
+        await userInfoLocalDataSource.saveUserData(user: loginEntity);
         return loginEntity;
       },
     );
@@ -44,7 +44,7 @@ class AuthRepoImpl implements AuthenticationRepo {
         final registerEntity = await loginDataSource.register(
           requestModel: requestModel,
         );
-        await userInfoLocalDataSourceImpl.saveUserData(user: registerEntity);
+        await userInfoLocalDataSource.saveUserData(user: registerEntity);
         return registerEntity;
       },
     );
@@ -55,7 +55,7 @@ class AuthRepoImpl implements AuthenticationRepo {
     return repoManager.call(
       action: () async {
         final result = await loginDataSource.signOut();
-        //  await userInfoLocalDataSourceImpl.clearUserData();
+        await userInfoLocalDataSource.clearUserData();
         return result;
       },
     );
@@ -66,7 +66,7 @@ class AuthRepoImpl implements AuthenticationRepo {
     return repoManager.call(
       action: () async {
         final googleEntity = await loginDataSource.signInWithGoogle();
-        await userInfoLocalDataSourceImpl.saveUserData(user: googleEntity);
+        await userInfoLocalDataSource.saveUserData(user: googleEntity);
         return googleEntity;
       },
     );
