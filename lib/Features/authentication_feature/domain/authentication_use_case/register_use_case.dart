@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/managers/error_manager/failure.dart';
@@ -12,9 +14,11 @@ class RegisterUseCase {
 
   Future<Either<Failure, UserEntity>> call({
     required RegisterRequestModel requestModel,
+    required File imageFile,
   }) async {
     return await authenticationRepo.register(
       requestModel: requestModel,
+      imageFile: imageFile,
     );
   }
 }

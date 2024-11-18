@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:shorts/core/clear_token/clear_token.dart';
 import 'package:shorts/core/network/firebase_manager/collection_names.dart';
@@ -20,6 +23,7 @@ abstract class AuthenticationRemoteDataSource {
 
   Future<UserModel> register({
     required RegisterRequestModel requestModel,
+    required File imageFile,
   });
   Future<void> verifyUser(String userId);
 
@@ -102,7 +106,12 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
   @override
   Future<UserModel> register({
     required RegisterRequestModel requestModel,
+    required File imageFile,
   }) async {
+    // Upload image to Firebase Storage
+    String imageUrl = await _uploadProfileImage(imageFile);
+
+    // Proceed with the rest of the registration logic
     UserCredential userCredential =
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: requestModel.email,
@@ -118,6 +127,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     userMap[RequestDataNames.id] = userCredential.user!.uid;
     userMap[RequestDataNames.fcmToken] = fcmToken ?? '';
     userMap[RequestDataNames.isVerified] = false;
+    userMap[RequestDataNames.profilePic] = imageUrl;
 
     UserModel user = UserModel.fromJson(userMap);
     await createUserData(user: user);
@@ -134,6 +144,26 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
         .collection(CollectionNames.users)
         .doc(user.id)
         .set(user.toJson());
+  }
+
+  Future<String> _uploadProfileImage(File imageFile) async {
+    try {
+      FirebaseStorage storage = FirebaseStorage.instance;
+      Reference ref = storage
+          .ref()
+          .child("profile_images/${DateTime.now().millisecondsSinceEpoch}");
+
+      // Upload the file
+      UploadTask uploadTask = ref.putFile(imageFile);
+      TaskSnapshot snapshot = await uploadTask;
+
+      // Get the image URL
+      String imageUrl = await snapshot.ref.getDownloadURL();
+      return imageUrl;
+    } catch (e) {
+      // Handle errors
+      throw Exception("Image upload failed: $e");
+    }
   }
 
   @override

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/screens/login_screen.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/login_header.dart';
@@ -29,6 +31,7 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
   late final TextEditingController passwordController;
   late final TextEditingController bioController;
   late String imageUrl = '';
+  late File imageFile = File('');
 
   late final ImageNotifierController imageNotifierController;
 
@@ -75,7 +78,7 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
             const SizedBox(height: 20),
             AuthStatusTextWidget(
               onTap: () {
-                NavigationManager.navigateAndFinishWithTransition(
+                NavigationManager.navigateToWithTransition(
                     context: context, screen: const LoginScreen());
               },
               title: 'Already have an account? ',

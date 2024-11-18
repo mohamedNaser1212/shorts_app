@@ -47,7 +47,6 @@ class _ConfirmRecordingWidgetState extends State<ConfirmRecordingWidget> {
         ),
       ).then((_) {
         widget.videoController?.resetVideoFile();
-        //stop playing the video
         widget.videoController?.videoController?.setLooping(false);
       });
     }

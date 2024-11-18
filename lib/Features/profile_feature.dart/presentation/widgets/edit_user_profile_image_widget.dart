@@ -117,8 +117,10 @@ class EditUserProfileImageWidgetState
 
     if (pickedFile != null) {
       widget.editState?.imageFile = File(pickedFile.path);
+      widget.registerFormState?.imageFile = File(pickedFile.path);
       widget.editState?.imageUrl = pickedFile.path;
       widget.registerFormState?.imageUrl = pickedFile.path;
+      print(widget.registerFormState?.imageUrl);
       setState(() {});
     } else {
       ToastHelper.showToast(message: 'No image selected', color: Colors.red);

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/managers/error_manager/failure.dart';
@@ -38,11 +40,13 @@ class AuthRepoImpl implements AuthenticationRepo {
   @override
   Future<Either<Failure, UserEntity>> register({
     required RegisterRequestModel requestModel,
+    required File imageFile,
   }) {
     return repoManager.call(
       action: () async {
         final registerEntity = await loginDataSource.register(
           requestModel: requestModel,
+          imageFile: imageFile,
         );
         await userInfoLocalDataSource.saveUserData(user: registerEntity);
         return registerEntity;

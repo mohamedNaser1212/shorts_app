@@ -17,7 +17,6 @@ class VerificationScreen extends StatelessWidget {
         titleStyle: TitleStyle.styleBold22,
         backColor: Colors.green,
         centerTitle: true,
-        showLeadingIcon: true,
       ),
       body: Center(
         child: Column(

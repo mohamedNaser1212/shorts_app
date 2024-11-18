@@ -42,8 +42,6 @@ class UpdateProfileElevatedButton extends StatelessWidget {
       updates[RequestDataNames.bio] = editState.bioController.text;
     }
 
-    // Only update the image if a new image is provided
-
     if (currentUser.profilePic != editState.imageUrl) {
       updates[RequestDataNames.profilePic] = editState.imageUrl;
     }

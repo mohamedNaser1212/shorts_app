@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 
 import '../../../../core/managers/error_manager/failure.dart';
@@ -12,6 +14,7 @@ abstract class AuthenticationRepo {
   });
   Future<Either<Failure, UserEntity>> register({
     required RegisterRequestModel requestModel,
+    required File imageFile,
   });
   Future<Either<Failure, bool>> signOut();
   Future<Either<Failure, UserEntity>> signInWithGoogle();

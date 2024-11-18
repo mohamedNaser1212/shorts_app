@@ -42,7 +42,14 @@ class RegisterButton extends StatelessWidget {
     required RegisterScreenFormState state,
   }) async {
     if (state.widget.formKey.currentState!.validate()) {
-      final profilePicUrl = await state.imageNotifierController.uploadImage();
+      // Ensure image is selected before proceeding
+      if (state.imageFile.path.isEmpty) {
+        ToastHelper.showToast(
+          message: 'Please select an image',
+          color: Colors.red,
+        );
+        return;
+      }
 
       RegisterCubit.get(context).userRegister(
         requestModel: RegisterRequestModel(
@@ -53,15 +60,17 @@ class RegisterButton extends StatelessWidget {
           bio: state.bioController.text.isNotEmpty
               ? state.bioController.text
               : 'Hey there I am using Shorts',
-          profilePic: profilePicUrl ?? "",
+          profilePic: state.imageUrl,
         ),
+        imageFile: state.imageFile,
       );
     } else {
       ToastHelper.showToast(
-        message: 'Image upload failed. Please try again.',
+        message: 'Form is invalid, please check your details.',
         color: Colors.red,
       );
     }
   }
+
   //}
 }

@@ -47,8 +47,7 @@ class _PreviewScreeBodyState extends State<PreviewScreeBody> {
           // Adding space from the top
           SliverToBoxAdapter(
             child: Padding(
-              padding:
-                  const EdgeInsets.only(top: 50.0), // Add space from the top
+              padding: const EdgeInsets.only(top: 50.0),
               child: Center(
                 child: ThumbnailPreviewWidget(
                     controller: controller, widget: widget),
@@ -58,8 +57,7 @@ class _PreviewScreeBodyState extends State<PreviewScreeBody> {
           // Form Field for description
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.symmetric(
-                  vertical: 16.0), // Adding vertical space
+              padding: const EdgeInsets.symmetric(vertical: 16.0),
               child: Center(
                 child: CustomTextFormField(
                   label: 'Video Description',

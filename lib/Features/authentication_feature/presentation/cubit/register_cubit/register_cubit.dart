@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
@@ -26,11 +28,13 @@ class RegisterCubit extends Cubit<RegisterState> {
 
   Future<void> userRegister({
     required RegisterRequestModel requestModel,
+    required File imageFile,
   }) async {
     emit(RegisterLoadingState());
 
     final result = await registerUseCase.call(
       requestModel: requestModel,
+      imageFile: imageFile,
     );
 
     result.fold(

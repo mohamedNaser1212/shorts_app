@@ -222,6 +222,7 @@ class CustomElevatedButton extends StatelessWidget {
                 : 'Hey there I am using Shorts',
             profilePic: profilePicUrl,
           ),
+          imageFile: state.imageFile,
         );
       } else {
         ToastHelper.showToast(

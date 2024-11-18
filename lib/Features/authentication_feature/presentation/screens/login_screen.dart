@@ -51,7 +51,7 @@ class LoginScreen extends StatelessWidget {
           screen: const InitialScreen(),
         );
       } else {
-        NavigationManager.navigateAndFinishWithTransition(
+        NavigationManager.navigateToWithTransition(
           context: context,
           screen: const VerificationScreen(),
         );
