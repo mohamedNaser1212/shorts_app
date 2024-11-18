@@ -26,7 +26,6 @@ class _SearchFormFieldState extends State<SearchFormField> {
   void initState() {
     super.initState();
     _controller = widget.query;
-    _focusNode = FocusNode();
     _searchCubit = SearchCubit.get(context);
   }
 

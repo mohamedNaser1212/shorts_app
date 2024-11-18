@@ -20,6 +20,14 @@ class SearchListView extends StatelessWidget {
           if (state is GetSearchResultsLoadingState) {
             return const Center(child: CircularProgressIndicator());
           } else if (state is GetSearchResultsSuccessState) {
+            if (state.searchResults.isEmpty) {
+              return const Center(
+                  child: CustomTitle(
+                title: 'No search results.',
+                color: ColorController.whiteColor,
+                style: TitleStyle.styleBold20,
+              ));
+            }
             return ListView.separated(
               separatorBuilder: (context, index) => const SizedBox(height: 10),
               itemCount: state.searchResults.length,
@@ -56,7 +64,15 @@ class SearchListView extends StatelessWidget {
           } else if (state is GetSearchResultsErrorState) {
             return Center(child: Text(state.errorMessage));
           }
-          return const Center(child: Text('No search results.'));
+          return const Center(
+            child: Center(
+              child: CustomTitle(
+                title: 'Search For Users ...',
+                color: ColorController.whiteColor,
+                style: TitleStyle.styleBold20,
+              ),
+            ),
+          );
         },
       ),
     );

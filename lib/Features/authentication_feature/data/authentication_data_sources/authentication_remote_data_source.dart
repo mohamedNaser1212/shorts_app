@@ -108,17 +108,14 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     required RegisterRequestModel requestModel,
     required File imageFile,
   }) async {
-    // Upload image to Firebase Storage
     String imageUrl = await _uploadProfileImage(imageFile);
 
-    // Proceed with the rest of the registration logic
     UserCredential userCredential =
         await FirebaseAuth.instance.createUserWithEmailAndPassword(
       email: requestModel.email,
       password: requestModel.password,
     );
 
-    // Send a verification email
     await userCredential.user!.sendEmailVerification();
 
     String? fcmToken = await FirebaseMessaging.instance.getToken();

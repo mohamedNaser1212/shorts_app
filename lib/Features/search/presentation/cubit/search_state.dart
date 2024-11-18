@@ -10,6 +10,12 @@ final class GetSearchResultsSuccessState extends SearchState {
   GetSearchResultsSuccessState({required this.searchResults});
 }
 
+final class ClearSearchResultsSuccessState extends SearchState {
+  final List<UserEntity> searchResults;
+
+  ClearSearchResultsSuccessState({required this.searchResults});
+}
+
 final class GetSearchResultsErrorState extends SearchState {
   final String errorMessage;
 

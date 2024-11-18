@@ -41,7 +41,7 @@ class RegisterCubit extends Cubit<RegisterState> {
       (failure) {
         emit(RegisterErrorState(message: failure.message));
       },
-      (userModel) async {
+      (userModel) {
         emit(RegisterSuccessState(userEntity: userModel));
       },
     );

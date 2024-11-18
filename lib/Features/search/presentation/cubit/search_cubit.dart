@@ -39,6 +39,6 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   void clearSearch() {
-    emit(GetSearchResultsSuccessState(searchResults: []));
+    emit(ClearSearchResultsSuccessState(searchResults: []));
   }
 }
