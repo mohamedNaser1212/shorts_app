@@ -8,22 +8,23 @@ class SwitchCameraIconWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Only show switch camera button if the user is not recording, and permission is granted
     return Positioned(
       bottom: 20.0,
       left: 16.0,
-      child: notifier.isRecording
-          ? const SizedBox()
-          : notifier.videoFile != null
-              ? const SizedBox()
-              : IconButton(
-                  icon: const CustomIconWidget(
-                    icon: Icons.switch_camera_rounded,
-                    color: Colors.white,
-                  ),
-                  onPressed: () {
-                    notifier.switchCamera();
-                  },
-                ),
+      child: notifier.isRecording ||
+              notifier.videoFile != null ||
+              !notifier.isPermissionGranted
+          ? const SizedBox() // Hide button if recording or permission is denied
+          : IconButton(
+              icon: const CustomIconWidget(
+                icon: Icons.switch_camera_rounded,
+                color: Colors.white,
+              ),
+              onPressed: () {
+                notifier.switchCamera();
+              },
+            ),
     );
   }
 }
