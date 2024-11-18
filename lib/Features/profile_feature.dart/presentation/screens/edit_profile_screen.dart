@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/use_case/update_user_data_use_case.dart';
@@ -24,6 +26,8 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   final nameController = TextEditingController();
   final phoneController = TextEditingController();
   final bioController = TextEditingController();
+  late String imageUrl = '';
+  late File imageFile = File('');
   final formKey = GlobalKey<FormState>();
   late final ImageNotifierController imageNotifierController;
 
@@ -41,6 +45,7 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     phoneController.dispose();
     bioController.dispose();
     imageNotifierController.dispose();
+    imageFile.delete();
     super.dispose();
   }
 
@@ -72,23 +77,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
 
   Widget _buildScreen(BuildContext context, UserInfoState userState,
       UpdateUserDataState updateState) {
-    if (userState is GetUserInfoSuccessState ||
-        updateState is UpdateUserDataSuccessState) {
-      if (userState is GetUserInfoSuccessState) {
-        nameController.text = userState.userEntity!.name ?? '';
-        bioController.text = userState.userEntity!.bio ?? '';
-        phoneController.text = userState.userEntity!.phone ?? '';
-        imageNotifierController.profilePicNotifier.value =
-            userState.userEntity!.profilePic;
-      } else if (updateState is UpdateUserDataSuccessState) {
-        nameController.text = updateState.userEntity!.name ?? '';
-        bioController.text = updateState.userEntity!.bio ?? '';
-        phoneController.text = updateState.userEntity!.phone ?? '';
-        imageNotifierController.profilePicNotifier.value =
-            updateState.userEntity!.profilePic;
-      }
-    }
-
     final isLoading = userState is GetUserInfoLoadingState ||
         updateState is UpdateUserDataLoadingState;
 

@@ -198,6 +198,7 @@ class CustomElevatedButton extends StatelessWidget {
           imageUrl: updates['profilePic'] ?? currentUser.profilePic,
           bio: updates['bio'] ?? currentUser.bio,
         ),
+        imageFile: editState.imageNotifierController.imageFileNotifier.value!,
         userId: currentUser.id!,
       );
     }
@@ -247,8 +248,9 @@ class CustomElevatedButton extends StatelessWidget {
         thumbnail: thumbnailFile?.path ?? '',
       );
 
-      UploadVideosCubit.get(context)
-          .uploadVideo(videoModel: video, );
+      UploadVideosCubit.get(context).uploadVideo(
+        videoModel: video,
+      );
     } else {
       ToastHelper.showToast(message: 'Please add a description');
     }

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:shorts/core/managers/error_manager/failure.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
@@ -10,6 +12,7 @@ abstract class UpdateUserDataRepo {
   Future<Either<Failure, UserEntity>> updateUserData({
     required UpdateUserRequestModel updateUserRequestModel,
     required String userId,
+    required File imageFile,
   });
 
   // Future<Either<Failure, bool>> signOut();

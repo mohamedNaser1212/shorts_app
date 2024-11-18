@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:dartz/dartz.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/repo/update_user_data_repo.dart';
 import 'package:shorts/core/managers/error_manager/failure.dart';
@@ -23,12 +25,14 @@ class UpdateUserDataRepoImpl extends UpdateUserDataRepo {
   Future<Either<Failure, UserEntity>> updateUserData({
     required UpdateUserRequestModel updateUserRequestModel,
     required String userId,
+    required File imageFile,
   }) async {
     return repoManager.call(
       action: () async {
         final cachedUserData = await updateUserDataSource.updateUserData(
           updateUserRequestModel: updateUserRequestModel,
           userId: userId,
+          imageFile: imageFile,
         );
         await userInfoLocalDataSource.saveUserData(user: cachedUserData);
         return cachedUserData;

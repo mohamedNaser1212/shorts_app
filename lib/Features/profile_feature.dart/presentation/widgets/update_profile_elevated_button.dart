@@ -31,9 +31,7 @@ class UpdateProfileElevatedButton extends StatelessWidget {
 
     final updates = <String, dynamic>{};
 
-    // if (currentUser!.email != editState.emailController.text) {
-    //   updates['email'] = editState.emailController.text;
-    // }
+    // Update other fields if changed
     if (currentUser!.name != editState.nameController.text) {
       updates[RequestDataNames.name] = editState.nameController.text;
     }
@@ -44,11 +42,10 @@ class UpdateProfileElevatedButton extends StatelessWidget {
       updates[RequestDataNames.bio] = editState.bioController.text;
     }
 
-    if (editState.imageNotifierController.imageFileNotifier.value != null) {
-      final newImageUrl = await editState.imageNotifierController.uploadImage();
-      if (newImageUrl != null && currentUser.profilePic != newImageUrl) {
-        updates[RequestDataNames.profilePic] = newImageUrl;
-      }
+    // Only update the image if a new image is provided
+
+    if (currentUser.profilePic != editState.imageUrl) {
+      updates[RequestDataNames.profilePic] = editState.imageUrl;
     }
 
     if (updates.isNotEmpty) {
@@ -60,6 +57,7 @@ class UpdateProfileElevatedButton extends StatelessWidget {
           imageUrl:
               updates[RequestDataNames.profilePic] ?? currentUser.profilePic,
         ),
+        imageFile: editState.imageFile,
         userId: currentUser.id!,
       );
     }

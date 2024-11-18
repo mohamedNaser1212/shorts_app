@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/profile_feature.dart/domain/use_case/update_user_data_use_case.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
@@ -30,11 +32,13 @@ class UpdateUserDataCubit extends Cubit<UpdateUserDataState> {
   Future<void> updateUserData({
     required UpdateUserRequestModel updateUserRequestModel,
     required String userId,
+    required File imageFile,
   }) async {
     emit(UpdateUserDataLoadingState());
     final result = await updateUserDataUseCase.call(
       updateUserRequestModel: updateUserRequestModel,
       userId: userId,
+      imageFile: imageFile,
     );
     result.fold(
       (failure) {

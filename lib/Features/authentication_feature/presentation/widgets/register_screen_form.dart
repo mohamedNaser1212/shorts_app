@@ -28,6 +28,7 @@ class RegisterScreenFormState extends State<RegisterScreenForm> {
   late final TextEditingController phoneController;
   late final TextEditingController passwordController;
   late final TextEditingController bioController;
+  late String imageUrl = '';
 
   late final ImageNotifierController imageNotifierController;
 

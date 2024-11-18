@@ -11,6 +11,7 @@ class ImageNotifierController extends ChangeNotifier {
   final ValueNotifier<File?> imageFileNotifier = ValueNotifier<File?>(null);
   final ValueNotifier<String?> profilePicNotifier =
       ValueNotifier<String?>(null);
+  String? imageUrl; // Store the image URL here
 
   ImageNotifierController({required this.emailController});
 
@@ -26,7 +27,8 @@ class ImageNotifierController extends ChangeNotifier {
 
     if (pickedFile != null) {
       imageFileNotifier.value = File(pickedFile.path);
-      notifyListeners(); // Notify listeners about the new image
+      imageUrl = pickedFile.path;
+      notifyListeners();
     } else {
       // Handle when no image is selected
       ToastHelper.showToast(message: 'No image selected', color: Colors.red);
@@ -44,6 +46,7 @@ class ImageNotifierController extends ChangeNotifier {
         fileName,
       );
       profilePicNotifier.value = uploadedProfilePic;
+      imageUrl = uploadedProfilePic;
       return uploadedProfilePic;
     } catch (e) {
       ToastHelper.showToast(
