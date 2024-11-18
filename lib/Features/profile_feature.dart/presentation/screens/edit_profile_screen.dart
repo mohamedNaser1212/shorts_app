@@ -45,7 +45,6 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     phoneController.dispose();
     bioController.dispose();
     imageNotifierController.dispose();
-    imageFile.delete();
     super.dispose();
   }
 
@@ -61,7 +60,14 @@ class EditProfileScreenState extends State<EditProfileScreen> {
           ),
         ],
         child: BlocConsumer<UserInfoCubit, UserInfoState>(
-          listener: (context, userState) {},
+          listener: (context, userState) {
+            if (userState is GetUserInfoSuccessState) {
+              nameController.text = userState.userEntity!.name ?? '';
+              bioController.text = userState.userEntity!.bio ?? '';
+              phoneController.text = userState.userEntity!.phone ?? '';
+              imageUrl = userState.userEntity!.profilePic ?? '';
+            }
+          },
           builder: (context, userState) {
             return BlocConsumer<UpdateUserDataCubit, UpdateUserDataState>(
               listener: (context, updateState) {},

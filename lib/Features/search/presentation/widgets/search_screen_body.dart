@@ -53,11 +53,9 @@ class _SearchScreenBodyState extends State<SearchScreenBody> {
                     },
                   ),
                   const SizedBox(width: 10),
-                  Expanded(
-                    child: SearchFormField(
-                      query: query,
-                      formKey: formKey,
-                    ),
+                  SearchFormField(
+                    query: query,
+                    formKey: formKey,
                   ),
                 ],
               ),

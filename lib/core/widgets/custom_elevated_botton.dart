@@ -19,7 +19,6 @@ import '../../Features/authentication_feature/data/user_model/login_request_mode
 import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
 import '../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
 import '../../Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
-import '../../Features/profile_feature.dart/domain/models/update_request_model.dart';
 import '../../Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
 import '../managers/styles_manager/color_manager.dart';
 
@@ -182,26 +181,26 @@ class CustomElevatedButton extends StatelessWidget {
       updates['bio'] = editState.bioController.text;
     }
 
-    if (editState.imageNotifierController.imageFileNotifier.value != null) {
-      final newImageUrl = await editState.imageNotifierController.uploadImage();
-      if (newImageUrl != null && currentUser.profilePic != newImageUrl) {
-        updates['profilePic'] = newImageUrl;
-      }
-    }
+    // if (editState.imageNotifierController.imageFileNotifier.value != null) {
+    //   final newImageUrl = await editState.imageNotifierController.uploadImage();
+    //   if (newImageUrl != null && currentUser.profilePic != newImageUrl) {
+    //     updates['profilePic'] = newImageUrl;
+    //   }
+    // }
 
-    if (updates.isNotEmpty) {
-      cubit.updateUserData(
-        updateUserRequestModel: UpdateUserRequestModel(
-          // email: updates['email'] ?? currentUser.email,
-          name: updates['name'] ?? currentUser.name,
-          phone: updates['phone'] ?? currentUser.phone,
-          imageUrl: updates['profilePic'] ?? currentUser.profilePic,
-          bio: updates['bio'] ?? currentUser.bio,
-        ),
-        imageFile: editState.imageNotifierController.imageFileNotifier.value!,
-        userId: currentUser.id!,
-      );
-    }
+    // if (updates.isNotEmpty) {
+    //   cubit.updateUserData(
+    //     updateUserRequestModel: UpdateUserRequestModel(
+    //       // email: updates['email'] ?? currentUser.email,
+    //       name: updates['name'] ?? currentUser.name,
+    //       phone: updates['phone'] ?? currentUser.phone,
+    //       imageUrl: updates['profilePic'] ?? currentUser.profilePic,
+    //       bio: updates['bio'] ?? currentUser.bio,
+    //     ),
+    //     imageFile: editState.imageNotifierController.imageFileNotifier.value!,
+    //     userId: currentUser.id!,
+    //   );
+    // }
   }
 
   static Future<void> _registerAction(
