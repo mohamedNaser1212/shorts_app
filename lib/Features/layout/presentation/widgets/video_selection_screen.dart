@@ -1,4 +1,3 @@
-import 'package:camera/camera.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:provider/provider.dart';
@@ -8,7 +7,7 @@ import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 
 import '../../../../core/video_controller/video_controller.dart';
-import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/camera_permission_warning_widgets.dart';
+import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/check_on_camera_permissions_widgets.dart';
 import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/gallary_icon_widget.dart';
 import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/switch_camera_icon_widget.dart';
 import '../../../videos_feature/presentation/widgets/videos_uploading_widgets/video_recording_icon_widget.dart';
@@ -21,7 +20,8 @@ class VideoSelectionScreen extends StatefulWidget {
   _VideoSelectionScreenState createState() => _VideoSelectionScreenState();
 }
 
-class _VideoSelectionScreenState extends State<VideoSelectionScreen> {
+class _VideoSelectionScreenState extends State<VideoSelectionScreen>
+    with WidgetsBindingObserver {
   late VideoController _videoController;
 
   @override
@@ -29,6 +29,20 @@ class _VideoSelectionScreenState extends State<VideoSelectionScreen> {
     super.initState();
     _videoController = VideoController();
     _videoController.requestCameraPermission(context);
+    WidgetsBinding.instance.addObserver(this);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _videoController.requestCameraPermission(context);
+    }
   }
 
   @override
@@ -48,33 +62,13 @@ class _VideoSelectionScreenState extends State<VideoSelectionScreen> {
                     height: MediaQuery.of(context).size.height,
                     width: MediaQuery.of(context).size.width,
                   ),
-                  if (notifier.isPermissionGranted &&
-                      notifier.cameraController != null &&
-                      notifier.cameraController!.value.isInitialized)
-                    CameraPreview(notifier.cameraController!)
-                  else if (notifier.isPermissionPermanentlyDenied)
-                    // Show message for permanently denied permission
-                    const CameraPermissionWarningWidgets(
-                      title: " Camera Permission Denied Permanently",
-                    )
-                  else if (notifier.isLoading)
-                    const Center(child: CircularProgressIndicator())
-                  else
-                    const Center(
-                      child: CameraPermissionWarningWidgets(
-                        title: " Camera Needs Permission to Work",
-                      ),
-                    ),
+                  CheckOnCameraPermissionsWidgets(notifier: notifier),
                   if (notifier.isRecording)
                     VideoTimerWidget(
                         recordingSeconds: notifier.recordingSeconds),
                   VideoRecordingIconWidget(notifier: notifier),
-                  GallaryIconWidget(
-                    notifier: notifier,
-                  ),
-                  SwitchCameraIconWidget(
-                    notifier: notifier,
-                  ),
+                  GallaryIconWidget(notifier: notifier),
+                  SwitchCameraIconWidget(notifier: notifier),
                 ],
               ),
             );
