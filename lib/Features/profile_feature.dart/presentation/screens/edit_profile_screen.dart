@@ -77,10 +77,10 @@ class EditProfileScreenState extends State<EditProfileScreen> {
   ) {
     final isLoading = userState is GetUserInfoLoadingState;
     if (userState is GetUserInfoSuccessState) {
-      nameController.text = userState.userEntity!.name ?? '';
-      bioController.text = userState.userEntity!.bio ?? '';
-      phoneController.text = userState.userEntity!.phone ?? '';
-      imageUrl = userState.userEntity!.profilePic ?? '';
+      nameController.text = userState.userEntity!.name;
+      bioController.text = userState.userEntity!.bio;
+      phoneController.text = userState.userEntity!.phone;
+      imageUrl = userState.userEntity!.profilePic;
     }
     return BlocBuilder<UpdateUserDataCubit, UpdateUserDataState>(
       builder: (context, state) {
