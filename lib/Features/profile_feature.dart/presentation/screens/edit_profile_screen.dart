@@ -82,42 +82,46 @@ class EditProfileScreenState extends State<EditProfileScreen> {
       phoneController.text = userState.userEntity!.phone ?? '';
       imageUrl = userState.userEntity!.profilePic ?? '';
     }
-    return Scaffold(
-      backgroundColor: ColorController.blackColor,
-      appBar: const CustomAppBar(
-        title: 'Edit Profile',
-        backColor: ColorController.transparentColor,
-        titleStyle: TitleStyle.styleBold24,
-        centerTitle: true,
-        showLeadingIcon: true,
-      ),
-      body: BlockInternactionLoadingWidget(
-        isLoading: isLoading,
-        child: CustomScrollView(
-          scrollBehavior: const MaterialScrollBehavior(),
-          slivers: [
-            SliverToBoxAdapter(
-              child: Padding(
-                padding: const EdgeInsets.all(16.0),
-                child: Form(
-                  key: formKey,
-                  child: EditProfileScreenBody(state: this),
+    return BlocBuilder<UpdateUserDataCubit, UpdateUserDataState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: ColorController.blackColor,
+          appBar: const CustomAppBar(
+            title: 'Edit Profile',
+            backColor: ColorController.transparentColor,
+            titleStyle: TitleStyle.styleBold24,
+            centerTitle: true,
+            showLeadingIcon: true,
+          ),
+          body: BlockInternactionLoadingWidget(
+            isLoading: isLoading || state is UpdateUserDataLoadingState,
+            child: CustomScrollView(
+              scrollBehavior: const MaterialScrollBehavior(),
+              slivers: [
+                SliverToBoxAdapter(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Form(
+                      key: formKey,
+                      child: EditProfileScreenBody(state: this),
+                    ),
+                  ),
                 ),
-              ),
+                SliverFillRemaining(
+                  hasScrollBody: false,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      UpdateProfileElevatedButton(editState: this),
+                      const SizedBox(height: 30.0),
+                    ],
+                  ),
+                ),
+              ],
             ),
-            SliverFillRemaining(
-              hasScrollBody: false,
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.end,
-                children: [
-                  UpdateProfileElevatedButton(editState: this),
-                  const SizedBox(height: 30.0),
-                ],
-              ),
-            ),
-          ],
-        ),
-      ),
+          ),
+        );
+      },
     );
   }
 }

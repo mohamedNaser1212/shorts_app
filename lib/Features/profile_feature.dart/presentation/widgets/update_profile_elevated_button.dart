@@ -35,9 +35,7 @@ class UpdateProfileElevatedButton extends StatelessWidget {
     if (currentUser!.name != editState.nameController.text) {
       updates[RequestDataNames.name] = editState.nameController.text;
     }
-    if (currentUser.phone != editState.phoneController.text) {
-      updates[RequestDataNames.phone] = editState.phoneController.text;
-    }
+
     if (currentUser.bio != editState.bioController.text) {
       updates[RequestDataNames.bio] = editState.bioController.text;
     }

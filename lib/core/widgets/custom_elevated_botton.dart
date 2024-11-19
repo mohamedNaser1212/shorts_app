@@ -174,9 +174,7 @@ class CustomElevatedButton extends StatelessWidget {
     if (currentUser!.name != editState.nameController.text) {
       updates['name'] = editState.nameController.text;
     }
-    if (currentUser.phone != editState.phoneController.text) {
-      updates['phone'] = editState.phoneController.text;
-    }
+
     if (currentUser.bio != editState.bioController.text) {
       updates['bio'] = editState.bioController.text;
     }
