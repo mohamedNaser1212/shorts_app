@@ -59,21 +59,11 @@ class EditProfileScreenState extends State<EditProfileScreen> {
             ),
           ),
         ],
-        child: BlocConsumer<UserInfoCubit, UserInfoState>(
-          listener: (context, userState) {
-            if (userState is GetUserInfoSuccessState) {
-              nameController.text = userState.userEntity!.name ?? '';
-              bioController.text = userState.userEntity!.bio ?? '';
-              phoneController.text = userState.userEntity!.phone ?? '';
-              imageUrl = userState.userEntity!.profilePic ?? '';
-            }
-          },
+        child: BlocBuilder<UserInfoCubit, UserInfoState>(
           builder: (context, userState) {
-            return BlocConsumer<UpdateUserDataCubit, UpdateUserDataState>(
-              listener: (context, updateState) {},
-              builder: (context, updateState) {
-                return _buildScreen(context, userState, updateState);
-              },
+            return _buildScreen(
+              context,
+              userState,
             );
           },
         ),
@@ -81,11 +71,17 @@ class EditProfileScreenState extends State<EditProfileScreen> {
     );
   }
 
-  Widget _buildScreen(BuildContext context, UserInfoState userState,
-      UpdateUserDataState updateState) {
-    final isLoading = userState is GetUserInfoLoadingState ||
-        updateState is UpdateUserDataLoadingState;
-
+  Widget _buildScreen(
+    BuildContext context,
+    UserInfoState userState,
+  ) {
+    final isLoading = userState is GetUserInfoLoadingState;
+    if (userState is GetUserInfoSuccessState) {
+      nameController.text = userState.userEntity!.name ?? '';
+      bioController.text = userState.userEntity!.bio ?? '';
+      phoneController.text = userState.userEntity!.phone ?? '';
+      imageUrl = userState.userEntity!.profilePic ?? '';
+    }
     return Scaffold(
       backgroundColor: ColorController.blackColor,
       appBar: const CustomAppBar(
