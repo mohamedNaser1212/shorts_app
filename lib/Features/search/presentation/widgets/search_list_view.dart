@@ -1,23 +1,24 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/Features/search/presentation/widgets/search_list_view_body.dart';
+import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
-import '../../../../core/functions/navigations_functions.dart';
 import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/widgets/custom_title.dart';
-import '../../../profile_feature.dart/presentation/screens/user_profile_screen.dart';
 import '../cubit/search_cubit.dart';
 
 class SearchListView extends StatefulWidget {
   const SearchListView({super.key, required this.query});
   final String query;
+
   @override
-  State<SearchListView> createState() => _SearchListViewState();
+  _SearchListViewState createState() => _SearchListViewState();
 }
 
 class _SearchListViewState extends State<SearchListView> {
   final ScrollController _scrollController = ScrollController();
   bool _isLoadingMore = false;
+
   @override
   void initState() {
     super.initState();
@@ -55,13 +56,13 @@ class _SearchListViewState extends State<SearchListView> {
   Widget build(BuildContext context) {
     return BlocBuilder<SearchCubit, SearchState>(
       builder: (context, state) {
-        final searchResults =
-            state is GetSearchResultsSuccessState ? state.searchResults : [];
+        final List<UserEntity> searchResults =
+            state is GetSearchResultsSuccessState
+                ? state.searchResults
+                : <UserEntity>[];
 
         if (state is GetSearchResultsLoadingState) {
-          return const Center(
-            child: CircularProgressIndicator(),
-          );
+          return const Center(child: CircularProgressIndicator());
         } else if (state is GetSearchResultsSuccessState) {
           if (searchResults.isEmpty) {
             return const Center(
@@ -88,46 +89,16 @@ class _SearchListViewState extends State<SearchListView> {
             ),
           );
         }
+        // return SearchListViewBody(
+        //   searchResults: searchResults,
+        //   scrollController: _scrollController,
+        //   isLoadingMore: _isLoadingMore,
+        // );
 
-        return Expanded(
-          child: ListView.separated(
-            controller: _scrollController,
-            separatorBuilder: (context, index) => const SizedBox(height: 10),
-            itemCount: searchResults.length + 1,
-            itemBuilder: (context, index) {
-              if (index == searchResults.length) {
-                return _isLoadingMore
-                    ? const Center(child: CircularProgressIndicator())
-                    : const SizedBox.shrink();
-              }
-
-              final user = searchResults[index];
-              return InkWell(
-                onTap: () {
-                  NavigationManager.navigateTo(
-                    context: context,
-                    screen: UserProfileScreen(user: user),
-                  );
-                },
-                child: ListTile(
-                  contentPadding: const EdgeInsets.symmetric(vertical: 8.0),
-                  leading: CircleAvatar(
-                    radius: 50,
-                    backgroundImage:
-                        CachedNetworkImageProvider(user.profilePic),
-                  ),
-                  title: CustomTitle(
-                    style: TitleStyle.styleBold20,
-                    title: user.name,
-                    overflow: TextOverflow.ellipsis,
-                    maxLines: 1,
-                    color: ColorController.whiteColor,
-                  ),
-                ),
-              );
-            },
-          ),
-        );
+        return ListUsers(
+            scrollController: _scrollController,
+            searchResults: searchResults,
+            isLoadingMore: _isLoadingMore);
       },
     );
   }

@@ -39,7 +39,7 @@ class _SplashScreenState extends State<SplashScreen> {
       backgroundColor: ColorController.blackColor,
       body: Center(
         child: Lottie.asset(
-          'assets/lottie_files/splash.json',
+          'assets/lottie_files/youtubeSplash.json',
         ),
       ),
 
