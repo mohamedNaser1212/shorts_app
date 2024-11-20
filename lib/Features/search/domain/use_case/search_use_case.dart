@@ -13,7 +13,8 @@ class SearchUseCase {
 
   Future<Either<Failure, List<UserEntity>>> call({
     required String search,
+    required int page,
   }) async {
-    return await searchRepo.search(query: search);
+    return await searchRepo.search(query: search, page: page);
   }
 }

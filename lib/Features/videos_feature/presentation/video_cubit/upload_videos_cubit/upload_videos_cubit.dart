@@ -1,12 +1,9 @@
 import 'dart:io';
-
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/Features/videos_feature/domain/videos_use_cases/upload_video_use_case/upload_video_use_case.dart';
-import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
-
 part 'upload_videos_state.dart';
 
 class UploadVideosCubit extends Cubit<UploadVideosState> {

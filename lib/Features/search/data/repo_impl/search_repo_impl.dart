@@ -16,12 +16,14 @@ class SearchRepoImpl extends SearchRepo {
   });
 
   @override
-  Future<Either<Failure, List<UserEntity>>> search({required String query}) {
+  Future<Either<Failure, List<UserEntity>>> search({
+    required String query,
+    required int page,
+  }) {
     return repoManager.call(
       action: () async {
-        final searchResults = await searchRemoteDataSource.search(
-          query: query,
-        );
+        final searchResults =
+            await searchRemoteDataSource.search(query: query, page: page);
 
         return searchResults;
       },

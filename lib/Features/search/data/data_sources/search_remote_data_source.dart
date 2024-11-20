@@ -4,19 +4,36 @@ import 'package:shorts/Features/authentication_feature/data/user_model/user_mode
 abstract class SearchRemoteDataSource {
   Future<List<UserModel>> search({
     required String query,
+    required int page,
   });
 }
 
 class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
   final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 
+  DocumentSnapshot? lastDocument;
+
   @override
   Future<List<UserModel>> search({
     required String query,
+    required int page,
   }) async {
     final lowerCaseQuery = query.toLowerCase();
 
-    QuerySnapshot snapshot = await _firestore.collection('users').get();
+    Query queryBuilder = _firestore
+        .collection('users')
+        .orderBy('name', descending: true)
+        .limit(14);
+
+    if (page > 1 && lastDocument != null) {
+      queryBuilder = queryBuilder.startAfterDocument(lastDocument!);
+    }
+
+    QuerySnapshot snapshot = await queryBuilder.get();
+
+    if (snapshot.docs.isEmpty) {
+      return [];
+    }
 
     List<UserModel> searchResults = snapshot.docs
         .map((doc) {
@@ -32,6 +49,12 @@ class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
         })
         .whereType<UserModel>()
         .toList();
+
+    if (searchResults.isNotEmpty) {
+      lastDocument = snapshot.docs.last;
+    }
+
+    print('Search results for page $page: ${searchResults.length}');
 
     return searchResults;
   }

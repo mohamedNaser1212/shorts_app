@@ -78,7 +78,6 @@ class UserProfileScreenState extends State<UserProfileScreen> {
     );
     // }
 
-    return const SizedBox.shrink();
   }
 
   void _listener(BuildContext context, UserInfoState state) {

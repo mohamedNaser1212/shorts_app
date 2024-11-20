@@ -18,20 +18,11 @@ class SearchFormField extends StatefulWidget {
 }
 
 class _SearchFormFieldState extends State<SearchFormField> {
-  late final TextEditingController _controller;
   late final FocusNode _focusNode;
-  late final SearchCubit _searchCubit;
-
-  @override
-  void initState() {
-    super.initState();
-    _controller = widget.query;
-    _searchCubit = SearchCubit.get(context);
-  }
+  late final SearchCubit _searchCubit = SearchCubit.get(context);
 
   @override
   void dispose() {
-    _controller.dispose();
     _focusNode.dispose();
     super.dispose();
   }
@@ -40,34 +31,41 @@ class _SearchFormFieldState extends State<SearchFormField> {
     if (query.isEmpty) {
       _searchCubit.clearSearch();
     } else {
-      _searchCubit.searchUsers(query: query);
+      _searchCubit.searchUsers(query: query, page: 1);
     }
   }
 
   @override
   Widget build(BuildContext context) {
     return Expanded(
-      child: CustomTextFormField(
-        controller: _controller,
-        label: 'Search for users...',
-        onChanged: (value) {
-          _onQueryChanged(value!);
-          return null;
-        },
-        onSubmit: (query) {
-          if (widget.formKey.currentState!.validate()) {
-            _searchCubit.searchUsers(query: query!);
-          }
-          return null;
-        },
-        prefix: const Icon(Icons.search),
-        keyboardType: TextInputType.text,
-        validator: (value) {
-          if (value!.isEmpty) {
-            return 'Please enter a search query';
-          }
-          return null;
-        },
+      child: Column(
+        children: [
+          CustomTextFormField(
+            controller: widget.query,
+            label: 'Search for users...',
+            onChanged: (value) {
+              _onQueryChanged(value!);
+              return null;
+            },
+            onSubmit: (query) {
+              setState(() {
+                widget.query.text = query!;
+              });
+              if (widget.formKey.currentState!.validate()) {
+                _searchCubit.searchUsers(query: query!, page: 1);
+              }
+              return null;
+            },
+            prefix: const Icon(Icons.search),
+            keyboardType: TextInputType.text,
+            validator: (value) {
+              if (value!.isEmpty) {
+                return 'Please enter a search query';
+              }
+              return null;
+            },
+          ),
+        ],
       ),
     );
   }

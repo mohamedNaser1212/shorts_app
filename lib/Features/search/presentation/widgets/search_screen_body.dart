@@ -14,13 +14,12 @@ class SearchScreenBody extends StatefulWidget {
 }
 
 class _SearchScreenBodyState extends State<SearchScreenBody> {
-  late TextEditingController query;
+  TextEditingController query = TextEditingController();
   final GlobalKey<FormState> formKey = GlobalKey<FormState>();
 
   @override
   void initState() {
     super.initState();
-    query = TextEditingController();
     SearchCubit.get(context).clearSearch();
   }
 
@@ -60,7 +59,9 @@ class _SearchScreenBodyState extends State<SearchScreenBody> {
                 ],
               ),
             ),
-            const SearchListView(),
+            SearchListView(
+              query: query.text,
+            ),
           ],
         ),
       ),

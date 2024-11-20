@@ -63,13 +63,13 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
 
     final currentUserLikeDoc = await firebaseHelperManager.getDocument(
       collectionPath: userLikesPath,
-      docId: videoEntity.id!,
+      docId: videoEntity.id,
     );
 
     if (currentUserLikeDoc != null) {
       await firebaseHelperManager.deleteDocument(
         collectionPath: userLikesPath,
-        docId: videoEntity.id!,
+        docId: videoEntity.id,
       );
 
       await firebaseHelperManager.deleteDocument(
@@ -97,7 +97,7 @@ class FavouritesRemoteDataSourceImpl implements FavouritesRemoteDataSource {
     } else {
       await firebaseHelperManager.addDocument(
         collectionPath: userLikesPath,
-        docId: videoEntity.id!,
+        docId: videoEntity.id,
         data: {
           'videoId': videoEntity.id,
           'timeStamp': DateTime.now(),

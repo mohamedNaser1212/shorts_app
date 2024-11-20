@@ -20,7 +20,6 @@ class CommentModel extends CommentEntity {
     );
   }
 
-  @override
   Map<String, dynamic> toJson() {
     return {
       RequestDataNames.id: id,

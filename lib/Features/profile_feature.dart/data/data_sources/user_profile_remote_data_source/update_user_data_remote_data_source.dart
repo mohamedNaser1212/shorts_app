@@ -42,13 +42,11 @@ class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
     // }
 
     String? uploadedImageUrl;
-    if (updateUserRequestModel.imageUrl != null) {
-      uploadedImageUrl = await uploadImage(
-        imageUrl: updateUserRequestModel.imageUrl,
-        imageFile: imageFile,
-      );
-    }
-
+    uploadedImageUrl = await uploadImage(
+      imageUrl: updateUserRequestModel.imageUrl,
+      imageFile: imageFile,
+    );
+  
     // Prepare data for Firestore update
     Map<String, dynamic> updatedData = {
       'name': updateUserRequestModel.name,

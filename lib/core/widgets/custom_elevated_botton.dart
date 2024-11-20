@@ -4,7 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/login_screen_body.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
 import 'package:shorts/Features/favourites_feature/presentation/screens/favourites_screen.dart';
-import 'package:shorts/Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/Features/videos_feature/presentation/screens/video_screen.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
@@ -159,7 +158,7 @@ class CustomElevatedButton extends StatelessWidget {
     required BuildContext context,
     required EditProfileScreenState editState,
   }) async {
-    final cubit = UpdateUserDataCubit.get(context);
+   // final cubit = UpdateUserDataCubit.get(context);
     final userCubit = UserInfoCubit.get(context);
 
     // Get the current user data

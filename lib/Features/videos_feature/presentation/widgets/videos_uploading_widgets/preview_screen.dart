@@ -8,6 +8,7 @@ import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 
 import '../../../../../core/widgets/custom_snack_bar.dart';
 
+// ignore: must_be_immutable
 class PreviewScreen extends StatefulWidget {
   PreviewScreen({super.key, required this.outputPath, this.thumbnailFile});
 

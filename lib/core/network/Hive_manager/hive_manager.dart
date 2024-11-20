@@ -40,7 +40,6 @@ class HiveManager implements LocalStorageManager {
     } catch (e) {
       print('Failed to open box $boxName: $e');
       throw Exception("Box $boxName could not be opened.");
-      throw Exception("Box $boxName could not be opened.");
     }
   }
 

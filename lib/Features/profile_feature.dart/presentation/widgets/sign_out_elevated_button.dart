@@ -29,7 +29,7 @@ class SignOutElevatedButton extends StatelessWidget {
         }
       },
       builder: (context, state) {
-        bool isLoading = state is SignOutLoadingState;
+        // bool isLoading = state is SignOutLoadingState;
 
         return CustomElevatedButton.signOutElevatedButton(
           context: context,

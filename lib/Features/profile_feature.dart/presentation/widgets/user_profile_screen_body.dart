@@ -25,7 +25,7 @@ class UserProfileScreenBody extends StatefulWidget {
 class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
   @override
   Widget build(BuildContext context) {
-    String name = widget.userEntity!.name ?? '';
+    String name = widget.userEntity!.name;
     return Scaffold(
       backgroundColor: ColorController.blackColor,
       body: Padding(

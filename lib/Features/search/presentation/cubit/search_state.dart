@@ -6,8 +6,9 @@ final class GetSearchResultsLoadingState extends SearchState {}
 
 final class GetSearchResultsSuccessState extends SearchState {
   final List<UserEntity> searchResults;
-
-  GetSearchResultsSuccessState({required this.searchResults});
+  final bool isLoadMore;
+  GetSearchResultsSuccessState(
+      {required this.searchResults, required this.isLoadMore});
 }
 
 final class ClearSearchResultsSuccessState extends SearchState {

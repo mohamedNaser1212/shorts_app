@@ -4,6 +4,7 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploa
 import 'package:shorts/core/video_controller/video_controller.dart';
 import 'package:shorts/core/widgets/custom_icon_widget.dart';
 
+// ignore: must_be_immutable
 class ConfirmRecordingWidget extends StatefulWidget {
   ConfirmRecordingWidget({
     super.key,
