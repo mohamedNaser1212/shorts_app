@@ -40,41 +40,34 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
   Future<List<VideoModel>> getVideos({
     required num page,
   }) async {
-    // Check if more videos are available
     if (!hasMoreVideos) return [];
 
-    // Initialize the query with ordering and limit
     Query query = FirebaseFirestore.instance
         .collection(CollectionNames.videos)
         .orderBy('timeStamp', descending: true)
         .limit(limit);
 
-    // Apply pagination by starting after the last fetched document
     if (_lastDocument != null) {
       query = query.startAfterDocument(_lastDocument!);
     }
 
-    // Execute the query
     final querySnapshot = await query.get();
 
-    // If no documents are returned, set hasMoreVideos to false
     if (querySnapshot.docs.isEmpty) {
       hasMoreVideos = false;
       return [];
     }
 
-    // Map documents to VideoModel and store the last document for pagination
     final videos = querySnapshot.docs.map((doc) {
       return VideoModel.fromJson(doc.data() as Map<String, dynamic>);
     }).toList();
 
-    _lastDocument =
-        querySnapshot.docs.last; // Update the last document for pagination
+    _lastDocument = querySnapshot.docs.last;
 
-    // Check if there are fewer results than the limit, meaning no more data
     if (videos.length < limit) {
       hasMoreVideos = false;
     }
+    print('videos.length${videos.length}');
 
     return videos;
   }

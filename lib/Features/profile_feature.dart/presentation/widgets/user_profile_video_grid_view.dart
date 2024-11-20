@@ -20,19 +20,18 @@ class UserProfileVideosGridView extends StatefulWidget {
 
 class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
   final ScrollController _scrollController = ScrollController();
-  final int _page = 0;
-  bool allVideosLoaded = false;
 
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
 
-    if (_page == 0) {
-      GetUserVideosCubit.get(context).videos = [];
-      print('get user videos');
-      GetUserVideosCubit.get(context).getUserVideos(
+    final cubit = GetUserVideosCubit.get(context);
+
+    if (cubit.currentUserId != widget.state.widget.userEntity!.id) {
+      cubit.reset();
+      cubit.getUserVideos(
         userId: widget.state.widget.userEntity!.id!,
-        page: _page + 1,
+        page: 1,
       );
     }
 
@@ -40,13 +39,12 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
   }
 
   void _onScroll() {
-    if (!allVideosLoaded &&
+    final cubit = GetUserVideosCubit.get(context);
+    if (!cubit.isLoadingMore &&
+        cubit.hasMoreVideos &&
         _scrollController.position.pixels >=
             _scrollController.position.maxScrollExtent * 0.7) {
-      final cubit = GetUserVideosCubit.get(context);
-      if (!cubit.isLoadingMore && cubit.hasMoreVideos) {
-        cubit.loadMoreVideos(userId: widget.state.widget.userEntity!.id!);
-      }
+      cubit.loadMoreVideos(userId: widget.state.widget.userEntity!.id!);
     }
   }
 
@@ -79,9 +77,6 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
                     if (index == state.videos.length && state.hasMoreVideos) {
                       return const Center(child: CircularProgressIndicator());
                     }
-                    if (index >= state.videos.length) {
-                      return const SizedBox();
-                    }
                     return _builder(index: index, successState: state);
                   },
                 ),
@@ -99,7 +94,7 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
     final video = successState.videos[index];
     return UserProfileVideosGridViewBody(
       video: video,
-      videos: [successState.videos[index]],
+      videos: [video],
       index: index,
     );
   }

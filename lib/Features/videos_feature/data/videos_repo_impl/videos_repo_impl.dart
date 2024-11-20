@@ -29,7 +29,6 @@ class VideosRepoImpl extends VideosRepo {
       final videos = await videosRemoteDataSource.getVideos(
         page: page,
       );
-      await videoLocalDataSource.saveVideos(videos);
       return videos;
     });
   }

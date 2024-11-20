@@ -176,25 +176,28 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
           data: {RequestDataNames.fcmToken: ''},
         );
 
-        // await FirebaseFirestore.instance
-        //     .collection(CollectionNames.users)
-        //     .doc(user.uid)
-        //     .update({RequestDataNames.fcmToken: ''});
-
         if (user.providerData
             .any((provider) => provider.providerId == 'google.com')) {
           await googleSignIn.signOut();
           googleSignIn.disconnect();
         }
+
         await ClearToken.clearToken(
           userId: user.uid,
           fcmToken: '',
           firebaseHelper: firebaseHelper,
         );
       }
+
+      // Clear Hive user data
+
+      // Firebase sign-out
       await FirebaseAuth.instance.signOut();
+
+      // Reset any global variables or in-memory user data
       fcmTokenAssigned = false;
     }
+
     return true;
   }
 

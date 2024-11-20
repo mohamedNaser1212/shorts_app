@@ -32,7 +32,10 @@ class UserProfileRepoImpl implements UserProfileRepo {
         pageSize: pageSize,
       );
       // Cache the fetched videos locally
-      await localDataSource.saveUserVideos(videos: videos);
+      await localDataSource.loadUserVideos();
+      await localDataSource.saveUserVideos(
+        videos: videos,
+      );
       return videos;
     });
   }

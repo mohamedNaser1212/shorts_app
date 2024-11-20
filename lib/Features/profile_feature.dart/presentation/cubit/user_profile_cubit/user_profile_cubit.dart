@@ -6,7 +6,8 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 class GetUserVideosCubit extends Cubit<UserProfileState> {
   final UserProfileVideosUseCase getUserInfoUseCase;
   List<VideoEntity> videos = [];
-  num _currentPage = 0; // Start with the first page
+  num _currentPage = 0;
+  String? currentUserId; // Track the current user ID
 
   bool isLoadingMore = false;
   bool hasMoreVideos = true;
@@ -18,10 +19,18 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
 
   static GetUserVideosCubit get(context) => BlocProvider.of(context);
 
-  Future<void> getUserVideos(
-      {required String userId, required num page}) async {
+  Future<void> getUserVideos({
+    required String userId,
+    required num page,
+  }) async {
     if (isLoadingMore) return;
+    if (currentUserId != userId) {
+      reset();
+      currentUserId = userId;
+    }
     isLoadingMore = true;
+
+    emit(GetUserVideosLoading());
 
     final result = await getUserInfoUseCase.call(
       userId: userId,
@@ -33,12 +42,8 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
         emit(GetUserVideosError(message: failure.message));
       },
       (fetchedVideos) {
-        if (page == 0) videos.clear();
-        print(videos.length);
         videos.addAll(fetchedVideos);
-        print(videos.length);
         hasMoreVideos = fetchedVideos.length == pageSize;
-
         emit(GetUserVideosSuccessState(
             videos: videos, hasMoreVideos: hasMoreVideos));
       },
@@ -57,5 +62,6 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
     _currentPage = 0;
     isLoadingMore = false;
     hasMoreVideos = true;
+    emit(UserProfileState()); // Reset to initial state
   }
 }

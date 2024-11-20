@@ -18,8 +18,6 @@ class UserEntity {
   final String profilePic;
   @HiveField(6)
   final String bio;
-
-  // New fields for follower, following, and likes count
   @HiveField(7)
   int followersCount;
   @HiveField(8)

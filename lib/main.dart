@@ -16,6 +16,7 @@ import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'Features/profile_feature.dart/domain/use_case/user_profile_videos_use_case.dart';
 import 'Features/profile_feature.dart/presentation/cubit/update_user_cubit/update_user_data_cubit.dart';
 import 'Features/profile_feature.dart/presentation/cubit/user_profile_cubit/user_profile_cubit.dart';
+import 'Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'core/utils/constants/consts.dart';
 import 'core/widgets/splash_screen.dart';
 
@@ -40,6 +41,12 @@ class MyApp extends StatelessWidget {
       providers: [
         BlocProvider(
           create: (context) => getIt<UserInfoCubit>()..getUserData(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<VideoCubit>()
+            ..getVideos(
+              page: 1,
+            ),
         ),
         BlocProvider(
             create: (context) => GetUserVideosCubit(

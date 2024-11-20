@@ -4,6 +4,7 @@ import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments
 import 'package:shorts/Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/videos_list.dart';
+import 'package:shorts/core/widgets/custom_title.dart';
 
 import '../../../../profile_feature.dart/presentation/widgets/user_profile_video_grid_view_body.dart';
 
@@ -28,14 +29,13 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
       initialPage: widget.userProfileVideosGridViewBodyState?.widget.index ?? 0,
     );
     _pageController.addListener(_onPageChanged);
-
-    context.read<VideoCubit>().getVideos(page: pageSize + 1);
   }
 
   void _onPageChanged() {
-    final cubit = context.read<VideoCubit>();
+    final cubit = VideoCubit.get(context);
 
-    if (_pageController.page?.toInt() == cubit.videos.length - 1) {
+    if (_pageController.page?.toInt() == cubit.videos.length - 2 &&
+        !cubit.isLoadingMore) {
       cubit.loadMoreVideos();
     }
   }
@@ -51,31 +51,31 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
     return BlocBuilder<VideoCubit, VideoState>(
       builder: (context, state) {
         if (state is VideoUploadErrorState) {
-          return Center(child: Text('Error: ${state.message}'));
+          return Center(
+            child: CustomTitle(
+              title: state.message,
+              style: TitleStyle.styleBold20,
+            ),
+          );
         }
         if (state is GetVideoSuccess) {
           final videos = state.videos;
+          final isLoadingMore = VideoCubit.get(context).isLoadingMore;
 
           return PageView.builder(
             controller: _pageController,
-            itemCount: videos.length,
+            itemCount: videos.length + (isLoadingMore ? 1 : 0),
             physics: const BouncingScrollPhysics(),
             scrollDirection: Axis.vertical,
             itemBuilder: (context, index) {
               final video = videos[index];
 
-              CommentsCubit.get(context).getCommentsCount(
-                videoId: video.id,
-              );
-              FavouritesCubit.get(context).getFavouritesCount(
-                videoId: video.id,
-              );
-              // CommentsCubit.get(context)
-              //     .getComments(videoId: video.id, page: 0);
+              CommentsCubit.get(context).getCommentsCount(videoId: video.id);
+              FavouritesCubit.get(context)
+                  .getFavouritesCount(videoId: video.id);
 
               return VideoListItem(
                 videoEntity: video,
-                // isShared: isShared,
               );
             },
           );

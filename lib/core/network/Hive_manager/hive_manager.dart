@@ -78,8 +78,13 @@ class HiveManager implements LocalStorageManager {
 
   @override
   Future<void> clearData<T>(String boxName) async {
-    var box = _getBox<T>(boxName);
-    await box.clear();
+    try {
+      var box = _getBox<T>(boxName);
+      await box.clear();
+      print('Data cleared from box: $boxName');
+    } catch (e) {
+      print('Error clearing data from box $boxName: $e');
+    }
   }
 
   @override
