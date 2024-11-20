@@ -14,12 +14,20 @@ class SearchFormField extends StatefulWidget {
   final GlobalKey<FormState> formKey;
 
   @override
-  _SearchFormFieldState createState() => _SearchFormFieldState();
+  State<SearchFormField> createState() => _SearchFormFieldState();
 }
 
 class _SearchFormFieldState extends State<SearchFormField> {
   late final FocusNode _focusNode;
-  late final SearchCubit _searchCubit = SearchCubit.get(context);
+  late final SearchCubit _searchCubit;
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    super.initState();
+    _searchCubit = SearchCubit.get(context);
+    _focusNode = FocusNode();
+  }
 
   @override
   void dispose() {

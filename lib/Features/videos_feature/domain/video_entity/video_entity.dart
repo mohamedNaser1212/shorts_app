@@ -1,4 +1,5 @@
 import 'package:hive/hive.dart';
+import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
 import '../../../authentication_feature/data/user_model/user_model.dart';
 

@@ -7,7 +7,7 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
   final UserProfileVideosUseCase getUserInfoUseCase;
   List<VideoEntity> videos = [];
   num _currentPage = 0;
-  String? currentUserId; // Track the current user ID
+  String? currentUserId;
 
   bool isLoadingMore = false;
   bool hasMoreVideos = true;
@@ -39,6 +39,7 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
 
     result.fold(
       (failure) {
+        print(failure.message);
         emit(GetUserVideosError(message: failure.message));
       },
       (fetchedVideos) {
@@ -62,6 +63,6 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
     _currentPage = 0;
     isLoadingMore = false;
     hasMoreVideos = true;
-    emit(UserProfileState()); // Reset to initial state
+    emit(UserProfileState());
   }
 }

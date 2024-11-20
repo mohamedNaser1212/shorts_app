@@ -6,6 +6,7 @@ import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_p
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_video_grid_view_body.dart';
 import 'package:shorts/core/functions/toast_function.dart';
 
+import '../../../../core/widgets/custom_title.dart';
 import 'custom_shimmer_grid_view_Widget.dart';
 
 class UserProfileVideosGridView extends StatefulWidget {
@@ -64,6 +65,13 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
           ToastHelper.showToast(message: state.message);
           return const Center(child: Text('Error loading videos'));
         } else if (state is GetUserVideosSuccessState) {
+          if (state.videos.isEmpty) {
+            return const Center(
+                child: CustomTitle(
+              title: 'No videos found',
+              style: TitleStyle.styleBold20,
+            ));
+          }
           if (state.videos.isNotEmpty) {
             return Expanded(
               child: Padding(
@@ -84,7 +92,7 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
             );
           }
         }
-        return const Center(child: Text('No videos found'));
+        return const SizedBox.shrink();
       },
     );
   }
