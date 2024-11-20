@@ -40,7 +40,7 @@ class _SearchListViewState extends State<SearchListView> {
   }
 
   Future<void> _loadMoreResults() async {
-    final searchCubit = context.read<SearchCubit>();
+    final searchCubit = SearchCubit.get(context);
     if (_isLoadingMore) return;
 
     setState(() => _isLoadingMore = true);
@@ -95,7 +95,7 @@ class _SearchListViewState extends State<SearchListView> {
         //   isLoadingMore: _isLoadingMore,
         // );
 
-        return ListUsers(
+        return SearchResultsList(
             scrollController: _scrollController,
             searchResults: searchResults,
             isLoadingMore: _isLoadingMore);

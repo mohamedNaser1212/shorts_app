@@ -7,8 +7,8 @@ import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/widgets/custom_title.dart';
 import '../../../profile_feature.dart/presentation/screens/user_profile_screen.dart';
 
-class ListUsers extends StatelessWidget {
-  const ListUsers({
+class SearchResultsList extends StatelessWidget {
+  const SearchResultsList({
     super.key,
     required ScrollController scrollController,
     required this.searchResults,

@@ -15,11 +15,9 @@ class SearchScreen extends StatelessWidget {
     return BlocProvider(
       create: (context) =>
           SearchCubit(searchUseCase: getIt.get<SearchUseCase>()),
-      child: const SafeArea(
-        child: Scaffold(
-          backgroundColor: ColorController.blackColor,
-          body: DummySearchField(),
-        ),
+      child: const Scaffold(
+        backgroundColor: ColorController.blackColor,
+        body: DummySearchField(),
       ),
     );
   }

@@ -26,7 +26,6 @@ class _SearchScreenBodyState extends State<SearchScreenBody> {
   @override
   void dispose() {
     query.dispose();
-    //SearchCubit.get(context).clearSearch();
     super.dispose();
   }
 
