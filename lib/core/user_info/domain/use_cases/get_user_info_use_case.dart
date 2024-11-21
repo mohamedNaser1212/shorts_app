@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 
 import '../../../managers/error_manager/failure.dart';
 import '../user_entity/user_entity.dart';
@@ -16,7 +15,7 @@ class GetUserInfoUseCase {
     return await userInfoRepo.getUser();
   }
 
-  Future<Either<Failure, UserModel?>> getUserById({
+  Future<Either<Failure, UserEntity?>> getUserById({
     required String uId,
   }) async {
     return await userInfoRepo.getUserById(uId: uId);

@@ -21,7 +21,7 @@ class VideoEntityAdapter extends TypeAdapter<VideoEntity> {
       thumbnail: fields[1] as String,
       videoUrl: fields[2] as String,
       description: fields[3] as String,
-      user: fields[4] as UserModel,
+      user: fields[4] as UserEntity,
       timeStamp: fields[5] as DateTime?,
     );
   }

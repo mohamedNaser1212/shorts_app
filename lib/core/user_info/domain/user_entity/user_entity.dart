@@ -1,5 +1,7 @@
 import 'package:hive/hive.dart';
 
+import '../../../utils/constants/request_data_names.dart';
+
 part 'user_entity.g.dart';
 
 @HiveType(typeId: 5)
@@ -40,7 +42,37 @@ class UserEntity {
     this.likesCount = 0,
     this.isVerified = false,
   });
+  factory UserEntity.fromJson(Map<String, dynamic> json) {
+    return UserEntity(
+      name: json[RequestDataNames.name] ?? '',
+      email: json[RequestDataNames.email] ?? '',
+      phone: json[RequestDataNames.phone] ?? '',
+      id: json[RequestDataNames.id] ?? '',
+      fcmToken: json[RequestDataNames.fcmToken] ?? '',
+      profilePic: json[RequestDataNames.profilePic] ?? '',
+      bio: json[RequestDataNames.bio] ?? '',
+      isVerified: json[RequestDataNames.isVerified] ?? false,
+      followersCount: json[RequestDataNames.followersCount] ?? 0,
+      followingCount: json[RequestDataNames.followingCount] ?? 0,
+      likesCount: json[RequestDataNames.likesCount] ?? 0,
+    );
+  }
 
+  Map<String, dynamic> toJson() {
+    return {
+      RequestDataNames.name: name,
+      RequestDataNames.email: email,
+      RequestDataNames.phone: phone,
+      RequestDataNames.id: id,
+      RequestDataNames.fcmToken: fcmToken,
+      RequestDataNames.profilePic: profilePic,
+      RequestDataNames.bio: bio,
+      RequestDataNames.isVerified: isVerified,
+      RequestDataNames.followersCount: followersCount,
+      RequestDataNames.followingCount: followingCount,
+      RequestDataNames.likesCount: likesCount,
+    };
+  }
   // factory UserEntity.fromJson(Map<String, dynamic> json) {
   //   return UserEntity(
   //     name: json[RequestDataNames.name],

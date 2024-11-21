@@ -1,7 +1,7 @@
 import 'package:intl/intl.dart';
 import 'package:shorts/core/utils/constants/request_data_names.dart';
 
-import '../../../authentication_feature/data/user_model/user_model.dart';
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../domain/video_entity/video_entity.dart';
 
 class VideoModel extends VideoEntity {
@@ -26,7 +26,7 @@ class VideoModel extends VideoEntity {
       thumbnail: json[RequestDataNames.thumbnail] ?? '',
       videoUrl: json[RequestDataNames.videoUrl] ?? '',
       description: json[RequestDataNames.description],
-      user: UserModel.fromJson(json[RequestDataNames.user]),
+      user: UserEntity.fromJson(json[RequestDataNames.user]),
       timeStamp: json[RequestDataNames.timeStamp] != null
           ? DateTime.parse(json[RequestDataNames.timeStamp])
           : null,

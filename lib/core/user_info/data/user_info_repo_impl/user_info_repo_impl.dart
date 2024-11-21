@@ -1,5 +1,4 @@
 import 'package:dartz/dartz.dart';
-import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 
 import '../../../managers/error_manager/failure.dart';
 import '../../../managers/repo_manager/repo_manager.dart';
@@ -41,7 +40,7 @@ class UserInfoRepoImpl implements UserInfoRepo {
   }
 
   @override
-  Future<Either<Failure, UserModel>> getUserById({required String uId}) {
+  Future<Either<Failure, UserEntity>> getUserById({required String uId}) {
     return repoManager.call(
       action: () async {
         final userData = await remoteDataSource.getUserById(uId: uId);

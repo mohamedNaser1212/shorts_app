@@ -1,15 +1,15 @@
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 
-import '../../../../Features/authentication_feature/data/user_model/user_model.dart';
 import '../../../network/firebase_manager/collection_names.dart';
+import '../../domain/user_entity/user_entity.dart';
 
 abstract class UserInfoRemoteDataSource {
   const UserInfoRemoteDataSource._();
 
-  Future<UserModel> getUser({
+  Future<UserEntity> getUser({
     required String uId,
   });
-  Future<UserModel> getUserById({
+  Future<UserEntity> getUserById({
     required String uId,
   });
   // Future<List<Map<String, UserModel>>> getUserVideos();
@@ -23,7 +23,7 @@ class UserInfoRemoteDataSourceImpl implements UserInfoRemoteDataSource {
   });
 
   @override
-  Future<UserModel> getUser({
+  Future<UserEntity> getUser({
     required String uId,
   }) async {
     final userData = await firebaseHelper.getDocument(
@@ -31,16 +31,16 @@ class UserInfoRemoteDataSourceImpl implements UserInfoRemoteDataSource {
       docId: uId,
     );
 
-    return UserModel.fromJson(userData ?? {});
+    return UserEntity.fromJson(userData ?? {});
   }
 
   @override
-  Future<UserModel> getUserById({required String uId}) async {
+  Future<UserEntity> getUserById({required String uId}) async {
     final userData = await firebaseHelper.getDocument(
       collectionPath: CollectionNames.users,
       docId: uId,
     );
 
-    return UserModel.fromJson(userData ?? {});
+    return UserEntity.fromJson(userData ?? {});
   }
 }

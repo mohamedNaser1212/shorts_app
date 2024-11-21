@@ -47,6 +47,7 @@ class VerificationScreen extends StatelessWidget {
                     'Verification Link Sent to your Email, Please Check Your Email To Verify Your Account',
                 style: TitleStyle.style20,
                 wordSpacing: 2,
+                maxLines: 3,
                 textAlign: TextAlign.center,
               ),
             ),

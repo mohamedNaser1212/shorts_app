@@ -1,6 +1,6 @@
 import 'package:shorts/core/utils/constants/request_data_names.dart';
 
-import '../../../authentication_feature/data/user_model/user_model.dart';
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../domain/comments_entity/comments_entity.dart';
 
 class CommentModel extends CommentEntity {
@@ -15,7 +15,7 @@ class CommentModel extends CommentEntity {
     return CommentModel(
       id: json[RequestDataNames.id] ?? '',
       content: json[RequestDataNames.content] ?? '',
-      user: UserModel.fromJson(json[RequestDataNames.user]),
+      user: UserEntity.fromJson(json[RequestDataNames.user]),
       timestamp: DateTime.parse(json[RequestDataNames.timestamp] as String),
     );
   }
@@ -24,7 +24,7 @@ class CommentModel extends CommentEntity {
     return {
       RequestDataNames.id: id,
       RequestDataNames.content: content,
-      RequestDataNames.user: (user as UserModel).toJson(),
+      RequestDataNames.user: user.toJson(),
       RequestDataNames.timestamp: timestamp.toIso8601String(),
     };
   }

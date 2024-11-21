@@ -59,6 +59,14 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
           );
         }
         if (state is GetVideoSuccess) {
+          if (state.videos.isEmpty) {
+            return const Center(
+              child: CustomTitle(
+                title: 'No Videos Yet',
+                style: TitleStyle.styleBold20,
+              ),
+            );
+          }
           final videos = state.videos;
           final isLoadingMore = VideoCubit.get(context).isLoadingMore;
 

@@ -1,8 +1,6 @@
 import 'package:hive/hive.dart';
 import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 
-import '../../../authentication_feature/data/user_model/user_model.dart';
-
 part 'video_entity.g.dart';
 
 @HiveType(typeId: 0)
@@ -20,7 +18,7 @@ class VideoEntity {
   final String description;
 
   @HiveField(4)
-  final UserModel user;
+  final UserEntity user;
 
   @HiveField(5)
   final DateTime? timeStamp;

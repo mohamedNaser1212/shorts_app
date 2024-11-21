@@ -1,5 +1,4 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 import 'package:shorts/Features/authentication_feature/domain/authentication_use_case/sign_out_use_case.dart';
 
 import '../domain/use_cases/get_user_info_use_case.dart';
@@ -18,7 +17,6 @@ class UserInfoCubit extends Cubit<UserInfoState> {
 
   final GetUserInfoUseCase getUserUseCase;
   UserEntity? userEntity;
-  UserModel? userModel;
 
   Future<void> getUserData() async {
     emit(GetUserInfoLoadingState());
@@ -29,8 +27,6 @@ class UserInfoCubit extends Cubit<UserInfoState> {
         emit(GetUserInfoErrorState(message: failure.message));
       },
       (user) {
-        print(userModel?.name);
-
         userEntity = user;
 
         emit(GetUserInfoSuccessState(userEntity: userEntity));
@@ -38,7 +34,7 @@ class UserInfoCubit extends Cubit<UserInfoState> {
     );
   }
 
-  UserModel? selectedUser;
+  // UserEntity? selectedUser;
   Future<void> getUserById({
     required String uId,
   }) async {
@@ -50,10 +46,9 @@ class UserInfoCubit extends Cubit<UserInfoState> {
         emit(GetUserInfoErrorState(message: failure.message));
       },
       (user) {
-        print(userModel?.name);
-        selectedUser = user;
+        // selectedUser = user;
 
-        emit(GetUserInfoSuccessState(userEntity: selectedUser));
+        emit(GetUserInfoSuccessState(userEntity: userEntity));
       },
     );
   }

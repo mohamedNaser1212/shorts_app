@@ -1,7 +1,7 @@
 import 'package:shorts/Features/favourites_feature/domain/favourites_entity/favourite_entitiy.dart';
 import 'package:shorts/core/utils/constants/request_data_names.dart';
 
-import '../../../authentication_feature/data/user_model/user_model.dart';
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
 class FavouritesVideoModel extends FavouritesEntity {
   FavouritesVideoModel({
@@ -19,7 +19,7 @@ class FavouritesVideoModel extends FavouritesEntity {
       thumbnail: json[RequestDataNames.thumbnail] ?? '',
       videoUrl: json[RequestDataNames.videoUrl] ?? '',
       description: json[RequestDataNames.description],
-      user: UserModel.fromJson(json[RequestDataNames.user]),
+      user: UserEntity.fromJson(json[RequestDataNames.user]),
       isFavourite: json[RequestDataNames.isFavourite] ?? false,
     );
   }

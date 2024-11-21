@@ -2,17 +2,17 @@ import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 import 'package:shorts/core/network/firebase_manager/collection_names.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 
 import '../../../../../core/managers/image_picker_manager/image_picker_manager.dart';
+import '../../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../../domain/models/update_request_model.dart';
 
 abstract class UpdateUserDataRemoteDataSource {
   const UpdateUserDataRemoteDataSource._();
 
-  Future<UserModel> updateUserData({
+  Future<UserEntity> updateUserData({
     required UpdateUserRequestModel updateUserRequestModel,
     required String userId,
     required File imageFile,
@@ -27,7 +27,7 @@ class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
   UpdateUserDataSourceImpl({required this.firebaseHelper});
 
   @override
-  Future<UserModel> updateUserData({
+  Future<UserEntity> updateUserData({
     required UpdateUserRequestModel updateUserRequestModel,
     required String userId,
     required File imageFile,
@@ -46,7 +46,7 @@ class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
       imageUrl: updateUserRequestModel.imageUrl,
       imageFile: imageFile,
     );
-  
+
     // Prepare data for Firestore update
     Map<String, dynamic> updatedData = {
       'name': updateUserRequestModel.name,
@@ -65,7 +65,7 @@ class UpdateUserDataSourceImpl implements UpdateUserDataRemoteDataSource {
         await firestore.collection(CollectionNames.users).doc(userId).get();
     final userData = userDoc.data() as Map<String, dynamic>;
 
-    return UserModel.fromJson(userData);
+    return UserEntity.fromJson(userData);
   }
 
   Future<String?> uploadImage({

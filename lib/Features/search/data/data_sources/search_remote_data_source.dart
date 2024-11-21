@@ -1,8 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
+
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 
 abstract class SearchRemoteDataSource {
-  Future<List<UserModel>> search({
+  Future<List<UserEntity>> search({
     required String query,
     required int page,
   });
@@ -14,7 +15,7 @@ class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
   DocumentSnapshot? lastDocument;
 
   @override
-  Future<List<UserModel>> search({
+  Future<List<UserEntity>> search({
     required String query,
     required int page,
   }) async {
@@ -35,11 +36,11 @@ class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
       return [];
     }
 
-    List<UserModel> searchResults = snapshot.docs
+    List<UserEntity> searchResults = snapshot.docs
         .map((doc) {
           final data = doc.data();
           if (data != null) {
-            final userModel = UserModel.fromJson(data as Map<String, dynamic>);
+            final userModel = UserEntity.fromJson(data as Map<String, dynamic>);
 
             if (userModel.name.toLowerCase().contains(lowerCaseQuery)) {
               return userModel;
@@ -47,7 +48,7 @@ class SearchRemoteDataSourceImpl extends SearchRemoteDataSource {
           }
           return null;
         })
-        .whereType<UserModel>()
+        .whereType<UserEntity>()
         .toList();
 
     if (searchResults.isNotEmpty) {

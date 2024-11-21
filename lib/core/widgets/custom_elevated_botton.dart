@@ -158,7 +158,7 @@ class CustomElevatedButton extends StatelessWidget {
     required BuildContext context,
     required EditProfileScreenState editState,
   }) async {
-   // final cubit = UpdateUserDataCubit.get(context);
+    // final cubit = UpdateUserDataCubit.get(context);
     final userCubit = UserInfoCubit.get(context);
 
     // Get the current user data
@@ -241,7 +241,7 @@ class CustomElevatedButton extends StatelessWidget {
         id: uuid.v1(),
         description: previewState.descriptionController.text,
         videoUrl: previewState.widget.outputPath,
-        user: UserInfoCubit.get(context).userModel!,
+        user: UserInfoCubit.get(context).userEntity!,
         thumbnail: thumbnailFile?.path ?? '',
       );
 

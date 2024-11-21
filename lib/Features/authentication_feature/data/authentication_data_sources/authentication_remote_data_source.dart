@@ -10,18 +10,18 @@ import 'package:shorts/core/network/firebase_manager/collection_names.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 import 'package:shorts/core/utils/constants/request_data_names.dart';
 
+import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../user_model/login_request_model.dart';
 import '../user_model/register_request_model.dart';
-import '../user_model/user_model.dart';
 
 abstract class AuthenticationRemoteDataSource {
   const AuthenticationRemoteDataSource._();
 
-  Future<UserModel> login({
+  Future<UserEntity> login({
     required LoginRequestModel requestModel,
   });
 
-  Future<UserModel> register({
+  Future<UserEntity> register({
     required RegisterRequestModel requestModel,
     required File imageFile,
   });
@@ -29,7 +29,7 @@ abstract class AuthenticationRemoteDataSource {
 
   Future<bool> signOut();
 
-  Future<UserModel> signInWithGoogle();
+  Future<UserEntity> signInWithGoogle();
 }
 
 class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
@@ -42,7 +42,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
   });
 
   @override
-  Future<UserModel> login({
+  Future<UserEntity> login({
     required LoginRequestModel requestModel,
   }) async {
     UserCredential userCredential =
@@ -80,7 +80,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     }
 
     fcmTokenAssigned = true;
-    return UserModel.fromJson(userData);
+    return UserEntity.fromJson(userData);
   }
 
   Future<DocumentSnapshot<Object?>> _accessUsersCollection(
@@ -104,7 +104,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
   }
 
   @override
-  Future<UserModel> register({
+  Future<UserEntity> register({
     required RegisterRequestModel requestModel,
     required File imageFile,
   }) async {
@@ -126,17 +126,17 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     userMap[RequestDataNames.isVerified] = false;
     userMap[RequestDataNames.profilePic] = imageUrl;
 
-    UserModel user = UserModel.fromJson(userMap);
+    UserEntity user = UserEntity.fromJson(userMap);
     await createUserData(user: user);
 
     DocumentSnapshot<Object?> userDoc =
         await _accessUsersCollection(userCredential);
     Map<String, dynamic> userData = userDoc.data() as Map<String, dynamic>;
 
-    return UserModel.fromJson(userData);
+    return UserEntity.fromJson(userData);
   }
 
-  Future<void> createUserData({required UserModel user}) async {
+  Future<void> createUserData({required UserEntity user}) async {
     await FirebaseFirestore.instance
         .collection(CollectionNames.users)
         .doc(user.id)
@@ -202,7 +202,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
   }
 
   @override
-  Future<UserModel> signInWithGoogle() async {
+  Future<UserEntity> signInWithGoogle() async {
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
     if (gUser == null) throw Exception("Google Sign-In aborted");
 
@@ -221,7 +221,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
         await FirebaseFirestore.instance.collection('users').doc(userId).get();
     final bool isVerified = firebaseUser.emailVerified;
 
-    final userModel = UserModel(
+    final userModel = UserEntity(
       id: userId,
       email: firebaseUser.email ?? '',
       name: firebaseUser.displayName ?? '',

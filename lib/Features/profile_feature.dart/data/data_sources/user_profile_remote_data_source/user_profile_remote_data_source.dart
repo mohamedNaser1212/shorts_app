@@ -1,9 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:shorts/Features/authentication_feature/data/user_model/user_model.dart';
 import 'package:shorts/Features/videos_feature/data/model/video_model.dart';
 import 'package:shorts/core/network/firebase_manager/firebase_helper.dart';
 
 import '../../../../../core/network/firebase_manager/collection_names.dart';
+import '../../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../../../../../core/utils/constants/request_data_names.dart';
 
 abstract class UserProfilesRemoteDataSource {
@@ -11,7 +11,7 @@ abstract class UserProfilesRemoteDataSource {
     required String userId,
     int pageSize = 6,
   });
-  Future<UserModel> toggleFollow({
+  Future<UserEntity> toggleFollow({
     required String currentUserId,
     required String targetUserId,
   });
@@ -79,7 +79,7 @@ class UserProfileVideosRemoteDataSourceImpl
   }
 
   @override
-  Future<UserModel> toggleFollow({
+  Future<UserEntity> toggleFollow({
     required String currentUserId,
     required String targetUserId,
   }) async {
@@ -141,7 +141,7 @@ class UserProfileVideosRemoteDataSourceImpl
       docId: targetUserId,
     );
 
-    return UserModel.fromJson(targetUserData!);
+    return UserEntity.fromJson(targetUserData!);
   }
 
   @override
