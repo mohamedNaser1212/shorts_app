@@ -46,10 +46,18 @@ class VideoPlayerScreenBodyState extends State<VideoPlayerScreenBody> {
         backColor: ColorController.blackColor,
       ),
       body: Stack(children: [
-        VideoPlayer(widget.controller),
+        InkWell(
+            onTap: () {
+              if (widget.controller.value.isPlaying) {
+                widget.controller.pause();
+              } else {
+                widget.controller.play();
+              }
+            },
+            child: VideoPlayer(widget.controller)),
         AnimatedPauseIcon(
           controller: widget.controller,
-          size: 100,
+          size: 80,
         ),
         VideoSliderWidget(
           state: this,
