@@ -1,8 +1,5 @@
 import 'package:flutter/material.dart';
-
-
 import 'package:video_player/video_player.dart';
-
 
 class VideoSlider extends StatelessWidget {
   const VideoSlider({
@@ -21,13 +18,25 @@ class VideoSlider extends StatelessWidget {
     return ValueListenableBuilder<Duration>(
       valueListenable: positionNotifier,
       builder: (context, position, child) {
-        return Slider(
-          value: position.inSeconds.toDouble(),
-          min: 0.0,
-          max: durationNotifier.value.inSeconds.toDouble(),
-          onChanged: (value) {
-            controller.seekTo(Duration(seconds: value.toInt()));
-          },
+        return Container(
+          height: 80,
+          padding: const EdgeInsets.symmetric(horizontal: 16),
+          alignment: Alignment.center,
+          child: SliderTheme(
+            data: SliderTheme.of(context).copyWith(
+              trackHeight: 8.0,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12.0),
+              overlayShape: const RoundSliderOverlayShape(overlayRadius: 25.0),
+            ),
+            child: Slider(
+              value: position.inSeconds.toDouble(),
+              min: 0.0,
+              max: durationNotifier.value.inSeconds.toDouble(),
+              onChanged: (value) {
+                controller.seekTo(Duration(seconds: value.toInt()));
+              },
+            ),
+          ),
         );
       },
     );

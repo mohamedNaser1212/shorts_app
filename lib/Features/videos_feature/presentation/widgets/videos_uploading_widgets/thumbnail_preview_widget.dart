@@ -35,16 +35,7 @@ class _ThumbnailPreviewWidgetState extends State<ThumbnailPreviewWidget> {
     return AspectRatio(
       aspectRatio: controller.value.aspectRatio,
       child: InkWell(
-        onTap: () {
-          if (widget.widget.thumbnailFile != null) {
-            NavigationManager.navigateTo(
-              context: context,
-              screen: VideoPlayerScreen(
-                videoPath: widget.widget.previewState.widget.outputPath,
-              ),
-            );
-          }
-        },
+        onTap: _onTap,
         child: Stack(
           alignment: Alignment.center,
           children: [
@@ -73,5 +64,16 @@ class _ThumbnailPreviewWidgetState extends State<ThumbnailPreviewWidget> {
         ),
       ),
     );
+  }
+
+  void _onTap() {
+    if (widget.widget.thumbnailFile != null) {
+      NavigationManager.navigateTo(
+        context: context,
+        screen: VideoPlayerScreen(
+          videoPath: widget.widget.previewState.widget.outputPath,
+        ),
+      );
+    }
   }
 }

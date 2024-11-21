@@ -55,8 +55,6 @@ class UserProfileVideosGridViewBodyState
       context: context,
       screen: VideoListItem(
         videoEntity: widget.video,
-
-        //videoController: videoController,
         fromProfile: true,
       ),
     );

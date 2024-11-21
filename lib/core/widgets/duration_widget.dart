@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:shorts/core/widgets/custom_title.dart';
 
 class DurationWidget extends StatelessWidget {
   const DurationWidget({
@@ -20,10 +21,8 @@ class DurationWidget extends StatelessWidget {
     return ValueListenableBuilder<Duration>(
       valueListenable: positionNotifier,
       builder: (context, duration, child) {
-        return Text(
-          _formatDuration(duration),
-          style: const TextStyle(color: Colors.white),
-        );
+        return CustomTitle(
+            title: _formatDuration(duration), style: TitleStyle.styleBold24);
       },
     );
   }

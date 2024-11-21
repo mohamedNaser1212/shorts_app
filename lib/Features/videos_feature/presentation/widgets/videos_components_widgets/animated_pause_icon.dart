@@ -1,14 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:video_player/video_player.dart';
+
 import '../../../../../core/video_controller/video_controller.dart';
+
 class AnimatedPauseIcon extends StatefulWidget {
   final VideoController? videoController;
   final VideoPlayerController? controller;
+  final int? size;
 
   const AnimatedPauseIcon({
     super.key,
     this.videoController,
     this.controller,
+    this.size = 60,
   });
 
   @override
@@ -83,7 +87,7 @@ class _AnimatedPauseIconState extends State<AnimatedPauseIcon>
               child: AnimatedIcon(
                 icon: AnimatedIcons.play_pause,
                 progress: _animationController,
-                size: 60.0,
+                size: widget.size!.toDouble(),
                 color: Colors.white,
               ),
             );
