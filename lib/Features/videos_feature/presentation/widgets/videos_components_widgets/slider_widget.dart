@@ -51,7 +51,7 @@ class _SliderWidgetState extends State<SliderWidget> {
   @override
   Widget build(BuildContext context) {
     return Positioned(
-      bottom: 0, // Align the slider to the bottom of the screen
+      bottom: 0,
       left: 0,
       right: 0,
       child: Column(

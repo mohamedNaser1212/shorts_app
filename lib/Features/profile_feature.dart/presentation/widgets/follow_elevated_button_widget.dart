@@ -48,17 +48,13 @@ class _FollowElevatedButtonWidgetState
   }
 
   void toggleFollow() {
-    // Save the previous follower count before updating
     previousFollowersCount = FollowCubit.get(context).followerCounts;
 
     setState(() {
       isFollowing = !isFollowing;
     });
 
-    // Instant update of followers count
     FollowCubit.get(context).updateFollowersCount(isFollowing: isFollowing);
-
-    // Follow/unfollow action
 
     FollowCubit.get(context).followUser(
       currentUserId: widget.currentUserId,

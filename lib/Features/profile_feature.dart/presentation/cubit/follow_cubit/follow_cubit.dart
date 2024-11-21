@@ -36,6 +36,7 @@ class FollowCubit extends Cubit<FollowState> {
       targetUserId: targetUserId,
     );
     result.fold((failure) {
+      print('error cubit ${failure.message}');
       emit(ToggleFollowErrorState(message: failure.message));
     }, (followModel) {
       getFollowersCount(userId: targetUserId);

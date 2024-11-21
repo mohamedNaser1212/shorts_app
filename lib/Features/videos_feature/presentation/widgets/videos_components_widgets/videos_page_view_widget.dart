@@ -43,6 +43,7 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
   @override
   void dispose() {
     _pageController.dispose();
+
     super.dispose();
   }
 
