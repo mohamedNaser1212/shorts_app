@@ -16,7 +16,13 @@ class TrimmerViewImageWidget extends StatelessWidget {
       scrollDirection: Axis.horizontal,
       child: Row(
         children: [
-          Image.file(thumbnailFile!, width: 200, height: 300),
+          if (thumbnailFile != null && thumbnailFile!.existsSync())
+            Image.file(thumbnailFile!, width: 200, height: 300)
+          else
+            const Text(
+              "Thumbnail not available",
+              style: TextStyle(color: Colors.grey),
+            ),
         ],
       ),
     );

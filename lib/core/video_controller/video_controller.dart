@@ -85,25 +85,20 @@ class VideoController extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> generateThumbnail({
-    required String videoPath,
-    required double seconds,
-  }) async {
+  Future<void> generateThumbnail(
+      {required String videoPath, required double seconds}) async {
     final thumbnailPath = await video_thumbnail.VideoThumbnail.thumbnailFile(
       video: videoPath,
       thumbnailPath: (await getTemporaryDirectory()).path,
       imageFormat: video_thumbnail.ImageFormat.PNG,
       maxWidth: 200,
-      quality: 75,
+      quality: 100,
       timeMs: (seconds * 1000).toInt(),
     );
-
     if (thumbnailPath != null) {
       thumbnailFile = File(thumbnailPath);
-      _thumbnail = await thumbnailFile!.readAsBytes();
+      print("Thumbnail generated: ${thumbnailFile!.path}");
       notifyListeners();
-    } else {
-      print("Thumbnail generation failed.");
     }
   }
 

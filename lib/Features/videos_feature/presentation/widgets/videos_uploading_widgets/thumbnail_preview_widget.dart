@@ -6,15 +6,29 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploa
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/video_player_screen.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 
-class ThumbnailPreviewWidget extends StatelessWidget {
+class ThumbnailPreviewWidget extends StatefulWidget {
   const ThumbnailPreviewWidget({
     super.key,
-    required this.controller,
     required this.widget,
   });
 
-  final CachedVideoPlayerController controller;
   final PreviewScreeBody widget;
+
+  @override
+  State<ThumbnailPreviewWidget> createState() => _ThumbnailPreviewWidgetState();
+}
+
+class _ThumbnailPreviewWidgetState extends State<ThumbnailPreviewWidget> {
+  late CachedVideoPlayerController controller;
+
+  @override
+  void initState() {
+    super.initState();
+    controller = CachedVideoPlayerController.file(
+      File(widget.widget.thumbnailFile?.path ??
+          widget.widget.previewState.widget.outputPath),
+    )..initialize();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -22,11 +36,11 @@ class ThumbnailPreviewWidget extends StatelessWidget {
       aspectRatio: controller.value.aspectRatio,
       child: InkWell(
         onTap: () {
-          if (widget.thumbnailFile != null) {
+          if (widget.widget.thumbnailFile != null) {
             NavigationManager.navigateTo(
               context: context,
               screen: VideoPlayerScreen(
-                videoPath: widget.previewState.widget.outputPath,
+                videoPath: widget.widget.previewState.widget.outputPath,
               ),
             );
           }
@@ -34,14 +48,22 @@ class ThumbnailPreviewWidget extends StatelessWidget {
         child: Stack(
           alignment: Alignment.center,
           children: [
-            Image.file(
-              widget.thumbnailFile ??
-                  File(widget.previewState.widget.outputPath),
-              fit: BoxFit.cover,
-              height: 320,
-              width: 320,
-            ),
-            if (widget.thumbnailFile != null)
+            widget.widget.thumbnailFile != null &&
+                    widget.widget.thumbnailFile!.existsSync()
+                ? Image.file(
+                    widget.widget.thumbnailFile!,
+                    fit: BoxFit.cover,
+                    height: 320,
+                    width: 320,
+                  )
+                : const Center(
+                    child: Icon(
+                      Icons.error_outline,
+                      color: Colors.red,
+                      size: 60,
+                    ),
+                  ),
+            if (widget.widget.thumbnailFile != null)
               const Icon(
                 Icons.play_circle_fill,
                 size: 60,

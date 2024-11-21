@@ -9,11 +9,9 @@ class SaveElevatedButton extends StatefulWidget {
   const SaveElevatedButton({
     super.key,
     required this.state,
-    this.thumbnailFile,
   });
 
   final TrimmerViewBodyState state;
-  final File? thumbnailFile;
 
   @override
   State<SaveElevatedButton> createState() => _SaveElevatedButtonState();
@@ -72,29 +70,41 @@ class _SaveElevatedButtonState extends State<SaveElevatedButton> {
 
   Future<void> _saveVideo() async {
     _progressVisibilityNotifier.value = true;
-    widget.state.trimmer.saveTrimmedVideo(
-      startValue: widget.state.videoController.startValue,
-      endValue: widget.state.videoController.endValue,
-      onSave: (outputPath) async {
-        _progressVisibilityNotifier.value = false;
+    try {
+      widget.state.trimmer.saveTrimmedVideo(
+        startValue: widget.state.videoController.startValue,
+        endValue: widget.state.videoController.endValue,
+        onSave: (outputPath) async {
+          _progressVisibilityNotifier.value = false;
 
-        await widget.state.videoController.generateThumbnail(
-          seconds: widget.state.videoController.startValue,
-          videoPath: outputPath!,
-        );
-        if (!mounted) return;
-        Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(
-            builder: (context) {
-              return PreviewScreen(
-                outputPath: outputPath,
-                thumbnailFile: widget.thumbnailFile,
-              );
-            },
-          ),
-        );
-      },
-    );
+          if (outputPath == null || !File(outputPath).existsSync()) {
+            throw Exception(
+                "Output video file is invalid or not saved properly.");
+          }
+
+          await widget.state.videoController.generateThumbnail(
+            seconds: widget.state.videoController.startValue,
+            videoPath: outputPath,
+          );
+
+          if (!mounted) return;
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(
+              builder: (context) {
+                return PreviewScreen(
+                  outputPath: outputPath,
+                  thumbnailFile: widget.state.videoController.thumbnailFile!,
+                );
+              },
+            ),
+          );
+        },
+      );
+    } catch (e) {
+      debugPrint("Error saving video: $e");
+    } finally {
+      _progressVisibilityNotifier.value = false;
+    }
   }
 }

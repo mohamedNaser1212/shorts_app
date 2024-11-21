@@ -67,12 +67,14 @@ class TrimmerViewBodyState extends State<TrimmerViewBody> {
             ProgressVisibilityWidget(progressVisibility: progressVisibility),
             const SizedBox(height: 20),
             SaveElevatedButton(
-                state: this, thumbnailFile: videoController.thumbnailFile),
+              state: this,
+            ),
             TrimViewerWidget(state: this),
             PlayIcon(state: this),
             if (videoController.thumbnailFile != null)
               TrimmerViewImageWidget(
-                  thumbnailFile: videoController.thumbnailFile),
+                thumbnailFile: videoController.thumbnailFile,
+              ),
           ],
         ),
       ),
