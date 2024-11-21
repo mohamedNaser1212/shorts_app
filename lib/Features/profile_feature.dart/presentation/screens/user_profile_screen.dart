@@ -12,78 +12,41 @@ import '../../domain/use_case/get_followers_count_use_case.dart';
 import '../../domain/use_case/get_followings_count_use_case.dart';
 import '../widgets/user_profile_screen_body.dart';
 
-class UserProfileScreen extends StatefulWidget {
+class UserProfileScreen extends StatelessWidget {
   const UserProfileScreen({
     super.key,
     this.user,
-    // this.videoEntity,
-    // this.user,
-    // this.comment,
   });
-//  final String? userId;
-  // final VideoEntity? videoEntity;
+
   final UserEntity? user;
-  // final bool isShared;
-  // final CommentEntity? comment;
-
-  @override
-  State<UserProfileScreen> createState() => UserProfileScreenState();
-}
-
-class UserProfileScreenState extends State<UserProfileScreen> {
-  @override
-  void initState() {
-    super.initState();
-  }
-
   @override
   Widget build(BuildContext context) {
-    // widget.comment?.user.id ??
-    // widget.videoEntity?.user.id ??
-    // widget.user?.id ??
-    // user?.id;
-
     return MultiBlocProvider(
       providers: [
         BlocProvider(
           create: (context) => FollowCubit(
             followUserUseCase: getIt.get<ToggleFollowUserUseCase>(),
-            //   unfollowUserUseCase: getIt.get<UnfollowUserUseCase>(),
             getFollowersCountUseCase: getIt.get<GetFollowersCountUseCase>(),
             getFollowingCountUseCase: getIt.get<GetFollowingCountUseCase>(),
             isUserFollowedUseCase: getIt.get<IsUserFollowedUseCase>(),
           ),
         ),
       ],
-      child: BlocConsumer<UserInfoCubit, UserInfoState>(
-        listener: _listener,
+      child: BlocBuilder<UserInfoCubit, UserInfoState>(
         builder: _builder,
       ),
     );
   }
 
   Widget _builder(BuildContext context, UserInfoState state) {
-    final user = UserInfoCubit.get(context).userEntity;
+    final userEntity = UserInfoCubit.get(context).userEntity;
 
     // if (state is GetUserInfoSuccessState) {
     return BlockInternactionLoadingWidget(
       isLoading: state is SignOutLoadingState,
       child: UserProfileScreenBody(
-        // videoEntity: widget.videoEntity,
-        // comment: widget.comment,.
-        userEntity: widget.user ?? user,
-
-        // userEntity: state.userEntity,
+        userEntity: user ?? userEntity,
       ),
     );
-    // }
-
-  }
-
-  void _listener(BuildContext context, UserInfoState state) {
-    if (state is GetUserInfoErrorState) {
-      // Handle error state, e.g., show a toast or dialog
-      print("Error loading user info: ${state.message}");
-    }
   }
 }

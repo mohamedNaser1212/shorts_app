@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'color_manager.dart';
+
 abstract class StylesManager {
   const StylesManager._();
   static const textStyle12 = TextStyle(
@@ -63,28 +65,28 @@ abstract class StylesManager {
     fontSize: 24,
     fontWeight: FontWeight.w900,
     fontFamily: 'Inter',
-    color: Colors.black,
+    color: ColorController.whiteColor,
     letterSpacing: 1.2,
   );
   static const textStyleBold24 = TextStyle(
     fontSize: 24,
     fontWeight: FontWeight.bold,
     fontFamily: 'Inter',
-    color: Colors.black,
+    color: ColorController.whiteColor,
     letterSpacing: 1.2,
   );
   static const textStyle30 = TextStyle(
     fontSize: 30,
     fontWeight: FontWeight.w900,
     fontFamily: 'Inter',
-    color: Colors.black,
+    color: ColorController.whiteColor,
     letterSpacing: 1.2,
   );
   static const style30Bold = TextStyle(
     fontSize: 30,
     fontWeight: FontWeight.bold,
     fontFamily: 'Inter',
-    color: Colors.black,
+    color: ColorController.whiteColor,
     letterSpacing: 1.2,
   );
 }

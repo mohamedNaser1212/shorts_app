@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_profile_cubit/user_profile_cubit.dart';
 
 import '../../../../Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
 import '../../../../Features/videos_feature/presentation/widgets/videos_components_widgets/videos_list.dart';
@@ -30,18 +31,6 @@ class LayoutScreenState extends State<LayoutScreen> {
   Widget build(BuildContext context) {
     return BlocListener<UploadVideosCubit, UploadVideosState>(
       listener: (context, state) {
-        // if (state is VideoUploadLoadingState) {
-        //   rootScaffoldMessengerKey.currentState!.showSnackBar(
-        //     const SnackBar(
-        //       content: Text(
-        //         'Video is now uploading, we will notify you when upload is complete',
-        //         style: TextStyle(color: Colors.white),
-        //       ),
-        //       backgroundColor: ColorController.greenAccent,
-        //     ),
-        //   );
-        // } else
-
         if (state is VideoUploadedSuccessState) {
           showMySnackBar(
             message: "Successs At Upload",
@@ -51,6 +40,7 @@ class LayoutScreenState extends State<LayoutScreen> {
                 screen: VideoListItem(videoEntity: state.videoEntity)),
             actionLabel: "Show",
           );
+          GetUserVideosCubit.get(context).videos.insert(0, state.videoEntity);
         }
       },
       child: Scaffold(

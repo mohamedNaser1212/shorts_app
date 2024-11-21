@@ -24,16 +24,17 @@ class CustomListTile extends StatelessWidget {
   Widget build(BuildContext context) {
     return ListTile(
       leading: leading ??
-          const CircleAvatar(backgroundColor: ColorController.greyColor, radius: 20),
+          const CircleAvatar(
+              backgroundColor: ColorController.greyColor, radius: 20),
       title: CustomTitle(
         title: title,
         style: TitleStyle.style16Bold,
-        color: color,
+        color: color ?? ColorController.whiteColor,
       ),
       subtitle: CustomTitle(
         title: subtitle,
         style: TitleStyle.style18,
-        color: color,
+        color: color ?? ColorController.whiteColor,
       ),
       trailing: trailing,
       onTap: onTap,

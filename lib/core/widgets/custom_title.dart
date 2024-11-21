@@ -25,7 +25,7 @@ enum TitleStyle {
 class CustomTitle extends StatelessWidget {
   final String title;
   final TitleStyle style;
-  final Color? color;
+  final Color color; // Change from Color? to Color
   final int? maxLines;
   final TextOverflow overflow;
   final double? wordSpacing;
@@ -34,7 +34,7 @@ class CustomTitle extends StatelessWidget {
   const CustomTitle({
     required this.title,
     required this.style,
-    this.color = ColorController.whiteColor,
+    this.color = ColorController.whiteColor, // Default value set here
     this.maxLines,
     this.overflow = TextOverflow.ellipsis,
     this.wordSpacing,
@@ -103,14 +103,16 @@ class CustomTitle extends StatelessWidget {
         );
         break;
       case TitleStyle.styleBold20:
-        textStyle = StylesManager.textStyleBold22.copyWith(
+        textStyle = StylesManager.textStyleBold20.copyWith(
+          // Fixed typo here
           color: color,
           fontFamily: constFontFamily,
           wordSpacing: wordSpacing,
         );
         break;
       case TitleStyle.style22:
-        textStyle = StylesManager.textStyle20.copyWith(
+        textStyle = StylesManager.textStyle22.copyWith(
+          // Fixed typo here
           color: color,
           fontFamily: constFontFamily,
           wordSpacing: wordSpacing,
@@ -152,12 +154,11 @@ class CustomTitle extends StatelessWidget {
         );
         break;
     }
-
     return Text(
       title,
       style: textStyle,
       maxLines: maxLines,
-      overflow: maxLines == null ? TextOverflow.visible : overflow,
+      overflow: overflow,
       textAlign: textAlign,
     );
   }

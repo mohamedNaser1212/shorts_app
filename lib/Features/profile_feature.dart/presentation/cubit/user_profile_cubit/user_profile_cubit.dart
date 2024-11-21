@@ -6,7 +6,7 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 class GetUserVideosCubit extends Cubit<UserProfileState> {
   final UserProfileVideosUseCase getUserInfoUseCase;
   List<VideoEntity> videos = [];
-  num _currentPage = 0;
+  num _currentPage = 1;
   String? currentUserId;
 
   bool isLoadingMore = false;
@@ -15,23 +15,24 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
   static const int pageSize = 6;
 
   GetUserVideosCubit({required this.getUserInfoUseCase})
-      : super(UserProfileState());
+      : super(GetUserVideosLoading());
 
   static GetUserVideosCubit get(context) => BlocProvider.of(context);
 
   Future<void> getUserVideos({
     required String userId,
     required num page,
+    bool isInitialLoad = false,
   }) async {
     if (isLoadingMore) return;
-    if (currentUserId != userId) {
+
+    if (isInitialLoad || currentUserId != userId) {
       reset();
       currentUserId = userId;
+      emit(GetUserVideosLoading());
     }
+
     isLoadingMore = true;
-
-    emit(GetUserVideosLoading());
-
     final result = await getUserInfoUseCase.call(
       userId: userId,
       pageSize: pageSize,
@@ -39,14 +40,15 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
 
     result.fold(
       (failure) {
-        print(failure.message);
         emit(GetUserVideosError(message: failure.message));
       },
       (fetchedVideos) {
         videos.addAll(fetchedVideos);
         hasMoreVideos = fetchedVideos.length == pageSize;
         emit(GetUserVideosSuccessState(
-            videos: videos, hasMoreVideos: hasMoreVideos));
+          videos: List.from(videos),
+          hasMoreVideos: hasMoreVideos,
+        ));
       },
     );
 
@@ -54,15 +56,17 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
   }
 
   Future<void> loadMoreVideos({required String userId}) async {
+    if (!hasMoreVideos) return;
+
     _currentPage++;
     await getUserVideos(userId: userId, page: _currentPage);
   }
 
   void reset() {
     videos.clear();
-    _currentPage = 0;
+    _currentPage = 1;
     isLoadingMore = false;
     hasMoreVideos = true;
-    emit(UserProfileState());
+    emit(GetUserVideosLoading());
   }
 }
