@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shorts/Features/authentication_feature/presentation/cubit/sign_out_cubit/sign_out_cubit.dart';
 import 'package:shorts/Features/authentication_feature/presentation/screens/login_screen.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
-import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import 'package:shorts/core/widgets/custom_elevated_botton.dart';
 
 class SignOutElevatedButton extends StatelessWidget {
@@ -12,7 +12,7 @@ class SignOutElevatedButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<UserInfoCubit, UserInfoState>(
+    return BlocConsumer<SignOutCubit, SignOutState>(
       listener: (context, state) {
         if (state is SignOutSuccessState) {
           NavigationManager.navigateAndFinish(

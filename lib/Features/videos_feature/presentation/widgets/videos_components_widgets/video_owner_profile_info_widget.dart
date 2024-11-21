@@ -19,7 +19,7 @@ class VideoOwnerProfileInfoWidget extends StatelessWidget {
         userName: state.widget.videoEntity.user.name,
         description: state.widget.videoEntity.description,
       ),
-    
+
       //  CustomListTile(
       //   leading: UserProfilePicture(state: state),
       //   title: state.widget.videoEntity.user.name,

@@ -65,4 +65,10 @@ class FavouritesCubit extends Cubit<FavouritesState> {
 
     return result.getOrElse(() => 0);
   }
+
+  void reset() {
+    getFavouritesModel.clear();
+    favorites.clear();
+    favouritesCount.clear();
+  }
 }

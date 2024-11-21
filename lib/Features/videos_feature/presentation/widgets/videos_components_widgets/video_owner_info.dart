@@ -20,12 +20,6 @@ class VideoOwnerInfo extends StatelessWidget {
         children: [
           Column(
             children: [
-              // if (state.widget.videoEntity.sharedBy != null)
-              //   SharedUserProfileInfoWidget(state: state),
-              // const Divider(
-              //   color: ColorController.whiteColor,
-              //   thickness: 1,
-              // ),
               VideoOwnerProfileInfoWidget(state: state),
             ],
           ),

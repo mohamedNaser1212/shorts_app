@@ -5,8 +5,8 @@ import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/managers/styles_manager/color_manager.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
-class VideoOwnerNameAndFollow extends StatelessWidget {
-  const VideoOwnerNameAndFollow({
+class VideoOwnerNameWidget extends StatelessWidget {
+  const VideoOwnerNameWidget({
     super.key,
     required this.userName,
     required this.state,

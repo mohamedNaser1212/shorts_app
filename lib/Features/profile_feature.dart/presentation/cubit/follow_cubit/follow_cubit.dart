@@ -127,4 +127,11 @@ class FollowCubit extends Cubit<FollowState> {
     });
     return false;
   }
+
+  void reset() {
+    _followStatus.clear();
+    followingCounts = 0;
+    followerCounts = 0;
+    emit(FollowState());
+  }
 }

@@ -31,7 +31,7 @@ class VideoCubit extends Cubit<VideoState> {
 
         videos.addAll(fetchedVideos);
         print('Loaded ${videos.length} videos');
-        emit(GetVideoSuccess(videos: List.of(videos))); // Emit new list
+        emit(GetVideoSuccess(videos: List.of(videos)));
       },
     );
 
@@ -47,7 +47,7 @@ class VideoCubit extends Cubit<VideoState> {
 
   void reset() {
     videos.clear();
-    _currentPage = 0; // Reset to the first page
-    isLoadingMore = true; // Allow loading of more videos again
+    _currentPage = 0;
+    isLoadingMore = true;
   }
 }

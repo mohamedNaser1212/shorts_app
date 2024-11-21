@@ -6,6 +6,9 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_compo
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/widgets/custom_read_more_widget.dart';
 
+import '../../../../../core/user_info/cubit/user_info_cubit.dart';
+import '../../../../profile_feature.dart/presentation/cubit/follow_cubit/follow_cubit.dart';
+
 class VideoOwnerInfoBody extends StatelessWidget {
   const VideoOwnerInfoBody({
     super.key,
@@ -35,7 +38,7 @@ class VideoOwnerInfoBody extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              VideoOwnerNameAndFollow(
+              VideoOwnerNameWidget(
                 userName: userName,
                 state: state,
               ),
@@ -55,10 +58,15 @@ class VideoOwnerInfoBody extends StatelessWidget {
     );
   }
 
-  void _onTap({
+  Future<void> _onTap({
     required BuildContext context,
     required VideoContentsScreenState state,
-  }) {
+  }) async {
+    FollowCubit.get(context).isUserFollowed(
+      currentUserId: UserInfoCubit.get(context).userEntity!.id!,
+      targetUserId: state.widget.videoEntity.user.id!,
+    );
+
     NavigationManager.navigateTo(
       context: context,
       screen: UserProfileScreen(

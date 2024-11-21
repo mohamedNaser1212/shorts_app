@@ -13,13 +13,21 @@ class GoogleSignInCubit extends Cubit<GoogleSignInState> {
   final GoogleSignInUseCase googleSignInUseCase;
 
   static GoogleSignInCubit get(context) => BlocProvider.of(context);
+  UserEntity? user;
 
   Future<void> signInWithGoogle() async {
     emit(GoogleSignInLoadingState());
     final result = await googleSignInUseCase.call();
     result.fold(
-      (failure) => emit(GoogleSignInErrorState(failure: failure.message)),
-      (userEntity) => emit(GoogleSignInSuccessState(userEntity: userEntity)),
-    );
+        (failure) => emit(GoogleSignInErrorState(failure: failure.message)),
+        (userEntity) {
+      user = userEntity;
+      emit(GoogleSignInSuccessState(userEntity: userEntity));
+    });
+  }
+
+  void reset() {
+    user = null;
+    emit(GoogleSignInState());
   }
 }

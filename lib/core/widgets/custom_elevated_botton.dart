@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:shorts/Features/authentication_feature/presentation/cubit/sign_out_cubit/sign_out_cubit.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/login_screen_body.dart';
 import 'package:shorts/Features/authentication_feature/presentation/widgets/register_screen_form.dart';
 import 'package:shorts/Features/favourites_feature/presentation/screens/favourites_screen.dart';
@@ -151,7 +152,7 @@ class CustomElevatedButton extends StatelessWidget {
   static void _signOutOnPressed({
     required BuildContext context,
   }) {
-    UserInfoCubit.get(context).signOut();
+    SignOutCubit.get(context).signOut();
   }
 
   static Future<void> _editProfileButtonOnPressed({

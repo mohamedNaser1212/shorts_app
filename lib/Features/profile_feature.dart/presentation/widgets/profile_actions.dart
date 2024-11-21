@@ -1,13 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/authentication_feature/presentation/screens/login_screen.dart';
+import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
+import 'package:shorts/Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
+import 'package:shorts/Features/profile_feature.dart/presentation/cubit/follow_cubit/follow_cubit.dart';
 import 'package:shorts/core/functions/toast_function.dart';
 
 import '../../../../core/functions/navigations_functions.dart';
 import '../../../../core/managers/styles_manager/color_manager.dart';
-import '../../../../core/user_info/cubit/user_info_cubit.dart';
 import '../../../../core/widgets/custom_container_widget.dart';
 import '../../../../core/widgets/custom_title.dart';
+import '../../../authentication_feature/presentation/cubit/sign_out_cubit/sign_out_cubit.dart';
+import '../../../videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import '../screens/edit_profile_screen.dart';
 
 class ProfileActions extends StatelessWidget {
@@ -32,13 +36,17 @@ class ProfileActions extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 10),
-          BlocConsumer<UserInfoCubit, UserInfoState>(
+          BlocConsumer<SignOutCubit, SignOutState>(
             listener: (context, state) {
               if (state is SignOutSuccessState) {
                 NavigationManager.navigateAndFinish(
                   context: context,
                   screen: const LoginScreen(),
                 );
+                VideoCubit.get(context).reset();
+                CommentsCubit.get(context).reset();
+                FollowCubit.get(context).reset();
+                FavouritesCubit.get(context).reset();
               } else if (state is SignOutErrorState) {
                 ToastHelper.showToast(message: state.error);
               }
@@ -51,7 +59,7 @@ class ProfileActions extends StatelessWidget {
                   // icon: Icons.exit_to_app,
                   containerColor: ColorController.redColor,
                   onTap: () {
-                    UserInfoCubit.get(context).signOut();
+                    SignOutCubit.get(context).signOut();
                   },
                 ),
               );

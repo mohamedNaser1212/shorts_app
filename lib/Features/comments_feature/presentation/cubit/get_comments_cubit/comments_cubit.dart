@@ -93,4 +93,11 @@ class CommentsCubit extends Cubit<CommentsState> {
 
     return result.getOrElse(() => 0);
   }
+
+  void reset() {
+
+    videoComments.clear();
+    hasMoreCommentsForVideo.clear();
+    commentsCount.clear();
+  }
 }

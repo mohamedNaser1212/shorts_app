@@ -4,6 +4,7 @@ import 'package:shorts/Features/authentication_feature/domain/authentication_use
 import 'package:shorts/Features/authentication_feature/domain/authentication_use_case/sign_out_use_case.dart';
 import 'package:shorts/Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
 import 'package:shorts/Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
+import 'package:shorts/Features/authentication_feature/presentation/cubit/sign_out_cubit/sign_out_cubit.dart';
 import 'package:shorts/Features/comments_feature/data/data_sources/comments_local_data_source.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/comments_count_use_case.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/delete_comment_use_case.dart';
@@ -273,9 +274,11 @@ Future<void> setUpServiceLocator() async {
         userInfoRepo: getIt.get<UserInfoRepo>(),
       ));
 
+  getIt.registerFactory<SignOutCubit>(() => SignOutCubit(
+        signOutUseCase: getIt.get<SignOutUseCase>(),
+      ));
   getIt.registerFactory<UserInfoCubit>(() => UserInfoCubit(
         getUserUseCase: getIt.get<GetUserInfoUseCase>(),
-        signOutUseCase: getIt.get<SignOutUseCase>(),
       ));
   getIt.registerSingleton<AddCommentsUseCase>(AddCommentsUseCase(
     commentsRepo: getIt.get<CommentsRepo>(),

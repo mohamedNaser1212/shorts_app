@@ -30,21 +30,6 @@ class VideoContentsScreenState extends State<VideoContentsScreen> {
     );
   }
 
-  // void _shareVideoListener(context, state) {
-  //   if (state is ShareVideoLoadingState) {
-  //     ToastHelper.showToast(
-  //       message: 'Sharing Video',
-  //       color: ColorController.greenAccent,
-  //     );
-  //   }
-  //   if (state is ShareVideoSuccessState) {
-  //     ToastHelper.showToast(
-  //       message: ' Video Shared',
-  //       color: ColorController.greenAccent,
-  //     );
-  //   }
-  // }
-
   Widget _videoCubitBuilder(context, state) {
     return Stack(
       children: [

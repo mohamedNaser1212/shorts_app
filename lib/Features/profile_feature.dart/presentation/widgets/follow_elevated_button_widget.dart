@@ -33,8 +33,8 @@ class _FollowElevatedButtonWidgetState
   @override
   void initState() {
     super.initState();
-    _checkFollowStatus();
-    FollowCubit.get(context).getFollowersCount(userId: widget.targetUserId);
+    // _checkFollowStatus();
+    // FollowCubit.get(context).getFollowersCount(userId: widget.targetUserId);
   }
 
   void _checkFollowStatus() async {
