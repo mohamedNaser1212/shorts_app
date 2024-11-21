@@ -62,6 +62,10 @@ class VideoOwnerInfoBody extends StatelessWidget {
     required BuildContext context,
     required VideoContentsScreenState state,
   }) async {
+    state
+        .widget.videoComponentsWidgetState.widget.videoProvider.videoController!
+        .pause();
+
     FollowCubit.get(context).isUserFollowed(
       currentUserId: UserInfoCubit.get(context).userEntity!.id!,
       targetUserId: state.widget.videoEntity.user.id!,
@@ -71,8 +75,6 @@ class VideoOwnerInfoBody extends StatelessWidget {
       context: context,
       screen: UserProfileScreen(
         user: state.widget.videoEntity.user,
-        // videoEntity: state.widget.videoEntity,
-        // isShared: false,
       ),
     );
   }

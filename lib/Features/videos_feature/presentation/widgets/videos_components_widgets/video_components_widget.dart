@@ -5,7 +5,7 @@ import 'package:shorts/Features/videos_feature/presentation/widgets/videos_compo
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_components_widgets/video_contents_screen.dart';
 import 'package:shorts/core/video_controller/video_controller.dart';
 
-class VideoComponentsWidget extends StatelessWidget {
+class VideoComponentsWidget extends StatefulWidget {
   const VideoComponentsWidget({
     super.key,
     required this.videoEntity,
@@ -15,19 +15,25 @@ class VideoComponentsWidget extends StatelessWidget {
 
   final VideoEntity videoEntity;
   final VideoController videoProvider;
-  // final bool isShared;
 
+  @override
+  State<VideoComponentsWidget> createState() => VideoComponentsWidgetState();
+}
+
+class VideoComponentsWidgetState extends State<VideoComponentsWidget> {
+  // final bool isShared;
   @override
   Widget build(BuildContext context) {
     return Positioned.fill(
       child: Stack(
         children: [
-          AnimatedPauseIcon(videoController: videoProvider),
+          AnimatedPauseIcon(videoController: widget.videoProvider),
           VideoContentsScreen(
-            videoEntity: videoEntity,
+            videoEntity: widget.videoEntity,
+            videoComponentsWidgetState: this,
             // isShared: isShared,
           ),
-          SliderWidget(videoProvider: videoProvider),
+          SliderWidget(videoProvider: widget.videoProvider),
         ],
       ),
     );

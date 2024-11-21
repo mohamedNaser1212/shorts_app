@@ -12,10 +12,9 @@ class LayoutModel {
     const VideosScreen(),
     const VideoSelectionScreen(),
     const SearchScreen(),
-    const UserProfileScreen(
-        //isShared: false,
-        //user: UserInfoCubit.get(context).userEntity,
-        ),
+    UserProfileScreen(
+      showLeadingIcon: false,
+    ),
   ];
 
   final List<BottomNavigationBarItem> _bottomNavigationBarItems = const [

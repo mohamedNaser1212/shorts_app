@@ -4,6 +4,7 @@ import 'package:shorts/Features/profile_feature.dart/presentation/widgets/profil
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_image_widget.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_video_grid_view.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
+import 'package:shorts/core/widgets/custom_app_bar.dart';
 import 'package:shorts/core/widgets/custom_title.dart';
 
 import '../../../../core/managers/styles_manager/color_manager.dart';
@@ -14,9 +15,11 @@ class UserProfileScreenBody extends StatefulWidget {
   const UserProfileScreenBody({
     super.key,
     this.userEntity,
+    required this.showLeadingIcon,
   });
 
   final UserEntity? userEntity;
+  final bool showLeadingIcon;
 
   @override
   State<UserProfileScreenBody> createState() => UserProfileScreenBodyState();
@@ -27,9 +30,16 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
   Widget build(BuildContext context) {
     String name = widget.userEntity!.name;
     return Scaffold(
+      appBar: widget.showLeadingIcon == true
+          ? const CustomAppBar(
+              title: '',
+              backColor: ColorController.transparentColor,
+              showLeadingIcon: true,
+            )
+          : null,
       backgroundColor: ColorController.blackColor,
       body: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 20.0),
+        padding: const EdgeInsets.symmetric(horizontal: 16.0),
         child: Column(
           children: [
             SizedBox(height: MediaQuery.sizeOf(context).height * 0.05),

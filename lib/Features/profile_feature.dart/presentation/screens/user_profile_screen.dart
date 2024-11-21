@@ -10,10 +10,12 @@ import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../widgets/user_profile_screen_body.dart';
 
 class UserProfileScreen extends StatelessWidget {
-  const UserProfileScreen({
+  UserProfileScreen({
     super.key,
     this.user,
+    this.showLeadingIcon = true,
   });
+  bool? showLeadingIcon;
 
   final UserEntity? user;
   @override
@@ -40,6 +42,7 @@ class UserProfileScreen extends StatelessWidget {
           isLoading: state is SignOutLoadingState,
           child: UserProfileScreenBody(
             userEntity: user ?? userEntity,
+            showLeadingIcon: showLeadingIcon!,
           ),
         );
       },
