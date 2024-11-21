@@ -19,14 +19,15 @@ class VideoSlider extends StatelessWidget {
       valueListenable: positionNotifier,
       builder: (context, position, child) {
         return Container(
-          height: 80,
           padding: const EdgeInsets.symmetric(horizontal: 16),
           alignment: Alignment.center,
           child: SliderTheme(
             data: SliderTheme.of(context).copyWith(
-              trackHeight: 8.0,
-              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 12.0),
-              overlayShape: const RoundSliderOverlayShape(overlayRadius: 25.0),
+              trackHeight: 5.0,
+              thumbShape: const RoundSliderThumbShape(enabledThumbRadius: 10.0),
+              overlayShape: const RoundSliderOverlayShape(
+                overlayRadius: 20.0,
+              ),
             ),
             child: Slider(
               value: position.inSeconds.toDouble(),

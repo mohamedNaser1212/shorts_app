@@ -45,22 +45,16 @@ class VideoPlayerScreenBodyState extends State<VideoPlayerScreenBody> {
         showLeadingIcon: true,
         backColor: ColorController.blackColor,
       ),
-      body: FittedBox(
-        fit: BoxFit.cover,
-        child: SizedBox(
-            width: widget.controller.value.size.width,
-            height: widget.controller.value.size.height,
-            child: Stack(alignment: Alignment.center, children: [
-              VideoPlayer(widget.controller),
-              AnimatedPauseIcon(
-                controller: widget.controller,
-                size: 100,
-              ),
-              VideoSliderWidget(
-                state: this,
-              ),
-            ])),
-      ),
+      body: Stack(children: [
+        VideoPlayer(widget.controller),
+        AnimatedPauseIcon(
+          controller: widget.controller,
+          size: 100,
+        ),
+        VideoSliderWidget(
+          state: this,
+        ),
+      ]),
     );
 
     //   Center(

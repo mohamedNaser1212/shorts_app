@@ -22,7 +22,9 @@ class DurationWidget extends StatelessWidget {
       valueListenable: positionNotifier,
       builder: (context, duration, child) {
         return CustomTitle(
-            title: _formatDuration(duration), style: TitleStyle.styleBold24);
+          title: _formatDuration(duration),
+          style: TitleStyle.styleBold18,
+        );
       },
     );
   }
