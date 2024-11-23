@@ -3,9 +3,9 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
+import 'package:shorts/core/widgets/custom_container_widget.dart';
 import 'package:shorts/core/widgets/initial_screen.dart';
 
-import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/widgets/custom_title.dart';
 import '../../../../core/widgets/verification_screen.dart';
 import '../cubit/google_sign_in_cubit/google_sign_in_cubit.dart';
@@ -21,35 +21,23 @@ class GoogleSignInWidget extends StatelessWidget {
       listener: _listener,
       builder: (context, state) {
         return InkWell(
-          onTap: () {
-            GoogleSignInCubit.get(context).signInWithGoogle();
-          },
-          child: Container(
-            width: double.infinity,
-            height: MediaQuery.sizeOf(context).height * 0.07,
-            decoration: BoxDecoration(
-              color: ColorController.purpleColor,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: const Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  FontAwesomeIcons.google,
-                  color: ColorController.whiteColor,
-                ),
-                SizedBox(width: 10),
-                CustomTitle(
-                  title: 'Use Google Account',
-                  style: TitleStyle.styleBold20,
-                  color: ColorController.whiteColor,
-                ),
-              ],
-            ),
+          onTap: () => _onTap(context: context),
+          child: CustomContainerWidget(
+            height: MediaQuery.of(context).size.height * 0.07,
+            title: 'Use Google Account',
+            titleStyle: TitleStyle.styleBold20,
+            icon: FontAwesomeIcons.google,
+            onTap: () => _onTap(context: context),
           ),
         );
       },
     );
+  }
+
+  void _onTap({
+    required BuildContext context,
+  }) {
+    GoogleSignInCubit.get(context).signInWithGoogle();
   }
 
   void _listener(context, state) {

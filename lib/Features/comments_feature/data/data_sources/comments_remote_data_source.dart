@@ -42,7 +42,7 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     required int page,
   }) async {
     List<CommentModel> comments = [];
-    bool hasMoreComments = true;
+    // bool hasMoreComments = true;
 
     Query commentsQuery = FirebaseFirestore.instance
         .collection('videos')
@@ -58,7 +58,7 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     final querySnapshot = await commentsQuery.get();
 
     if (querySnapshot.docs.isEmpty) {
-      hasMoreComments = false;
+///      hasMoreComments = false;
       return comments;
     }
 
@@ -74,7 +74,7 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     comments.addAll(fetchedComments);
 
     if (fetchedComments.length < limit) {
-      hasMoreComments = false;
+   //   hasMoreComments = false;
     }
 
     print('Comments for video $videoId: ${comments.length}');

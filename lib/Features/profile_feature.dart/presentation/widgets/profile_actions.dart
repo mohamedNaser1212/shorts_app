@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/authentication_feature/presentation/screens/login_screen.dart';
-import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/follow_cubit/follow_cubit.dart';
 import 'package:shorts/core/functions/toast_function.dart';
@@ -44,7 +43,6 @@ class ProfileActions extends StatelessWidget {
                   screen: const LoginScreen(),
                 );
                 VideoCubit.get(context).reset();
-                CommentsCubit.get(context).reset();
                 FollowCubit.get(context).reset();
                 FavouritesCubit.get(context).reset();
               } else if (state is SignOutErrorState) {

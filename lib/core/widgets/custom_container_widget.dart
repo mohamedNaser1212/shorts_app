@@ -8,15 +8,17 @@ class CustomContainerWidget extends StatelessWidget {
     super.key,
     required this.title,
     this.icon,
-    required this.onTap,
+    this.onTap,
     this.titleStyle,
     this.textColor,
     this.containerColor,
+    this.height,
   });
   final String title;
   final IconData? icon;
-  final Function() onTap;
+  final Function()? onTap;
   final TitleStyle? titleStyle;
+  final double? height;
   final Color? textColor;
   final Color? containerColor;
 
@@ -25,7 +27,7 @@ class CustomContainerWidget extends StatelessWidget {
     return InkWell(
       onTap: onTap,
       child: Container(
-        height: MediaQuery.of(context).size.height * 0.06,
+        height: height ?? MediaQuery.of(context).size.height * 0.06,
         decoration: BoxDecoration(
           color: containerColor ?? ColorController.purpleColor,
           borderRadius: BorderRadius.circular(10),
