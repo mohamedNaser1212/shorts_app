@@ -9,11 +9,9 @@ class CommentsListView extends StatefulWidget {
   const CommentsListView({
     super.key,
     required this.state,
-    required this.scrollController,
   });
 
   final CommentsBottomSheetState state;
-  final ScrollController scrollController;
 
   @override
   State<CommentsListView> createState() => _CommentsListViewState();
@@ -34,7 +32,7 @@ class _CommentsListViewState extends State<CommentsListView> {
     }
 
     return ListView.separated(
-      controller: widget.scrollController,
+      controller: widget.state.scrollController,
       padding: EdgeInsets.zero,
       separatorBuilder: (context, index) => const SizedBox(height: 10),
       itemCount: comments.length + (hasMoreComments ? 1 : 0),

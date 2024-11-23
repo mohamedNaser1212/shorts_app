@@ -51,6 +51,7 @@ class CommentsCubit extends Cubit<CommentsState> {
           ...existingComments,
           ...fetchedComments,
         ];
+        print('videoComments: ${videoComments[videoId]}');
         emit(GetCommentsSuccessState(comments: videoComments[videoId]!));
       },
     );

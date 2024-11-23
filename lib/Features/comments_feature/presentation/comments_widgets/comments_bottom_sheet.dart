@@ -6,7 +6,6 @@ import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/core/widgets/custom_progress_indicator.dart';
 
-import '../../../../core/functions/toast_function.dart';
 import '../../domain/comments_entity/comments_entity.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
@@ -56,16 +55,16 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   Widget build(BuildContext context) {
     return BlocConsumer<CommentsCubit, CommentsState>(
       listener: (context, state) {
-        if (state is GetCommentsSuccessState) {
-          allCommentsLoaded = !(CommentsCubit.get(context)
-                  .hasMoreCommentsForVideo[widget.videoEntity.id] ??
-              true);
-          if (state.comments!.isNotEmpty) {
-            commentsList.addAll(state.comments!);
-          }
-        } else if (state is GetCommentsErrorState) {
-          ToastHelper.showToast(message: state.message);
-        }
+        // if (state is GetCommentsSuccessState) {
+        //   allCommentsLoaded = !(CommentsCubit.get(context)
+        //           .hasMoreCommentsForVideo[widget.videoEntity.id] ??
+        //       true);
+        //   if (state.comments!.isNotEmpty) {
+        //     commentsList.addAll(state.comments!);
+        //   }
+        // } else if (state is GetCommentsErrorState) {
+        //   ToastHelper.showToast(message: state.message);
+        // }
       },
       builder: (context, state) {
         return BlocBuilder<AddCommentsCubit, AddCommentsState>(

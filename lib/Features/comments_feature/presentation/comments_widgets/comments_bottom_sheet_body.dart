@@ -35,7 +35,6 @@ class CommentsBottomSheetBody extends StatelessWidget {
             Expanded(
               child: CommentsListView(
                 state: state,
-                scrollController: state.scrollController,
               ),
             ),
             const SizedBox(height: 8),

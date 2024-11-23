@@ -20,19 +20,7 @@ class AddCommentsWidgets extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocConsumer<AddCommentsCubit, AddCommentsState>(
       listener: (context, addCommentState) async {
-        if (addCommentState is AddCommentsSuccessState) {
-          // Refresh comments on success
-          final videoId = state.widget.videoEntity.id;
-          CommentsCubit.get(context).videoComments[videoId] = [];
-          CommentsCubit.get(context).hasMoreCommentsForVideo[videoId] = true;
-          CommentsCubit.get(context).getComments(
-            videoId: videoId,
-          );
 
-          await CommentsCubit.get(context).getCommentsCount(videoId: videoId);
-        } else if (addCommentState is AddCommentsErrorState) {
-          ToastHelper.showToast(message: addCommentState.message);
-        }
       },
       builder: (context, addCommentState) {
         return Container(
