@@ -77,7 +77,9 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
         controller: _scrollController,
         padding: const EdgeInsets.symmetric(horizontal: 16.0),
         children: [
-          SizedBox(height: MediaQuery.sizeOf(context).height * 0.05),
+          if (widget.userEntity!.id ==
+              UserInfoCubit.get(context).userEntity!.id)
+            SizedBox(height: MediaQuery.sizeOf(context).height * 0.05),
           Column(
             children: [
               UserProfileImageWidget(

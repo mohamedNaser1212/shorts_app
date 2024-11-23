@@ -199,6 +199,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
 
   @override
   Future<UserEntity> signInWithGoogle() async {
+    await GoogleSignIn().signOut();
     final GoogleSignInAccount? gUser = await GoogleSignIn().signIn();
     if (gUser == null) throw Exception("Google Sign-In aborted");
 
