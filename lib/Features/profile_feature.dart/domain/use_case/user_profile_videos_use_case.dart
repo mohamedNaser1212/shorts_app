@@ -10,11 +10,9 @@ class UserProfileVideosUseCase {
 
   Future<Either<Failure, List<VideoEntity>>> call({
     required String userId,
-    int pageSize = 6,
   }) async {
     return await repository.getUserVideos(
       userId: userId,
-      pageSize: pageSize,
     );
   }
 }

@@ -12,9 +12,7 @@ import '../../../../../core/network/firebase_manager/collection_names.dart';
 abstract class VideosRemoteDataSource {
   const VideosRemoteDataSource._();
 
-  Future<List<VideoModel>> getVideos({
-    required num page,
-  });
+  Future<List<VideoModel>> getVideos();
 
   Future<VideoModel> uploadVideo({
     required VideoModel videoModel,
@@ -37,9 +35,7 @@ class VideosRemoteDataSourceImpl implements VideosRemoteDataSource {
   final int limit = _defaultPageSize;
   VideosRemoteDataSourceImpl({required this.firebaseHelperManager});
   @override
-  Future<List<VideoModel>> getVideos({
-    required num page,
-  }) async {
+  Future<List<VideoModel>> getVideos() async {
     if (!hasMoreVideos) return [];
 
     Query query = FirebaseFirestore.instance

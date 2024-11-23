@@ -6,7 +6,6 @@ import 'package:shorts/core/user_info/domain/user_entity/user_entity.dart';
 abstract class UserProfileRepo {
   Future<Either<Failure, List<VideoEntity>>> getUserVideos({
     required String userId,
-    int pageSize = 6,
   });
   Future<Either<Failure, UserEntity>> toggleFollow({
     required String currentUserId,

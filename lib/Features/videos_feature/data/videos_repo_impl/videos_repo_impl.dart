@@ -21,14 +21,9 @@ class VideosRepoImpl extends VideosRepo {
   });
 
   @override
-  Future<Either<Failure, List<VideoEntity>>> getVideos({
-    required num page,
-    required num pageSize,
-  }) async {
+  Future<Either<Failure, List<VideoEntity>>> getVideos() async {
     return repoManager.call(action: () async {
-      final videos = await videosRemoteDataSource.getVideos(
-        page: page,
-      );
+      final videos = await videosRemoteDataSource.getVideos();
       return videos;
     });
   }

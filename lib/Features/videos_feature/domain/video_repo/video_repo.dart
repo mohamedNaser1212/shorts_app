@@ -8,10 +8,7 @@ import '../video_entity/video_entity.dart';
 abstract class VideosRepo {
   const VideosRepo();
 
-  Future<Either<Failure, List<VideoEntity>>> getVideos({
-    required num page,
-    required num pageSize,
-  });
+  Future<Either<Failure, List<VideoEntity>>> getVideos();
 
   Future<Either<Failure, VideoEntity>> uploadVideo({
     required VideoModel videoModel,

@@ -9,10 +9,7 @@ class GetVideosUseCase {
 
   GetVideosUseCase({required this.videoRepository});
 
-  Future<Either<Failure, List<VideoEntity>>> call({
-    num page = 1,
-    num limit = 2, // Changed default limit for better pagination
-  }) {
-    return videoRepository.getVideos(page: page, pageSize: limit);
+  Future<Either<Failure, List<VideoEntity>>> call() {
+    return videoRepository.getVideos();
   }
 }

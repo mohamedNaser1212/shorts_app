@@ -30,8 +30,6 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
       cubit.reset();
       cubit.getUserVideos(
         userId: widget.state.widget.userEntity!.id!,
-        page: 1,
-        isInitialLoad: true,
       );
     }
 
@@ -43,7 +41,7 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
     if (!cubit.isLoadingMore &&
         cubit.hasMoreVideos &&
         _scrollController.position.pixels >=
-            _scrollController.position.maxScrollExtent * 0.7) {
+            _scrollController.position.maxScrollExtent * 0.4) {
       cubit.loadMoreVideos(userId: widget.state.widget.userEntity!.id!);
     }
   }
@@ -62,7 +60,12 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
         final videos = cubit.videos;
 
         if (state is GetUserVideosError) {
-          return const Center(child: Text('Error loading videos'));
+          return const Center(
+            child: CustomTitle(
+              title: 'Error loading videos',
+              style: TitleStyle.styleBold20,
+            ),
+          );
         }
 
         if (videos.isEmpty && state is! GetUserVideosLoading) {
@@ -73,21 +76,20 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
             ),
           );
         }
-
         return Expanded(
-          child: Padding(
-            padding: const EdgeInsets.all(12.0),
-            child: GridView.builder(
-              controller: _scrollController,
-              gridDelegate: _gridDelegate(),
-              itemCount: videos.length + (cubit.isLoadingMore ? 6 : 0),
-              itemBuilder: (context, index) {
-                if (index < videos.length) {
-                  return _buildVideoItem(index, videos);
-                }
+          child: GridView.builder(
+            controller: _scrollController,
+            gridDelegate: _gridDelegate(),
+            itemCount: videos.length + (cubit.hasMoreVideos ? 6 : 0),
+            itemBuilder: (context, index) {
+              if (index == videos.length && cubit.hasMoreVideos) {
                 return _buildShimmerItem();
-              },
-            ),
+              }
+              if (index < videos.length) {
+                return _buildVideoItem(index, videos);
+              }
+              return _buildShimmerItem();
+            },
           ),
         );
       },

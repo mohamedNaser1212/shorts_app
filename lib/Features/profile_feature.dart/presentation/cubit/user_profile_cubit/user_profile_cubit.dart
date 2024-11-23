@@ -18,11 +18,10 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
       : super(GetUserVideosLoading());
 
   static GetUserVideosCubit get(context) => BlocProvider.of(context);
+  bool isInitialLoad = false;
 
   Future<void> getUserVideos({
     required String userId,
-    required num page,
-    bool isInitialLoad = false,
   }) async {
     if (isLoadingMore) return;
 
@@ -35,7 +34,6 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
     isLoadingMore = true;
     final result = await getUserInfoUseCase.call(
       userId: userId,
-      pageSize: pageSize,
     );
 
     result.fold(
@@ -59,7 +57,9 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
     if (!hasMoreVideos) return;
 
     _currentPage++;
-    await getUserVideos(userId: userId, page: _currentPage);
+    await getUserVideos(
+      userId: userId,
+    );
   }
 
   void reset() {

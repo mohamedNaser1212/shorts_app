@@ -66,7 +66,6 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
                 currentUserId: UserInfoCubit.get(context).userEntity!.id!,
                 targetUserId: widget.userEntity!.id!,
               ),
-            const SizedBox(height: 10),
             UserProfileVideosGridView(state: this),
           ],
         ),

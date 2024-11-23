@@ -9,7 +9,6 @@ import '../../../../../core/utils/constants/request_data_names.dart';
 abstract class UserProfilesRemoteDataSource {
   Future<List<VideoModel>> getUserVideos({
     required String userId,
-    int pageSize = 6,
   });
   Future<UserEntity> toggleFollow({
     required String currentUserId,

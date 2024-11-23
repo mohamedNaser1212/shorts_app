@@ -37,16 +37,6 @@ class _FollowElevatedButtonWidgetState
     // FollowCubit.get(context).getFollowersCount(userId: widget.targetUserId);
   }
 
-  void _checkFollowStatus() async {
-    await context.read<FollowCubit>().isUserFollowed(
-          currentUserId: widget.currentUserId,
-          targetUserId: widget.targetUserId,
-        );
-    setState(() {
-      isLoading = false;
-    });
-  }
-
   void toggleFollow() {
     previousFollowersCount = FollowCubit.get(context).followerCounts;
 

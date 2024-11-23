@@ -24,14 +24,11 @@ class UserProfileRepoImpl implements UserProfileRepo {
   Future<Either<Failure, List<VideoEntity>>> getUserVideos({
     required String userId,
     DocumentSnapshot? lastVisible,
-    int pageSize = 6,
   }) async {
     return repoManager.call(action: () async {
       final videos = await remoteDataSource.getUserVideos(
         userId: userId,
-        pageSize: pageSize,
       );
-      // Cache the fetched videos locally
       await localDataSource.saveUserVideos(
         videos: videos,
       );
