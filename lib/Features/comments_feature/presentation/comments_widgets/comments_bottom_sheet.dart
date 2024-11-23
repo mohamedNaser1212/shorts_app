@@ -22,7 +22,6 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   late double bottomSheetHeight = MediaQuery.of(context).size.height * 0.75;
   List<CommentEntity> commentsList = [];
   late final ScrollController scrollController = ScrollController();
-  int currentPage = 0;
   bool allCommentsLoaded = false;
 
   @override
@@ -41,9 +40,9 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   }
 
   void _loadComments() {
-    context.read<CommentsCubit>().getComments(
-          videoId: widget.videoEntity.id,
-        );
+    CommentsCubit.get(context).getComments(
+      videoId: widget.videoEntity.id,
+    );
   }
 
   @override
@@ -58,9 +57,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
     return BlocConsumer<CommentsCubit, CommentsState>(
       listener: (context, state) {
         if (state is GetCommentsSuccessState) {
-          currentPage++;
-          allCommentsLoaded = !(context
-                  .read<CommentsCubit>()
+          allCommentsLoaded = !(CommentsCubit.get(context)
                   .hasMoreCommentsForVideo[widget.videoEntity.id] ??
               true);
           if (state.comments!.isNotEmpty) {
@@ -68,9 +65,6 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
           }
         } else if (state is GetCommentsErrorState) {
           ToastHelper.showToast(message: state.message);
-          ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-            content: Text(state.message),
-          ));
         }
       },
       builder: (context, state) {

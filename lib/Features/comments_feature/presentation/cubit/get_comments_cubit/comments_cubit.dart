@@ -45,6 +45,7 @@ class CommentsCubit extends Cubit<CommentsState> {
         emit(GetCommentsErrorState(message: failure.message));
       },
       (fetchedComments) {
+        hasMoreCommentsForVideo[videoId] = fetchedComments.isNotEmpty;
         final existingComments = videoComments[videoId] ?? [];
         videoComments[videoId] = [
           ...existingComments,
