@@ -53,19 +53,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocConsumer<CommentsCubit, CommentsState>(
-      listener: (context, state) {
-        // if (state is GetCommentsSuccessState) {
-        //   allCommentsLoaded = !(CommentsCubit.get(context)
-        //           .hasMoreCommentsForVideo[widget.videoEntity.id] ??
-        //       true);
-        //   if (state.comments!.isNotEmpty) {
-        //     commentsList.addAll(state.comments!);
-        //   }
-        // } else if (state is GetCommentsErrorState) {
-        //   ToastHelper.showToast(message: state.message);
-        // }
-      },
+    return BlocBuilder<CommentsCubit, CommentsState>(
       builder: (context, state) {
         return BlocBuilder<AddCommentsCubit, AddCommentsState>(
           builder: (context, addState) {
