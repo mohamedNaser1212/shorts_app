@@ -7,7 +7,6 @@ import '../model/comments_model.dart';
 abstract class CommentsRemoteDataSource {
   Future<List<CommentModel>> getComments({
     required String videoId,
-    required int page,
   });
 
   Future<num> getCommentsCount({
@@ -39,7 +38,6 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
   @override
   Future<List<CommentModel>> getComments({
     required String videoId,
-    required int page,
   }) async {
     List<CommentModel> comments = [];
     // bool hasMoreComments = true;
@@ -51,33 +49,23 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
         .orderBy('timestamp', descending: true)
         .limit(limit);
 
-    if (page > 0 && lastComments[videoId] != null) {
+    if (lastComments[videoId] != null) {
       commentsQuery = commentsQuery.startAfterDocument(lastComments[videoId]!);
     }
 
     final querySnapshot = await commentsQuery.get();
 
     if (querySnapshot.docs.isEmpty) {
-///      hasMoreComments = false;
       return comments;
     }
-
     List<CommentModel> fetchedComments = querySnapshot.docs.map((doc) {
       CommentModel comment =
           CommentModel.fromJson(doc.data() as Map<String, dynamic>);
       comment.id = doc.id;
       return comment;
     }).toList();
-
     lastComments[videoId] = querySnapshot.docs.last;
-
     comments.addAll(fetchedComments);
-
-    if (fetchedComments.length < limit) {
-   //   hasMoreComments = false;
-    }
-
-    print('Comments for video $videoId: ${comments.length}');
     return comments;
   }
 

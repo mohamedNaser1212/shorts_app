@@ -54,7 +54,6 @@ class ProfileActions extends StatelessWidget {
                 child: CustomContainerWidget(
                   titleStyle: TitleStyle.styleBold18,
                   title: 'Log Out',
-                  // icon: Icons.exit_to_app,
                   containerColor: ColorController.redColor,
                   onTap: () {
                     SignOutCubit.get(context).signOut();

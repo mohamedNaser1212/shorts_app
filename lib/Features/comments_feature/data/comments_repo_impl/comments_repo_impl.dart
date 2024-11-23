@@ -1,4 +1,3 @@
-
 import 'package:dartz/dartz.dart';
 import 'package:shorts/Features/comments_feature/data/data_sources/comments_local_data_source.dart';
 import 'package:shorts/Features/comments_feature/data/data_sources/comments_remote_data_source.dart';
@@ -47,13 +46,11 @@ class CommentsRepoImpl implements CommentsRepo {
   @override
   Future<Either<Failure, List<CommentEntity>>> getVideoComments({
     required String videoId,
-    required int page,
   }) async {
     return repoManager.call(
       action: () async {
         final comments = await commentsRemoteDataSource.getComments(
           videoId: videoId,
-          page: page,
         );
 
         await commentsLocalDataSource.saveComments(comments);
@@ -93,6 +90,4 @@ class CommentsRepoImpl implements CommentsRepo {
       },
     );
   }
-
-
 }

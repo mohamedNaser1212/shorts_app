@@ -43,7 +43,6 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   void _loadComments() {
     context.read<CommentsCubit>().getComments(
           videoId: widget.videoEntity.id,
-          page: currentPage + 1,
         );
   }
 

@@ -35,15 +35,9 @@ class CommentsCubit extends Cubit<CommentsState> {
 
   Future<void> getComments({
     required String videoId,
-    required int page,
   }) async {
-    hasMoreCommentsForVideo[videoId] ??= true;
-
-    if (!hasMoreCommentsForVideo[videoId]!) return;
-
     final result = await getCommentsUseCase.getVideoComments(
       videoId: videoId,
-      page: page,
     );
 
     result.fold(
@@ -51,7 +45,6 @@ class CommentsCubit extends Cubit<CommentsState> {
         emit(GetCommentsErrorState(message: failure.message));
       },
       (fetchedComments) {
-        hasMoreCommentsForVideo[videoId] = fetchedComments.length == 7;
         final existingComments = videoComments[videoId] ?? [];
         videoComments[videoId] = [
           ...existingComments,
