@@ -6,7 +6,6 @@ import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.
 class GetUserVideosCubit extends Cubit<UserProfileState> {
   final UserProfileVideosUseCase getUserInfoUseCase;
   List<VideoEntity> videos = [];
-  num _currentPage = 1;
   String? currentUserId;
 
   bool isLoadingMore = false;
@@ -56,7 +55,6 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
   Future<void> loadMoreVideos({required String userId}) async {
     if (!hasMoreVideos) return;
 
-    _currentPage++;
     await getUserVideos(
       userId: userId,
     );
@@ -64,7 +62,6 @@ class GetUserVideosCubit extends Cubit<UserProfileState> {
 
   void reset() {
     videos.clear();
-    _currentPage = 1;
     isLoadingMore = false;
     hasMoreVideos = true;
     emit(GetUserVideosLoading());
