@@ -22,14 +22,6 @@ class CommentsCubit extends Cubit<CommentsState> {
   final Map<String, bool> hasMoreCommentsForVideo = {};
   final Map<String, num> commentsCount = {};
 
-  // StreamController to broadcast comments count updates
-  final _commentsCountController =
-      StreamController<Map<String, num>>.broadcast();
-
-  // Expose the stream to listen for comments count updates
-  Stream<Map<String, num>> get commentsCountStream =>
-      _commentsCountController.stream;
-
   // Future<void> getCommentsAndCount(String videoId) async {
   //   await getComments(videoId: videoId, page: 0);
   //   await getCommentsCount(videoId: videoId);
@@ -70,12 +62,6 @@ class CommentsCubit extends Cubit<CommentsState> {
     );
   }
 
-  @override
-  Future<void> close() {
-    _commentsCountController.close();
-    return super.close();
-  }
-
   Future<num> getCommentsCount({required String videoId}) async {
     emit(GetCommentsCountLoadingState());
 
@@ -85,8 +71,6 @@ class CommentsCubit extends Cubit<CommentsState> {
       (failure) => emit(GetCommentsCountErrorState(message: failure.message)),
       (count) {
         commentsCount[videoId] = count;
-        // Add updated comments count to the stream
-        _commentsCountController.add(commentsCount);
         emit(GetCommentsCountSuccessState(commentsCount: count));
       },
     );
@@ -95,7 +79,6 @@ class CommentsCubit extends Cubit<CommentsState> {
   }
 
   void reset() {
-
     videoComments.clear();
     hasMoreCommentsForVideo.clear();
     commentsCount.clear();

@@ -5,7 +5,7 @@ import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments
 
 import 'empty_comments_widget.dart';
 
-class CommentsListView extends StatelessWidget {
+class CommentsListView extends StatefulWidget {
   const CommentsListView({
     super.key,
     required this.state,
@@ -16,20 +16,25 @@ class CommentsListView extends StatelessWidget {
   final ScrollController scrollController;
 
   @override
+  State<CommentsListView> createState() => _CommentsListViewState();
+}
+
+class _CommentsListViewState extends State<CommentsListView> {
+  @override
   Widget build(BuildContext context) {
     final commentsCubit = CommentsCubit.get(context);
     final comments =
-        commentsCubit.videoComments[state.widget.videoEntity.id] ?? [];
-    final hasMoreComments =
-        commentsCubit.hasMoreCommentsForVideo[state.widget.videoEntity.id] ??
-            false;
+        commentsCubit.videoComments[widget.state.widget.videoEntity.id] ?? [];
+    final hasMoreComments = commentsCubit
+            .hasMoreCommentsForVideo[widget.state.widget.videoEntity.id] ??
+        false;
 
     if (comments.isEmpty) {
       return const EmptyCommentsWidget();
     }
 
     return ListView.separated(
-      controller: scrollController,
+      controller: widget.scrollController,
       padding: EdgeInsets.zero,
       separatorBuilder: (context, index) => const SizedBox(height: 10),
       itemCount: comments.length + (hasMoreComments ? 1 : 0),

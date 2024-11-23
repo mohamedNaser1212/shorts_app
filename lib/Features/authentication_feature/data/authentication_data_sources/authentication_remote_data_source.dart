@@ -177,7 +177,7 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
         );
 
         if (user.providerData
-            .any((provider) => provider.providerId == 'google.com')) {
+            .any((provider) => provider.providerId == 'google')) {
           await googleSignIn.signOut();
           googleSignIn.disconnect();
         }
@@ -189,12 +189,8 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
         );
       }
 
-      // Clear Hive user data
-
-      // Firebase sign-out
       await FirebaseAuth.instance.signOut();
 
-      // Reset any global variables or in-memory user data
       fcmTokenAssigned = false;
     }
 
@@ -247,12 +243,10 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
-      // Refresh the user to get the latest verification status
       await user.reload();
       user = FirebaseAuth.instance.currentUser;
 
       if (user!.emailVerified) {
-        // Update Firestore if email is verified
         await FirebaseFirestore.instance
             .collection(CollectionNames.users)
             .doc(userId)

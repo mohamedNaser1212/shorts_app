@@ -86,6 +86,11 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
       borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
     );
 
+    OutlineInputBorder errorBorder = OutlineInputBorder(
+      borderSide: const BorderSide(width: 2.0, color: Colors.red),
+      borderRadius: BorderRadius.all(Radius.circular(widget.borderRadius)),
+    );
+
     return Padding(
       padding: const EdgeInsets.fromLTRB(8, 5, 8, 5),
       child: Column(
@@ -119,6 +124,8 @@ class _CustomTextFormFieldState extends State<CustomTextFormField> {
               suffixIconColor: ColorController.whiteColor,
               enabledBorder: border,
               focusedBorder: border,
+              errorBorder: errorBorder,
+              focusedErrorBorder: errorBorder,
               labelText: widget.label,
               labelStyle: widget.labelStyle ??
                   TextStyle(

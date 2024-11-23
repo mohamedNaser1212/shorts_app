@@ -20,7 +20,7 @@ class EditProfileComponentsWidgets extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return BlockInternactionLoadingWidget(
+    return BlockInteractionLoadingWidget(
       isLoading: isLoading || state is UpdateUserDataLoadingState,
       child: CustomScrollView(
         scrollBehavior: const MaterialScrollBehavior(),

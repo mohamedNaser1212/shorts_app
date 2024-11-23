@@ -2,8 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../managers/styles_manager/color_manager.dart';
 
-class BlockInternactionLoadingWidget extends StatelessWidget {
-  const BlockInternactionLoadingWidget({
+class BlockInteractionLoadingWidget extends StatelessWidget {
+  const BlockInteractionLoadingWidget({
     super.key,
     required this.isLoading,
     required this.child,

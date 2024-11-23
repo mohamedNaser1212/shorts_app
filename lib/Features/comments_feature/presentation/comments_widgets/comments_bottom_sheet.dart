@@ -6,6 +6,7 @@ import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 import 'package:shorts/core/widgets/custom_progress_indicator.dart';
 
+import '../../../../core/functions/toast_function.dart';
 import '../../domain/comments_entity/comments_entity.dart';
 
 class CommentsBottomSheet extends StatefulWidget {
@@ -67,6 +68,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
             commentsList.addAll(state.comments!);
           }
         } else if (state is GetCommentsErrorState) {
+          ToastHelper.showToast(message: state.message);
           ScaffoldMessenger.of(context).showSnackBar(SnackBar(
             content: Text(state.message),
           ));
@@ -75,7 +77,7 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
       builder: (context, state) {
         return BlocBuilder<AddCommentsCubit, AddCommentsState>(
           builder: (context, addState) {
-            return BlockInternactionLoadingWidget(
+            return BlockInteractionLoadingWidget(
               isLoading: addState is AddCommentsLoadingState,
               child: CommentsBottomSheetBody(
                 comments: commentsList,
