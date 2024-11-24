@@ -6,11 +6,13 @@ import 'package:shorts/core/widgets/custom_app_bar.dart';
 import 'package:shorts/core/widgets/custom_icon_widget.dart';
 
 import '../../Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
+import '../functions/toast_function.dart';
 import '../managers/styles_manager/color_manager.dart';
 import 'custom_title.dart';
 
 class VerificationScreen extends StatefulWidget {
   const VerificationScreen({super.key, required this.userId});
+
   final String userId;
 
   @override
@@ -53,6 +55,10 @@ class _VerificationScreenState extends State<VerificationScreen>
       listener: (context, state) {
         if (state is VerificationSuccessState) {
           if (state.isVerified) {
+            ToastHelper.showToast(
+              color: ColorController.greenColor,
+              message: 'Verification Success',
+            );
             NavigationManager.navigateAndFinish(
               context: context,
               screen: const LoginScreen(),

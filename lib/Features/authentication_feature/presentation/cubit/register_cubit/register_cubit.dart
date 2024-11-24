@@ -17,13 +17,13 @@ class RegisterCubit extends Cubit<RegisterState> {
   final VerifyUserUseCase verifyUserUseCase;
   Timer? _verificationTimer;
 
+  static RegisterCubit get(context) => BlocProvider.of(context);
+
   RegisterCubit({
     required this.registerUseCase,
     required this.userDataUseCase,
     required this.verifyUserUseCase,
   }) : super(RegisterState());
-
-  static RegisterCubit get(context) => BlocProvider.of(context);
 
   void startVerificationListener({
     required String userId,
