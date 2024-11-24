@@ -32,7 +32,7 @@ class LayoutScreenState extends State<LayoutScreen> {
     return BlocListener<UploadVideosCubit, UploadVideosState>(
       listener: (context, state) {
         if (state is VideoUploadedSuccessState) {
-          showMySnackBar(
+          showSnackBar(
             message: "Successs At Upload",
             context: context,
             onActionPressed: () => NavigationManager.navigateTo(

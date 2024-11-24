@@ -5,16 +5,13 @@ import '../../../../core/functions/navigations_functions.dart';
 import '../../../../core/functions/toast_function.dart';
 import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/service_locator/service_locator.dart';
-import '../../../../core/user_info/cubit/user_info_cubit.dart';
 import '../../../../core/user_info/domain/use_cases/get_user_info_use_case.dart';
 import '../../../../core/widgets/custom_progress_indicator.dart';
-import '../../../../core/widgets/initial_screen.dart';
 import '../../../../core/widgets/verification_screen.dart';
 import '../../domain/authentication_use_case/register_use_case.dart';
 import '../../domain/authentication_use_case/verify_user_use_case.dart';
 import '../cubit/register_cubit/register_cubit.dart';
 import '../widgets/register_screen_body.dart';
-import 'login_screen.dart';
 
 class RegisterScreen extends StatelessWidget {
   const RegisterScreen({super.key});
@@ -46,41 +43,15 @@ class RegisterScreen extends StatelessWidget {
 
   void _listener(BuildContext context, RegisterState state) {
     if (state is RegisterSuccessState) {
-      ToastHelper.showToast(
-        color: ColorController.greenColor,
-        message: 'Register Success',
+      NavigationManager.navigateAndFinishWithTransition(
+        context: context,
+        screen: VerificationScreen(
+          userId: state.userEntity.id!,
+        ),
       );
-
-      UserInfoCubit.get(context).userEntity = state.userEntity;
-
-      if (state.userEntity.isVerified) {
-        NavigationManager.navigateAndFinish(
-          context: context,
-          screen: const InitialScreen(),
-        );
-      } else {
-        NavigationManager.navigateAndFinishWithTransition(
-          context: context,
-          screen: VerificationScreen(
-            userId: state.userEntity.id!,
-          ),
-        );
-      }
     } else if (state is RegisterErrorState) {
       ToastHelper.showToast(
         message: state.message,
-      );
-    } else if (state is VerificationSuccessState) {
-      if (state.isVerified) {
-        NavigationManager.navigateAndFinish(
-          context: context,
-          screen: const LoginScreen(),
-        );
-      }
-
-      NavigationManager.navigateAndFinish(
-        context: context,
-        screen: const InitialScreen(),
       );
     }
   }

@@ -49,7 +49,7 @@ class PreviewScreenState extends State<PreviewScreen> {
   void _listener(context, state) {
     if (state is VideoUploadLoadingState) {
       Navigator.pop(context);
-      showMySnackBar(
+      showSnackBar(
         message:
             "Video is now uploading, we will notify you when upload is complete",
         context: context,

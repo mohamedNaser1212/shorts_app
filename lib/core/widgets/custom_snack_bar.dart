@@ -1,9 +1,10 @@
 // custom_snack_bar.dart
 import 'package:flutter/material.dart';
+import 'package:shorts/core/widgets/custom_title.dart';
 
 import '../managers/styles_manager/color_manager.dart';
 
-void showMySnackBar({
+void showSnackBar({
   required BuildContext context,
   required String message,
   String? actionLabel,
@@ -17,9 +18,9 @@ void showMySnackBar({
       behavior: SnackBarBehavior.floating,
       margin: const EdgeInsets.all(20),
       padding: const EdgeInsets.all(10),
-      content: Text(
-        message,
-        style: const TextStyle(color: ColorController.whiteColor, fontSize: 16),
+      content: CustomTitle(
+        title: message,
+        style: TitleStyle.style20,
       ),
       action: actionLabel != null && onActionPressed != null
           ? SnackBarAction(
@@ -31,30 +32,3 @@ void showMySnackBar({
     ),
   );
 }
-// class CustomSnackBar {
-//   static SnackBar show({
-//     required String message,
-//     String? actionLabel,
-//     VoidCallback? onActionPressed,
-//   }) {
-//     return SnackBar(
-//       showCloseIcon: true,
-//       backgroundColor: Colors.greenAccent,
-//       dismissDirection: DismissDirection.up,
-//       behavior: SnackBarBehavior.floating,
-//       margin: const EdgeInsets.all(20),
-//       padding: const EdgeInsets.all(10),
-//       content: Text(
-//         message,
-//         style: const TextStyle(color: Colors.white, fontSize: 16),
-//       ),
-//       action: actionLabel != null && onActionPressed != null
-//           ? SnackBarAction(
-//               label: actionLabel,
-//               onPressed: onActionPressed,
-//               textColor: Colors.white,
-//             )
-//           : null,
-//     );
-//   }
-// }
