@@ -20,7 +20,7 @@ void showSnackBar({
       padding: const EdgeInsets.all(10),
       content: CustomTitle(
         title: message,
-        style: TitleStyle.style20,
+        style: TitleStyle.style12,
       ),
       action: actionLabel != null && onActionPressed != null
           ? SnackBarAction(

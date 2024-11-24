@@ -68,7 +68,6 @@ class _TrimViewerWidgetState extends State<TrimViewerWidget> {
   }
 
   void _updateThumbnail(double value) {
-    // Generate a new thumbnail based on the current position
     if (widget.state.videoController.thumbnailFile != null) {
       widget.state.videoController.generateThumbnail(
         seconds: value.toDouble(),

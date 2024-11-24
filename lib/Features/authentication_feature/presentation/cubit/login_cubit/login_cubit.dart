@@ -30,25 +30,16 @@ class LoginCubit extends Cubit<LoginState> {
         emit(LoginErrorState(error: failure.message));
       },
       (success) async {
-        final verifyResult =
-            await verifyUserUseCase.call(userId: success.id!); // Use the userId
-        verifyResult.fold(
+        final userDataResult = await userDataUseCase.call();
+        userDataResult.fold(
           (failure) {
             emit(LoginErrorState(error: failure.message));
           },
-          (verifiedUser) async {
-            final userDataResult = await userDataUseCase.call();
-            userDataResult.fold(
-              (failure) {
-                emit(LoginErrorState(error: failure.message));
-              },
-              (userData) {
-                emit(
-                  LoginSuccessState(
-                    userEntity: userData!,
-                  ),
-                );
-              },
+          (userData) {
+            emit(
+              LoginSuccessState(
+                userEntity: userData!,
+              ),
             );
           },
         );

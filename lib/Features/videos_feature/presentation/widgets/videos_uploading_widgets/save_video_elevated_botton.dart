@@ -3,7 +3,8 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/preview_screen.dart';
 import 'package:shorts/Features/videos_feature/presentation/widgets/videos_uploading_widgets/trimmer_view_body.dart';
-import 'package:shorts/core/widgets/custom_title.dart';
+import 'package:shorts/core/managers/styles_manager/color_manager.dart';
+import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
 
 class SaveElevatedButton extends StatefulWidget {
   const SaveElevatedButton({
@@ -35,19 +36,15 @@ class _SaveElevatedButtonState extends State<SaveElevatedButton> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: [
-        ValueListenableBuilder<bool>(
-          valueListenable: _progressVisibilityNotifier,
-          builder: (context, isVisible, child) {
-            return ElevatedButton(
-              onPressed: isVisible
-                  ? null
-                  : () async {
-                      await _saveVideo();
-                    },
-              child: isVisible
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          ValueListenableBuilder<bool>(
+            valueListenable: _progressVisibilityNotifier,
+            builder: (context, isVisible, child) {
+              return isVisible
                   ? const SizedBox(
                       height: 16,
                       width: 16,
@@ -56,15 +53,20 @@ class _SaveElevatedButtonState extends State<SaveElevatedButton> {
                         color: Colors.white,
                       ),
                     )
-                  : const CustomTitle(
-                      title: 'Save Video',
-                      style: TitleStyle.style12,
-                    ),
-            );
-          },
-        ),
-        const SizedBox(height: 20),
-      ],
+                  : ReusableElevatedButton(
+                      label: 'Save',
+                      backColor: ColorController.purpleColor,
+                      onPressed: isVisible
+                          ? null
+                          : () async {
+                              await _saveVideo();
+                            },
+                    );
+            },
+          ),
+          const SizedBox(height: 20),
+        ],
+      ),
     );
   }
 

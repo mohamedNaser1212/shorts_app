@@ -20,10 +20,7 @@ class CheckOnCameraPermissionsWidgets extends StatelessWidget {
       );
     } else if (notifier.isLoading) {
       return const Center(child: CircularProgressIndicator());
-    } else {
-      return const CameraPermissionWarningWidgets(
-        title: " Camera Needs Permission to Work",
-      );
     }
+    return SizedBox();
   }
 }
