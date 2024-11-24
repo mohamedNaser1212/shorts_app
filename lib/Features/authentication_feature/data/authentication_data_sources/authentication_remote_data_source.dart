@@ -25,7 +25,10 @@ abstract class AuthenticationRemoteDataSource {
     required RegisterRequestModel requestModel,
     required File imageFile,
   });
-  Future<void> verifyUser(String userId);
+
+  Future<bool> verifyUser({
+    required String userId,
+  });
 
   Future<bool> signOut();
 
@@ -158,7 +161,6 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       String imageUrl = await snapshot.ref.getDownloadURL();
       return imageUrl;
     } catch (e) {
-      // Handle errors
       throw Exception("Image upload failed: $e");
     }
   }
@@ -166,7 +168,6 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
   @override
   Future<bool> signOut() async {
     final user = FirebaseAuth.instance.currentUser;
-    final googleSignIn = GoogleSignIn();
 
     if (user != null) {
       if (fcmTokenAssigned) {
@@ -175,12 +176,6 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
           docId: user.uid,
           data: {RequestDataNames.fcmToken: ''},
         );
-
-        if (user.providerData
-            .any((provider) => provider.providerId == 'google')) {
-          await googleSignIn.signOut();
-          googleSignIn.disconnect();
-        }
 
         await ClearToken.clearToken(
           userId: user.uid,
@@ -240,7 +235,9 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
   }
 
   @override
-  Future<void> verifyUser(String userId) async {
+  Future<bool> verifyUser({
+    required String userId,
+  }) async {
     User? user = FirebaseAuth.instance.currentUser;
 
     if (user != null) {
@@ -248,11 +245,11 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       user = FirebaseAuth.instance.currentUser;
 
       if (user!.emailVerified) {
-        await FirebaseFirestore.instance
-            .collection(CollectionNames.users)
-            .doc(userId)
-            .update({RequestDataNames.isVerified: true});
+        return true;
+      } else {
+        return false;
       }
     }
+    return false;
   }
 }

@@ -52,7 +52,9 @@ class GoogleSignInWidget extends StatelessWidget {
       } else {
         NavigationManager.navigateAndFinish(
           context: context,
-          screen: const VerificationScreen(),
+          screen: VerificationScreen(
+            userId: state.userEntity.id!,
+          ),
         );
       }
     }

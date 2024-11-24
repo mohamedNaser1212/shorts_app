@@ -51,7 +51,7 @@ class RegisterButton extends StatelessWidget {
         return;
       }
 
-      RegisterCubit.get(context).userRegister(
+      RegisterCubit.get(context).registerUser(
         requestModel: RegisterRequestModel(
           email: state.emailController.text,
           password: state.passwordController.text,

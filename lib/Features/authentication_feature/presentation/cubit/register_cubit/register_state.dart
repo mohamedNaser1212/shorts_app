@@ -20,3 +20,21 @@ class RegisterVerificationRequiredState extends RegisterState {
 }
 
 class RegisterChangePasswordVisibility extends RegisterState {}
+
+class VerificationLoadingState extends RegisterState {}
+
+class VerificationSuccessState extends RegisterState {
+  final bool isVerified;
+
+  VerificationSuccessState({
+    required this.isVerified,
+  });
+}
+
+class VerificationErrorState extends RegisterState {
+  final String errMessage;
+
+  VerificationErrorState({
+    required this.errMessage,
+  });
+}

@@ -3,6 +3,7 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/authentication_feature/presentation/cubit/google_sign_in_cubit/google_sign_in_cubit.dart';
+import 'package:shorts/Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/add_comments_cubit/add_comments_cubit.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
 import 'package:shorts/Features/favourites_feature/presentation/cubit/get_favourites_cubit/favourites_cubit.dart';
@@ -73,6 +74,9 @@ class MyApp extends StatelessWidget {
         ),
         BlocProvider(
           create: (context) => getIt<UploadVideosCubit>(),
+        ),
+        BlocProvider(
+          create: (context) => getIt<RegisterCubit>(),
         ),
         BlocProvider(
           create: (context) => getIt<ToggleFavouritesCubit>(),

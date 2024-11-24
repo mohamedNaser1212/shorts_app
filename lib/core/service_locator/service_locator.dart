@@ -52,6 +52,7 @@ import '../../Features/authentication_feature/data/authentication_data_sources/a
 import '../../Features/authentication_feature/domain/authentication_repo/authentication_repo.dart';
 import '../../Features/authentication_feature/domain/authentication_use_case/google_sign_in_use_case.dart';
 import '../../Features/authentication_feature/domain/authentication_use_case/login_use_case.dart';
+import '../../Features/authentication_feature/domain/authentication_use_case/verify_user_use_case.dart';
 import '../../Features/authentication_feature/presentation/cubit/google_sign_in_cubit/google_sign_in_cubit.dart';
 import '../../Features/comments_feature/data/comments_repo_impl/comments_repo_impl.dart';
 import '../../Features/comments_feature/data/data_sources/comments_remote_data_source.dart';
@@ -319,6 +320,9 @@ Future<void> setUpServiceLocator() async {
   getIt.registerSingleton<UpdateUserDataUseCase>(UpdateUserDataUseCase(
     updateRepo: getIt.get<UpdateUserDataRepo>(),
   ));
+  getIt.registerSingleton<VerifyUserUseCase>(VerifyUserUseCase(
+    authenticationRepo: getIt.get<AuthenticationRepo>(),
+  ));
   // getIt.registerSingleton<GetCollectionAfterDocUseCase>(
   //     GetCollectionAfterDocUseCase(
   //   commentsRepo: getIt.get<CommentsRepo>(),
@@ -329,11 +333,13 @@ Future<void> setUpServiceLocator() async {
       ));
   getIt.registerFactory<GoogleSignInCubit>(() => GoogleSignInCubit(
         googleSignInUseCase: getIt.get<GoogleSignInUseCase>(),
+        verifyUserUseCase: getIt.get<VerifyUserUseCase>(),
       ));
 
   getIt.registerFactory<RegisterCubit>(() => RegisterCubit(
         userDataUseCase: getIt.get<GetUserInfoUseCase>(),
         registerUseCase: getIt.get<RegisterUseCase>(),
+        verifyUserUseCase: getIt.get<VerifyUserUseCase>(),
       ));
   getIt.registerFactory<CommentsCubit>(() => CommentsCubit(
         getCommentsUseCase: getIt.get<GetCommentsUseCase>(),
@@ -347,5 +353,6 @@ Future<void> setUpServiceLocator() async {
   getIt.registerFactory<LoginCubit>(() => LoginCubit(
         loginUseCase: getIt.get<LoginUseCase>(),
         userDataUseCase: getIt.get<GetUserInfoUseCase>(),
+        verifyUserUseCase: getIt.get<VerifyUserUseCase>(),
       ));
 }

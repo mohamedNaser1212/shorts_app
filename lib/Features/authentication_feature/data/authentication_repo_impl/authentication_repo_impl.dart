@@ -75,4 +75,13 @@ class AuthRepoImpl implements AuthenticationRepo {
       },
     );
   }
+
+  @override
+  Future<Either<Failure, bool>> verifyUser({required String userId}) async {
+    return repoManager.call(
+      action: () async {
+        return await loginDataSource.verifyUser(userId: userId);
+      },
+    );
+  }
 }

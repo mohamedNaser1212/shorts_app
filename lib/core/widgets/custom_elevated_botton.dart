@@ -16,9 +16,7 @@ import 'package:shorts/core/widgets/reusable_elevated_botton.dart';
 import 'package:uuid/uuid.dart';
 
 import '../../Features/authentication_feature/data/user_model/login_request_model.dart';
-import '../../Features/authentication_feature/data/user_model/register_request_model.dart';
 import '../../Features/authentication_feature/presentation/cubit/login_cubit/login_cubit.dart';
-import '../../Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
 import '../../Features/profile_feature.dart/presentation/screens/edit_profile_screen.dart';
 import '../managers/styles_manager/color_manager.dart';
 
@@ -203,31 +201,31 @@ class CustomElevatedButton extends StatelessWidget {
 
   static Future<void> _registerAction(
       BuildContext context, RegisterScreenFormState state) async {
-    if (state.widget.formKey.currentState!.validate()) {
-      // Check if an image is selected and attempt to upload it
-      final profilePicUrl = await state.imageNotifierController.uploadImage();
-      if (profilePicUrl != null) {
-        // Set the profile picture URL in the registration model only if upload was successful
-        RegisterCubit.get(context).userRegister(
-          requestModel: RegisterRequestModel(
-            email: state.emailController.text,
-            password: state.passwordController.text,
-            name: state.nameController.text,
-            phone: state.phoneController.text,
-            bio: state.bioController.text.isNotEmpty
-                ? state.bioController.text
-                : 'Hey there I am using Shorts',
-            profilePic: profilePicUrl,
-          ),
-          imageFile: state.imageFile,
-        );
-      } else {
-        ToastHelper.showToast(
-          message: 'Image upload failed. Please try again.',
-          color: Colors.red,
-        );
-      }
-    }
+    // if (state.widget.formKey.currentState!.validate()) {
+    //   // Check if an image is selected and attempt to upload it
+    //   final profilePicUrl = await state.imageNotifierController.uploadImage();
+    //   if (profilePicUrl != null) {
+    //     // Set the profile picture URL in the registration model only if upload was successful
+    //     RegisterCubit.get(context).userRegister(
+    //       requestModel: RegisterRequestModel(
+    //         email: state.emailController.text,
+    //         password: state.passwordController.text,
+    //         name: state.nameController.text,
+    //         phone: state.phoneController.text,
+    //         bio: state.bioController.text.isNotEmpty
+    //             ? state.bioController.text
+    //             : 'Hey there I am using Shorts',
+    //         profilePic: profilePicUrl,
+    //       ),
+    //       imageFile: state.imageFile,
+    //     );
+    //   } else {
+    //     ToastHelper.showToast(
+    //       message: 'Image upload failed. Please try again.',
+    //       color: Colors.red,
+    //     );
+    //   }
+    // }
   }
 
   static void _uploadVideoOnPressed({

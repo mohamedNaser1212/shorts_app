@@ -10,6 +10,7 @@ import '../../../../core/user_info/domain/use_cases/get_user_info_use_case.dart'
 import '../../../../core/widgets/custom_progress_indicator.dart';
 import '../../../../core/widgets/initial_screen.dart';
 import '../../domain/authentication_use_case/login_use_case.dart';
+import '../../domain/authentication_use_case/verify_user_use_case.dart';
 import '../cubit/google_sign_in_cubit/google_sign_in_cubit.dart';
 import '../cubit/login_cubit/login_cubit.dart';
 import '../cubit/login_cubit/login_state.dart';
@@ -24,6 +25,7 @@ class LoginScreen extends StatelessWidget {
       create: (context) => LoginCubit(
         loginUseCase: getIt.get<LoginUseCase>(),
         userDataUseCase: getIt.get<GetUserInfoUseCase>(),
+        verifyUserUseCase: getIt.get<VerifyUserUseCase>(),
       ),
       child: BlocConsumer<LoginCubit, LoginState>(
         listener: _loginListener,
@@ -53,7 +55,9 @@ class LoginScreen extends StatelessWidget {
       } else {
         NavigationManager.navigateToWithTransition(
           context: context,
-          screen: const VerificationScreen(),
+          screen: VerificationScreen(
+            userId: state.userEntity.id!,
+          ),
         );
       }
     } else if (state is LoginErrorState) {

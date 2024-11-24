@@ -18,4 +18,7 @@ abstract class AuthenticationRepo {
   });
   Future<Either<Failure, bool>> signOut();
   Future<Either<Failure, UserEntity>> signInWithGoogle();
+  Future<Either<Failure, bool>> verifyUser({
+    required String userId,
+  });
 }

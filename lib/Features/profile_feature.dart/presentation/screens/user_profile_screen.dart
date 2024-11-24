@@ -8,6 +8,7 @@ import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../widgets/user_profile_screen_body.dart';
 
+// ignore: must_be_immutable
 class UserProfileScreen extends StatelessWidget {
   UserProfileScreen({
     super.key,

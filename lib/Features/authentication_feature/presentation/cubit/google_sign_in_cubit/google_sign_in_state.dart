@@ -21,3 +21,21 @@ class GoogleSignInErrorState extends GoogleSignInState {
     required this.failure,
   });
 }
+
+class VerificationLoadingState extends GoogleSignInState {}
+
+class VerificationSuccessState extends GoogleSignInState {
+  final bool isVerified;
+
+  VerificationSuccessState({
+    required this.isVerified,
+  });
+}
+
+class VerificationErrorState extends GoogleSignInState {
+  final String errMessage;
+
+  VerificationErrorState({
+    required this.errMessage,
+  });
+}

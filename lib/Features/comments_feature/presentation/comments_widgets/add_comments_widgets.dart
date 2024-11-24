@@ -3,8 +3,6 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/send_comment_icon_widget.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/add_comments_cubit/add_comments_cubit.dart';
-import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
-import 'package:shorts/core/functions/toast_function.dart';
 
 import 'comments_form_field.dart';
 
@@ -19,9 +17,7 @@ class AddCommentsWidgets extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<AddCommentsCubit, AddCommentsState>(
-      listener: (context, addCommentState) async {
-
-      },
+      listener: (context, addCommentState) async {},
       builder: (context, addCommentState) {
         return Container(
           padding: const EdgeInsets.symmetric(horizontal: 10),
