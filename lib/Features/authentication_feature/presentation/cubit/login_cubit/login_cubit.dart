@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 import '../../../../../core/user_info/domain/use_cases/get_user_info_use_case.dart';
@@ -10,6 +12,9 @@ class LoginCubit extends Cubit<LoginState> {
   final LoginUseCase loginUseCase;
   final GetUserInfoUseCase userDataUseCase;
   final VerifyUserUseCase verifyUserUseCase;
+  Timer? _verificationTimer;
+
+  static LoginCubit get(context) => BlocProvider.of(context);
 
   LoginCubit({
     required this.loginUseCase,
@@ -17,15 +22,41 @@ class LoginCubit extends Cubit<LoginState> {
     required this.verifyUserUseCase,
   }) : super(LoginState());
 
-  static LoginCubit get(context) => BlocProvider.of(context);
+  void startVerificationListener({
+    required String userId,
+  }) {
+    emit(VerificationLoadingState());
+    _verificationTimer =
+        Timer.periodic(const Duration(seconds: 3), (timer) async {
+      final verificationResult = await verifyUserUseCase.call(userId: userId);
+
+      verificationResult.fold(
+        (failure) {
+          emit(VerificationErrorState(errMessage: failure.message));
+        },
+        (isVerified) {
+          if (isVerified) {
+            timer.cancel();
+            emit(VerificationSuccessState(
+              isVerified: isVerified,
+            ));
+          }
+        },
+      );
+    });
+  }
+
+  void stopVerificationListener() {
+    _verificationTimer?.cancel();
+  }
 
   Future<void> login({
     required LoginRequestModel requestModel,
   }) async {
     emit(LoginLoadingState());
 
-    final result = await loginUseCase.call(requestModel: requestModel);
-    result.fold(
+    final loginResult = await loginUseCase.call(requestModel: requestModel);
+    loginResult.fold(
       (failure) {
         emit(LoginErrorState(error: failure.message));
       },
@@ -36,14 +67,18 @@ class LoginCubit extends Cubit<LoginState> {
             emit(LoginErrorState(error: failure.message));
           },
           (userData) {
-            emit(
-              LoginSuccessState(
-                userEntity: userData!,
-              ),
-            );
+            emit(LoginSuccessState(userEntity: userData!));
+
+            startVerificationListener(userId: userData.id!);
           },
         );
       },
     );
+  }
+
+  @override
+  Future<void> close() {
+    stopVerificationListener();
+    return super.close();
   }
 }

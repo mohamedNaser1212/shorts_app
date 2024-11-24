@@ -4,6 +4,7 @@ import 'package:shorts/Features/authentication_feature/domain/authentication_use
 import 'package:shorts/Features/authentication_feature/presentation/cubit/sign_out_cubit/sign_out_cubit.dart';
 import 'package:shorts/core/service_locator/service_locator.dart';
 import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
+import 'package:shorts/core/widgets/custom_progress_indicator.dart';
 
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../widgets/user_profile_screen_body.dart';
@@ -38,9 +39,12 @@ class UserProfileScreen extends StatelessWidget {
 
     return BlocBuilder<SignOutCubit, SignOutState>(
       builder: (context, state) {
-        return UserProfileScreenBody(
-          userEntity: user ?? userEntity,
-          showLeadingIcon: showLeadingIcon!,
+        return BlockInteractionLoadingWidget(
+          isLoading: state is SignOutLoadingState,
+          child: UserProfileScreenBody(
+            userEntity: user ?? userEntity,
+            showLeadingIcon: showLeadingIcon!,
+          ),
         );
       },
     );

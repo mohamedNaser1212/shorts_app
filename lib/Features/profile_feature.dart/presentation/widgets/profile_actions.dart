@@ -44,6 +44,7 @@ class ProfileActions extends StatelessWidget {
                 );
                 VideoCubit.get(context).reset();
                 FollowCubit.get(context).reset();
+                //   UserInfoCubit.get(context).reset();
                 FavouritesCubit.get(context).reset();
               } else if (state is SignOutErrorState) {
                 ToastHelper.showToast(message: state.error);

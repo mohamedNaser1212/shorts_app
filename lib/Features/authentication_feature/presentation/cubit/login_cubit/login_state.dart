@@ -21,3 +21,21 @@ class LoginErrorState extends LoginState {
 class LoginVerificationRequiredState extends LoginState {}
 
 class AppChangePasswordVisibilityState extends LoginState {}
+
+class VerificationLoadingState extends LoginState {}
+
+class VerificationSuccessState extends LoginState {
+  final bool isVerified;
+
+  VerificationSuccessState({
+    required this.isVerified,
+  });
+}
+
+class VerificationErrorState extends LoginState {
+  final String errMessage;
+
+  VerificationErrorState({
+    required this.errMessage,
+  });
+}

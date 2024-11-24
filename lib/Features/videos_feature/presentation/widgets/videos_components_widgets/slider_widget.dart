@@ -58,30 +58,29 @@ class _SliderWidgetState extends State<SliderWidget> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           FlutterSlider(
-            values: [_position.inMilliseconds.toDouble()],
-            max: _duration.inMilliseconds.toDouble(),
+            values: [_position.inSeconds.toDouble()],
+            max: _duration.inSeconds.toDouble(),
             min: 0,
             minimumDistance: 0,
-            maximumDistance: _duration.inMilliseconds.toDouble(),
+            maximumDistance: _duration.inSeconds.toDouble(),
             handler: FlutterSliderHandler(
               decoration: const BoxDecoration(
-                color: Colors.transparent, // Make the thumb transparent
+                color: Colors.transparent,
               ),
             ),
             trackBar: FlutterSliderTrackBar(
               activeTrackBar: BoxDecoration(
-                color: Colors.blue, // Set color of active track
-                borderRadius: BorderRadius.circular(2.0), // Add slight rounding
+                color: Colors.blue,
+                borderRadius: BorderRadius.circular(2.0),
               ),
               inactiveTrackBar: BoxDecoration(
-                color:
-                    Colors.grey.withOpacity(0.5), // Set color of inactive track
+                color: Colors.grey.withOpacity(0.5),
                 borderRadius: BorderRadius.circular(2.0),
               ),
             ),
             onDragging: (handlerIndex, lowerValue, upperValue) {
               widget.videoProvider
-                  .seekTo(Duration(milliseconds: lowerValue.toInt()));
+                  .seekTo(Duration(seconds: lowerValue.toInt()));
             },
           ),
           //  DurationNotifier(videoProvider: widget.videoProvider),

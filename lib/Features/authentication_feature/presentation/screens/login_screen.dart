@@ -11,7 +11,6 @@ import '../../../../core/widgets/custom_progress_indicator.dart';
 import '../../../../core/widgets/initial_screen.dart';
 import '../../domain/authentication_use_case/login_use_case.dart';
 import '../../domain/authentication_use_case/verify_user_use_case.dart';
-import '../cubit/google_sign_in_cubit/google_sign_in_cubit.dart';
 import '../cubit/login_cubit/login_cubit.dart';
 import '../cubit/login_cubit/login_state.dart';
 import '../widgets/login_screen_body.dart';
@@ -36,8 +35,7 @@ class LoginScreen extends StatelessWidget {
 
   Widget _builder(BuildContext context, LoginState state) {
     return BlockInteractionLoadingWidget(
-      isLoading:
-          state is LoginLoadingState || state is GoogleSignInLoadingState,
+      isLoading: state is LoginLoadingState,
       child: const Scaffold(
         backgroundColor: ColorController.blackColor,
         body: LoginScreenBody(),
@@ -65,5 +63,17 @@ class LoginScreen extends StatelessWidget {
         message: state.error,
       );
     }
+    // else if (state is VerificationSuccessState) {
+    //   if (state.isVerified) {
+    //     NavigationManager.navigateAndFinish(
+    //       context: context,
+    //       screen: const InitialScreen(),
+    //     );
+    //   }
+    // } else if (state is VerificationErrorState) {
+    //   ToastHelper.showToast(
+    //     message: state.errMessage,
+    //   );
+    // }
   }
 }
