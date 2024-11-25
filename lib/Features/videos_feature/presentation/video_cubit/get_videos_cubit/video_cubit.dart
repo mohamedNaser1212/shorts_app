@@ -44,4 +44,10 @@ class VideoCubit extends Cubit<VideoState> {
     videos.clear();
     isLoadingMore = true;
   }
+
+  @override
+  Future<void> close() {
+    // TODO: implement close
+    return super.close();
+  }
 }

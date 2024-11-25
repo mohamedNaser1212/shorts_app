@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shorts/Features/authentication_feature/presentation/screens/login_screen.dart';
 import 'package:shorts/core/functions/navigations_functions.dart';
 import 'package:shorts/core/widgets/custom_app_bar.dart';
 import 'package:shorts/core/widgets/custom_icon_widget.dart';
+import 'package:shorts/core/widgets/initial_screen.dart';
 
 import '../../Features/authentication_feature/presentation/cubit/register_cubit/register_cubit.dart';
 import '../functions/toast_function.dart';
@@ -61,7 +61,7 @@ class _VerificationScreenState extends State<VerificationScreen>
             );
             NavigationManager.navigateAndFinish(
               context: context,
-              screen: const LoginScreen(),
+              screen: const InitialScreen(),
             );
           }
         } else if (state is RegisterErrorState) {
