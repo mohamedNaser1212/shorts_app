@@ -11,7 +11,7 @@ abstract class CommentsRepo {
     required String videoId,
   });
 
-  Future<Either<Failure, List<CommentEntity>>> addCommentToVideo({
+  Future<Either<Failure, CommentEntity>> addCommentToVideo({
     required CommentModel comment,
     required VideoEntity video,
   });

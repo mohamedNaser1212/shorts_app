@@ -21,7 +21,7 @@ class CommentsRepoImpl implements CommentsRepo {
   });
 
   @override
-  Future<Either<Failure, List<CommentEntity>>> addCommentToVideo({
+  Future<Either<Failure, CommentEntity>> addCommentToVideo({
     required CommentModel comment,
     required VideoEntity video,
   }) async {
@@ -36,7 +36,7 @@ class CommentsRepoImpl implements CommentsRepo {
         //   videoId: video.id,
         // );
         // comments.add(comment);
-        await commentsLocalDataSource.saveComments(comments);
+        //   await commentsLocalDataSource.saveComments(comments);
         // await getVideoComments(videoId: video.id, page: 0);
         return comments;
       },

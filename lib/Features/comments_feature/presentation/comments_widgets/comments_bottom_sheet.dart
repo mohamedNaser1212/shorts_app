@@ -55,7 +55,15 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   Widget build(BuildContext context) {
     return BlocBuilder<CommentsCubit, CommentsState>(
       builder: (context, state) {
-        return BlocBuilder<AddCommentsCubit, AddCommentsState>(
+        return BlocConsumer<AddCommentsCubit, AddCommentsState>(
+          listener: (context, addState) {
+            if (addState is AddCommentsSuccessState) {
+              commentController.clear();
+              CommentsCubit.get(context)
+                  .videoComments[widget.videoEntity.id]!
+                  .insert(0, addState.comment);
+            }
+          },
           builder: (context, addState) {
             return BlockInteractionLoadingWidget(
               isLoading: addState is AddCommentsLoadingState,

@@ -1,5 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/comments_feature/data/model/comments_model.dart';
+import 'package:shorts/Features/comments_feature/domain/comments_entity/comments_entity.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/add_comments_use_case.dart';
 import 'package:shorts/Features/comments_feature/domain/comments_use_case/delete_comment_use_case.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
@@ -38,7 +39,9 @@ class AddCommentsCubit extends Cubit<AddCommentsState> {
         emit(AddCommentsErrorState(message: failure.message));
       },
       (success) {
-        emit(AddCommentsSuccessState());
+        emit(AddCommentsSuccessState(
+          comment: success,
+        ));
       },
     );
   }
