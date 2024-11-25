@@ -62,6 +62,8 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
               CommentsCubit.get(context)
                   .videoComments[widget.videoEntity.id]!
                   .insert(0, addState.comment);
+              CommentsCubit.get(context)
+                  .getCommentsCount(videoId: widget.videoEntity.id);
             }
           },
           builder: (context, addState) {
