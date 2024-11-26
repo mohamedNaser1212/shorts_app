@@ -77,6 +77,7 @@ class _SettingsFormBodyState extends State<SettingsFormBody> {
         message: 'Data updated successfully',
         color: ColorController.greenColor,
       );
+      Navigator.pop(context);
     }
   }
 }

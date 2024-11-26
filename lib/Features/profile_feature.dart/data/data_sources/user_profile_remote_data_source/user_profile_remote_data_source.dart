@@ -84,6 +84,7 @@ class UserProfileVideosRemoteDataSourceImpl
   }) async {
     final currentUserDocPath = '${CollectionNames.users}/$currentUserId';
     final targetUserDocPath = '${CollectionNames.users}/$targetUserId';
+    const updatedCurrentUserDocPath = CollectionNames.users;
 
     final isFollowing = await firebaseHelper.getDocument(
           collectionPath: '$currentUserDocPath/${CollectionNames.following}',
@@ -102,12 +103,12 @@ class UserProfileVideosRemoteDataSourceImpl
       );
 
       await firebaseHelper.updateDocument(
-        collectionPath: currentUserDocPath,
+        collectionPath: updatedCurrentUserDocPath,
         docId: currentUserId,
         data: {RequestDataNames.followingCount: FieldValue.increment(-1)},
       );
       await firebaseHelper.updateDocument(
-        collectionPath: targetUserDocPath,
+        collectionPath: updatedCurrentUserDocPath,
         docId: targetUserId,
         data: {RequestDataNames.followersCount: FieldValue.increment(-1)},
       );
@@ -122,7 +123,6 @@ class UserProfileVideosRemoteDataSourceImpl
         docId: currentUserId,
         data: {RequestDataNames.targetUserId: currentUserId},
       );
-      const updatedCurrentUserDocPath = CollectionNames.users;
 
       await firebaseHelper.updateDocument(
         collectionPath: updatedCurrentUserDocPath,
