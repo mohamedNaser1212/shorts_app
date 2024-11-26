@@ -21,6 +21,7 @@ void showSnackBar({
       content: CustomTitle(
         title: message,
         style: TitleStyle.style12,
+        maxLines: 3,
       ),
       action: actionLabel != null && onActionPressed != null
           ? SnackBarAction(
