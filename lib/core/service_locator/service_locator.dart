@@ -333,7 +333,6 @@ Future<void> setUpServiceLocator() async {
       ));
   getIt.registerFactory<GoogleSignInCubit>(() => GoogleSignInCubit(
         googleSignInUseCase: getIt.get<GoogleSignInUseCase>(),
-        verifyUserUseCase: getIt.get<VerifyUserUseCase>(),
       ));
 
   getIt.registerFactory<RegisterCubit>(() => RegisterCubit(

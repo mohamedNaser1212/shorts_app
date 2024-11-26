@@ -7,7 +7,6 @@ import 'package:shorts/core/widgets/custom_container_widget.dart';
 import 'package:shorts/core/widgets/initial_screen.dart';
 
 import '../../../../core/widgets/custom_title.dart';
-import '../../../../core/widgets/verification_screen.dart';
 import '../cubit/google_sign_in_cubit/google_sign_in_cubit.dart';
 
 class GoogleSignInWidget extends StatelessWidget {
@@ -44,19 +43,10 @@ class GoogleSignInWidget extends StatelessWidget {
     if (state is GoogleSignInSuccessState) {
       UserInfoCubit.get(context).userEntity = state.userEntity;
 
-      if (state.userEntity.isVerified) {
-        NavigationManager.navigateAndFinish(
-          context: context,
-          screen: const InitialScreen(),
-        );
-      } else {
-        NavigationManager.navigateAndFinish(
-          context: context,
-          screen: VerificationScreen(
-            userId: state.userEntity.id!,
-          ),
-        );
-      }
+      NavigationManager.navigateAndFinish(
+        context: context,
+        screen: const InitialScreen(),
+      );
     }
   }
 }

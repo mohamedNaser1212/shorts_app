@@ -22,17 +22,6 @@ class CommentsCubit extends Cubit<CommentsState> {
   final Map<String, bool> hasMoreCommentsForVideo = {};
   final Map<String, num> commentsCount = {};
 
-  // Future<void> getCommentsAndCount(String videoId) async {
-  //   await getComments(videoId: videoId, page: 0);
-  //   await getCommentsCount(videoId: videoId);
-  // }
-  //
-  // Future<void> refreshCommentsForVideo({required String videoId}) async {
-  //   videoComments[videoId] = [];
-  //   hasMoreCommentsForVideo[videoId] = true;
-  //   await getCommentsAndCount(videoId);
-  // }
-
   Future<void> getComments({
     required String videoId,
   }) async {
@@ -45,13 +34,14 @@ class CommentsCubit extends Cubit<CommentsState> {
         emit(GetCommentsErrorState(message: failure.message));
       },
       (fetchedComments) {
-        hasMoreCommentsForVideo[videoId] = fetchedComments.isNotEmpty;
+        hasMoreCommentsForVideo[videoId] = fetchedComments.isNotEmpty &&
+            (videoComments[videoId]?.length ?? 0) < commentsCount[videoId]!;
         final existingComments = videoComments[videoId] ?? [];
+
         videoComments[videoId] = [
           ...existingComments,
-          ...fetchedComments,
         ];
-        print('videoComments: ${videoComments[videoId]}');
+
         emit(GetCommentsSuccessState(comments: videoComments[videoId]!));
       },
     );
@@ -77,5 +67,8 @@ class CommentsCubit extends Cubit<CommentsState> {
     videoComments.clear();
     hasMoreCommentsForVideo.clear();
     commentsCount.clear();
+    emit(CommentsState());
   }
 }
+
+// Updated `CommentsBottomSheetState`
