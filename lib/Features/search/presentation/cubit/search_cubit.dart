@@ -11,6 +11,7 @@ class SearchCubit extends Cubit<SearchState> {
   final SearchUseCase searchUseCase;
   final Map<String, List<UserEntity>> _searchCache = {};
   final Map<String, int> _pageNumbers = {};
+  String? _activeQuery;
 
   static SearchCubit get(context) => BlocProvider.of(context);
 
@@ -19,7 +20,8 @@ class SearchCubit extends Cubit<SearchState> {
     required int page,
     bool isLoadMore = false,
   }) async {
-    // If cached and no load more is required, emit directly
+    _activeQuery = query;
+
     if (_searchCache.containsKey(query) && !isLoadMore) {
       emit(GetSearchResultsSuccessState(
         searchResults: _searchCache[query]!,
@@ -30,14 +32,16 @@ class SearchCubit extends Cubit<SearchState> {
 
     if (!isLoadMore) emit(GetSearchResultsLoadingState());
 
-    // Avoid fetching if the page already exists in cache
     if (_pageNumbers[query] != null && _pageNumbers[query]! >= page) return;
 
     final searchResults = await searchUseCase.call(search: query, page: page);
     searchResults.fold(
-      (failure) =>
-          emit(GetSearchResultsErrorState(errorMessage: failure.message)),
+      (failure) {
+        emit(GetSearchResultsErrorState(errorMessage: failure.message));
+      },
       (newResults) {
+        if (_activeQuery != query) return;
+        print('search');
         final existingResults = _searchCache[query] ?? [];
         final updatedResults = [...existingResults, ...newResults];
 
@@ -53,6 +57,7 @@ class SearchCubit extends Cubit<SearchState> {
   }
 
   void clearSearch() {
+    _activeQuery = null;
     _searchCache.clear();
     _pageNumbers.clear();
     emit(ClearSearchResultsSuccessState(searchResults: []));
