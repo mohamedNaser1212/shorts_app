@@ -30,38 +30,28 @@ class _FollowingFollowersCountWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return BlocListener<FollowCubit, FollowState>(
-      listener: (context, state) {
-        // if (state is FollowersCountSuccessState) {
-        //   widget.userEntity.followersCount = state.count;
-        // }
-        // if (state is FollowingCountSuccessState) {
-        //   widget.userEntity.followingCount = state.count;
-        // }
-      },
-      child: BlocBuilder<FollowCubit, FollowState>(
-        builder: (context, state) {
-          return Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CustomUserProfileInformations(
-                number: widget.userEntity.followersCount,
-                title: 'Followers',
-              ),
-              const SizedBox(width: 50),
-              CustomUserProfileInformations(
-                number: widget.userEntity.followingCount,
-                title: 'Following',
-              ),
-              const SizedBox(width: 50),
-              CustomUserProfileInformations(
-                number: widget.userEntity.likesCount,
-                title: 'Likes',
-              ),
-            ],
-          );
-        },
-      ),
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: [
+        BlocBuilder<FollowCubit, FollowState>(
+          builder: (context, state) {
+            return CustomUserProfileInformations(
+              number: FollowCubit.get(context).followerCounts,
+              title: 'Followers',
+            );
+          },
+        ),
+        const SizedBox(width: 50),
+        CustomUserProfileInformations(
+          number: widget.userEntity.followingCount,
+          title: 'Following',
+        ),
+        const SizedBox(width: 50),
+        CustomUserProfileInformations(
+          number: widget.userEntity.likesCount,
+          title: 'Likes',
+        ),
+      ],
     );
   }
 }

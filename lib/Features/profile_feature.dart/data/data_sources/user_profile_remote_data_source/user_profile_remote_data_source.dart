@@ -152,6 +152,7 @@ class UserProfileVideosRemoteDataSourceImpl
       collectionPath:
           '${CollectionNames.users}/$userId/${CollectionNames.followers}',
     );
+    print('followers count requested${followersSnapshot.size}');
     return followersSnapshot.size;
   }
 

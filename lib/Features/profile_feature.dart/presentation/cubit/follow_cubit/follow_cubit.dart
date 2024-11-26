@@ -56,7 +56,7 @@ class FollowCubit extends Cubit<FollowState> {
     }, (followersCount) {
       followerCounts = followersCount;
       print('followersCount $followersCount');
-      getFollowingsCount(userId: userId);
+      // getFollowingsCount(userId: userId);
       emit(FollowersCountSuccessState(count: followersCount));
     });
   }
@@ -71,7 +71,7 @@ class FollowCubit extends Cubit<FollowState> {
       emit(FollowingCountErrorState(message: failure.message));
     }, (followersCount) {
       followingCounts = followersCount;
-      print('followersCount $followersCount');
+      print('followingsCount $followersCount');
       emit(FollowingCountSuccessState(count: followersCount));
     });
   }
