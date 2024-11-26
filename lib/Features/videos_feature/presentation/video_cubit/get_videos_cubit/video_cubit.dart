@@ -16,6 +16,7 @@ class VideoCubit extends Cubit<VideoState> {
   static VideoCubit get(context) => BlocProvider.of(context);
 
   Future<void> getVideos() async {
+    emit(GetVideoLoading());
     if (isLoadingMore) return;
     isLoadingMore = true;
 
@@ -26,8 +27,13 @@ class VideoCubit extends Cubit<VideoState> {
       },
       (fetchedVideos) {
         videos.addAll(fetchedVideos);
+        isLoadingMore = fetchedVideos.length == 6;
         print('Loaded ${videos.length} videos');
-        emit(GetVideoSuccess(videos: List.of(videos)));
+        emit(
+          GetVideoSuccess(
+            videos: List.from(videos),
+          ),
+        );
       },
     );
 
@@ -35,19 +41,13 @@ class VideoCubit extends Cubit<VideoState> {
   }
 
   Future<void> loadMoreVideos() async {
-    if (!isLoadingMore) {
-      await getVideos();
-    }
+    if (!isLoadingMore) return;
+    await getVideos();
   }
 
   void reset() {
-    videos.clear();
+    videos = [];
     isLoadingMore = true;
-  }
-
-  @override
-  Future<void> close() {
-    // TODO: implement close
-    return super.close();
+    emit(GetVideoLoading());
   }
 }

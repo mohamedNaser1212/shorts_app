@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_profile_cubit/user_profile_cubit.dart';
+import 'package:shorts/Features/videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 
 import '../../../../Features/videos_feature/presentation/video_cubit/upload_videos_cubit/upload_videos_cubit.dart';
 import '../../../../Features/videos_feature/presentation/widgets/videos_components_widgets/videos_list.dart';
@@ -24,6 +25,8 @@ class LayoutScreenState extends State<LayoutScreen> {
     // FavouritesCubit.get(context).getFavorites();
     // CartsCubit.get(context).getCarts();
 
+    VideoCubit.get(context).getVideos();
+
     // GetHomeDataCubit.get(context).getProducts();
   }
 
@@ -31,24 +34,25 @@ class LayoutScreenState extends State<LayoutScreen> {
   Widget build(BuildContext context) {
     return BlocListener<UploadVideosCubit, UploadVideosState>(
       listener: (context, state) {
-        if (state is VideoUploadedSuccessState) {
+        if (state is VideoUploadLoadingState) {
+        } else if (state is VideoUploadedSuccessState) {
+          VideoCubit.get(context).videos.insert(0, state.videoEntity);
+          GetUserVideosCubit.get(context).videos.insert(0, state.videoEntity);
           showSnackBar(
-            message: "Successs At Upload",
+            message: "Success At Upload",
             context: context,
             onActionPressed: () => NavigationManager.navigateTo(
                 context: context,
                 screen: VideoListItem(videoEntity: state.videoEntity)),
             actionLabel: "Show",
           );
-          GetUserVideosCubit.get(context).videos.insert(0, state.videoEntity);
         }
       },
       child: Scaffold(
           //  appBar: _buildAppBar(context),
           body: layoutModel.currentScreen,
           bottomNavigationBar: BottomNavigationBar(
-            type: BottomNavigationBarType
-                .fixed, // Set type to fixed for custom colors
+            type: BottomNavigationBarType.fixed,
             backgroundColor:
                 Colors.black, // Set navigation bar background to black
             currentIndex: layoutModel.currentIndex,

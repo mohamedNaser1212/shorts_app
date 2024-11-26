@@ -49,7 +49,7 @@ class MyApp extends StatelessWidget {
           create: (context) => getIt<UserInfoCubit>()..getUserData(),
         ),
         BlocProvider(
-          create: (context) => getIt<VideoCubit>()..getVideos(),
+          create: (context) => getIt<VideoCubit>(),
         ),
         BlocProvider(
             create: (context) => GetUserVideosCubit(

@@ -50,6 +50,8 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
   Widget build(BuildContext context) {
     return BlocBuilder<VideoCubit, VideoState>(
       builder: (context, state) {
+        final cubit = VideoCubit.get(context);
+        final videos = cubit.videos;
         if (state is VideoUploadErrorState) {
           return Center(
             child: CustomTitle(
@@ -67,7 +69,6 @@ class _VideosPageViewWidgetState extends State<VideosPageViewWidget> {
               ),
             );
           }
-          final videos = state.videos;
           final isLoadingMore = VideoCubit.get(context).isLoadingMore;
 
           return PageView.builder(

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 
 import '../../../../core/widgets/reusable_text_form_field.dart';
@@ -20,10 +22,10 @@ class SearchFormField extends StatefulWidget {
 class _SearchFormFieldState extends State<SearchFormField> {
   late final FocusNode _focusNode;
   late final SearchCubit _searchCubit;
+  Timer? _debounce;
 
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
     _searchCubit = SearchCubit.get(context);
     _focusNode = FocusNode();
@@ -32,15 +34,20 @@ class _SearchFormFieldState extends State<SearchFormField> {
   @override
   void dispose() {
     _focusNode.dispose();
+    _debounce?.cancel();
     super.dispose();
   }
 
   void _onQueryChanged(String query) {
-    if (query.isEmpty) {
-      _searchCubit.clearSearch();
-    } else {
-      _searchCubit.searchUsers(query: query, page: 1);
-    }
+    if (_debounce?.isActive ?? false) _debounce!.cancel();
+
+    _debounce = Timer(const Duration(milliseconds: 300), () {
+      if (query.isEmpty) {
+        _searchCubit.clearSearch();
+      } else {
+        _searchCubit.searchUsers(query: query, page: 1);
+      }
+    });
   }
 
   @override
@@ -56,11 +63,12 @@ class _SearchFormFieldState extends State<SearchFormField> {
               return null;
             },
             onSubmit: (query) {
-              setState(() {
-                widget.query.text = query!;
-              });
-              if (widget.formKey.currentState!.validate()) {
-                _searchCubit.searchUsers(query: query!, page: 1);
+              if (query != null && query.isNotEmpty) {
+                if (widget.formKey.currentState!.validate()) {
+                  _searchCubit.searchUsers(query: query, page: 1);
+                }
+              } else {
+                _searchCubit.clearSearch();
               }
               return null;
             },
@@ -68,7 +76,7 @@ class _SearchFormFieldState extends State<SearchFormField> {
             keyboardType: TextInputType.text,
             validator: (value) {
               if (value!.isEmpty) {
-                return 'Please enter a search query';
+                return 'PleaSe enter a search query';
               }
               return null;
             },

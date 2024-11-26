@@ -10,7 +10,6 @@ import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/widgets/custom_container_widget.dart';
 import '../../../../core/widgets/custom_title.dart';
 import '../../../authentication_feature/presentation/cubit/sign_out_cubit/sign_out_cubit.dart';
-import '../../../videos_feature/presentation/video_cubit/get_videos_cubit/video_cubit.dart';
 import '../screens/edit_profile_screen.dart';
 
 class ProfileActions extends StatelessWidget {
@@ -42,7 +41,6 @@ class ProfileActions extends StatelessWidget {
                   context: context,
                   screen: const LoginScreen(),
                 );
-                VideoCubit.get(context).reset();
                 FollowCubit.get(context).reset();
                 //   UserInfoCubit.get(context).reset();
                 FavouritesCubit.get(context).reset();
