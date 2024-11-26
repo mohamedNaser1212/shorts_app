@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:shimmer/shimmer.dart';
 
 class CustomShimmerGridViewWidget extends StatelessWidget {
   const CustomShimmerGridViewWidget({
@@ -8,22 +7,9 @@ class CustomShimmerGridViewWidget extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Expanded(
-      child: GridView.builder(
-        gridDelegate: _gridDelegate(),
-        itemCount: 4,
-        itemBuilder: (context, index) {
-          return Shimmer.fromColors(
-            baseColor: Colors.grey[300]!,
-            highlightColor: Colors.grey[100]!,
-            child: Container(
-              width: double.infinity,
-              height: 300, // Match the image height
-              color: Colors.white,
-            ),
-          );
-        },
-      ),
+    return Container(
+      color: Colors.grey[300],
+      margin: const EdgeInsets.all(8.0),
     );
   }
 

@@ -7,6 +7,7 @@ import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_p
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 
 import '../../../../core/widgets/custom_title.dart';
+import 'custom_shimmer_grid_view_Widget.dart';
 
 class UserProfileVideosGridView extends StatefulWidget {
   const UserProfileVideosGridView({super.key, required this.state});
@@ -73,10 +74,7 @@ class _UserProfileVideosGridViewState extends State<UserProfileVideosGridView> {
   }
 
   Widget _buildShimmerItem() {
-    return Container(
-      color: Colors.grey[300],
-      margin: const EdgeInsets.all(8.0),
-    );
+    return CustomShimmerGridViewWidget();
   }
 
   SliverGridDelegateWithFixedCrossAxisCount _gridDelegate() {

@@ -10,6 +10,7 @@ import '../../../../core/managers/styles_manager/color_manager.dart';
 import '../../../../core/widgets/custom_container_widget.dart';
 import '../../../../core/widgets/custom_title.dart';
 import '../../../authentication_feature/presentation/cubit/sign_out_cubit/sign_out_cubit.dart';
+import '../cubit/user_profile_cubit/user_profile_cubit.dart';
 import '../screens/edit_profile_screen.dart';
 
 class ProfileActions extends StatelessWidget {
@@ -42,6 +43,7 @@ class ProfileActions extends StatelessWidget {
                   screen: const LoginScreen(),
                 );
                 FollowCubit.get(context).reset();
+                GetUserVideosCubit.get(context).reset();
                 //   UserInfoCubit.get(context).reset();
                 FavouritesCubit.get(context).reset();
               } else if (state is SignOutErrorState) {

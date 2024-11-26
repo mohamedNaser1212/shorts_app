@@ -34,11 +34,10 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
     super.didChangeDependencies();
     final cubit = GetUserVideosCubit.get(context);
 
-    if (cubit.currentUserId != widget.userEntity!.id) {
+    // Reload videos if switching to a different user's profile or returning to the same profile
+    if (cubit.currentUserId != widget.userEntity?.id || cubit.isInitialLoad) {
       cubit.reset();
-      cubit.getUserVideos(
-        userId: widget.userEntity!.id!,
-      );
+      cubit.getUserVideos(userId: widget.userEntity!.id!);
     }
 
     _scrollController.addListener(_onScroll);
@@ -47,10 +46,9 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
   void _onScroll() {
     final cubit = GetUserVideosCubit.get(context);
     final scrollPosition = _scrollController.position;
-    // Check if we're within 40% of the total scrollable height
     if (!cubit.isLoadingMore &&
         cubit.hasMoreVideos &&
-        scrollPosition.pixels >= scrollPosition.maxScrollExtent * 0.4) {
+        scrollPosition.pixels >= scrollPosition.maxScrollExtent * 0.2) {
       cubit.loadMoreVideos(userId: widget.userEntity!.id!);
     }
   }
@@ -82,18 +80,14 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
             SizedBox(height: MediaQuery.sizeOf(context).height * 0.05),
           Column(
             children: [
-              UserProfileImageWidget(
-                user: widget.userEntity!,
-              ),
+              UserProfileImageWidget(user: widget.userEntity!),
               const SizedBox(height: 10),
               CustomTitle(title: name, style: TitleStyle.styleBold24),
               const SizedBox(height: 20),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  FollowingFollowersCountWidget(
-                    userEntity: widget.userEntity!,
-                  ),
+                  FollowingFollowersCountWidget(userEntity: widget.userEntity!),
                 ],
               ),
               const SizedBox(height: 10),
