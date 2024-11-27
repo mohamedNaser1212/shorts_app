@@ -43,7 +43,6 @@ class FollowCubit extends Cubit<FollowState> {
       emit(ToggleFollowErrorState(message: failure.message));
     }, (_) {
       getFollowersCount(userId: targetUserId);
-      getFollowingsCount(userId: currentUserId);
       emit(ToggleFollowSuccessState());
     });
   }
