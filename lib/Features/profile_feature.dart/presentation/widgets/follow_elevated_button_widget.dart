@@ -27,7 +27,6 @@ class FollowElevatedButtonWidget extends StatefulWidget {
 class _FollowElevatedButtonWidgetState
     extends State<FollowElevatedButtonWidget> {
   bool isFollowing = false;
-  bool isLoading = true;
 
   @override
   void initState() {
@@ -48,21 +47,28 @@ class _FollowElevatedButtonWidgetState
     setState(() {
       isFollowing = !isFollowing;
     });
-//followCubit.updateFollowersCount(isFollowing: isFollowing);
+
     followCubit.followUser(
       currentUserId: widget.currentUserId,
       targetUserId: widget.targetUserId,
     );
+
+    if (isFollowing) {
+      followCubit.updateLocalCountForFollow(widget.targetUserId);
+    } else {
+      followCubit.updateLocalCountForUnfollow(widget.targetUserId);
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     return BlocConsumer<FollowCubit, FollowState>(
-      listener: (context, state) {
+      listener: (context, state) async {
         if (state is ToggleFollowErrorState) {
           setState(() {
             isFollowing = !isFollowing;
           });
+
           ToastHelper.showToast(message: state.message);
         } else if (state is UserActionSuccessState) {
           setState(() {
@@ -71,10 +77,6 @@ class _FollowElevatedButtonWidgetState
         }
       },
       builder: (context, state) {
-        if (state is ToggleFollowLoadingState) {
-          return const CircularProgressIndicator();
-        }
-
         return ReusableElevatedButton(
           onPressed: toggleFollow,
           backColor: ColorController.purpleColor,

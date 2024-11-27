@@ -21,6 +21,7 @@ class FollowCubit extends Cubit<FollowState> {
   final GetFollowingCountUseCase getFollowingCountUseCase;
   final IsUserFollowedUseCase isUserFollowedUseCase;
 
+  int count = 0;
   final Map<String, int> _followersCounts = {};
   final Map<String, int> _followingsCounts = {};
 
@@ -42,6 +43,7 @@ class FollowCubit extends Cubit<FollowState> {
       emit(ToggleFollowErrorState(message: failure.message));
     }, (_) {
       getFollowersCount(userId: targetUserId);
+      getFollowingsCount(userId: currentUserId);
       emit(ToggleFollowSuccessState());
     });
   }
@@ -52,6 +54,7 @@ class FollowCubit extends Cubit<FollowState> {
     result.fold((failure) {
       emit(FollowersCountErrorState(message: failure.message));
     }, (followersCount) {
+      // Store the count in the cache map
       _followersCounts[userId] = followersCount;
       emit(FollowersCountSuccessState(count: followersCount));
     });
@@ -68,12 +71,39 @@ class FollowCubit extends Cubit<FollowState> {
     });
   }
 
-  int getFollowerCountForUser(String userId) {
-    return _followersCounts[userId] ?? 0;
+  void updateLocalCountForFollow(String userId) {
+    // Increment the following count
+    if (_followingsCounts.containsKey(userId)) {
+      _followingsCounts[userId] = _followingsCounts[userId]! + 1;
+    } else {
+      _followingsCounts[userId] = 1;
+    }
+
+    // Increment the followers count
+    if (_followersCounts.containsKey(userId)) {
+      _followersCounts[userId] = _followersCounts[userId]! + 1;
+    } else {
+      _followersCounts[userId] = 1;
+    }
+
+    emit(FollowingCountSuccessState(count: _followingsCounts[userId]!));
+    emit(FollowersCountSuccessState(count: _followersCounts[userId]!));
   }
 
-  int getFollowingCountForUser(String userId) {
-    return _followingsCounts[userId] ?? 0;
+  void updateLocalCountForUnfollow(String userId) {
+    // Decrement the following count
+    if (_followingsCounts.containsKey(userId) &&
+        _followingsCounts[userId]! > 0) {
+      _followingsCounts[userId] = _followingsCounts[userId]! - 1;
+    }
+
+    // Decrement the followers count
+    if (_followersCounts.containsKey(userId) && _followersCounts[userId]! > 0) {
+      _followersCounts[userId] = _followersCounts[userId]! - 1;
+    }
+
+    emit(FollowingCountSuccessState(count: _followingsCounts[userId]!));
+    emit(FollowersCountSuccessState(count: _followersCounts[userId]!));
   }
 
   Future<void> isUserFollowed({
@@ -86,12 +116,6 @@ class FollowCubit extends Cubit<FollowState> {
     result.fold((failure) {
       emit(UserActionErrorState(message: failure.message));
     }, (isFollowing) {
-      // _followStatus[targetUserId] = FollowModel(
-      //   targetUserId: targetUserId,
-      //   targetUserName: '',
-      //   isFollowing: isFollowing,
-      // );.
-      print('isFollowing cubbit $isFollowing');
       emit(UserActionSuccessState(isFollowing: isFollowing));
     });
   }
