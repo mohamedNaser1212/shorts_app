@@ -56,23 +56,33 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
 
     bool isVerified = userCredential.user!.emailVerified;
     if (userData[RequestDataNames.isVerified] != isVerified) {
-      await FirebaseFirestore.instance
-          .collection(CollectionNames.users)
-          .doc(userCredential.user!.uid)
-          .update({RequestDataNames.isVerified: isVerified});
+      await firebaseHelper.updateDocument(
+        collectionPath: CollectionNames.users,
+        docId: userCredential.user!.uid,
+        data: {RequestDataNames.isVerified: isVerified},
+      );
       userData[RequestDataNames.isVerified] = isVerified;
+      // await FirebaseFirestore.instance
+      //     .collection(CollectionNames.users)
+      //     .doc(userCredential.user!.uid)
+      //     .update({RequestDataNames.isVerified: isVerified});
+      // userData[RequestDataNames.isVerified] = isVerified;
     }
 
     if (userData[RequestDataNames.fcmToken] == null ||
         userData[RequestDataNames.fcmToken].isEmpty) {
       String? newFcmToken = await FirebaseMessaging.instance.getToken();
-
-      await FirebaseFirestore.instance
-          .collection(CollectionNames.users)
-          .doc(userCredential.user!.uid)
-          .update({
-        RequestDataNames.fcmToken: newFcmToken ?? '',
-      });
+      await firebaseHelper.updateDocument(
+        collectionPath: CollectionNames.users,
+        docId: userCredential.user!.uid,
+        data: {RequestDataNames.fcmToken: newFcmToken ?? ''},
+      );
+      // await FirebaseFirestore.instance
+      //     .collection(CollectionNames.users)
+      //     .doc(userCredential.user!.uid)
+      //     .update({
+      //   RequestDataNames.fcmToken: newFcmToken ?? '',
+      // });
 
       userData[RequestDataNames.fcmToken] = newFcmToken;
       await ClearToken.clearToken(
@@ -145,10 +155,11 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
   }
 
   Future<void> createUserData({required UserEntity user}) async {
-    await FirebaseFirestore.instance
-        .collection(CollectionNames.users)
-        .doc(user.id)
-        .set(user.toJson());
+    await firebaseHelper.addDocument(
+      collectionPath: CollectionNames.users,
+      data: user.toJson(),
+      docId: user.id,
+    );
   }
 
   Future<String> _uploadProfileImage(File imageFile) async {
@@ -214,8 +225,10 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     final firebaseUser = userCredential.user;
     final userId = firebaseUser!.uid;
 
-    final userDoc =
-        await FirebaseFirestore.instance.collection('users').doc(userId).get();
+    final userDoc = await firebaseHelper.getDocumentDocumentSnapShot(
+      collectionPath: CollectionNames.users,
+      docId: userId,
+    );
     final bool isVerified = firebaseUser.emailVerified;
 
     final userModel = UserEntity(
@@ -230,10 +243,11 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
     );
 
     if (!userDoc.exists) {
-      await FirebaseFirestore.instance
-          .collection('users')
-          .doc(userId)
-          .set(userModel.toJson());
+      await firebaseHelper.addDocument(
+        collectionPath: CollectionNames.users,
+        data: userModel.toJson(),
+        docId: userId,
+      );
     }
 
     return userModel;
@@ -250,6 +264,14 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
       user = FirebaseAuth.instance.currentUser;
 
       if (user!.emailVerified) {
+        await firebaseHelper.updateDocument(
+          collectionPath: CollectionNames.users,
+          docId: userId,
+          data: {
+            RequestDataNames.isVerified: true,
+          },
+        );
+
         return true;
       } else {
         return false;
