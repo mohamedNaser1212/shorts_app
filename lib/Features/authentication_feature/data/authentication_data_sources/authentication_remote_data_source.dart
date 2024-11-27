@@ -88,10 +88,15 @@ class AuthenticationDataSourceImpl implements AuthenticationRemoteDataSource {
 
   Future<DocumentSnapshot<Object?>> _accessUsersCollection(
       UserCredential userCredential) async {
-    DocumentSnapshot userDoc = await FirebaseFirestore.instance
-        .collection(CollectionNames.users)
-        .doc(userCredential.user!.uid)
-        .get();
+    DocumentSnapshot userDoc = await firebaseHelper.getDocumentDocumentSnapShot(
+      collectionPath: CollectionNames.users,
+      docId: userCredential.user!.uid,
+    );
+
+    // FirebaseFirestore.instance
+    //     .collection(CollectionNames.users)
+    //     .doc(userCredential.user!.uid)
+    //     .get();
     return userDoc;
   }
 

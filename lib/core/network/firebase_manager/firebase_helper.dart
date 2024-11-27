@@ -44,6 +44,12 @@ abstract class FirebaseHelper {
     String? subCollectionPath,
     String? subDocId,
   });
+  Future<DocumentSnapshot<Object?>> getDocumentDocumentSnapShot({
+    required String collectionPath,
+    required String docId,
+    String? subCollectionPath,
+    String? subDocId,
+  });
 
   Future<String> generateDocumentId({required String collectionPath});
 

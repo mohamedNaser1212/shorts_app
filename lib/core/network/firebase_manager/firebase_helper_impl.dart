@@ -128,6 +128,19 @@ class FirebaseHelperImpl extends FirebaseHelper {
   }
 
   @override
+  Future<DocumentSnapshot<Object?>> getDocumentDocumentSnapShot({
+    required String collectionPath,
+    required String docId,
+    String? subCollectionPath,
+    String? subDocId,
+  }) async {
+    DocumentSnapshot document =
+        await firestore.collection(collectionPath).doc(docId).get();
+
+    return document;
+  }
+
+  @override
   Future<String> generateDocumentId({required String collectionPath}) async {
     return firestore.collection(collectionPath).doc().id;
   }
