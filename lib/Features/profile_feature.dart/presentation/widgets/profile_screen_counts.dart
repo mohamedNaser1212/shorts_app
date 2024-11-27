@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:shorts/core/user_info/cubit/user_info_cubit.dart';
 
 import '../../../../core/user_info/domain/user_entity/user_entity.dart';
 import '../cubit/follow_cubit/follow_cubit.dart';
@@ -38,37 +37,14 @@ class _FollowingFollowersCountWidgetState
         children: [
           FollowersCount(userEntity: widget.userEntity),
           const SizedBox(width: 50),
-          if (widget.userEntity.id !=
-              UserInfoCubit.get(context).userEntity!.id!)
-            BlocBuilder<FollowCubit, FollowState>(builder: (context, state) {
-              if (state is FollowingCountLoadingState) {
-                return const CustomUserProfileInformations(
-                  number: 0,
-                  title: 'Followings',
-                );
-              } else if (state is FollowingCountErrorState) {
-                return const CustomUserProfileInformations(
-                  number: 0,
-                  title: 'Followings',
-                );
-              } else if (state is FollowingCountSuccessState) {
-                return CustomUserProfileInformations(
-                  number: FollowCubit.get(context)
-                          .followingsCounts[widget.userEntity.id] ??
-                      0,
-                  title: 'Followings',
-                );
-              }
-              return const CustomUserProfileInformations(
-                number: 0,
-                title: 'Followings',
-              );
-            })
-          else
-            CustomUserProfileInformations(
-              number: widget.userEntity.followingCount,
+          BlocBuilder<FollowCubit, FollowState>(builder: (context, state) {
+            final cachedFollowingsCount =
+                FollowCubit.get(context).followingsCounts[widget.userEntity.id];
+            return CustomUserProfileInformations(
+              number: cachedFollowingsCount ?? widget.userEntity.followingCount,
               title: 'Followings',
-            ),
+            );
+          }),
           const SizedBox(width: 50),
           CustomUserProfileInformations(
             number: widget.userEntity.likesCount,
@@ -88,7 +64,6 @@ class FollowersCount extends StatelessWidget {
   Widget build(BuildContext context) {
     return BlocBuilder<FollowCubit, FollowState>(
       builder: (context, state) {
-        // Get the follower count from the map cache or use the default
         final cachedFollowersCount =
             FollowCubit.get(context).followersCounts[userEntity.id];
 
