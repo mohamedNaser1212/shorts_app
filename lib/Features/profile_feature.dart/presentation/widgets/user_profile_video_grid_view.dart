@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_profile_cubit/profile_state.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/user_profile_cubit/user_profile_cubit.dart';
-import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_screen_body.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/widgets/user_profile_video_grid_view_body.dart';
 import 'package:shorts/Features/videos_feature/domain/video_entity/video_entity.dart';
 
@@ -10,9 +9,9 @@ import '../../../../core/widgets/custom_title.dart';
 import 'custom_shimmer_grid_view_Widget.dart';
 
 class UserProfileVideosGridView extends StatefulWidget {
-  const UserProfileVideosGridView({super.key, required this.state});
-
-  final UserProfileScreenBodyState state;
+  const UserProfileVideosGridView({
+    super.key,
+  });
 
   @override
   State<UserProfileVideosGridView> createState() =>

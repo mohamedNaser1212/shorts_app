@@ -34,9 +34,8 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
     super.didChangeDependencies();
     final cubit = GetUserVideosCubit.get(context);
 
-    // Reload videos if switching to a different user's profile or returning to the same profile
+    // Reload videos if switching to a different user's profile
     if (cubit.currentUserId != widget.userEntity?.id || cubit.isInitialLoad) {
-      cubit.reset();
       cubit.getUserVideos(userId: widget.userEntity!.id!);
     }
 
@@ -48,7 +47,7 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
     final scrollPosition = _scrollController.position;
     if (!cubit.isLoadingMore &&
         cubit.hasMoreVideos &&
-        scrollPosition.pixels >= scrollPosition.maxScrollExtent * 0.2) {
+        scrollPosition.pixels >= scrollPosition.maxScrollExtent * 0.8) {
       cubit.loadMoreVideos(userId: widget.userEntity!.id!);
     }
   }
@@ -84,12 +83,7 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
               const SizedBox(height: 10),
               CustomTitle(title: name, style: TitleStyle.styleBold24),
               const SizedBox(height: 20),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  FollowingFollowersCountWidget(userEntity: widget.userEntity!),
-                ],
-              ),
+              FollowingFollowersCountWidget(userEntity: widget.userEntity!),
               const SizedBox(height: 10),
               if (widget.userEntity!.id ==
                   UserInfoCubit.get(context).userEntity!.id)
@@ -100,7 +94,7 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
                   targetUserId: widget.userEntity!.id!,
                 ),
               const SizedBox(height: 20),
-              UserProfileVideosGridView(state: this),
+              const UserProfileVideosGridView(),
             ],
           ),
         ],

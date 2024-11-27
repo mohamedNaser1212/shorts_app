@@ -11,20 +11,23 @@ part 'follow_state.dart';
 class FollowCubit extends Cubit<FollowState> {
   FollowCubit({
     required this.followUserUseCase,
-    // required this.unfollowUserUseCase,
     required this.getFollowersCountUseCase,
     required this.getFollowingCountUseCase,
     required this.isUserFollowedUseCase,
   }) : super(FollowState());
+
   final ToggleFollowUserUseCase followUserUseCase;
-  // final UnfollowUserUseCase unfollowUserUseCase;
   final GetFollowersCountUseCase getFollowersCountUseCase;
   final GetFollowingCountUseCase getFollowingCountUseCase;
   final IsUserFollowedUseCase isUserFollowedUseCase;
-  final Map<String, FollowModel> _followStatus = {};
+
+  final Map<String, int> _followersCounts = {};
+  final Map<String, int> _followingsCounts = {};
+
   static FollowCubit get(context) => BlocProvider.of(context);
 
-  Map<String, FollowModel> get followStatus => _followStatus;
+  Map<String, int> get followersCounts => _followersCounts;
+  Map<String, int> get followingsCounts => _followingsCounts;
 
   Future<void> followUser({
     required String currentUserId,
@@ -36,77 +39,44 @@ class FollowCubit extends Cubit<FollowState> {
       targetUserId: targetUserId,
     );
     result.fold((failure) {
-      print('error cubit ${failure.message}');
       emit(ToggleFollowErrorState(message: failure.message));
-    }, (followModel) {
+    }, (_) {
       getFollowersCount(userId: targetUserId);
-
       emit(ToggleFollowSuccessState());
     });
   }
 
-  int followerCounts = 0;
-  Future<void> getFollowersCount({
-    required String userId,
-  }) async {
+  Future<void> getFollowersCount({required String userId}) async {
     emit(FollowersCountLoading());
     final result = await getFollowersCountUseCase.call(userId: userId);
     result.fold((failure) {
       emit(FollowersCountErrorState(message: failure.message));
     }, (followersCount) {
-      followerCounts = followersCount;
-      print('followersCount $followersCount');
-      // getFollowingsCount(userId: userId);
+      _followersCounts[userId] = followersCount;
       emit(FollowersCountSuccessState(count: followersCount));
     });
   }
 
-  int followingCounts = 0;
-  Future<void> getFollowingsCount({
-    required String userId,
-  }) async {
+  Future<void> getFollowingsCount({required String userId}) async {
     emit(FollowingCountLoadingState());
     final result = await getFollowingCountUseCase.call(userId: userId);
     result.fold((failure) {
       emit(FollowingCountErrorState(message: failure.message));
-    }, (followersCount) {
-      followingCounts = followersCount;
-      print('followingsCount $followersCount');
-      emit(FollowingCountSuccessState(count: followersCount));
+    }, (followingsCount) {
+      _followingsCounts[userId] = followingsCount;
+      emit(FollowingCountSuccessState(count: followingsCount));
     });
   }
 
-  void updateFollowersCount({required bool isFollowing}) {
-    followerCounts = isFollowing ? followerCounts + 1 : followerCounts - 1;
-    emit(FollowersCountSuccessState(count: followerCounts));
+  int getFollowerCountForUser(String userId) {
+    return _followersCounts[userId] ?? 0;
   }
 
-  // Future<void> unfollowUser({
-  //   required String currentUserId,
-  //   required String targetUserId,
-  // }) async {
-  //   emit(UserActionLoading());
-  //   final result = await unfollowUserUseCase.call(
-  //       currentUserId: currentUserId, targetUserId: targetUserId);
-  //   result.fold((failure) {
-  //     emit(UnfollowUserErrorState(message: failure.message));
-  //   }, (followModel) {
-  //     _followStatus[targetUserId] = followModel;
-  //     emit(UserUnfollowedSuccessState(followModel: followModel));
-  //   });
-  // }
+  int getFollowingCountForUser(String userId) {
+    return _followingsCounts[userId] ?? 0;
+  }
 
-  // void updateFollowersCount(
-  //     {required String userId, required bool isFollowing}) {
-  //   if (isFollowing) {
-  //     followerCounts++;
-  //   } else {
-  //     followerCounts--;
-  //   }
-  //   emit(FollowersCountSuccessState(count: followerCounts));
-  // }
-
-  Future<bool> isUserFollowed({
+  Future<void> isUserFollowed({
     required String currentUserId,
     required String targetUserId,
   }) async {
@@ -123,15 +93,11 @@ class FollowCubit extends Cubit<FollowState> {
       // );.
       print('isFollowing cubbit $isFollowing');
       emit(UserActionSuccessState(isFollowing: isFollowing));
-      return isFollowing;
     });
-    return false;
   }
 
   void reset() {
-    _followStatus.clear();
-    followingCounts = 0;
-    followerCounts = 0;
-    //   emit(FollowState());
+    _followersCounts.clear();
+    _followingsCounts.clear();
   }
 }

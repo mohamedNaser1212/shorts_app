@@ -28,25 +28,28 @@ class _FollowElevatedButtonWidgetState
     extends State<FollowElevatedButtonWidget> {
   bool isFollowing = false;
   bool isLoading = true;
-  int previousFollowersCount = 0;
 
   @override
   void initState() {
     super.initState();
-    // _checkFollowStatus();
-    // FollowCubit.get(context).getFollowersCount(userId: widget.targetUserId);
+    _initializeFollowStatus();
+  }
+
+  Future<void> _initializeFollowStatus() async {
+    await FollowCubit.get(context).isUserFollowed(
+      currentUserId: widget.currentUserId,
+      targetUserId: widget.targetUserId,
+    );
   }
 
   void toggleFollow() {
-    previousFollowersCount = FollowCubit.get(context).followerCounts;
+    final followCubit = FollowCubit.get(context);
 
     setState(() {
       isFollowing = !isFollowing;
     });
-
-    FollowCubit.get(context).updateFollowersCount(isFollowing: isFollowing);
-
-    FollowCubit.get(context).followUser(
+//followCubit.updateFollowersCount(isFollowing: isFollowing);
+    followCubit.followUser(
       currentUserId: widget.currentUserId,
       targetUserId: widget.targetUserId,
     );
@@ -54,21 +57,30 @@ class _FollowElevatedButtonWidgetState
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<FollowCubit, FollowState>(builder: (context, state) {
-      if (state is UserActionSuccessState) {
-        isFollowing = state.isFollowing;
-      } else if (state is ToggleFollowErrorState) {
-        FollowCubit.get(context)
-            .updateFollowersCount(isFollowing: !isFollowing);
-        isFollowing = !isFollowing;
-        ToastHelper.showToast(message: state.message);
-      }
+    return BlocConsumer<FollowCubit, FollowState>(
+      listener: (context, state) {
+        if (state is ToggleFollowErrorState) {
+          setState(() {
+            isFollowing = !isFollowing;
+          });
+          ToastHelper.showToast(message: state.message);
+        } else if (state is UserActionSuccessState) {
+          setState(() {
+            isFollowing = state.isFollowing;
+          });
+        }
+      },
+      builder: (context, state) {
+        if (state is ToggleFollowLoadingState) {
+          return const CircularProgressIndicator();
+        }
 
-      return ReusableElevatedButton(
-        onPressed: toggleFollow,
-        backColor: ColorController.purpleColor,
-        label: isFollowing ? 'Unfollow' : 'Follow',
-      );
-    });
+        return ReusableElevatedButton(
+          onPressed: toggleFollow,
+          backColor: ColorController.purpleColor,
+          label: isFollowing ? 'Unfollow' : 'Follow',
+        );
+      },
+    );
   }
 }
