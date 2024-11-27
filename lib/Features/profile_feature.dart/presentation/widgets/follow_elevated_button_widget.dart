@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:shimmer/shimmer.dart';
 import 'package:shorts/Features/profile_feature.dart/presentation/cubit/follow_cubit/follow_cubit.dart';
 import 'package:shorts/core/functions/toast_function.dart';
 
@@ -27,6 +28,7 @@ class FollowElevatedButtonWidget extends StatefulWidget {
 class _FollowElevatedButtonWidgetState
     extends State<FollowElevatedButtonWidget> {
   bool isFollowing = false;
+  bool isLoading = true;
 
   @override
   void initState() {
@@ -39,6 +41,9 @@ class _FollowElevatedButtonWidgetState
       currentUserId: widget.currentUserId,
       targetUserId: widget.targetUserId,
     );
+    setState(() {
+      isLoading = false;
+    });
   }
 
   void toggleFollow() {
@@ -48,16 +53,16 @@ class _FollowElevatedButtonWidgetState
       isFollowing = !isFollowing;
     });
 
-    followCubit.followUser(
-      currentUserId: widget.currentUserId,
-      targetUserId: widget.targetUserId,
-    );
-
     if (isFollowing) {
       followCubit.updateLocalCountForFollow(widget.targetUserId);
     } else {
       followCubit.updateLocalCountForUnfollow(widget.targetUserId);
     }
+
+    followCubit.followUser(
+      currentUserId: widget.currentUserId,
+      targetUserId: widget.targetUserId,
+    );
   }
 
   @override
@@ -77,11 +82,20 @@ class _FollowElevatedButtonWidgetState
         }
       },
       builder: (context, state) {
-        return ReusableElevatedButton(
-          onPressed: toggleFollow,
-          backColor: ColorController.purpleColor,
-          label: isFollowing ? 'Unfollow' : 'Follow',
-        );
+        return isLoading
+            ? Shimmer.fromColors(
+                baseColor: Colors.grey[300]!,
+                highlightColor: Colors.grey[100]!,
+                child: const ReusableElevatedButton(
+                  label: 'Loading...',
+                  onPressed: null,
+                ),
+              )
+            : ReusableElevatedButton(
+                onPressed: toggleFollow,
+                backColor: ColorController.purpleColor,
+                label: isFollowing ? 'Unfollow' : 'Follow',
+              );
       },
     );
   }

@@ -7,7 +7,7 @@ import '../functions/navigations_functions.dart';
 import '../layout/presentation/screens/layout_widget.dart';
 import '../managers/styles_manager/color_manager.dart';
 import '../user_info/cubit/user_info_cubit.dart';
-import 'custom_title.dart';
+import 'connection_failure_widget.dart';
 
 class InitialScreen extends StatefulWidget {
   const InitialScreen({super.key});
@@ -44,7 +44,11 @@ class _InitialScreenState extends State<InitialScreen> {
       return Scaffold(
         backgroundColor: ColorController.blackColor,
         body: Center(
-          child: CustomTitle(title: state.message, style: TitleStyle.style16),
+          child: ConnectionFailureWidget(
+            onPressed: () {
+              UserInfoCubit.get(context).getUserData();
+            },
+          ),
         ),
       );
     }

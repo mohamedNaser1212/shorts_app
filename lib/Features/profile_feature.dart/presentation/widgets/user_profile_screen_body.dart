@@ -83,7 +83,7 @@ class UserProfileScreenBodyState extends State<UserProfileScreenBody> {
               const SizedBox(height: 10),
               CustomTitle(title: name, style: TitleStyle.styleBold24),
               const SizedBox(height: 20),
-              FollowingFollowersCountWidget(userEntity: widget.userEntity!),
+              UserProfileCountWidgets(userEntity: widget.userEntity!),
               const SizedBox(height: 10),
               if (widget.userEntity!.id ==
                   UserInfoCubit.get(context).userEntity!.id)
