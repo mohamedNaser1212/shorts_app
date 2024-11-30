@@ -41,32 +41,36 @@ class CommentsRemoteDataSourceImpl implements CommentsRemoteDataSource {
     required String videoId,
   }) async {
     List<CommentModel> comments = [];
-    // bool hasMoreComments = true;
 
-    Query commentsQuery = FirebaseFirestore.instance
+    // Reference to the comments sub-collection.
+    final query = FirebaseFirestore.instance
         .collection('videos')
         .doc(videoId)
         .collection('comments')
-        .orderBy('timestamp', descending: true)
-        .limit(limit);
+        .orderBy('timestamp', descending: true);
+
+    QuerySnapshot<Map<String, dynamic>> fetchedComments;
 
     if (lastComments[videoId] != null) {
-      commentsQuery = commentsQuery.startAfterDocument(lastComments[videoId]!);
+      fetchedComments = await query
+          .startAfterDocument(lastComments[videoId]!)
+          .limit(limit)
+          .get();
+    } else {
+      fetchedComments = await query.limit(limit).get();
     }
 
-    final querySnapshot = await commentsQuery.get();
-
-    if (querySnapshot.docs.isEmpty) {
-      return comments;
-    }
-    List<CommentModel> fetchedComments = querySnapshot.docs.map((doc) {
-      CommentModel comment =
-          CommentModel.fromJson(doc.data() as Map<String, dynamic>);
-      comment.id = doc.id;
-      return comment;
+    // Map the fetched Firestore documents to CommentModel instances.
+    comments = fetchedComments.docs.map((doc) {
+      return CommentModel.fromJson(doc.data());
     }).toList();
-    lastComments[videoId] = querySnapshot.docs.last;
-    comments.addAll(fetchedComments);
+
+    // Update the last fetched document for pagination.
+    if (fetchedComments.docs.isNotEmpty) {
+      lastComments[videoId] = fetchedComments.docs.last;
+    }
+    print('fetched comments${comments.length}');
+
     return comments;
   }
 

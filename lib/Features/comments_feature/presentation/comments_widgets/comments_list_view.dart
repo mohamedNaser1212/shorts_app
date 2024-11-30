@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comment_item_widget.dart';
 import 'package:shorts/Features/comments_feature/presentation/comments_widgets/comments_bottom_sheet.dart';
 import 'package:shorts/Features/comments_feature/presentation/cubit/get_comments_cubit/comments_cubit.dart';
@@ -20,37 +21,38 @@ class CommentsListView extends StatefulWidget {
 class _CommentsListViewState extends State<CommentsListView> {
   @override
   Widget build(BuildContext context) {
-    final commentsCubit = CommentsCubit.get(context);
-    final comments =
-        commentsCubit.videoComments[widget.state.widget.videoEntity.id] ?? [];
-    final hasMoreComments = commentsCubit
-            .hasMoreCommentsForVideo[widget.state.widget.videoEntity.id] ??
-        false;
+    return BlocBuilder<CommentsCubit, CommentsState>(
+      builder: (context, state) {
+        final commentsCubit = CommentsCubit.get(context);
+        final comments =
+            commentsCubit.videoComments[widget.state.widget.videoEntity.id] ??
+                [];
+        final hasMoreComments = commentsCubit
+                .hasMoreCommentsForVideo[widget.state.widget.videoEntity.id] ??
+            false;
 
-    if (comments.isEmpty) {
-      return const EmptyCommentsWidget();
-    }
-
-    return ListView.separated(
-      controller: widget.state.scrollController,
-      padding: EdgeInsets.zero,
-      separatorBuilder: (context, index) => const SizedBox(height: 10),
-      itemCount: comments.length + (hasMoreComments ? 1 : 0),
-      itemBuilder: (context, index) {
-        if (index == comments.length && hasMoreComments) {
-          return const Padding(
-            padding: EdgeInsets.symmetric(vertical: 8),
-            child: Center(
-              child: CircularProgressIndicator(
-                color: Colors.black,
-              ),
-            ),
-          );
+        if (comments.isEmpty) {
+          return const EmptyCommentsWidget();
         }
 
-        final comment = comments[index];
-        return CommentItemWidget(
-          comment: comment,
+        return ListView.separated(
+          controller: widget.state.scrollController,
+          padding: EdgeInsets.zero,
+          separatorBuilder: (context, index) => const SizedBox(height: 10),
+          itemCount: comments.length + (hasMoreComments ? 1 : 0),
+          itemBuilder: (context, index) {
+            if (index == comments.length && hasMoreComments) {
+              return const Padding(
+                padding: EdgeInsets.symmetric(vertical: 8),
+                child: Center(
+                  child: CircularProgressIndicator(color: Colors.black),
+                ),
+              );
+            }
+
+            final comment = comments[index];
+            return CommentItemWidget(comment: comment);
+          },
         );
       },
     );

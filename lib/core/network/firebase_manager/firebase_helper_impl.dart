@@ -201,4 +201,49 @@ class FirebaseHelperImpl extends FirebaseHelper {
 
     return await query.get();
   }
+
+  @override
+  Future<List<Map<String, dynamic>>> getDocumentsWithQuery({
+    required String collectionPath,
+    String? docId,
+    String? subCollectionPath,
+    String? whereField,
+    dynamic whereValue,
+    int? limit,
+    String? orderBy,
+    bool descending = false,
+    DocumentSnapshot? startAfter, // Change type here
+  }) async {
+    CollectionReference collectionRef = firestore.collection(collectionPath);
+
+    if (docId != null) {
+      collectionRef = collectionRef.doc(docId).collection(subCollectionPath!);
+    } else if (subCollectionPath != null) {
+      throw ArgumentError(
+          "docId must be provided if subCollectionPath is used.");
+    }
+
+    Query query = collectionRef;
+
+    if (whereField != null && whereValue != null) {
+      query = query.where(whereField, isEqualTo: whereValue);
+    }
+
+    if (orderBy != null) {
+      query = query.orderBy(orderBy, descending: descending);
+    }
+
+    if (startAfter != null) {
+      query = query.startAfterDocument(startAfter);
+    }
+
+    if (limit != null) {
+      query = query.limit(limit);
+    }
+
+    final querySnapshot = await query.get();
+    return querySnapshot.docs
+        .map((doc) => doc.data() as Map<String, dynamic>)
+        .toList();
+  }
 }

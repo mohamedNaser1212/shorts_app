@@ -52,6 +52,17 @@ abstract class FirebaseHelper {
   });
 
   Future<String> generateDocumentId({required String collectionPath});
+  Future<List<Map<String, dynamic>>> getDocumentsWithQuery({
+    required String collectionPath,
+    String? docId,
+    String? subCollectionPath,
+    String? whereField,
+    dynamic whereValue,
+    int? limit,
+    String? orderBy,
+    bool descending = false,
+    DocumentSnapshot? startAfter,
+  });
 
   Future<void> addDocumentWithAutoId({
     required String collectionPath,

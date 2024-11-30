@@ -25,37 +25,32 @@ class CommentsCubit extends Cubit<CommentsState> {
   Future<void> getComments({
     required String videoId,
   }) async {
-    if (videoComments[videoId] == null) {
-      videoComments[videoId] = [];
-    } else if (videoComments[videoId]!.isNotEmpty) {
+    // Check if comments already exist for this videoId and pagination is enabled
+    if (videoComments.containsKey(videoId) &&
+        !hasMoreCommentsForVideo[videoId]!) {
       emit(GetCommentsSuccessState(comments: videoComments[videoId]!));
       return;
     }
-    final result = await getCommentsUseCase.getVideoComments(
-      videoId: videoId,
-    );
+
+    final result = await getCommentsUseCase.getVideoComments(videoId: videoId);
 
     result.fold(
-      (failure) {
-        emit(GetCommentsErrorState(message: failure.message));
-      },
+      (failure) => emit(GetCommentsErrorState(message: failure.message)),
       (fetchedComments) {
         final existingComments = videoComments[videoId] ?? [];
 
-        final existingCommentIds = existingComments.map((e) => e.id).toSet();
-
         final newComments = fetchedComments
-            .where((comment) => !existingCommentIds.contains(comment.id))
+            .where(
+                (comment) => !existingComments.any((e) => e.id == comment.id))
             .toList();
-        print('newComments: ${newComments.length}');
 
         videoComments[videoId] = [
           ...existingComments,
-          ...newComments,
+          ...fetchedComments,
         ];
 
-        hasMoreCommentsForVideo[videoId] = newComments.isNotEmpty &&
-            videoComments[videoId]!.length < commentsCount[videoId]!;
+        // Update pagination flag
+        hasMoreCommentsForVideo[videoId] = newComments.isNotEmpty;
 
         emit(GetCommentsSuccessState(comments: videoComments[videoId]!));
       },

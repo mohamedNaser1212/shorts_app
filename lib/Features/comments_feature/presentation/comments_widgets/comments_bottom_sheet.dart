@@ -22,16 +22,17 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   List<CommentEntity> commentsList = [];
   late final ScrollController scrollController = ScrollController();
   bool allCommentsLoaded = false;
-
   @override
   void initState() {
     super.initState();
+
+    final commentsCubit = CommentsCubit.get(context);
 
     _loadComments();
 
     scrollController.addListener(() {
       if (!allCommentsLoaded &&
-          scrollController.position.pixels ==
+          scrollController.position.pixels >=
               scrollController.position.maxScrollExtent) {
         _loadComments();
       }
@@ -39,9 +40,13 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   }
 
   void _loadComments() {
-    CommentsCubit.get(context).getComments(
-      videoId: widget.videoEntity.id,
-    );
+    final commentsCubit = CommentsCubit.get(context);
+
+    // Fetch comments only if they have not been fetched before or if pagination is ongoing
+    if (!commentsCubit.videoComments.containsKey(widget.videoEntity.id) ||
+        commentsCubit.hasMoreCommentsForVideo[widget.videoEntity.id]!) {
+      commentsCubit.getComments(videoId: widget.videoEntity.id);
+    }
   }
 
   @override
