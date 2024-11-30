@@ -30,28 +30,35 @@ class _CommentsListViewState extends State<CommentsListView> {
         final hasMoreComments = commentsCubit
                 .hasMoreCommentsForVideo[widget.state.widget.videoEntity.id] ??
             false;
+        final isFetchingComments = state is GetCommentsLoadingState;
 
         if (comments.isEmpty) {
           return const EmptyCommentsWidget();
         }
 
+        final itemCount =
+            comments.length + (hasMoreComments && !isFetchingComments ? 1 : 0);
+
         return ListView.separated(
           controller: widget.state.scrollController,
           padding: EdgeInsets.zero,
           separatorBuilder: (context, index) => const SizedBox(height: 10),
-          itemCount: comments.length + (hasMoreComments ? 1 : 0),
+          itemCount: itemCount,
           itemBuilder: (context, index) {
-            if (index == comments.length && hasMoreComments) {
+            if (index == comments.length &&
+                comments.length >= 6 &&
+                hasMoreComments) {
               return const Padding(
                 padding: EdgeInsets.symmetric(vertical: 8),
                 child: Center(
                   child: CircularProgressIndicator(color: Colors.black),
                 ),
               );
+            } else if (index < comments.length) {
+              final comment = comments[index];
+              return CommentItemWidget(comment: comment);
             }
-
-            final comment = comments[index];
-            return CommentItemWidget(comment: comment);
+            return const SizedBox.shrink();
           },
         );
       },

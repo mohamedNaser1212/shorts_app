@@ -25,7 +25,7 @@ class CommentsCubit extends Cubit<CommentsState> {
   Future<void> getComments({
     required String videoId,
   }) async {
-    // Check if comments already exist for this videoId and pagination is enabled
+    emit(GetCommentsLoadingState());
     if (videoComments.containsKey(videoId) &&
         !hasMoreCommentsForVideo[videoId]!) {
       emit(GetCommentsSuccessState(comments: videoComments[videoId]!));

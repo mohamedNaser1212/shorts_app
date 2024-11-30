@@ -42,7 +42,6 @@ class CommentsBottomSheetState extends State<CommentsBottomSheet> {
   void _loadComments() {
     final commentsCubit = CommentsCubit.get(context);
 
-    // Fetch comments only if they have not been fetched before or if pagination is ongoing
     if (!commentsCubit.videoComments.containsKey(widget.videoEntity.id) ||
         commentsCubit.hasMoreCommentsForVideo[widget.videoEntity.id]!) {
       commentsCubit.getComments(videoId: widget.videoEntity.id);
